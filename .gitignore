@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# Large binary files — manage via DAM
+*.mp4
+*.mov
+
+# Zip files
+*.zip
+
+# Claude Code internal
+.claude/settings.local.json

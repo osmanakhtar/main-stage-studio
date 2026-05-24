@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Main Stage Studio — Operational Build Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #F5EFE5;
+    --blush: #E8C9AE;
+    --terracotta: #BF6B47;
+    --ember: #8C4A2F;
+    --nearblack: #1C1712;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--parchment);
+    color: var(--nearblack);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--nearblack);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 2rem 0;
+  }
+
+  .sidebar-logo {
+    padding: 2rem 1.75rem 1.5rem;
+    border-bottom: 1px solid rgba(245,239,229,0.08);
+  }
+
+  /* MSS Logo Mark */
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .logo-squares {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .sq-back {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    background: var(--nearblack);
+    border: 1.5px solid rgba(245,239,229,0.35);
+  }
+
+  .sq-front {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    background: var(--terracotta);
+  }
+
+  .sq-cutout {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 10px;
+    height: 10px;
+    background: var(--nearblack);
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--parchment);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+  }
+
+  .logo-sub {
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-top: 0.15rem;
+  }
+
+  .sidebar-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,239,229,0.3);
+    padding: 1.5rem 1.75rem 0.5rem;
+  }
+
+  .sidebar nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.4rem 1.75rem;
+    color: rgba(245,239,229,0.55);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 400;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1.4;
+  }
+
+  .sidebar nav a:hover {
+    color: var(--blush);
+    background: rgba(245,239,229,0.04);
+  }
+
+  .sidebar nav a.active {
+    color: var(--terracotta);
+  }
+
+  .nav-num {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ember);
+    flex-shrink: 0;
+    min-width: 1.2rem;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--nearblack);
+    padding: 5rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(191,107,71,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 300;
+    color: var(--parchment);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--blush);
+  }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    color: rgba(245,239,229,0.45);
+    margin-top: 1.25rem;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245,239,229,0.08);
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .meta-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,239,229,0.3);
+  }
+
+  .meta-value {
+    font-size: 0.8rem;
+    color: var(--blush);
+  }
+
+  /* ── CONTENT BODY ── */
+  .content {
+    padding: 0 4rem 5rem;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 3.5rem 0 0;
+    border-top: 1px solid rgba(28,23,18,0.12);
+    margin-top: 3.5rem;
+  }
+
+  .section:first-child {
+    border-top: none;
+    margin-top: 3.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-num {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--blush);
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.5;
+    margin-top: -0.3rem;
+  }
+
+  .section-title-group {}
+
+  .section-eyebrow {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.3rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.85rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--nearblack);
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0 1.25rem;
+    position: relative;
+  }
+
+  .step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 1.15rem;
+    top: 2.5rem;
+    bottom: 0;
+    width: 1px;
+    background: rgba(191,107,71,0.2);
+  }
+
+  .step-dot {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--parchment);
+    border: 1.5px solid var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ember);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-body {
+    padding-bottom: 1.75rem;
+  }
+
+  .step-body p {
+    font-size: 0.88rem;
+    color: var(--nearblack);
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-body p:last-child { margin-bottom: 0; }
+
+  .step-body strong {
+    font-weight: 600;
+    color: var(--nearblack);
+  }
+
+  .step-body code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    background: rgba(140,74,47,0.1);
+    color: var(--ember);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+  }
+
+  /* ── CALLOUT TYPES ── */
+  .callout {
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    font-size: 0.84rem;
+    line-height: 1.7;
+  }
+
+  .callout-decision {
+    background: rgba(140,74,47,0.08);
+    border-left: 3px solid var(--ember);
+  }
+
+  .callout-decision::before {
+    content: '⬦ DECISION POINT';
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--ember);
+    margin-bottom: 0.4rem;
+  }
+
+  .callout-tip {
+    background: rgba(191,107,71,0.07);
+    border-left: 3px solid var(--terracotta);
+  }
+
+  .callout-tip::before {
+    content: '◈ NOTE';
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--terracotta);
+    margin-bottom: 0.4rem;
+  }
+
+  .callout-warn {
+    background: rgba(232,201,174,0.3);
+    border-left: 3px solid var(--blush);
+  }
+
+  .callout-warn::before {
+    content: '▲ WATCH OUT';
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #a05c30;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout p { font-size: 0.84rem; margin: 0; }
+  .callout strong { font-weight: 600; }
+
+  /* ── CODE BLOCK ── */
+  .codeblock {
+    background: var(--nearblack);
+    color: var(--blush);
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    margin: 0.75rem 0;
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+
+  .codeblock .comment { color: rgba(245,239,229,0.3); }
+  .codeblock .cmd { color: #e8a87c; }
+
+  /* ── CHECKLIST ── */
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .checklist li {
+    font-size: 0.87rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .checklist li::before {
+    content: '□';
+    color: var(--terracotta);
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: -0.05rem;
+  }
+
+  /* ── TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin: 0.75rem 0;
+  }
+
+  .data-table th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ember);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1.5px solid var(--blush);
+  }
+
+  .data-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid rgba(28,23,18,0.07);
+    color: var(--nearblack);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .tag-pick {
+    display: inline-block;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--terracotta);
+    color: white;
+    padding: 0.15rem 0.45rem;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  /* ── GO-LIVE GRID ── */
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 2rem;
+    margin: 0.75rem 0;
+  }
+
+  .checklist-grid li {
+    font-size: 0.86rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    line-height: 1.55;
+  }
+
+  .checklist-grid li::before {
+    content: '□';
+    color: var(--terracotta);
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    margin-left: 260px;
+    background: var(--nearblack);
+    padding: 2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .doc-footer p {
+    font-size: 0.72rem;
+    color: rgba(245,239,229,0.3);
+  }
+
+  .doc-footer .footer-logo {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: rgba(245,239,229,0.4);
+    font-style: italic;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .sidebar { display: none; }
+    .main, .doc-footer { margin-left: 0; }
+    .hero { padding: 2rem; }
+    .content { padding: 0 2rem 2rem; }
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main, .doc-footer { margin-left: 0; }
+    .hero { padding: 2.5rem 1.5rem; }
+    .content { padding: 0 1.5rem 3rem; }
+    .checklist-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-squares">
+        <div class="sq-back"></div>
+        <div class="sq-front"></div>
+        <div class="sq-cutout"></div>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Main Stage Studio</span>
+        <span class="logo-sub">Build Guide</span>
+      </div>
+    </div>
+  </div>
+  <p class="sidebar-label">Sections</p>
+  <nav>
+    <a href="#s1"><span class="nav-num">1</span>LocalWP Setup</a>
+    <a href="#s2"><span class="nav-num">2</span>GitHub Pages Prototype</a>
+    <a href="#s3"><span class="nav-num">3</span>Cloudways Account</a>
+    <a href="#s4"><span class="nav-num">4</span>WordPress on Cloudways</a>
+    <a href="#s5"><span class="nav-num">5</span>DNS Configuration</a>
+    <a href="#s6"><span class="nav-num">6</span>SSL Certificate</a>
+    <a href="#s7"><span class="nav-num">7</span>Bricks Builder</a>
+    <a href="#s8"><span class="nav-num">8</span>LocalWP → Cloudways Migration</a>
+    <a href="#s9"><span class="nav-num">9</span>Go-Live Checklist</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">Main Stage Studio — Internal Reference</p>
+    <h1>Operational<br><em>Build Guide</em></h1>
+    <p class="hero-sub">Step-by-step from local environment to first live site. First project: PureMed Aesthetics, puremed.uk.</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Stack</span>
+        <span class="meta-value">LocalWP · WP + Bricks · Cloudways / DO</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Prototype Delivery</span>
+        <span class="meta-value">GitHub Pages · HTML</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Version</span>
+        <span class="meta-value">1.0 — May 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ─────────────────────────────────────────
+         SECTION 1 — LocalWP
+    ───────────────────────────────────────── -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <span class="section-num">1</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Local Development</p>
+          <h2 class="section-title">LocalWP Installation &amp; First Site</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Download LocalWP.</strong> Go to <code>localwp.com</code>, download the macOS installer. It's a standard <code>.dmg</code> — drag to Applications, launch.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Create your first local site.</strong> Click <strong>+ Create a new site</strong>. Enter site name: <code>PureMed Aesthetics</code>. LocalWP will suggest a local domain like <code>puremed.local</code> — accept it.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Choose environment.</strong> Select <strong>Preferred</strong> (not Custom). This gives you PHP 8.x, MySQL 8.x, Nginx — appropriate for a Cloudways/DO deployment.</p>
+            <div class="callout callout-decision">
+              <p><strong>Why Preferred:</strong> Matches Cloudways server stack closely enough that you won't encounter environment mismatches on migration. Custom is only needed if a plugin requires a specific PHP version.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Set WordPress credentials.</strong> Create your admin username and password. Record these — you'll use them daily. LocalWP creates the WP install automatically.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Click WP Admin.</strong> Once the site is running (green indicator), click <strong>WP Admin</strong> in LocalWP. Your browser opens <code>puremed.local/wp-admin</code>. You're in.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">6</div>
+          <div class="step-body">
+            <p><strong>Tidy the default install.</strong> In WP Admin: delete the Hello Dolly plugin (Plugins → Installed Plugins), delete the sample page and Hello World post, and remove all default themes except Twenty Twenty-Four (you'll delete that too once Bricks is active).</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">7</div>
+          <div class="step-body">
+            <p><strong>Note your local site files path.</strong> In LocalWP, right-click your site → <strong>Reveal in Finder</strong>. Your WP files live inside <code>app/public/</code>. This is where you'll work with themes and uploads locally.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 2 — GitHub Pages
+    ───────────────────────────────────────── -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <span class="section-num">2</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Client Approval Tool</p>
+          <h2 class="section-title">GitHub Pages — HTML Prototype Delivery</h2>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem; color: var(--nearblack); margin-bottom:1.5rem; line-height:1.8;">The workflow: Claude builds an HTML prototype → you push to GitHub → client gets a live URL to review before any WordPress build begins. No hosting cost, no CMS overhead.</p>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Create a repo for the project.</strong> On GitHub, create a new repo: <code>puremed-prototype</code>. Set it to <strong>Public</strong> (required for free GitHub Pages). Initialise with a README.</p>
+            <div class="callout callout-decision">
+              <p><strong>Why Public:</strong> GitHub Pages is free only on public repos (on the free plan). Since these are prototypes — not production code — public is fine. If you want private repos with Pages, upgrade to GitHub Pro (£4/mo).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Clone the repo locally.</strong></p>
+            <div class="codeblock">
+              <span class="cmd">git clone https://github.com/YOUR_USERNAME/puremed-prototype.git</span><br>
+              <span class="cmd">cd puremed-prototype</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Add your prototype HTML.</strong> Drop Claude's output into the repo root as <code>index.html</code>. Any linked assets (images, fonts if self-hosted) go in subfolders. Inline CSS/JS is simplest — one file, no broken paths.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Push to GitHub.</strong></p>
+            <div class="codeblock">
+              <span class="cmd">git add .</span><br>
+              <span class="cmd">git commit -m "Initial prototype — PureMed homepage"</span><br>
+              <span class="cmd">git push origin main</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Enable GitHub Pages.</strong> On GitHub: repo → <strong>Settings</strong> → <strong>Pages</strong> (left sidebar) → Source: <strong>Deploy from a branch</strong> → Branch: <code>main</code>, folder: <code>/ (root)</code> → Save.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">6</div>
+          <div class="step-body">
+            <p><strong>Get the live URL.</strong> After ~60 seconds, the Pages section shows your URL: <code>https://YOUR_USERNAME.github.io/puremed-prototype/</code>. Share this directly with your client.</p>
+            <div class="callout callout-tip">
+              <p>Every <code>git push</code> to <code>main</code> auto-deploys. Iterate freely — changes are live within about 60 seconds.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 3 — Cloudways Account
+    ───────────────────────────────────────── -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <span class="section-num">3</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Managed Hosting</p>
+          <h2 class="section-title">Cloudways Account &amp; Server Provisioning</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Sign up at cloudways.com.</strong> Use your business email. Cloudways offers a 3-day free trial — activate it. No credit card required upfront.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Choose your cloud provider.</strong></p>
+            <div class="callout callout-decision">
+              <p><strong>Pick DigitalOcean.</strong> You've already decided this — it's the right call. DO is the best price-to-performance at small scale, has solid London presence, and Cloudways' tooling is most mature on DO. AWS on Cloudways costs ~40% more for equivalent specs and adds unnecessary complexity at this stage.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Provision your first server.</strong> Click <strong>Launch</strong> → choose provider, region, size.</p>
+            <table class="data-table">
+              <thead>
+                <tr><th>Setting</th><th>Choice</th><th>Why</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Provider</td><td><span class="tag-pick">DigitalOcean</span></td><td>Best value + Cloudways integration</td></tr>
+                <tr><td>Region</td><td><span class="tag-pick">London (LON1)</span></td><td>UK client base, GDPR-aligned data residency</td></tr>
+                <tr><td>Server Size</td><td><span class="tag-pick">2GB RAM / 1 vCPU</span></td><td>~£17/mo. Handles 2–3 low-traffic brochure sites comfortably. Upgrade is one-click if needed.</td></tr>
+                <tr><td>PHP Stack</td><td><span class="tag-pick">WordPress</span></td><td>Pre-optimised stack for WP (Nginx, Redis, Varnish)</td></tr>
+              </tbody>
+            </table>
+            <div class="callout callout-tip">
+              <p><strong>Server vs Application:</strong> One server hosts multiple WordPress applications. You'll add a new Application (Section 4) per client site — not a new server. The 2GB DO droplet is your container for all MSS brochure sites until you hit resource limits.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Wait for provisioning.</strong> Takes 5–8 minutes. Cloudways spins up the droplet on DO, installs the stack, and hands you a server IP. You'll see it in your dashboard.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Add your SSH key.</strong> Go to <strong>Servers → Master Credentials</strong> → note the SSH username and password. Optionally add your public key under <strong>Security → SSH Access</strong> for password-free terminal access. Not required for the GUI workflow below, but useful.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 4 — WP Application on Cloudways
+    ───────────────────────────────────────── -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <span class="section-num">4</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Application Setup</p>
+          <h2 class="section-title">Adding a WordPress Application on Cloudways</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Add an application.</strong> From your server dashboard, click <strong>Applications</strong> → <strong>Add Application</strong>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Fill in application details.</strong></p>
+            <table class="data-table">
+              <thead><tr><th>Field</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Application Type</td><td>WordPress</td></tr>
+                <tr><td>Application Name</td><td><code>puremed-aesthetics</code></td></tr>
+                <tr><td>Admin Email</td><td>Your email or client's</td></tr>
+                <tr><td>Admin Username</td><td>Something non-obvious (not "admin")</td></tr>
+                <tr><td>Admin Password</td><td>Strong, unique — save in password manager</td></tr>
+                <tr><td>Project Name</td><td>PureMed Aesthetics</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Note the temporary URL.</strong> Cloudways assigns a staging URL like <code>abc123.cloudwaysapps.com</code>. Use this for all work until DNS is pointed (Section 5). Access WP Admin at <code>abc123.cloudwaysapps.com/wp-admin</code>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Configure key server settings.</strong> Under your application → <strong>Application Settings</strong>: enable <strong>Varnish</strong> (full-page cache, off during development, on at go-live), <strong>Redis Object Cache</strong> (on), set PHP version to 8.2.</p>
+            <div class="callout callout-warn">
+              <p><strong>Leave Varnish OFF during build.</strong> Varnish caches pages aggressively — you'll see stale content when editing. Turn it on only at go-live (Section 9).</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 5 — DNS
+    ───────────────────────────────────────── -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <span class="section-num">5</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Domain Routing</p>
+          <h2 class="section-title">DNS Configuration — puremed.uk → Cloudways</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Get your Cloudways server IP.</strong> In Cloudways: <strong>Servers</strong> → select your server → the IP is shown at the top of the dashboard. Copy it.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Add domain to Cloudways application.</strong> Application → <strong>Domain Management</strong> → Add Domain → enter <code>puremed.uk</code> and <code>www.puremed.uk</code>. Do this <em>before</em> changing DNS so Cloudways is ready to serve requests when they arrive.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Log in to your domain registrar</strong> (wherever puremed.uk is registered — likely 123-reg, GoDaddy, or Namecheap for .uk domains). Navigate to DNS management.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Update DNS records.</strong></p>
+            <table class="data-table">
+              <thead><tr><th>Type</th><th>Name / Host</th><th>Value</th><th>TTL</th></tr></thead>
+              <tbody>
+                <tr><td>A</td><td><code>@</code></td><td>Your Cloudways server IP</td><td>300</td></tr>
+                <tr><td>A</td><td><code>www</code></td><td>Your Cloudways server IP</td><td>300</td></tr>
+                <tr><td>CNAME</td><td><code>www</code></td><td>Delete this if it exists — conflicts with the A record above</td><td>—</td></tr>
+              </tbody>
+            </table>
+            <div class="callout callout-tip">
+              <p>Set TTL to 300 seconds (5 min) before the change so propagation is fast. Restore to 3600 after go-live to reduce DNS query load.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Verify propagation.</strong> Use <code>dnschecker.org</code> — search <code>puremed.uk</code>, type A. You want green ticks across most nodes. Can take anywhere from 5 minutes to 48 hours; typically &lt;30 min with a low TTL.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">6</div>
+          <div class="step-body">
+            <p><strong>Update WordPress URL.</strong> Once DNS is resolving, go to WP Admin (via the temporary Cloudways URL) → <strong>Settings → General</strong>. Set both WordPress Address and Site Address to <code>https://puremed.uk</code>. Save. (You'll need HTTPS live first — do SSL in the next section before this step.)</p>
+            <div class="callout callout-warn">
+              <p>Don't update WP URLs to the final domain until SSL is active or you'll lock yourself out of WP Admin with mixed-content errors. Do Section 6 first, then come back here.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 6 — SSL
+    ───────────────────────────────────────── -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <span class="section-num">6</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">HTTPS</p>
+          <h2 class="section-title">SSL Certificate Setup</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Confirm DNS is fully propagated</strong> before proceeding. The Let's Encrypt ACME challenge that Cloudways uses requires DNS to resolve correctly or certificate issuance fails.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Issue SSL via Cloudways.</strong> Application → <strong>SSL Certificate</strong> → <strong>Let's Encrypt</strong>. Enter:</p>
+            <ul style="font-size:0.87rem; margin: 0.5rem 0 0.5rem 1.5rem; line-height:2;">
+              <li>Email address (for renewal notifications)</li>
+              <li>Domain: <code>puremed.uk</code></li>
+              <li>Tick <strong>Wildcard</strong> if you want subdomains covered (not needed for a simple brochure site — leave unticked)</li>
+              <li>Check <strong>www Redirect</strong> — this redirects www → non-www automatically</li>
+            </ul>
+            <p>Click <strong>Install Certificate</strong>. Takes ~30 seconds.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Enable HTTPS redirect.</strong> On the same screen, toggle <strong>Force HTTPS</strong> to ON. This adds a 301 redirect from http → https at the server level — more reliable than a WP plugin redirect.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Now update WordPress URLs.</strong> Back to WP Admin → Settings → General → update both URL fields to <code>https://puremed.uk</code>. Save changes. Your site is now fully on HTTPS.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Verify in browser.</strong> Visit <code>https://puremed.uk</code>. Padlock should be showing. If you see a mixed-content warning (padlock with warning), use the plugin <strong>Really Simple SSL</strong> to scan and fix any hardcoded HTTP URLs in content.</p>
+            <div class="callout callout-tip">
+              <p>Cloudways auto-renews Let's Encrypt certificates every 90 days. You don't need to do anything.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 7 — Bricks Builder
+    ───────────────────────────────────────── -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <span class="section-num">7</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Page Builder</p>
+          <h2 class="section-title">Bricks Builder — Licence, Installation &amp; Activation</h2>
+        </div>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Purchase Business licence.</strong> Go to <code>bricksbuilder.io/pricing</code>. Business = unlimited sites, which is correct for an agency context. Cost is ~€149/yr. Pay, download the <code>bricks.zip</code> file, and note your licence key from the confirmation email.</p>
+            <div class="callout callout-decision">
+              <p><strong>Why Business (not Personal):</strong> Personal limits you to one site. You'll be adding new client sites regularly — Business pays back on site two. It also includes white-label mode if you ever want to hide the builder from clients.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Install on LocalWP first.</strong> In your local WP Admin → Plugins → Add New → Upload Plugin → select <code>bricks.zip</code> → Install Now → Activate.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Activate licence locally.</strong> WP Admin → Bricks → Licence → paste your key → Activate. You're now building locally with Bricks.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Install on Cloudways (live site).</strong> Access your Cloudways WP Admin → repeat the plugin upload process. Paste the same licence key → Activate.</p>
+            <div class="callout callout-tip">
+              <p>Bricks licence activations are domain-tied. LocalWP local domains (e.g. <code>puremed.local</code>) count as development domains and don't consume licence slots.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Set Bricks as the active theme.</strong> Appearance → Themes → Activate Bricks. You can now delete the default Twenty Twenty-Four theme.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">6</div>
+          <div class="step-body">
+            <p><strong>Configure Bricks settings.</strong> Bricks → Settings. Key settings on first run:</p>
+            <ul style="font-size:0.87rem; margin:0.5rem 0 0 1.5rem; line-height:2.1;">
+              <li><strong>Post Types:</strong> Enable Pages and any CPTs you'll build with Bricks</li>
+              <li><strong>Gutenberg:</strong> Disable Gutenberg editor for post types where Bricks is active — keeps the UI clean</li>
+              <li><strong>Template Library:</strong> Leave enabled — useful for importing Bricks community templates as starting points</li>
+              <li><strong>Custom Breakpoints:</strong> Set breakpoints to match your design system early (default is fine to start)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">7</div>
+          <div class="step-body">
+            <p><strong>Enter the builder.</strong> Edit any page → click <strong>Edit with Bricks</strong>. The visual editor loads. Left panel = elements; right panel = style controls; canvas = live preview. The learning curve is moderate but logical — structure first (Section/Container/Div), then elements inside.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 8 — Migration
+    ───────────────────────────────────────── -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <span class="section-num">8</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Deployment</p>
+          <h2 class="section-title">Migrating LocalWP → Cloudways</h2>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem; color:var(--nearblack); margin-bottom:1.5rem; line-height:1.8;">Use the <strong>Migrate Guru</strong> plugin — it's free, handles large sites, performs a direct server-to-server transfer (no download/upload of zip files), and is specifically optimised for Cloudways.</p>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <p><strong>Install Migrate Guru on your local site.</strong> WP Admin (LocalWP) → Plugins → Add New → search "Migrate Guru" → Install &amp; Activate.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <p><strong>Get your Cloudways SFTP credentials.</strong> Cloudways → Application → <strong>Access Details</strong> → note: Public IP, Application Username, Application Password, SFTP Port (typically 22). You'll need these in the next step.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <p><strong>Run the migration.</strong> In Migrate Guru (local WP Admin) → enter your email → click <strong>Migrate</strong> → select <strong>Other Host</strong> (Cloudways is on the dropdown but "Other" with manual SFTP creds is more reliable).</p>
+            <p>Enter the SFTP details from Step 2. The migration path field should be the application's document root — Cloudways shows this under Access Details as something like <code>/home/APP_USER/htdocs/YOUR_APP_NAME.cloudwaysapps.com/public_html</code>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <p><strong>Monitor progress.</strong> Migrate Guru emails you updates. The transfer runs server-to-server; you don't need to keep the browser open. For a small brochure site, expect 10–20 minutes.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">5</div>
+          <div class="step-body">
+            <p><strong>Update site URL on Cloudways.</strong> After migration completes, log in to WP Admin via the Cloudways temporary URL (<code>abc123.cloudwaysapps.com/wp-admin</code>). Go to Settings → General → change both URL fields from your local domain (<code>puremed.local</code>) to your Cloudways temporary URL. Save. Verify the site loads correctly.</p>
+            <div class="callout callout-warn">
+              <p>Don't skip this step. WP stores the site URL in the database. If it still says <code>puremed.local</code>, all redirects and asset paths will break on the live server.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">6</div>
+          <div class="step-body">
+            <p><strong>Search-replace remaining local references.</strong> After verifying the site works on the temp URL, use <strong>Better Search Replace</strong> plugin to find/replace any remaining <code>puremed.local</code> strings in the database. Replace with <code>https://puremed.uk</code>. Tick "Run as dry run" first to see what would change, then run for real.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-dot">7</div>
+          <div class="step-body">
+            <p><strong>Re-activate Bricks licence on the live domain.</strong> After DNS is pointed and WP URLs are updated to <code>https://puremed.uk</code>, go to Bricks → Licence → the domain will have changed. Re-activate with your key to bind it to the live domain.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 9 — Go-Live Checklist
+    ───────────────────────────────────────── -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <span class="section-num">9</span>
+        <div class="section-title-group">
+          <p class="section-eyebrow">Final Checks</p>
+          <h2 class="section-title">Go-Live Checklist</h2>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem; color:var(--nearblack); margin-bottom:1.5rem; line-height:1.8;">Run through this top-to-bottom before sharing the live URL with your client.</p>
+
+      <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin-bottom:0.75rem;">DNS &amp; HTTPS</p>
+      <ul class="checklist-grid">
+        <li>DNS fully propagated (dnschecker.org)</li>
+        <li>SSL padlock showing, no mixed-content warnings</li>
+        <li>http:// redirects to https://</li>
+        <li>www redirects to non-www (or vice versa — consistent)</li>
+      </ul>
+
+      <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin: 1.25rem 0 0.75rem;">WordPress Core</p>
+      <ul class="checklist-grid">
+        <li>WP Site URL and Home URL both set to live domain</li>
+        <li>All plugins up to date</li>
+        <li>Admin username is not "admin"</li>
+        <li>Strong admin password set</li>
+        <li>WP debug mode OFF (<code>WP_DEBUG false</code>)</li>
+        <li>File editor disabled in production</li>
+        <li>WordPress version up to date</li>
+        <li>Unused plugins deleted (not just deactivated)</li>
+      </ul>
+
+      <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin: 1.25rem 0 0.75rem;">SEO &amp; Visibility</p>
+      <ul class="checklist-grid">
+        <li>Settings → Reading: "Discourage search engines" is UNCHECKED</li>
+        <li>SEO plugin installed (Rank Math or Yoast)</li>
+        <li>Meta title and description set on homepage</li>
+        <li>XML sitemap generated and submitted to Google Search Console</li>
+        <li>Google Search Console property added and verified</li>
+        <li>Favicon set (WP Customiser → Site Identity)</li>
+      </ul>
+
+      <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin: 1.25rem 0 0.75rem;">Performance &amp; Caching</p>
+      <ul class="checklist-grid">
+        <li>Varnish cache ENABLED (Cloudways dashboard)</li>
+        <li>Redis object cache ENABLED</li>
+        <li>Images optimised (Cloudflare Images or Smush)</li>
+        <li>Google PageSpeed score checked (target 80+ mobile)</li>
+        <li>No console errors in browser dev tools</li>
+        <li>CDN enabled if needed (Cloudways has Cloudflare integration)</li>
+      </ul>
+
+      <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin: 1.25rem 0 0.75rem;">Content &amp; Forms</p>
+      <ul class="checklist-grid">
+        <li>All links tested — no 404s</li>
+        <li>Contact form tested end-to-end (submission → email received)</li>
+        <li>SMTP email sending configured (not PHP mail — use WP Mail SMTP)</li>
+        <li>All images have alt text</li>
+        <li>Privacy Policy page published</li>
+        <li>Cookie consent banner active (if handling personal data)</li>
+        <li>All placeholder / Lorem Ipsum text removed</li>
+        <li>Mobile layout reviewed on real device</li>
+      </ul>
+
+      <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin: 1.25rem 0 0.75rem;">Backups &amp; Security</p>
+      <ul class="checklist-grid">
+        <li>Cloudways automated backups enabled (daily, 7-day retention)</li>
+        <li>Backup frequency confirmed in Cloudways dashboard</li>
+        <li>Cloudflare or Cloudways Bot Protection enabled</li>
+        <li>WP login URL optionally changed (WPS Hide Login plugin)</li>
+      </ul>
+
+      <div class="callout callout-tip" style="margin-top:1.5rem;">
+        <p><strong>Final step:</strong> Take a manual Cloudways snapshot backup immediately before going live. Label it "Pre-launch snapshot — [date]". If anything breaks after go-live, you have a clean restore point.</p>
+      </div>
+
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <p>Main Stage Studio — Internal use. First project: PureMed Aesthetics (puremed.uk)</p>
+  <span class="footer-logo">Main Stage Studio</span>
+</footer>
+
+<script>
+  // Active nav highlighting on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('.sidebar nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

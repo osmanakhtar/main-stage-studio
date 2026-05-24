@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sable — Case Study | Main Stage Studio</title>
+  <meta name="description" content="How we built the world before the music arrived. Identity, positioning, and visual language for an independent artist — before the first release.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment:    '#F5EFE5',
+            blush:        '#E8C9AE',
+            terracotta:   '#BF6B47',
+            ember:        '#8C4A2F',
+            'near-black': '#1C1712',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans:    ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --parchment:  #F5EFE5;
+      --blush:      #E8C9AE;
+      --terracotta: #BF6B47;
+      --ember:      #8C4A2F;
+      --near-black: #1C1712;
+      --sable-gold: #C8952A;
+      --sable-dark: #0E0D0B;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    html { background: var(--sable-dark); }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      color: var(--near-black);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scroll progress ──────────────────────────────────── */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 1px; width: 0%;
+      background: var(--sable-gold);
+      z-index: 100; transition: width 0.05s linear;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────── */
+    #nav {
+      transition: background-color 0.45s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow       0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    #nav.scrolled-light {
+      background: var(--parchment);
+      box-shadow: 0 1px 0 rgba(28,23,18,0.08);
+    }
+    #nav.scrolled-dark {
+      background: var(--sable-dark);
+      box-shadow: 0 1px 0 rgba(200,149,42,0.1);
+    }
+    .nav-link {
+      position: relative; font-size: 0.8125rem;
+      letter-spacing: 0.05em; text-decoration: none;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px; background: var(--sable-gold);
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── Button fill ──────────────────────────────────────── */
+    .btn-fill {
+      position: relative; display: inline-flex; align-items: center;
+      overflow: hidden; padding: 0.8rem 1.625rem;
+      background: var(--near-black); color: var(--parchment);
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.75rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border: none; cursor: pointer;
+    }
+    .btn-fill__bg {
+      position: absolute; inset: 0; background: var(--terracotta);
+      transform: translateX(-101%);
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+    }
+    .btn-fill:hover .btn-fill__bg { transform: translate(0,0); }
+    .btn-fill__label { position: relative; z-index: 1; }
+
+    /* ── Labels ───────────────────────────────────────────── */
+    .slabel {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.625rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .slabel-gold { color: rgba(200,149,42,0.7); }
+
+    /* ── Scroll reveal ────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.22s; }
+    .rd3 { transition-delay: 0.36s; }
+
+    /* ── Hero reveal ──────────────────────────────────────── */
+    .line-clip { overflow: hidden; }
+    .line-clip__inner {
+      display: block; transform: translateY(105%);
+      transition: transform 1.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hero-ready .line-clip__inner { transform: translateY(0); }
+    .hero-fade {
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 1.1s cubic-bezier(0.16,1,0.3,1),
+                  transform 1.1s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hero-ready .hero-fade { opacity: 1; transform: translateY(0); }
+
+    /* ── Q&A ──────────────────────────────────────────────── */
+    .qa-block { padding: 3rem 0; border-top: 1px solid rgba(28,23,18,0.08); }
+    .qa-q {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.625rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--terracotta); margin-bottom: 1.25rem;
+    }
+    .qa-rejected {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem;
+      font-weight: 300; color: var(--near-black); opacity: 0.28;
+      text-decoration: line-through;
+      text-decoration-color: rgba(28,23,18,0.25);
+      text-decoration-thickness: 1px; margin-bottom: 0.35rem;
+    }
+    .qa-note {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic; font-size: 1.0625rem;
+      color: var(--near-black); opacity: 0.45;
+      margin: 1.25rem 0; padding-left: 1.25rem;
+      border-left: 2px solid var(--blush); max-width: 52ch;
+    }
+    .qa-final {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.0625rem;
+      font-weight: 300; color: var(--near-black);
+      max-width: 55ch; line-height: 1.7; margin-top: 1rem;
+    }
+    .qa-final-hero {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 300;
+      color: var(--near-black); line-height: 1.15; margin-top: 1rem;
+    }
+
+    /* ── Mark annotation ──────────────────────────────────── */
+    .mark-point {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.5rem 0; border-top: 1px solid rgba(245,239,229,0.07);
+    }
+    .mark-point__dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      margin-top: 5px; flex-shrink: 0;
+    }
+
+    /* ── Status list ──────────────────────────────────────── */
+    .status-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 0.875rem 0; border-top: 1px solid rgba(28,23,18,0.07);
+    }
+
+    /* ── Image hover ──────────────────────────────────────── */
+    .img-zoom { transition: transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+    .img-zoom:hover { transform: scale(1.03); }
+
+    /* ── Concept badge ────────────────────────────────────── */
+    .concept-badge {
+      display: inline-flex; align-items: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.5rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      border: 1px solid rgba(245,239,229,0.2);
+      padding: 0.3rem 0.7rem;
+      color: rgba(245,239,229,0.4);
+    }
+
+    hr { border: none; border-top: 1px solid rgba(28,23,18,0.09); }
+    .hr-light { border-top-color: rgba(245,239,229,0.07); }
+  </style>
+</head>
+
+<body style="background:var(--sable-dark);">
+
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════ NAV -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between">
+
+    <a href="./index.html" class="flex items-center gap-3 no-underline group" aria-label="Back to Main Stage Studio">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"
+           class="text-parchment opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+           style="transform:rotate(180deg);">
+        <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
+        <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+        <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+      </svg>
+      <span class="flex items-baseline gap-[0.3em]">
+        <span class="font-display font-normal text-parchment" style="font-size:0.9375rem;letter-spacing:0.02em;">Main Stage</span>
+        <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5rem;letter-spacing:0.24em;">Studio</span>
+      </span>
+    </a>
+
+    <a href="./index.html#contact" class="btn-fill"
+       style="background:rgba(245,239,229,0.08);border:1px solid rgba(245,239,229,0.12);">
+      <span class="btn-fill__bg"></span>
+      <span class="btn-fill__label text-parchment">Start a project</span>
+    </a>
+  </nav>
+
+
+  <!-- ═══════════════════════════════ HERO -->
+  <section class="min-h-[100dvh] relative flex flex-col justify-end overflow-hidden" style="background:var(--sable-dark);">
+
+    <!-- Atmospheric image — full bleed, low opacity -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <img src="../../05_resources/assets/sable-atmospheric.png"
+           alt=""
+           style="width:100%;height:100%;object-fit:cover;object-position:center;
+                  opacity:0.55;
+                  -webkit-mask-image:radial-gradient(ellipse 100% 80% at 50% 60%, black 20%, transparent 80%);
+                  mask-image:radial-gradient(ellipse 100% 80% at 50% 60%, black 20%, transparent 80%);">
+    </div>
+
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true"
+         style="background:linear-gradient(to bottom, rgba(14,13,11,0.2) 0%, rgba(14,13,11,0) 25%, rgba(14,13,11,0.65) 70%, rgba(14,13,11,1) 100%);">
+    </div>
+
+    <!-- Content -->
+    <div id="sable-hero-content" class="relative z-10 px-6 md:px-12 lg:px-24 pb-16 md:pb-24 max-w-[1400px] w-full mx-auto">
+
+      <div class="mb-8 flex items-center gap-4 line-clip">
+        <span class="line-clip__inner slabel-gold" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.625rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;transition-delay:0.08s;">Case Study · Artist · 2026</span>
+        <span class="concept-badge line-clip__inner" style="transition-delay:0.12s;">Concept</span>
+      </div>
+
+      <h1 class="font-display font-normal text-parchment mb-6"
+          style="font-size:clamp(3rem,8vw,7.5rem);line-height:1.0;letter-spacing:-0.025em;max-width:18ch;">
+        <div class="line-clip"><span class="line-clip__inner" style="transition-delay:0.2s;">The brand is</span></div>
+        <div class="line-clip"><span class="line-clip__inner" style="transition-delay:0.36s;">the room.</span></div>
+        <div class="line-clip"><span class="line-clip__inner" style="font-style:italic;color:rgba(200,149,42,0.8);transition-delay:0.52s;">The music is what</span></div>
+        <div class="line-clip"><span class="line-clip__inner" style="font-style:italic;color:rgba(200,149,42,0.8);transition-delay:0.66s;">happens in it.</span></div>
+      </h1>
+
+      <p class="hero-fade font-sans font-light text-parchment mb-10"
+         style="font-size:1.0625rem;line-height:1.72;opacity:0.5;max-width:44ch;transition-delay:0.84s;">
+        Sable had the sound before she had the language for it. We built the world first — so the music had somewhere to land.
+      </p>
+
+      <div class="hero-fade flex flex-wrap items-center gap-6 md:gap-8" style="transition-delay:1.0s;">
+        <div>
+          <p class="slabel-gold mb-1" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.5rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,149,42,0.4);">Started</p>
+          <p class="font-sans font-light text-parchment" style="font-size:0.875rem;opacity:0.55;">2026</p>
+        </div>
+        <div class="hidden md:block" style="width:1px;height:2rem;background:rgba(200,149,42,0.15);"></div>
+        <div>
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.5rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,149,42,0.4);margin-bottom:0.25rem;">Status</p>
+          <p class="font-sans font-light text-parchment" style="font-size:0.875rem;opacity:0.55;">Concept</p>
+        </div>
+        <div class="hidden md:block" style="width:1px;height:2rem;background:rgba(200,149,42,0.15);"></div>
+        <div>
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.5rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,149,42,0.4);margin-bottom:0.25rem;">Services</p>
+          <p class="font-sans font-light text-parchment" style="font-size:0.875rem;opacity:0.55;">Positioning · Brand Identity</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="relative z-10 px-6 md:px-12 lg:px-24 pb-8 max-w-[1400px] w-full mx-auto flex items-center gap-6">
+      <hr class="flex-1 hr-light">
+      <span class="font-sans text-parchment shrink-0" style="font-size:0.5625rem;letter-spacing:0.22em;text-transform:uppercase;opacity:0.22;">Scroll</span>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ THE BRIEF -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-24">
+
+        <div class="reveal">
+          <p class="slabel mb-4">01 — The Brief</p>
+          <h2 class="font-display font-normal text-near-black mb-6"
+              style="font-size:clamp(2rem,4vw,3.5rem);line-height:1.05;letter-spacing:-0.015em;">
+            What was<br>in the head.
+          </h2>
+          <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.55;max-width:34ch;">
+            Identity before exposure. A founder who knew what the music felt like but not yet what it looked like.
+          </p>
+        </div>
+
+        <div class="reveal rd1">
+          <div style="border-left:2px solid var(--blush);padding-left:2rem;">
+            <p class="font-display font-normal text-near-black mb-6"
+               style="font-size:clamp(1.125rem,1.8vw,1.375rem);line-height:1.65;font-style:italic;opacity:0.75;">
+              "Independent artist. Nothing released yet. Building around a specific sound — I know what it is, I just can't explain it to anyone."
+            </p>
+            <p class="font-display font-normal text-near-black mb-6"
+               style="font-size:clamp(1.125rem,1.8vw,1.375rem);line-height:1.65;font-style:italic;opacity:0.75;">
+              "I don't want to look like anyone else in this space. Not the polished major-label version. Not the lo-fi bedroom aesthetic either. Something in between that doesn't exist yet."
+            </p>
+            <p class="font-display font-normal text-near-black"
+               style="font-size:clamp(1.125rem,1.8vw,1.375rem);line-height:1.65;font-style:italic;opacity:0.75;">
+              "I need the world to exist before I put anything out. I want people to arrive somewhere, not just discover a song."
+            </p>
+          </div>
+          <div class="mt-10 pt-8 border-t" style="border-color:rgba(28,23,18,0.08);">
+            <p class="font-sans font-light text-near-black" style="font-size:0.875rem;opacity:0.4;max-width:44ch;line-height:1.65;">
+              Songwriter and producer. Pre-release. No label. Building entirely independently with a clear sense of sound and almost no visual language to match it.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ DISCOVERY -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="border-top:1px solid rgba(28,23,18,0.07);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="reveal mb-16">
+        <p class="slabel mb-4">02 — Discovery</p>
+        <h2 class="font-display font-normal text-near-black"
+            style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.0;letter-spacing:-0.02em;max-width:18ch;">
+          Before anything<br>looks like anything.
+        </h2>
+      </div>
+
+      <!-- Q1 -->
+      <div class="qa-block reveal rd1">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+          <div><p class="qa-q">What kind of artist?</p></div>
+          <div>
+            <p class="qa-rejected">R&amp;B artist. Soul singer.</p>
+            <p class="qa-rejected">Alternative pop.</p>
+            <p class="qa-note">Genre labels are distribution tools — they tell people where to find the music, not what it means. Starting with genre flattens the identity before it exists.</p>
+            <p class="qa-final">A songwriter building around a specific emotional register. Quiet, heavy, lit from within. The genre will follow the brand — not the other way around.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qa-block reveal rd2">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+          <div><p class="qa-q">What does a brand need to do before a release?</p></div>
+          <div>
+            <p class="qa-rejected">Build awareness. Grow a following.</p>
+            <p class="qa-note">Awareness without context is noise. You don't want people to know you exist — you want them to know what you mean. Awareness before identity just creates confusion at scale.</p>
+            <p class="qa-final">Create the conditions for the music to mean something when it arrives. The brand is the room. Everything else is what happens in it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 — proposition -->
+      <div class="qa-block reveal rd3">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+          <div><p class="qa-q">What's the name and the world?</p></div>
+          <div>
+            <p class="qa-rejected">Stage name derived from birth name.</p>
+            <p class="qa-rejected">A colour. A feeling. Something abstract.</p>
+            <p class="qa-note">Both routes feel chosen. The name needs to feel inevitable — like it couldn't be anything else. A colour that isn't just a colour.</p>
+            <p class="qa-final-hero">Sable.</p>
+            <p class="font-sans font-light text-near-black mt-4" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:50ch;">Black with warmth in it. The name carries the palette, the register, the temperature of the music — all at once. The proposition follows: <em>the signal before the noise.</em></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ INSIGHT -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden" style="background:var(--sable-dark);">
+
+    <div class="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
+      <span class="font-display text-parchment block"
+            style="font-size:clamp(6rem,16vw,16rem);line-height:1;opacity:0.018;letter-spacing:-0.04em;white-space:nowrap;padding-left:4vw;">
+        Signal.
+      </span>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto relative">
+      <div class="reveal md:ml-[22%]">
+        <p class="slabel-gold mb-8" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.625rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,149,42,0.6);">The proposition</p>
+        <blockquote class="font-display font-normal text-parchment mb-10"
+                    style="font-size:clamp(2.5rem,6vw,5.5rem);line-height:1.0;letter-spacing:-0.025em;">
+          "The signal<br>
+          <span style="color:rgba(200,149,42,0.85);">before the noise."</span>
+        </blockquote>
+        <div style="max-width:52ch;border-left:2px solid rgba(200,149,42,0.25);padding-left:1.5rem;">
+          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.75;opacity:0.45;">
+            The thin line of warmth in the dark. Something there before you can fully hear it. Not a promise of what's coming — a presence that says something is already here.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ THE MARK -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-24 relative" style="background:var(--sable-dark);border-top:1px solid rgba(200,149,42,0.06);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <!-- Full-width atmospheric — the mark IS the image -->
+      <div class="reveal mb-12 md:mb-16">
+        <p class="slabel-gold mb-6" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.625rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,149,42,0.6);">03 — The Mark</p>
+        <div class="overflow-hidden" style="border-radius:4px;">
+          <img src="../../05_resources/assets/sable-atmospheric.png"
+               alt="Sable mark — single gold line on deep charcoal"
+               class="w-full img-zoom" style="display:block;max-height:60vh;object-fit:cover;object-position:center;">
+        </div>
+      </div>
+
+      <!-- Annotation — below the image -->
+      <div class="grid grid-cols-1 md:grid-cols-[4fr_5fr] gap-10 md:gap-24 reveal rd1">
+
+        <div>
+          <h2 class="font-display font-normal text-parchment mb-6"
+              style="font-size:clamp(2rem,3.5vw,3.25rem);line-height:1.05;letter-spacing:-0.015em;">
+            One line.<br>Everything.
+          </h2>
+          <p class="font-sans font-light text-parchment" style="font-size:0.9375rem;line-height:1.7;opacity:0.4;max-width:38ch;">
+            The mark is the proposition made visible. No symbol, no letterform — just the signal itself. A horizontal line of warm gold on deep charcoal.
+          </p>
+        </div>
+
+        <div>
+          <div class="mark-point" style="border-top-color:rgba(200,149,42,0.12);">
+            <div class="mark-point__dot" style="background:rgba(200,149,42,0.8);"></div>
+            <div>
+              <p class="font-sans font-medium text-parchment mb-1" style="font-size:0.8125rem;letter-spacing:0.02em;">The line — The signal</p>
+              <p class="font-sans font-light text-parchment" style="font-size:0.875rem;line-height:1.65;opacity:0.45;">The single horizontal mark. Warm, present, not loud. The thing that's there before you fully register it.</p>
+            </div>
+          </div>
+          <div class="mark-point" style="border-top-color:rgba(200,149,42,0.12);">
+            <div class="mark-point__dot" style="background:rgba(14,13,11,0.9);border:1px solid rgba(200,149,42,0.3);"></div>
+            <div>
+              <p class="font-sans font-medium text-parchment mb-1" style="font-size:0.8125rem;letter-spacing:0.02em;">The field — Sable</p>
+              <p class="font-sans font-light text-parchment" style="font-size:0.875rem;line-height:1.65;opacity:0.45;">Not pure black. Deep charcoal with warmth in it. Black that's been lived in. The name in the palette.</p>
+            </div>
+          </div>
+          <div class="mark-point" style="border-top-color:rgba(200,149,42,0.12);">
+            <div class="mark-point__dot" style="background:rgba(200,149,42,0.2);border:1px solid rgba(200,149,42,0.4);"></div>
+            <div>
+              <p class="font-sans font-medium text-parchment mb-1" style="font-size:0.8125rem;letter-spacing:0.02em;">Together — Identity before exposure</p>
+              <p class="font-sans font-light text-parchment" style="font-size:0.875rem;line-height:1.65;opacity:0.45;">The brand is already present before a note is heard. That's the whole brief. Done.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ BRAND EXPRESSION -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="reveal mb-16">
+        <p class="slabel mb-4">04 — Brand Expression</p>
+        <h2 class="font-display font-normal text-near-black"
+            style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.0;letter-spacing:-0.02em;">
+          What got built<br>from the proposition.
+        </h2>
+      </div>
+
+      <!-- Portrait — large, asymmetric -->
+      <div class="reveal mb-20 grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-8 md:gap-12 items-start">
+        <div>
+          <div class="overflow-hidden" style="border-radius:4px;">
+            <img src="../../05_resources/assets/sable-portrait-v2.png"
+                 alt="Sable — editorial portrait"
+                 class="w-full img-zoom" style="display:block;">
+          </div>
+        </div>
+        <div class="flex flex-col justify-end h-full pt-6 md:pt-0 md:pb-8">
+          <p class="font-display font-normal text-near-black mb-6"
+             style="font-size:clamp(1.5rem,3vw,2.5rem);line-height:1.1;letter-spacing:-0.01em;font-style:italic;opacity:0.65;">
+            "Black with warmth in it. The name says the palette, the register, the temperature — all at once."
+          </p>
+          <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.5;max-width:42ch;">
+            The portrait direction came directly from the brief. Not a performance. Not a stage. Just presence — the artist before the crowd.
+          </p>
+        </div>
+      </div>
+
+      <!-- Palette -->
+      <div class="reveal mb-20">
+        <p class="font-sans font-medium text-near-black mb-6 uppercase" style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">Colour palette</p>
+        <div class="grid grid-cols-5 gap-3 md:gap-4 mb-8">
+          <div class="flex flex-col gap-2">
+            <div style="aspect-ratio:1;background:#0E0D0B;border-radius:2px;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Sable</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#0E0D0B</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div style="aspect-ratio:1;background:#2A2624;border-radius:2px;border:1px solid rgba(28,23,18,0.15);"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Charcoal</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#2A2624</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div style="aspect-ratio:1;background:#C8952A;border-radius:2px;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Gold</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#C8952A</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div style="aspect-ratio:1;background:#8A7A6A;border-radius:2px;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Grain</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#8A7A6A</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div style="aspect-ratio:1;background:#F5F0E8;border:1px solid rgba(28,23,18,0.08);border-radius:2px;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Warm white</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#F5F0E8</p>
+          </div>
+        </div>
+        <p class="font-sans font-light text-near-black" style="font-size:0.875rem;opacity:0.4;max-width:52ch;line-height:1.65;">
+          No flat blacks. No neon. The warmth lives in every tone — the gold is desaturated enough to feel like candlelight, not stage light.
+        </p>
+      </div>
+
+      <!-- Typography -->
+      <div class="reveal mb-20">
+        <p class="font-sans font-medium text-near-black mb-6 uppercase" style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">Typography</p>
+        <div class="border-t" style="border-color:rgba(28,23,18,0.07);padding:2rem 0;">
+          <p class="font-sans text-near-black mb-3" style="font-size:0.5625rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;">Display — Cormorant Garamond 300, sparse</p>
+          <p class="font-display font-light text-near-black" style="font-size:clamp(2.5rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.02em;">
+            The signal before the noise.
+          </p>
+        </div>
+        <div class="border-t" style="border-color:rgba(28,23,18,0.07);padding:2rem 0;">
+          <p class="font-sans text-near-black mb-3" style="font-size:0.5625rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;">Body — Plus Jakarta Sans 300</p>
+          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;opacity:0.75;">
+            New music coming. Until then, this is the world.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ STATUS -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:#EAE0D0;">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="reveal mb-14">
+        <p class="slabel mb-4">Status — Concept</p>
+        <h2 class="font-display font-normal text-near-black"
+            style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.0;letter-spacing:-0.02em;">
+          Self-initiated.<br>Not yet built.
+        </h2>
+      </div>
+
+      <div class="reveal rd1 mb-16">
+        <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.6;max-width:56ch;">
+          Sable is a fictional artist built to demonstrate how MSS approaches a brief in the music and artist space — the discovery process, the naming, the visual world. No client was engaged.
+        </p>
+        <p class="font-sans font-light text-near-black mt-4" style="font-size:1.0625rem;line-height:1.75;opacity:0.6;max-width:56ch;">
+          If you're an artist who knows what the music sounds like but not yet what it looks like — this is where we'd start.
+        </p>
+      </div>
+
+      <div class="reveal rd2 pt-10 border-t" style="border-color:rgba(28,23,18,0.08);">
+        <a href="./index.html#contact" class="btn-fill">
+          <span class="btn-fill__bg"></span>
+          <span class="btn-fill__label">Start a real project</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════ FOOTER -->
+  <footer class="bg-near-black py-10 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+      <a href="./index.html" class="flex items-center gap-3 no-underline" aria-label="Main Stage Studio — back to home">
+        <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
+          <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+          <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+        </svg>
+        <span class="flex items-baseline gap-[0.3em]">
+          <span class="font-display font-normal text-parchment" style="font-size:0.9375rem;letter-spacing:0.02em;">Main Stage</span>
+          <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5rem;letter-spacing:0.24em;">Studio</span>
+        </span>
+      </a>
+      <a href="./index.html#work" class="font-sans text-parchment no-underline"
+         style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;"
+         onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">
+        Back to work
+      </a>
+      <p class="font-sans text-parchment" style="font-size:0.6875rem;opacity:0.16;">&copy; 2026 Main Stage Studio</p>
+    </div>
+  </footer>
+
+
+  <script>
+    // ── SCROLL PROGRESS ────────────────────────────────────────────────
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (window.scrollY / max * 100) + '%';
+    }, { passive: true });
+
+    // ── HERO REVEAL ────────────────────────────────────────────────────
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById('sable-hero-content')?.classList.add('hero-ready');
+      });
+    });
+
+    // ── NAV COLOUR SHIFT ───────────────────────────────────────────────
+    const nav = document.getElementById('nav');
+    const lightSections = document.querySelectorAll('.bg-parchment, section[style*="EAE0D0"]');
+    window.addEventListener('scroll', () => {
+      let anyLight = false;
+      lightSections.forEach(sec => {
+        const r = sec.getBoundingClientRect();
+        if (r.top <= 60 && r.bottom >= 60) anyLight = true;
+      });
+      nav.classList.toggle('scrolled-light', anyLight  && window.scrollY > 80);
+      nav.classList.toggle('scrolled-dark',  !anyLight && window.scrollY > 80);
+    }, { passive: true });
+
+    // ── SCROLL REVEAL ──────────────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

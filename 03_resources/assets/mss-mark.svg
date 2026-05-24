@@ -1,0 +1,16 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Main Stage Studio mark">
+  <title>Main Stage Studio — Logo Mark</title>
+
+  <!-- Background -->
+  <rect width="800" height="800" fill="#F5EFE5"/>
+
+  <!-- Near-black square — top right -->
+  <rect x="280" y="40" width="480" height="440" rx="50" fill="#1C1712"/>
+
+  <!-- Terracotta square — bottom left -->
+  <rect x="40" y="320" width="480" height="440" rx="50" fill="#BF6B47"/>
+
+  <!-- Negative space window — the stage (exactly covers overlap zone) -->
+  <rect x="280" y="320" width="240" height="160" rx="30" fill="#F5EFE5"/>
+
+</svg>
