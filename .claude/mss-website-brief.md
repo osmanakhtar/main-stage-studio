@@ -1,27 +1,28 @@
 # Main Stage Studio — Website Brief
 
 *Use alongside `mss-brand-identity.md`. That file is the visual source of truth.*
+*Last reviewed: 02 June 2026*
 
 ---
 
 ## Proposition
 *"You know what you want. We know how to build it."*
 
-Target: Creative founders who lead with instinct and identity. They have the vision, they struggle to execute it. MSS takes what's in their head and makes it real.
+Target: Creative founders who lead with instinct and identity. They have the vision — they haven't yet found the form to make it real. MSS starts with what they're trying to say, not what they think they need built.
 
 ---
 
 ## Creative Direction
 
-**Aesthetic:** Editorial motion — considered layouts, bold typography, kinetic moments used as punctuation not decoration.
+**Aesthetic:** Editorial motion — considered layouts, typographically confident, kinetic moments used as punctuation not decoration.
 
-**Feel:** Warm, confident, direct. Not corporate, not try-hard. The rigour is the method, not the message.
+**Feel:** Warm, direct, quietly confident. Not corporate. Not try-hard. The rigour runs underneath; it's not the message.
 
 **Motion approach**
 - Hero: ambient 3D mark loop or Higgsfield video — slow, intentional, one continuous motion
 - Below hero: editorial stillness — typography and space do the work
 - Scroll-triggered moments: kinetic typography, image reveals, section transitions
-- No motion for motion's sake
+- Motion is the punctuation, not the sentence
 
 ---
 
@@ -53,20 +54,38 @@ Target: Creative founders who lead with instinct and identity. They have the vis
 - Single CTA: Start a project
 - Navigation: wordmark left, links + CTA right
 
+**Copy direction:** Opens with the reader's experience, not the studio's offer. Empathy before capability. States the offer without decorating it — no adjectives doing the work that substance should do. First impression register: direct, clear, warm. The reader should feel recognised before they feel sold to.
+
+---
+
 ### Work / Portfolio
 - Case studies as editorial cards
 - Each card: client name, sector, services, visual thumbnail
+- Card links to framing page — full case study accessible from there
 - No carousel — grid or stacked layout
 
+**Copy direction:** Each case study leads with the client's world, not the studio's process. The problem emerges from the person, not from a brief. Deliverables are not achievements — outcomes are. Make the client feel recognised, not just described.
+
+---
+
 ### Process
-- Four stages: Discovery → Brand Expression → Design System → Web Presence
+- Four stages: Discovery, Brand Expression, Design System, Web Presence
 - Editorial layout, each stage given space
-- Emphasise the journey, not the deliverable
+- The sequence is the point — each stage informs the next
+
+**Copy direction:** The process is framed as a journey, not a service menu. Don't explain the methodology — make the reader feel the logic of it. Discovery framing register: warm but purposeful. The studio listens first.
+
+---
 
 ### About
-- One person, PM background, AI-assisted delivery
-- Honest about the model — not pretending to be a large agency
+- One person — PM background in financial services, fintech, and broadcasting; creative director at heart
+- AI-assisted delivery, human vision and judgment
 - Values: rigour, creative empathy, positive societal impact
+- The thinking is public. The person stays private.
+
+**Copy direction:** Honest about the model without over-explaining it. The finance-to-creative trajectory is context, not autobiography — it explains where the rigour comes from. The empathy is what makes the rigour useful: someone who has lived the tension between structure and creativity understands what creative founders are navigating. No bios, no headshots, no personal disclosure beyond what serves the work.
+
+---
 
 ### Start a project
 - Name, email, tell me about your project
@@ -81,7 +100,7 @@ Target: Creative founders who lead with instinct and identity. They have the vis
 | Build (primary) | WordPress + Bricks Builder |
 | Prototyping | HTML/CSS via Claude Code |
 | Design assets | Higgsfield (video/3D), Claude (SVG, components) |
-| DAM | TBD — Cloudflare R2 or Bunny.net |
+| DAM | TBC — Cloudflare R2 or Bunny.net |
 | Hosting | Cloudways |
 | Local dev | LocalWP |
 

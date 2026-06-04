@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Font Options — Art by Ayesha Johar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Cardo:ital,wght@0,400;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:      #1A1410;
+    --canvas:   #EDE5D8;
+    --saffron:  #B8620E;
+    --gold:     #C98B1A;
+    --teal:     #0F3D35;
+    --muted:    #8A7D6E;
+    --parchment:#F4EDE0;
+    --surface:  #E4DBC8;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    padding: 48px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .intro {
+    margin-bottom: 56px;
+    max-width: 560px;
+  }
+  .intro-label {
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 12px;
+  }
+  .intro-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .intro-body {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── OPTION CARDS ── */
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option {
+    background: white;
+    border: 0.5px solid rgba(26,20,16,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .option-hero {
+    background: var(--teal);
+    padding: 36px 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* geometry echo */
+  .option-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(201,139,26,0.1);
+    pointer-events: none;
+  }
+  .option-hero::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(201,139,26,0.07);
+    pointer-events: none;
+  }
+
+  .art-by {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.625rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(244,237,224,0.28);
+    margin-bottom: 6px;
+  }
+  .name-a {
+    font-size: clamp(52px, 7vw, 80px);
+    line-height: 0.92;
+    color: var(--parchment);
+    letter-spacing: -0.01em;
+    display: block;
+    font-style: normal;
+  }
+  .name-b {
+    font-size: clamp(52px, 7vw, 80px);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--gold);
+    display: block;
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+  .tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: rgba(244,237,224,0.35);
+    line-height: 1.65;
+  }
+
+  .option-body {
+    padding: 24px 40px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    border-top: 0.5px solid rgba(26,20,16,0.06);
+  }
+
+  .spec-label {
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 6px;
+  }
+  .spec-value {
+    font-size: 0.8125rem;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  .option-number {
+    position: absolute;
+    top: 20px; left: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(244,237,224,0.3);
+  }
+
+  /* body text sample */
+  .body-sample {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* full-width paragraph sample */
+  .para-sample {
+    padding: 0 40px 28px;
+    border-top: 0.5px solid rgba(26,20,16,0.05);
+    padding-top: 20px;
+  }
+  .para-inner {
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--ink);
+    max-width: 600px;
+  }
+
+  .option-tag {
+    display: inline-block;
+    font-size: 0.5625rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .tag-warm   { background: rgba(184,98,14,0.1);  color: var(--saffron); }
+  .tag-cool   { background: rgba(26,107,92,0.1);  color: #1A6B5C; }
+  .tag-strong { background: rgba(26,20,16,0.08);  color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <p class="intro-label">Font options — Art by Ayesha Johar</p>
+  <h1 class="intro-title">Three directions.<br>Pick the one that feels like her.</h1>
+  <p class="intro-body">Each option shown in the arrival context — name on teal, italic Johar in gold — plus specimen text and character notes. The J is legible in all three.</p>
+</div>
+
+<div class="options">
+
+  <!-- ── OPTION 1: FRAUNCES ── -->
+  <div class="option">
+    <div class="option-hero" style="position:relative;">
+      <span class="option-number">Option 01 — Fraunces</span>
+      <p class="art-by" style="margin-top:28px;">Art by</p>
+      <span class="name-a" style="font-family:'Fraunces',Georgia,serif;">Ayesha</span>
+      <span class="name-b" style="font-family:'Fraunces',Georgia,serif;">Johar</span>
+      <p class="tagline">Beauty and resistance are one thing.</p>
+    </div>
+    <div class="para-sample">
+      <span class="option-tag tag-warm">Warm · Soft · Expressive</span>
+      <p class="para-inner" style="font-family:'Fraunces',Georgia,serif;">
+        Thirty years of painting what she believes in — not what she observes.
+      </p>
+    </div>
+    <div class="option-body">
+      <div>
+        <p class="spec-label">Character</p>
+        <p class="spec-value">Optical size serif. Soft, almost rounded. Warm and approachable. The italic has genuine personality without the historical quirks of older typefaces.</p>
+      </div>
+      <div>
+        <p class="spec-label">Best for</p>
+        <p class="spec-value">Work that wants to feel alive and made by hand. Less formal than Spectral. Closer to the energy of her acrylic paintings than the restraint of her pencil drawing.</p>
+      </div>
+      <div>
+        <p class="spec-label">Risk</p>
+        <p class="spec-value">Can feel slightly soft if not balanced with strong layout. Needs the teal and the ink to hold its weight.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OPTION 2: SPECTRAL ── -->
+  <div class="option">
+    <div class="option-hero" style="position:relative;">
+      <span class="option-number">Option 02 — Spectral</span>
+      <p class="art-by" style="margin-top:28px;">Art by</p>
+      <span class="name-a" style="font-family:'Spectral',Georgia,serif;font-weight:300;">Ayesha</span>
+      <span class="name-b" style="font-family:'Spectral',Georgia,serif;font-weight:300;">Johar</span>
+      <p class="tagline">Beauty and resistance are one thing.</p>
+    </div>
+    <div class="para-sample">
+      <span class="option-tag tag-cool">Refined · Quiet · Long-form</span>
+      <p class="para-inner" style="font-family:'Spectral',Georgia,serif;font-weight:300;">
+        Thirty years of painting what she believes in — not what she observes.
+      </p>
+    </div>
+    <div class="option-body">
+      <div>
+        <p class="spec-label">Character</p>
+        <p class="spec-value">Designed for screen reading. Light weight has real elegance. More restrained than Fraunces — built for long text as much as display.</p>
+      </div>
+      <div>
+        <p class="spec-label">Best for</p>
+        <p class="spec-value">If the site should feel like a long exhale — quiet, considered, the work doing all the talking. Good for an artist who has nothing to prove.</p>
+      </div>
+      <div>
+        <p class="spec-label">Risk</p>
+        <p class="spec-value">Can feel too refined for the political weight of the work. Witness and the Earth painting need more friction than Spectral naturally carries.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OPTION 3: LORA ── -->
+  <div class="option">
+    <div class="option-hero" style="position:relative;">
+      <span class="option-number">Option 03 — Lora</span>
+      <p class="art-by" style="margin-top:28px;">Art by</p>
+      <span class="name-a" style="font-family:'Lora',Georgia,serif;font-weight:400;">Ayesha</span>
+      <span class="name-b" style="font-family:'Lora',Georgia,serif;font-weight:400;">Johar</span>
+      <p class="tagline">Beauty and resistance are one thing.</p>
+    </div>
+    <div class="para-sample">
+      <span class="option-tag tag-strong">Grounded · Readable · Balanced</span>
+      <p class="para-inner" style="font-family:'Lora',Georgia,serif;font-weight:400;">
+        Thirty years of painting what she believes in — not what she observes.
+      </p>
+    </div>
+    <div class="option-body">
+      <div>
+        <p class="spec-label">Character</p>
+        <p class="spec-value">Brushstroke origins. Contemporary but rooted. The italic J is clean and confident. Sits between the warmth of Fraunces and the restraint of Spectral.</p>
+      </div>
+      <div>
+        <p class="spec-label">Best for</p>
+        <p class="spec-value">Holds the full range of her work — the spiritual and the political and the intimate — without pulling too far in any one direction. The most versatile of the three.</p>
+      </div>
+      <div>
+        <p class="spec-label">Risk</p>
+        <p class="spec-value">More widely used than the other two. Less distinctive at first glance — though the context and colour system do enough to make it feel owned.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSS Building MSS — Case Study | Main Stage Studio</title>
+  <meta name="description" content="How Main Stage Studio built itself. The positioning, the brand, the identity — built the same way we build for clients. Documented in full.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment:    '#F5EFE5',
+            blush:        '#E8C9AE',
+            terracotta:   '#BF6B47',
+            ember:        '#8C4A2F',
+            'near-black': '#1C1712',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans:    ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --parchment:  #F5EFE5;
+      --blush:      #E8C9AE;
+      --terracotta: #BF6B47;
+      --ember:      #8C4A2F;
+      --near-black: #1C1712;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    html { background: var(--near-black); }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      color: var(--near-black);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scroll progress */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 1px;
+      width: 0%;
+      background: var(--terracotta);
+      z-index: 100;
+      transition: width 0.05s linear;
+    }
+
+    /* Nav */
+    #nav {
+      transition: background-color 0.45s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow       0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    #nav.scrolled-light {
+      background: var(--parchment);
+      box-shadow: 0 1px 0 rgba(28,23,18,0.08);
+    }
+    #nav.scrolled-dark {
+      background: var(--near-black);
+      box-shadow: 0 1px 0 rgba(245,239,229,0.06);
+    }
+    .nav-link {
+      position: relative;
+      font-size: 0.8125rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--terracotta);
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Button fill */
+    .btn-fill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 0.8rem 1.625rem;
+      background: var(--near-black);
+      color: var(--parchment);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-fill__bg {
+      position: absolute;
+      inset: 0;
+      background: var(--terracotta);
+      transform: translateX(-101%);
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+    }
+    .btn-fill:hover .btn-fill__bg { transform: translate(0,0); }
+    .btn-fill__label { position: relative; z-index: 1; }
+
+    .btn-fill.light {
+      background: var(--parchment);
+      color: var(--near-black);
+    }
+    .btn-fill.light .btn-fill__bg { background: var(--terracotta); }
+    .btn-fill.light:hover { color: var(--parchment); }
+
+    /* Section label */
+    .slabel {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .slabel-light { color: rgba(191,107,71,0.7); }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.22s; }
+    .rd3 { transition-delay: 0.36s; }
+
+    /* Discovery Q&A */
+    .qa-block {
+      padding: 3rem 0;
+      border-top: 1px solid rgba(245,239,229,0.07);
+    }
+    .qa-q {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(191,107,71,0.7);
+      margin-bottom: 1.25rem;
+    }
+    .qa-rejected {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--parchment);
+      opacity: 0.22;
+      text-decoration: line-through;
+      text-decoration-color: rgba(245,239,229,0.2);
+      text-decoration-thickness: 1px;
+      margin-bottom: 0.35rem;
+    }
+    .qa-note {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.0625rem;
+      color: var(--parchment);
+      opacity: 0.4;
+      margin: 1.25rem 0;
+      padding-left: 1.25rem;
+      border-left: 2px solid rgba(191,107,71,0.3);
+      max-width: 52ch;
+    }
+    .qa-final {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.0625rem;
+      font-weight: 300;
+      color: var(--parchment);
+      max-width: 55ch;
+      line-height: 1.7;
+      margin-top: 1rem;
+      opacity: 0.85;
+    }
+    .qa-final-hero {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 300;
+      color: var(--parchment);
+      line-height: 1.15;
+      margin-top: 1rem;
+    }
+
+    /* Mark annotation */
+    .mark-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(245,239,229,0.07);
+    }
+    .mark-point__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    /* Process image sequence */
+    .process-seq-caption {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: var(--parchment);
+      opacity: 0.38;
+      line-height: 1.6;
+      margin-top: 0.875rem;
+    }
+
+    /* Palette swatch */
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .swatch__block {
+      aspect-ratio: 1;
+      width: 100%;
+    }
+
+    /* Type specimen */
+    .type-row {
+      padding: 2rem 0;
+      border-top: 1px solid rgba(28,23,18,0.07);
+    }
+
+    /* ToV table */
+    .tov-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(28,23,18,0.07);
+      align-items: start;
+    }
+    .tov-before {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 300;
+      opacity: 0.3;
+      text-decoration: line-through;
+      text-decoration-color: rgba(28,23,18,0.2);
+    }
+    .tov-after {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 300;
+      color: var(--near-black);
+    }
+
+    /* Pulse dot */
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.3; transform: scale(0.75); }
+    }
+    .pulse-dot { animation: pulseDot 2.8s ease-in-out infinite; }
+
+    hr { border: none; border-top: 1px solid rgba(28,23,18,0.09); }
+    .hr-light { border-top-color: rgba(245,239,229,0.07); }
+
+    /* Hero line reveal */
+    .line-clip { overflow: hidden; }
+    .line-clip__inner {
+      display: block;
+      transform: translateY(105%);
+      transition: transform 1.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hero-ready .line-clip__inner { transform: translateY(0); }
+    .hero-fade {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 1.1s cubic-bezier(0.16,1,0.3,1),
+                  transform 1.1s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hero-ready .hero-fade { opacity: 1; transform: translateY(0); }
+
+    /* Image hover zoom */
+    .img-zoom { transition: transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+    .img-zoom:hover { transform: scale(1.03); }
+
+    /* Video section */
+    .motion-video-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+    }
+    .motion-video-wrap video {
+      width: 100%;
+      display: block;
+      opacity: 0.72;
+    }
+
+    /* Chapter rule */
+    .chapter-rule {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+    .chapter-rule__line {
+      flex: 1;
+      height: 1px;
+      background: rgba(28,23,18,0.1);
+    }
+    .chapter-rule__line-light {
+      background: rgba(245,239,229,0.08);
+    }
+  </style>
+</head>
+
+<body style="background:var(--near-black);">
+
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+
+  <!-- NAV -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between">
+
+    <a href="../../website/index.html" class="flex items-center gap-3 no-underline group" aria-label="Back to Main Stage Studio">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"
+           class="text-parchment opacity-50 group-hover:opacity-100 transition-opacity duration-300"
+           style="transform:rotate(180deg);">
+        <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
+        <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+        <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+      </svg>
+      <span class="flex items-baseline gap-[0.3em]">
+        <span class="font-display font-normal text-parchment" style="font-size:0.9375rem;letter-spacing:0.02em;">Main Stage</span>
+        <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5rem;letter-spacing:0.24em;">Studio</span>
+      </span>
+    </a>
+
+    <a href="../../website/index.html#contact"
+       class="btn-fill"
+       style="background:rgba(245,239,229,0.08);border:1px solid rgba(245,239,229,0.12);">
+      <span class="btn-fill__bg"></span>
+      <span class="btn-fill__label text-parchment">Start a project</span>
+    </a>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="min-h-[100dvh] relative flex flex-col justify-end overflow-hidden" style="background:var(--near-black);">
+
+    <video id="cs-hero-video" autoplay muted loop playsinline
+      src="../../../03_resources/assets/falling-hero.mp4"
+      aria-hidden="true"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;
+             will-change:opacity;
+             transition:opacity 1.8s cubic-bezier(0.16,1,0.3,1);
+             -webkit-mask-image:radial-gradient(ellipse 90% 85% at 55% 45%, black 20%, transparent 72%);
+             mask-image:radial-gradient(ellipse 90% 85% at 55% 45%, black 20%, transparent 72%);">
+    </video>
+
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true"
+         style="background:linear-gradient(to bottom, rgba(28,23,18,0.15) 0%, rgba(28,23,18,0) 30%, rgba(28,23,18,0.7) 75%, rgba(28,23,18,1) 100%);">
+    </div>
+
+    <div id="hero-content" class="relative z-10 px-6 md:px-12 lg:px-24 pb-16 md:pb-24 max-w-[1400px] w-full mx-auto">
+
+      <div class="mb-8 line-clip">
+        <span class="line-clip__inner slabel-light" style="color:rgba(191,107,71,0.65);transition-delay:0.08s;">
+          Case Study · Studio · 2026
+        </span>
+      </div>
+
+      <h1 class="font-display font-normal text-parchment mb-6"
+          style="font-size:clamp(3rem,8vw,7.5rem);line-height:1.0;letter-spacing:-0.025em;max-width:14ch;">
+        <div class="line-clip"><span class="line-clip__inner" style="transition-delay:0.2s;">The first client</span></div>
+        <div class="line-clip"><span class="line-clip__inner" style="transition-delay:0.36s;">was the studio</span></div>
+        <div class="line-clip"><span class="line-clip__inner" style="transition-delay:0.52s;">itself.</span></div>
+      </h1>
+
+      <p class="hero-fade font-sans font-light text-parchment mb-10"
+         style="font-size:1.0625rem;line-height:1.72;opacity:0.52;max-width:46ch;transition-delay:0.72s;">
+        No portfolio. No clients. No proof of concept. Just a clear sense of what was missing, and a decision to build it the same way we'd build it for anyone.
+      </p>
+
+      <div class="hero-fade flex flex-wrap items-center gap-6 md:gap-8" style="transition-delay:0.88s;">
+        <div>
+          <p class="slabel-light mb-1" style="color:rgba(245,239,229,0.3);">Started</p>
+          <p class="font-sans font-light text-parchment" style="font-size:0.875rem;opacity:0.55;">May 2026</p>
+        </div>
+        <div class="hidden md:block" style="width:1px;height:2rem;background:rgba(245,239,229,0.1);"></div>
+        <div>
+          <p class="slabel-light mb-1" style="color:rgba(245,239,229,0.3);">Status</p>
+          <div class="flex items-center gap-2">
+            <div class="w-[5px] h-[5px] rounded-full bg-terracotta pulse-dot shrink-0"></div>
+            <p class="font-sans font-light text-parchment" style="font-size:0.875rem;opacity:0.55;">Ongoing</p>
+          </div>
+        </div>
+        <div class="hidden md:block" style="width:1px;height:2rem;background:rgba(245,239,229,0.1);"></div>
+        <div>
+          <p class="slabel-light mb-1" style="color:rgba(245,239,229,0.3);">Services</p>
+          <p class="font-sans font-light text-parchment" style="font-size:0.875rem;opacity:0.55;">Positioning · Brand · Web</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative z-10 px-6 md:px-12 lg:px-24 pb-8 max-w-[1400px] w-full mx-auto flex items-center gap-6">
+      <hr class="flex-1 hr-light">
+      <span class="font-sans text-parchment shrink-0" style="font-size:0.5625rem;letter-spacing:0.22em;text-transform:uppercase;opacity:0.22;">Scroll</span>
+    </div>
+  </section>
+
+
+  <!-- MISSION -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="grid grid-cols-1 md:grid-cols-[3fr_4fr] gap-14 md:gap-32 items-start">
+
+        <div class="reveal">
+          <p class="slabel mb-6">The studio</p>
+          <h2 class="font-display font-normal text-near-black"
+              style="font-size:clamp(2.5rem,5vw,4.75rem);line-height:1.0;letter-spacing:-0.02em;">
+            Every creative vision deserves a centre stage.
+          </h2>
+        </div>
+
+        <div class="reveal rd1 flex flex-col justify-center" style="padding-top:0.5rem;">
+          <p class="font-sans font-light text-near-black mb-6"
+             style="font-size:1.0625rem;line-height:1.78;opacity:0.7;max-width:52ch;">
+            Some things are hard to say not because they're unclear, but because no one has ever given them the right form.
+          </p>
+          <p class="font-sans font-light text-near-black mb-6"
+             style="font-size:1.0625rem;line-height:1.78;opacity:0.7;max-width:52ch;">
+            Main Stage Studio exists for people with a vision. People who know what they're trying to create, but haven't yet found the language, the identity, or the digital presence to make it real for the people who need to encounter it.
+          </p>
+          <p class="font-sans font-light text-near-black"
+             style="font-size:1.0625rem;line-height:1.78;opacity:0.7;max-width:52ch;">
+            The name says it. The client is always centre stage. We are the infrastructure that makes it possible: the thinking, the positioning, the brand, the platform, built to carry their vision, not ours.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- THE BRIEF -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="border-top:1px solid rgba(28,23,18,0.07);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-24">
+
+        <div class="reveal">
+          <div class="chapter-rule">
+            <p class="slabel shrink-0">01 — The Brief</p>
+            <div class="chapter-rule__line"></div>
+          </div>
+          <h2 class="font-display font-normal text-near-black mb-6"
+              style="font-size:clamp(2rem,4vw,3.5rem);line-height:1.05;letter-spacing:-0.015em;">
+            Before the work began.
+          </h2>
+          <p class="font-sans font-light text-near-black"
+             style="font-size:0.9375rem;line-height:1.75;opacity:0.55;max-width:36ch;">
+            Every MSS engagement starts here. Not with a mood board or a template. With a question about what the founder is actually trying to say, and what it will take to say it properly.
+          </p>
+          <p class="font-sans font-light text-near-black mt-4"
+             style="font-size:0.9375rem;line-height:1.75;opacity:0.55;max-width:36ch;">
+            This was the hardest version of that conversation. Because the client was us.
+          </p>
+        </div>
+
+        <div class="reveal rd1">
+          <div style="border-left:2px solid var(--blush);padding-left:2rem;">
+            <p class="font-display font-normal text-near-black mb-6"
+               style="font-size:clamp(1.125rem,1.8vw,1.375rem);line-height:1.65;font-style:italic;opacity:0.75;">
+              "Build a studio that takes what creative founders have in their heads and makes it real. Positioning, brand identity, web presence. End-to-end."
+            </p>
+            <p class="font-display font-normal text-near-black mb-6"
+               style="font-size:clamp(1.125rem,1.8vw,1.375rem);line-height:1.65;font-style:italic;opacity:0.75;">
+              "Target: creative founders. Initially scoped to events and broadcasting. May be broader. Figure it out."
+            </p>
+            <p class="font-display font-normal text-near-black"
+               style="font-size:clamp(1.125rem,1.8vw,1.375rem);line-height:1.65;font-style:italic;opacity:0.75;">
+              "Challenge: no portfolio yet. No completed clients. Build MSS as its own first case study."
+            </p>
+          </div>
+
+          <div class="mt-10 pt-8 border-t" style="border-color:rgba(28,23,18,0.08);">
+            <p class="font-sans font-light text-near-black"
+               style="font-size:0.875rem;opacity:0.4;max-width:44ch;line-height:1.65;">
+              The brief raised the only question that mattered: what does success actually look like? Not what gets built. What changes for the person it's built for. That question is where every engagement at MSS begins.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- DISCOVERY -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:var(--near-black);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="reveal mb-16">
+        <div class="chapter-rule">
+          <p class="slabel-light shrink-0" style="color:rgba(191,107,71,0.6);">02 — Discovery</p>
+          <div class="chapter-rule__line chapter-rule__line-light"></div>
+        </div>
+        <h2 class="font-display font-normal text-parchment"
+            style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.0;letter-spacing:-0.02em;max-width:18ch;">
+          The questions before the answers.
+        </h2>
+      </div>
+
+      <!-- Q&A 1 -->
+      <div class="qa-block reveal rd1">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+          <div>
+            <p class="qa-q">Who exactly is the client?</p>
+          </div>
+          <div>
+            <p class="qa-rejected">Creative founders in events, live entertainment, and broadcasting.</p>
+            <p class="qa-note">Too narrow. And it starts from the wrong place: from the studio's existing network, not from the problem being solved. The question was never which industry. It was what kind of person has this problem. What does the situation look like?</p>
+            <p class="qa-final">Creative founders. Any sector. Someone with a vision that's real and developed, but no infrastructure to make it visible. That pattern exists everywhere.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q&A 2 -->
+      <div class="qa-block reveal rd2">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+          <div>
+            <p class="qa-q">What makes MSS different?</p>
+          </div>
+          <div>
+            <p class="qa-rejected">Product thinking and AI tools.</p>
+            <p class="qa-note">That's the method. Methods don't differentiate. What differentiates is what the method is in service of. The question to answer before anything gets made is: what does the client need to walk away with? Not what deliverables. What clarity. What changed understanding of their own work. Starting there, and working backwards, is the discipline.</p>
+            <p class="qa-final">Someone who starts with the outcome and works backwards. Who asks what success looks like before asking what anything looks like. Structured enough to deliver. Creative enough to earn the trust.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q&A 3 -->
+      <div class="qa-block reveal rd3">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+          <div>
+            <p class="qa-q">What's the proposition?</p>
+          </div>
+          <div>
+            <p class="qa-rejected">We make it real.</p>
+            <p class="qa-rejected">Built for founders.</p>
+            <p class="qa-rejected">Brand meets strategy.</p>
+            <p class="qa-note">Every rejected option describes the studio. None of them speak to the client's situation. The right proposition starts where the client already is: they have the vision. The gap is execution. Speak to the gap, not the service.</p>
+            <p class="qa-final-hero">You know what you want.<br>We know how to build it.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- PROPOSITION -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden" style="background:var(--near-black);border-top:1px solid rgba(245,239,229,0.05);">
+
+    <div class="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
+      <span class="font-display text-parchment block"
+            style="font-size:clamp(6rem,16vw,16rem);line-height:1;opacity:0.025;letter-spacing:-0.04em;white-space:nowrap;padding-left:4vw;">
+        You know.
+      </span>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto relative">
+      <div class="reveal md:ml-[22%]">
+        <p class="slabel-light mb-8" style="color:rgba(191,107,71,0.6);">The proposition</p>
+
+        <blockquote class="font-display font-normal text-parchment mb-10"
+                    style="font-size:clamp(2.5rem,6vw,5.5rem);line-height:1.0;letter-spacing:-0.025em;">
+          "You know what<br>you want."
+          <br>
+          <span style="color:var(--terracotta);">"We know how<br>to build it."</span>
+        </blockquote>
+
+        <div style="max-width:52ch;border-left:2px solid rgba(191,107,71,0.3);padding-left:1.5rem;">
+          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.75;opacity:0.45;">
+            Every rejected option described what the studio offers. This one describes what the client already has, and names the one thing standing between them and the outcome they're working toward. The "you" comes first because the client's vision always does.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- THE MARK -->
+  <section class="py-24 md:py-36 px-6 md:px-12 lg:px-24 relative" style="background:var(--near-black);border-top:1px solid rgba(245,239,229,0.06);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="grid grid-cols-1 md:grid-cols-[5fr_4fr] gap-16 md:gap-24 items-center">
+
+        <!-- 3D mark animation -->
+        <div class="reveal">
+          <div class="overflow-hidden" style="border-radius:4px;">
+            <video autoplay muted loop playsinline
+                   src="../../../03_resources/assets/3d-mark-animation.mp4"
+                   aria-label="MSS mark in motion, terracotta and near-black forms resolving around the parchment stage"
+                   style="display:block;width:100%;opacity:0.92;"></video>
+          </div>
+        </div>
+
+        <!-- Annotation -->
+        <div class="reveal rd1">
+          <div class="chapter-rule">
+            <p class="slabel-light shrink-0" style="color:rgba(191,107,71,0.6);">03 — The Mark</p>
+            <div class="chapter-rule__line chapter-rule__line-light"></div>
+          </div>
+          <h2 class="font-display font-normal text-parchment mb-10"
+              style="font-size:clamp(2rem,3.5vw,3.25rem);line-height:1.05;letter-spacing:-0.015em;">
+            A vision needs something to stand on.
+          </h2>
+
+          <div>
+            <div class="mark-point">
+              <div class="mark-point__dot" style="background:#2A2420;border:1px solid rgba(245,239,229,0.2);"></div>
+              <div>
+                <p class="font-sans font-medium text-parchment mb-1" style="font-size:0.8125rem;letter-spacing:0.02em;">Near-black — The scaffolding</p>
+                <p class="font-sans font-light text-parchment" style="font-size:0.875rem;line-height:1.65;opacity:0.45;">
+                  What the studio brings. The thinking infrastructure: outcome-first, clear about what success looks like before anything gets made. It leads, because without it the vision has nowhere to go.
+                </p>
+              </div>
+            </div>
+
+            <div class="mark-point">
+              <div class="mark-point__dot" style="background:var(--terracotta);"></div>
+              <div>
+                <p class="font-sans font-medium text-parchment mb-1" style="font-size:0.8125rem;letter-spacing:0.02em;">Terracotta — The vision</p>
+                <p class="font-sans font-light text-parchment" style="font-size:0.875rem;line-height:1.65;opacity:0.45;">
+                  What the client brings. The idea, the instinct, the creative energy that drives the whole engagement. It's already there before we arrive. Our job is never to replace it, only to give it form.
+                </p>
+              </div>
+            </div>
+
+            <div class="mark-point">
+              <div class="mark-point__dot" style="background:rgba(245,239,229,0.7);border:1px solid rgba(245,239,229,0.4);"></div>
+              <div>
+                <p class="font-sans font-medium text-parchment mb-1" style="font-size:0.8125rem;letter-spacing:0.02em;">Parchment — The stage</p>
+                <p class="font-sans font-light text-parchment" style="font-size:0.875rem;line-height:1.65;opacity:0.45;">
+                  Where the two meet. Not a compromise between structure and vision, but the space where they stop being separate things. The place where the work becomes possible. The stage the client steps onto.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Process image sequence -->
+      <div class="mt-20 md:mt-28 pt-14 md:pt-20" style="border-top:1px solid rgba(245,239,229,0.06);">
+        <p class="reveal font-sans text-parchment uppercase mb-10"
+           style="font-size:0.5rem;letter-spacing:0.22em;opacity:0.25;">How the thinking evolved</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 items-end">
+
+          <div class="reveal rd1">
+            <div class="overflow-hidden" style="border-radius:3px;">
+              <img src="../../../03_resources/assets/black-mark-glass-01.png"
+                   alt="Near-black form with glass cube on top — early exploration of transparency"
+                   class="w-full img-zoom" style="display:block;">
+            </div>
+            <p class="process-seq-caption">
+              The first idea was transparency. Structure made visible through glass. The concept was right. The form wasn't resolved yet.
+            </p>
+          </div>
+
+          <div class="reveal rd2">
+            <div class="overflow-hidden" style="border-radius:3px;">
+              <img src="../../../03_resources/assets/terracotta-and-black-glass.png"
+                   alt="Terracotta and near-black forms side by side, each with a glass cube — understanding the two elements separately"
+                   class="w-full img-zoom" style="display:block;">
+            </div>
+            <p class="process-seq-caption">
+              The two elements understood separately. Each with its own relationship to structure and space, before deciding how they should meet.
+            </p>
+          </div>
+
+          <div class="reveal rd3">
+            <div class="overflow-hidden" style="border-radius:3px;">
+              <img src="../../../03_resources/assets/terracotta-and-glass-01.png"
+                   alt="Terracotta clay form with glass cube at intersection — the resolved concept"
+                   class="w-full img-zoom" style="display:block;">
+            </div>
+            <p class="process-seq-caption">
+              The resolved idea. Terracotta and glass. Raw vision and precise structure, meeting at an intersection that belongs to neither. That's the stage.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- BRAND EXPRESSION -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="reveal mb-16">
+        <div class="chapter-rule">
+          <p class="slabel shrink-0">04 — Brand Expression</p>
+          <div class="chapter-rule__line"></div>
+        </div>
+        <h2 class="font-display font-normal text-near-black"
+            style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.0;letter-spacing:-0.02em;">
+          What the positioning<br>made possible.
+        </h2>
+      </div>
+
+      <!-- Motion identity -->
+      <div class="reveal mb-20">
+        <p class="font-sans font-medium text-near-black mb-6 uppercase"
+           style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">Motion identity</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-10 md:gap-16 items-center">
+          <div class="motion-video-wrap">
+            <video autoplay muted loop playsinline
+                   src="../../../03_resources/assets/falling-hero.mp4"
+                   aria-label="Falling cubes assembling into structure — MSS motion identity"></video>
+          </div>
+          <div>
+            <p class="font-sans font-light text-near-black mb-5"
+               style="font-size:1rem;line-height:1.78;opacity:0.65;max-width:38ch;">
+              Structure assembling from nothing. Individual elements falling, finding their place, filling a space that didn't exist before they arrived.
+            </p>
+            <p class="font-sans font-light text-near-black"
+               style="font-size:1rem;line-height:1.78;opacity:0.65;max-width:38ch;">
+              That's what the studio does for a client. The vision is already there. The motion shows what happens when the scaffolding arrives to hold it up.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Palette -->
+      <div class="reveal mb-20">
+        <p class="font-sans font-medium text-near-black mb-6 uppercase"
+           style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">Colour palette</p>
+        <div class="grid grid-cols-5 gap-3 md:gap-4 mb-8">
+          <div class="swatch">
+            <div class="swatch__block" style="background:#F5EFE5;border:1px solid rgba(28,23,18,0.1);"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Parchment</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#F5EFE5</p>
+          </div>
+          <div class="swatch">
+            <div class="swatch__block" style="background:#E8C9AE;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Blush</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#E8C9AE</p>
+          </div>
+          <div class="swatch">
+            <div class="swatch__block" style="background:#BF6B47;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Terracotta</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#BF6B47</p>
+          </div>
+          <div class="swatch">
+            <div class="swatch__block" style="background:#8C4A2F;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Ember</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#8C4A2F</p>
+          </div>
+          <div class="swatch">
+            <div class="swatch__block" style="background:#1C1712;"></div>
+            <p class="font-sans text-near-black" style="font-size:0.5625rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.55;">Near-black</p>
+            <p class="font-sans text-near-black" style="font-size:0.5rem;opacity:0.3;">#1C1712</p>
+          </div>
+        </div>
+        <p class="font-sans font-light text-near-black"
+           style="font-size:0.875rem;opacity:0.4;max-width:52ch;line-height:1.65;">
+          Warm, editorial, grounded. Parchment as the surface everything lives on. Terracotta as the moment of punctuation. Near-black carrying the weight of the type. Nothing cool, nothing generic, nothing that could belong to anyone else.
+        </p>
+      </div>
+
+      <!-- Typography -->
+      <div class="reveal mb-20">
+        <p class="font-sans font-medium text-near-black mb-6 uppercase"
+           style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">Typography</p>
+
+        <div class="type-row">
+          <p class="font-sans text-near-black mb-3"
+             style="font-size:0.5625rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;">
+            Display — Cormorant Garamond 300/400
+          </p>
+          <p class="font-display font-normal text-near-black"
+             style="font-size:clamp(2.5rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.02em;">
+            You know what you want.
+          </p>
+        </div>
+
+        <div class="type-row">
+          <p class="font-sans text-near-black mb-3"
+             style="font-size:0.5625rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;">
+            Body — Plus Jakarta Sans 300
+          </p>
+          <p class="font-sans font-light text-near-black"
+             style="font-size:1.0625rem;line-height:1.75;max-width:55ch;opacity:0.75;">
+            The brief is rarely the real brief. We stay in the question long enough to find what's actually there.
+          </p>
+        </div>
+
+        <div class="type-row">
+          <p class="font-sans text-near-black mb-3"
+             style="font-size:0.5625rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.35;">
+            Label — Plus Jakarta Sans 500
+          </p>
+          <p class="slabel">Discovery · Brand Expression · Design System · Web Presence</p>
+        </div>
+
+        <p class="font-sans font-light text-near-black mt-6"
+           style="font-size:0.875rem;opacity:0.4;max-width:52ch;line-height:1.65;">
+          Two voices in relationship. Cormorant Garamond for the moments that need to carry weight. Plus Jakarta Sans for everything that needs to move cleanly and be understood immediately. The pairing says the same thing the mark says: structure and warmth, working together.
+        </p>
+      </div>
+
+      <!-- Tone of voice -->
+      <div class="reveal">
+        <p class="font-sans font-medium text-near-black mb-6 uppercase"
+           style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">Tone of voice</p>
+
+        <div class="grid grid-cols-2 gap-4 mb-3">
+          <p class="font-sans text-near-black uppercase"
+             style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.3;">What we almost wrote</p>
+          <p class="font-sans text-near-black uppercase"
+             style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.3;">What we actually wrote</p>
+        </div>
+
+        <div class="tov-row">
+          <p class="tov-before">Product thinking applied to creative work.</p>
+          <p class="tov-after">We figure out what success looks like before we design a single thing.</p>
+        </div>
+        <div class="tov-row">
+          <p class="tov-before">AI-assisted delivery, faster without it showing.</p>
+          <p class="tov-after">The thinking is always ours. The tools mean we can move at the speed the work deserves.</p>
+        </div>
+        <div class="tov-row">
+          <p class="tov-before">End-to-end process.</p>
+          <p class="tov-after">Each stage informs the next. Nothing gets handed over and abandoned.</p>
+        </div>
+        <div class="tov-row">
+          <p class="tov-before">Discovery and positioning.</p>
+          <p class="tov-after">The brief is rarely the real brief. We stay in the question long enough to find what's actually there.</p>
+        </div>
+
+        <div class="mt-12 pt-8 border-t" style="border-color:rgba(28,23,18,0.07);">
+          <p class="font-sans font-medium text-near-black mb-6 uppercase"
+             style="font-size:0.625rem;letter-spacing:0.2em;opacity:0.4;">The voice in context</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div style="border-left:2px solid var(--blush);padding-left:1.5rem;">
+              <p class="font-sans text-near-black mb-2 uppercase"
+                 style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">First impression</p>
+              <p class="font-sans font-light text-near-black"
+                 style="font-size:0.9375rem;line-height:1.72;opacity:0.7;">
+                Some things are hard to say not because they're unclear, but because no one has ever given them the right form. Main Stage Studio works with creative founders who have a vision worth expressing. We listen until we understand it properly. Then we build everything around it, the brand, the language, the digital presence, so that when people encounter your work, they hear exactly what you meant.
+              </p>
+            </div>
+            <div style="border-left:2px solid var(--blush);padding-left:1.5rem;">
+              <p class="font-sans text-near-black mb-2 uppercase"
+                 style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">Discovery framing</p>
+              <p class="font-sans font-light text-near-black"
+                 style="font-size:0.9375rem;line-height:1.72;opacity:0.7;">
+                Before we talk about what anything looks like, I want to understand what you're actually trying to say. Most briefs are a starting point. The real story is usually underneath it, and it takes a proper conversation to find it. So let's start there. What made you build this?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CLOSE -->
+  <section class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="border-top:1px solid rgba(28,23,18,0.07);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-32 items-start">
+
+        <div class="reveal">
+          <div class="chapter-rule">
+            <p class="slabel shrink-0">What this made possible</p>
+            <div class="chapter-rule__line"></div>
+          </div>
+          <h2 class="font-display font-normal text-near-black"
+              style="font-size:clamp(2rem,4vw,3.75rem);line-height:1.05;letter-spacing:-0.015em;">
+            Proof that the process works.
+          </h2>
+        </div>
+
+        <div class="reveal rd1">
+          <p class="font-sans font-light text-near-black mb-6"
+             style="font-size:1.0625rem;line-height:1.78;opacity:0.65;max-width:52ch;">
+            The studio built itself the same way it builds for clients. Outcome defined before anything was designed. Every decision traced back to the same question: what does this need to do?
+          </p>
+          <p class="font-sans font-light text-near-black mb-12"
+             style="font-size:1.0625rem;line-height:1.78;opacity:0.65;max-width:52ch;">
+            The result is a positioning, an identity, and a digital presence that does what it was always supposed to do: make the vision visible to the people who need to encounter it. That's what Main Stage Studio can do for you.
+          </p>
+          <a href="../../website/index.html#contact" class="btn-fill light">
+            <span class="btn-fill__bg"></span>
+            <span class="btn-fill__label">Start a project</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-near-black py-10 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+
+      <a href="../../website/index.html"
+         class="flex items-center gap-3 no-underline"
+         aria-label="Main Stage Studio, back to home">
+        <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
+          <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+          <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+        </svg>
+        <span class="flex items-baseline gap-[0.3em]">
+          <span class="font-display font-normal text-parchment" style="font-size:0.9375rem;letter-spacing:0.02em;">Main Stage</span>
+          <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5rem;letter-spacing:0.24em;">Studio</span>
+        </span>
+      </a>
+
+      <a href="../../website/index.html#work"
+         class="font-sans text-parchment no-underline"
+         style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;"
+         onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">
+        Back to work
+      </a>
+
+      <p class="font-sans text-parchment" style="font-size:0.6875rem;opacity:0.16;">&copy; 2026 Main Stage Studio</p>
+    </div>
+  </footer>
+
+
+  <script>
+    // SCROLL PROGRESS
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (window.scrollY / max * 100) + '%';
+    }, { passive: true });
+
+    // HERO VIDEO
+    const csHeroVideo = document.getElementById('cs-hero-video');
+    if (csHeroVideo) {
+      csHeroVideo.playbackRate = 0.75;
+      csHeroVideo.addEventListener('canplay', () => {
+        csHeroVideo.playbackRate = 0.75;
+        csHeroVideo.style.opacity = '0.42';
+      }, { once: true });
+    }
+
+    // HERO LINE REVEAL
+    function triggerHeroReveal() {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.getElementById('hero-content')?.classList.add('hero-ready');
+        });
+      });
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(triggerHeroReveal);
+    } else {
+      window.addEventListener('load', triggerHeroReveal);
+    }
+
+    // NAV colour shift
+    const nav = document.getElementById('nav');
+    const lightSections = document.querySelectorAll('.bg-parchment');
+
+    window.addEventListener('scroll', () => {
+      let anyLight = false;
+      lightSections.forEach(sec => {
+        const r = sec.getBoundingClientRect();
+        if (r.top <= 60 && r.bottom >= 60) anyLight = true;
+      });
+      nav.classList.toggle('scrolled-light', anyLight && window.scrollY > 80);
+      nav.classList.toggle('scrolled-dark',  !anyLight && window.scrollY > 80);
+    }, { passive: true });
+
+    // SCROLL REVEAL
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+
+</body>
+</html>
