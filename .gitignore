@@ -15,7 +15,6 @@ dist/
 build/
 
 # Large binary files — manage via DAM
-*.mp4
 *.mov
 
 # Zip files
