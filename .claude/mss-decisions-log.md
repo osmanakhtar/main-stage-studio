@@ -148,7 +148,7 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 | Locked In Learning | Standalone personal project. Sits in its own top-level workspace folder, separate from the MSS repo. Not part of MSS or any studio brand. |
 | PureMed Aesthetics | Standalone personal project, same status as Locked In Learning. May surface on a future MSS Work page once built, at the studio's discretion. |
 | Each case study | Has its own creative identity — not inherited from MSS brand |
-| Two `.claude` folders | `~/workspace/main-stage-studio/.claude` is the repo-specific context folder and is the canonical home for this decisions log and all MSS context files. `osmanakhtar/.claude` is a separate folder with no decisions log currently saved in it — its purpose relative to the repo folder needs clarifying. See Flagged. |
+| Two `.claude` folders | `~/workspace/main-stage-studio/.claude` is the repo-specific context folder: MSS strategy, brand, voice, decisions. `~/.claude/` (osmanakhtar/.claude) is the global layer: portable skills and Claude Code config that aren't tied to MSS. Skills that are genuinely cross-project (Bricks skill family, copywriting, creative-director) live globally. Anything that would be wrong or missing if a session forgot MSS context lives in the repo folder. Confirmed 19 June 2026 via README audit. |
 
 ---
 
@@ -199,7 +199,7 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 | `constraints.md` template | No template exists in `02_clients/_template/`. Structure is only documented inside workflow guide prompts — needs a standalone template file created and placed in the client template folder. |
 | `mss-bricks-build-guide.md` / `mss-bricks-quick-fixes.md` | Added 19 June 2026. Content has been folded into the new `bricks-mss-site-notes` skill, but these two files haven't been formally retired or marked superseded. Decide whether to mark them superseded in favour of the skill, or keep them as the longer-form reference the skill points back to. |
 | `bricks-lowcode-skill` element catalogue | Added 19 June 2026. Built from a live `get_builder_guide` pull against PureMed's install, not MSS's own. Needs a fresh pull against the MSS/Ayesha install before its element list can be treated as verified for MSS work. |
-| Docs audit | A full documentation audit was commissioned on 17 June 2026 (saved as `docs-audit-[date].md`), covering the two `.claude` folders, skills naming convention, and the build guide's HTML format. Outcome not yet reviewed in this log — may directly resolve the two-`.claude`-folders item above. |
+| Docs audit | Confirmed present at repo root (docs-audit-2026-06-19.md), tracked in git since commit b7e1e31. Of its 10 numbered decisions: closed are 1 (build-guide duplicate deleted), 4 (ghost file investigated, no action needed), 5 (strategy-folder duplicates resolved), 6 (copywriting skill consolidated), 7 (bricks-mss-site-notes now points to the build guide and quick-fixes files), 8 (mss-production-ops.md created), 10 (CLAUDE.md corrected). Still open: 2 (three HTML files in 01_mss/strategy/ — system architecture extracted, tooling rationale extraction pending, final archive/delete decision pending), 3 (Bricks_Workflow_User_Guide.docx not yet actioned), 9 (final sweep of this log for stale Open items — largely done through tonight's fixes, worth one more pass to confirm). |
 | Project custom instructions | Recommended 13 June 2026: move context files into Claude Project custom instructions and knowledge instead of attaching per session, plus a model-routing default (Haiku for mechanical work, Opus for thinking). Adoption status unconfirmed. |
 
 ---
@@ -208,6 +208,9 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 
 | Date | What changed | Why |
 |------|-------------|-----|
+| 19 June 2026 | Corrected false claim that the docs audit file "was never located on disk" | A prior session searched incorrectly and wrote a wrong conclusion into this log. Confirmed via `find` and `git log` that the file exists and has been tracked since commit b7e1e31. |
+| 19 June 2026 | `mss-decisions-log-workflow.md` and `mss-studio-ops-checklist.md` created | README referenced both files but neither existed. Created to complete the audit. |
+| 19 June 2026 | Two-`.claude`-folders flagged item resolved | `README.md` audit locked the distinction: repo `.claude/` for MSS-specific context, global `~/.claude/` for portable skills. |
 | 19 June 2026 | This file rebuilt from the correct 05 June base | A stale 25 May fork had been worked on in a parallel session and was mistakenly treated as current. The 05 June repo version (`workspace/main-stage-studio/.claude`) confirmed as the real lineage. All changes since 05 June folded in: Studio 2 reversed, DAM and Bricks licence resolved, site confirmed live, contact form built, Sable's stale "placeholder" flag removed, Bricks skill system added, several new items flagged |
 | 17 June 2026 | Studio 2 venture reversed, single studio confirmed | A sense check on 4 June raised the overhead problem at pre-revenue stage. Founder confirmed: one studio, PureMed and Locked In Learning stay personal projects, possible future surface on an MSS Work page only |
 | 17 June 2026 | DAM resolved to Bunny.net | Account provisioned, closes the Cloudflare R2 vs Bunny.net open decision |
