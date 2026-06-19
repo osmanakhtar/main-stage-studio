@@ -1,17 +1,15 @@
 # Workspace — Claude Code Context
 
 ## Overview
-Osman Akhtar's workspace. Four active streams in one repo while each is early stage. Spin out to separate repos when a stream gets traction.
+Osman Akhtar's workspace. Multiple streams in one repo while each is early stage. Spin out to separate repos when a stream gets traction.
 
 ## Streams
 
 | Folder | Stream | What it is |
 |--------|--------|-----------|
 | `01_mss/` | Main Stage Studio | Creative agency for founders — brand, web, AI-assisted delivery |
-| `02_pm-ai/` | PM / AI | Systems, integrations, consulting. Locked In Learning, PureMed |
-| `03_social/` | Social automation | Higgsfield/TikTok POCs — validate before committing |
-| `04_cookies/` | Cookies | Daughter's cookie business. Brand-separate from everything else |
-| `05_resources/` | Shared assets | DAM holding area — Cloudflare R2 or Bunny.net TBD |
+| `02_clients/` | Client projects | Active client engagements. Current: Ayesha Johar |
+| `03_resources/` | Shared assets | DAM holding area — images, video, tools. Cloudflare R2 or Bunny.net TBD |
 
 ---
 
@@ -79,10 +77,9 @@ Near-black top-right (leads). Terracotta bottom-left (recedes). Parchment cutout
 ---
 
 ## Stream separation rules
-- Client work lives at `~/projects/clients/[name]/` — never inside `01_mss/`
-- Cookies brand is fully isolated from MSS — different audience, different aesthetic
-- Social automation is a standalone POC — not MSS-specific
-- PM/AI consulting targets professional services — different from MSS positioning
+- Client work lives at `02_clients/[name]/` — never inside `01_mss/`
+- Portfolio case studies live at `01_mss/portfolio/[client]/` — separate from the active client folder
+- Each client folder follows the `02_clients/_template/` scaffold: brand/, discovery/, design-system/, deliverables/, web/
 
 ---
 
@@ -93,4 +90,4 @@ When starting a new MSS conversation, attach:
 - `mss-website-brief.md` — for build sessions
 - `mss-decisions-log.md` — for strategy or planning sessions
 
-All files live at `~/projects/mss/.claude/`
+All files live at `~/workspace/main-stage-studio/.claude/`
