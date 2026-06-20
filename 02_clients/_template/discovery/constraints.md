@@ -8,7 +8,7 @@
 
 ## Directory confirmation
 
-- [ ] Client folder path: `~/projects/clients/[client-name]/`
+- [ ] Client folder path: `~/workspace/main-stage-studio/02_clients/[client-name]/`
 - [ ] Not nested inside MSS directory
 - [ ] CLAUDE.md written and placed at project root
 - [ ] iTerm2 tab named and opened from Clients profile
@@ -69,9 +69,15 @@ Agencies, studios, or competitors whose aesthetic this client actively doesn't w
 
 ## 04 Case study note
 
-After delivery, the case study lives at `~/projects/mss/portfolio/case-studies/[client]/` — not in this folder.
+After delivery, the case study lives at `~/workspace/main-stage-studio/01_mss/portfolio/[client-name]/` — not in this folder.
 
 The case study earns its own creative treatment. It reflects the client's world, not MSS's. If it starts looking like the MSS website, re-read section 03 and start again.
+
+---
+
+## Notes
+
+Vague constraints produce generic work. If any line above could describe more than one brand, it is not specific enough yet. Trace every later design decision back to this file. If a decision cannot be traced here, either the decision is wrong or this file is incomplete.
 
 ---
 
