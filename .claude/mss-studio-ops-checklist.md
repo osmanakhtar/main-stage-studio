@@ -42,6 +42,7 @@ These don't have a schedule — they run when the named event happens.
 - [ ] Download the updated file
 - [ ] Replace the version in `.claude/`
 - [ ] Do not keep both versions — the current one is the only one
+- [ ] If the file is part of the Claude Project knowledge set (see "Claude Project knowledge" section below), re-upload it to the project, replacing the stale copy
 
 ---
 
@@ -69,6 +70,47 @@ Run when context files are being updated or something significant has changed. N
 - [ ] `mss-spend-tracker.md` — all current costs reflected?
 - [ ] `mss-client-workflow-guide.md` — any prompts improved since last review?
 - [ ] `mss-prompt-library.md` — any prompts updated in sessions that haven't been captured here?
+
+---
+
+## Claude Project knowledge
+
+The Claude.ai project (desktop) holds its own copy of select `.claude/`
+files as attached knowledge, separate from what lives on disk. Desktop
+sessions have no filesystem access — they only know what's been uploaded
+here. If this falls out of sync with `.claude/`, desktop reasons from
+stale context without any way to notice it's stale. This happened on
+19 June and required a full project knowledge wipe and reupload.
+
+**Essential — re-upload whenever changed:**
+- `README.md`
+- `mss-decisions-log.md`
+- `mss-brand-identity.md`
+- `mss-tone-of-voice.md`
+- `copy-contexts.md`
+
+**Recommended — covers most desktop session work:**
+- `mss-website-brief.md`
+- `mss-client-workflow-guide.md`
+- `mss-case-study-workflow-guide.md`
+- `mss-prompt-library.md`
+- `mss-new-client-checklist.md`
+- `mss-new-case-study-checklist.md`
+- `mss-system-architecture.md`
+
+**Useful, lower frequency:**
+- `mss-spend-tracker.md`
+- `mss-founder-vision.md`
+- `mss-decisions-log-workflow.md`
+- `mss-studio-ops-checklist.md`
+
+**Never upload — Claude Code's domain, not desktop's:**
+- `mss-production-ops.md`
+- Anything from `01_mss/strategy/`
+
+**Rule:** always upload directly from `~/workspace/main-stage-studio/.claude/`
+on disk. Never from memory, an old download, or a stale local copy — that's
+exactly how project knowledge went stale before.
 
 ---
 
