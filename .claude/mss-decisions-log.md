@@ -2,7 +2,7 @@
 
 *Living document. Add entries when something is locked or changed.*
 *Never delete — mark superseded decisions with ~~strikethrough~~ and note the date.*
-*Last reviewed: 19 June 2026*
+*Last reviewed: 20 June 2026*
 
 ---
 
@@ -78,6 +78,14 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 
 ---
 
+### Generative Assets
+
+| Decision | What's locked |
+|----------|--------------|
+| Higgsfield hero asset | Generated and locked. MSS homepage hero asset, produced once visual identity was fully locked and the creative brief was clear. Closes the earlier "can only generate once identity locked" open item. Confirmed 20 June 2026. |
+
+---
+
 ### Tone of Voice
 
 | Decision | What's locked |
@@ -111,7 +119,7 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 | Version control | GitHub — osmanakhtar/main-stage-studio |
 | CSS framework | Tailwind CSS |
 | Code principles | Asymmetric, editorial. No centred hero. No generic card overuse. Hardware-accelerated motion only. `min-h-[100dvh]` not `h-screen`. No emoji, no gradient backgrounds. |
-| Domain | mainstagingstudio.co.uk. Live and published as of mid-June 2026, hosted on Cloudways via WordPress and Bricks. A separate reference to "mainstagestudio.co.uk" (without "ing") surfaced in one session, see Flagged to confirm which spelling is correct on the live DNS. |
+| Domain | `mainstagestudio.co.uk`. Live and published as of mid-June 2026, hosted on Cloudways via WordPress and Bricks. Homepage only published so far. ~~A previous version of this log incorrectly recorded the domain as `mainstagingstudio.co.uk` — confirmed and corrected 20 June 2026.~~ |
 | Workflow | Phase 1 (Claude web/desktop): discovery, positioning, copy, creative direction, HTML/CSS prototype. Phase 2 (Claude Code): build, GitHub push, publish. |
 | Work section | Homepage shows curated highlights — two or three strongest case studies. Dedicated Work page holds full portfolio. "View all work" link on homepage. Work page not built until three case studies are fully complete, and deferred further behind the PureMed Aesthetics build per the 17 June studio structure decision above. |
 | DAM | Bunny.net. Account provisioned. Resolves the earlier Cloudflare R2 vs Bunny.net open decision. |
@@ -127,12 +135,12 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 | Case study structure | Each case study has a framing page before the full write-up. The framing page is written as part of the story phase, not the build phase. Added 02 June 2026. |
 | Self-initiated concepts | Positioned transparently as self-initiated briefs, not fabricated client relationships. One honest line in the case study resolves the framing. |
 | Portfolio — entry level | MSS building MSS and Sable lead the homepage grid. Most accessible, speak directly to the core audience. Both are built and live as of mid-June 2026. |
-| Portfolio — depth | Apex FC and a professional services concept (doctor, consultant, dietitian) were planned for the dedicated work page. Apex FC build was deferred by the founder ("build that later") — treat as not currently active rather than locked. |
+| Portfolio — depth | Apex FC and a professional services concept (doctor, consultant, dietitian) were planned for the dedicated work page. Apex FC case study copy is paused, not active — may be picked up later, possibly as proof of capability on a larger site. The professional services concept is also on hold, see Open Decisions. |
 | Portfolio — off site | PureMed and Locked In Learning stay off the MSS site for now. Standalone personal projects, not part of the MSS proposition. May surface later on the future Work page, at the studio's discretion, once it exists. |
 | Creative identity rule | Each case study has its own creative identity — not inherited from MSS brand. If it starts looking like the MSS website, stop and restart from the brief. |
-| Sable case study | Built and live on the homepage. Received scroll/motion polish in a session on 06 June 2026. This file previously flagged Sable as "placeholder only, needs proper rebuild" — that flag was incorrect and has been removed. |
-| Ayesha case study | Homepage card exists with a footer note reading "Visual assets incoming, late 2026." No link live yet. See Flagged — the underlying engagement's instruction-template blocker was never confirmed resolved, despite the card's existence suggesting some progress. |
-| Voss case study | No information found in recent sessions beyond the original flag. See Flagged. |
+| Sable case study | Built on WordPress, currently published as a hidden page, not yet publicly live. Blocked on formatting fixes before publishing. Received scroll/motion polish in a session on 06 June 2026. |
+| Ayesha case study | Homepage card exists with a footer note reading "Visual assets incoming, late 2026." No link live yet. Underlying engagement status: brand strategy document delivered and currently with the client for review. Not actively being chased — deprioritised behind internal work and the PureMed build. |
+| Portfolio folder naming | Resolved 20 June 2026. Workspace taxonomy confirmed: `01_mss/portfolio/` contains `apex-fc`, `mss`, and `sable`. Earlier folder names (`chef`, `music`) no longer exist. |
 
 ---
 
@@ -157,7 +165,7 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 | Tool | Cost | Status |
 |------|------|--------|
 | Claude Pro | £20/month | Committed |
-| Higgsfield | $45/month | Month one committed — extension pending |
+| Higgsfield | $45/month | Extended for a second month. Current period: 18 June – 18 July 2026, on a month-by-month basis. Review again at the end of the current period. |
 | Bricks Builder | Lifetime licence | Purchased and confirmed. Covers MSS, Ayesha, and the personal projects (PureMed, Locked In Learning) as shared infrastructure only, not a shared brand. |
 
 ---
@@ -168,13 +176,21 @@ These are known — they haven't been made yet. Some are blockers.
 
 | Decision | Why it's open | Blocker? |
 |----------|--------------|---------|
-| Higgsfield hero asset | Can only be generated once visual identity is fully locked and brief is clear | Depends on identity lock |
-| Higgsfield subscription extension | Month one committed — worth extending? | Review after month one |
-| LinkedIn company page | Claimed — not yet populated or active | Low urgency, pre-launch |
-| Editorial section | Direction of travel — not yet active. Studio point of view, not personal blog. | Post-launch |
-| Spend tracker reconciliation | Additional Claude spend and subscription costs to be logged | Owner action — update ad hoc |
-| Professional services case study | Doctor, consultant, dietitian or similar. Concept brief to demonstrate that use case. No longer urgent given Apex FC deferral — work page itself is now deferred behind PureMed. | No timeline set |
-| Work page structure | When the Work page is eventually built: will it replace the homepage's curated highlights, hold full case studies directly, or link out to separate framing pages. To be settled once the PureMed build is complete and the Work page is actually being designed. | No, deferred by design |
+| LinkedIn company page | Claimed, no content yet. Scope has grown beyond "populate it" — now a content strategy and automation decision: what content, which platforms, how it's created, and whether the workflow can be built as a reusable pattern for future clients, not just MSS. | Tied to hard launch |
+| Spend tracker reconciliation | Additional Claude spend and subscription costs to be logged | Not a decision — see Action Items below |
+| Professional services case study | Doctor, consultant, dietitian or similar. Concept brief to demonstrate that use case. Blocked behind a more fundamental capability gap: a confident, repeatable pattern for spinning up a new site or template in Bricks using the correct components and effects, usable as a white-label example. PureMed is the proving ground for that pattern. This case study doesn't move until PureMed does. | Blocked on PureMed Bricks pattern |
+| Work page structure | When the Work page is eventually built: will it replace the homepage's curated highlights, hold full case studies directly, or link out to separate framing pages. To be settled once the PureMed build is complete and the Work page is actually being designed. | Deferred by design |
+
+---
+
+## Action Items (not decisions)
+
+Things that need doing, not deciding. Tracked here so they don't get lost, but they don't belong in Open Decisions.
+
+| Item | What needs doing |
+|------|-------------------|
+| Spend tracker reconciliation | Update `mss-spend-tracker.md` with additional Claude spend and subscription costs as they're confirmed. Ad hoc, ongoing. |
+| Full sprint tracker review | Founder is reviewing each context document in turn as part of this session's broader pass — no decision required, just completion. |
 
 ---
 
@@ -184,23 +200,22 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 
 | Item | What needs checking |
 |------|---------------------|
-| `mss-website-brief.md` | Proposition line and hero copy updated in session 05 June 2026 — file needs updating to reflect new copy |
-| `mss-tone-of-voice.md` first impression example | Still references "creative founders" — update to remove founder-specific language |
-| Voss case study | Status unknown — confirm whether still planned, renamed, or shelved |
-| Ayesha engagement | Homepage card exists with a "visual assets incoming" note, suggesting some progress, but the original blocker (missing client project instruction template) was never confirmed resolved. Confirm whether the engagement is on hold or has resumed. |
-| Apex FC case study copy | Written in session 05 June 2026, needs review through updated lens before build starts. Build itself has been deferred by the founder — confirm this copy work isn't wasted effort if the concept changes before it's picked back up. |
-| MSS case study | Needs full rewrite through updated lens — non-conformist thread, wider client definition, AI as thinking partner framing. No timeline set. |
-| Domain spelling | This log locks `mainstagingstudio.co.uk`. A separate session referenced the live site as `mainstagestudio.co.uk`, without the "ing". Confirm which is correct on the live DNS and fix the other reference. |
-| Portfolio folder naming | A copy audit on 06 June flagged that this log's homepage-grid language (MSS, Sable) doesn't map cleanly to the actual workspace folder names (`chef`, `music`). Reconcile the naming. |
+| `mss-website-brief.md` | Proposition line and hero copy updated in session 05 June 2026 — file is stale against current locked copy. Fix deferred until the next homepage copy pass; reconciliation prompt prepared, not yet run. |
+| `mss-tone-of-voice.md` first impression example | Still references "creative founders." Fix prompt issued 20 June 2026 (replace with "people") — pending local execution and confirmation. |
+| `mss-tone-of-voice.md` and `copy-contexts.md` — audience reference consistency | Audit needed for consistent use of "the client" / "the reader" / direct second person, outside of worked copy examples (where second person addressing the client is expected and correct). Audit prompt prepared 20 June 2026, not yet run. |
+| MSS case study | Needs full rewrite through updated lens — non-conformist thread, wider client definition, AI as thinking partner framing. On hold until the copy document is updated and tone of voice is confirmed reflective of current positioning. |
 | Contact form frontend | Backend (mu-plugin and SMTP relay) is built, but one session noted the live site showing the contact section as text only, no visible form rendering. Confirm the form actually renders before treating this as fully resolved. |
 | `mss-new-client-checklist.md` | Not yet reviewed in this review cycle — may be out of date |
 | `mss-new-case-study-checklist.md` | Not yet reviewed in this review cycle — may be out of date |
 | `mss-spend-tracker.md` | Not yet reviewed in this review cycle — update ad hoc when figures confirmed |
 | `constraints.md` template | No template exists in `02_clients/_template/`. Structure is only documented inside workflow guide prompts — needs a standalone template file created and placed in the client template folder. |
-| `mss-bricks-build-guide.md` / `mss-bricks-quick-fixes.md` | Added 19 June 2026. Content has been folded into the new `bricks-mss-site-notes` skill, but these two files haven't been formally retired or marked superseded. Decide whether to mark them superseded in favour of the skill, or keep them as the longer-form reference the skill points back to. |
+| `mss-bricks-build-guide.md` / `mss-bricks-quick-fixes.md` | Added 19 June 2026. Content has been folded into the new `bricks-mss-site-notes` skill, but these two files haven't been formally retired or marked superseded. Status unclear — a diff prompt comparing both files against the skill's actual content has been prepared (20 June 2026) to confirm coverage before deciding whether to retire or keep as longer-form reference. |
 | `bricks-lowcode-skill` element catalogue | Added 19 June 2026. Built from a live `get_builder_guide` pull against PureMed's install, not MSS's own. Needs a fresh pull against the MSS/Ayesha install before its element list can be treated as verified for MSS work. |
 | Docs audit | Confirmed present at repo root (docs-audit-2026-06-19.md), tracked in git since commit b7e1e31. Of its 10 numbered decisions: closed are 1 (build-guide duplicate deleted), 4 (ghost file investigated, no action needed), 5 (strategy-folder duplicates resolved), 6 (copywriting skill consolidated), 7 (bricks-mss-site-notes now points to the build guide and quick-fixes files), 8 (mss-production-ops.md created), 10 (CLAUDE.md corrected). Still open: 2 (three HTML files in 01_mss/strategy/ — system architecture extracted, tooling rationale extraction pending, final archive/delete decision pending), 3 (Bricks_Workflow_User_Guide.docx not yet actioned), 9 (final sweep of this log for stale Open items — largely done through tonight's fixes, worth one more pass to confirm). |
 | Project custom instructions | Recommended 13 June 2026: move context files into Claude Project custom instructions and knowledge instead of attaching per session, plus a model-routing default (Haiku for mechanical work, Opus for thinking). Adoption status unconfirmed. |
+| `mss-go-live-checklist.md` | Marked v0.1, never validated against a real go-live. The MSS site has been live for weeks — review this checklist against what the actual go-live required and update or confirm it. |
+| Go-live checklist superset check | Before `mss-build-guide.html` is deleted (part of Decision 2), confirm whether its embedded go-live checklist is fully covered by the standalone `mss-go-live-checklist.md`, or whether it has unique items worth merging in first. |
+| Untracked working-tree content | As of 19 June 2026, significant uncommitted work is sitting in the working tree: `01_mss/portfolio/apex-fc/` (untracked), Sable brand assets (11 files, untracked), `01_mss/strategy/` (13 files, never committed), and modified-but-unstaged changes to both case-study.html files and the website index.html. This is real, separate site/asset work, not part of the documentation cleanup — needs its own review session before committing. |
 
 ---
 
@@ -208,6 +223,18 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 
 | Date | What changed | Why |
 |------|-------------|-----|
+| 20 June 2026 | Higgsfield hero asset moved from Open to Locked | MSS hero asset generated and confirmed; identity was fully locked first, satisfying the original dependency |
+| 20 June 2026 | Higgsfield subscription extended, recurring monthly review framing locked | Renewed 18 June, runs to 18 July 2026, on a month-by-month basis. Reframed from a one-off "review after month one" decision to a recurring monthly checkpoint |
+| 20 June 2026 | Editorial section removed from Open Decisions | Confirmed not a near-term priority, no longer worth tracking as an open item |
+| 20 June 2026 | Spend tracker reconciliation reclassified | Moved out of Open Decisions into a new Action Items section — it's a task, not a decision |
+| 20 June 2026 | Professional services case study — blocker clarified | Now explicitly blocked on PureMed proving out a repeatable Bricks build pattern, rather than "no timeline set" |
+| 20 June 2026 | Domain spelling corrected | `mainstagestudio.co.uk` confirmed as the correct, live domain. The previous `mainstagingstudio.co.uk` entry in this log was incorrect and has been struck through and corrected. |
+| 20 June 2026 | Portfolio folder naming resolved | Workspace taxonomy confirmed: `01_mss/portfolio/` contains `apex-fc`, `mss`, `sable`. Removed from Flagged. |
+| 20 June 2026 | Voss case study dropped | Founder confirmed this is not being pursued. Removed from tracking; would follow the standard case study guide fresh if picked up again in future. |
+| 20 June 2026 | Sable case study status corrected | Built and live on WordPress as a hidden page, not yet publicly published. Blocked on formatting fixes. Previously grouped with Voss under a single ambiguous flag; now tracked separately. |
+| 20 June 2026 | Ayesha engagement status updated | Brand strategy document delivered, currently with the client for review. Not being actively chased — deprioritised behind internal work and the PureMed build. |
+| 20 June 2026 | Apex FC case study copy confirmed paused | Founder confirmed this is intentionally on hold, not drifting — may be revisited later, possibly as proof of capability on a larger site |
+| 20 June 2026 | MSS case study rewrite — dependency added | On hold until the copy document is updated and tone of voice is confirmed reflective of current positioning |
 | 19 June 2026 | Corrected false claim that the docs audit file "was never located on disk" | A prior session searched incorrectly and wrote a wrong conclusion into this log. Confirmed via `find` and `git log` that the file exists and has been tracked since commit b7e1e31. |
 | 19 June 2026 | `mss-decisions-log-workflow.md` and `mss-studio-ops-checklist.md` created | README referenced both files but neither existed. Created to complete the audit. |
 | 19 June 2026 | Two-`.claude`-folders flagged item resolved | `README.md` audit locked the distinction: repo `.claude/` for MSS-specific context, global `~/.claude/` for portable skills. |
