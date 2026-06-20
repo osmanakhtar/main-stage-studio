@@ -67,6 +67,26 @@ worth naming so it doesn't get mistaken for active reference.
 
 ---
 
+## Bricks skill session ordering
+
+The four Bricks skills (`bricks-site-connection`, `bricks-lowcode-skill`,
+`bricks-html-importer`, `bricks-mss-site-notes`) divide responsibilities cleanly. Within
+a typical build session, use them in this order:
+
+1. `bricks-site-connection` — open the session, authenticate, troubleshoot connection issues
+2. `bricks-html-importer` — run the HTML-to-Bricks conversion workflow
+3. `bricks-lowcode-skill` — consulted throughout the build for element, style, and pattern decisions
+
+**When something new comes up that none of the skills cover:**
+
+- New component or pattern → `bricks-lowcode-skill`'s Compound Pattern Library
+- New hosting or environment quirk → `bricks-site-connection`'s troubleshooting table
+- Workflow or sequencing change → `bricks-html-importer`'s phase structure
+
+This is a map to the skills, not a replacement for reading them.
+
+---
+
 ## Markdown only
 
 No HTML, no `.docx`, in either `.claude/` or `01_mss/strategy/`. This is a locked
