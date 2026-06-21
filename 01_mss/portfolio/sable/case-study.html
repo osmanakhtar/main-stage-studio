@@ -193,7 +193,18 @@
       margin-bottom: clamp(40px, 6vh, 64px);
     }
 
-    /* Atmospheric texture — sits between dark-overlay and section content */
+    /* ── Image reveal: scale settles on scroll ──────────────────────────────── */
+    .reveal-img {
+      transform: scale(1.04);
+      transition: transform 1400ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .reveal.visible .reveal-img,
+    .visible .reveal-img {
+      transform: scale(1);
+    }
+
+    /* ── Atmospheric texture — sits between dark-overlay and section content */
     .atmo-bg {
       position: absolute;
       inset: 0;
@@ -689,22 +700,27 @@
         a single genre. She is completely, unapologetically herself.
       </p>
       <p class="hinge-line reveal reveal-delay-1">
-        She did not need to be explained. She needed a world built around her.
+        She didn't need to be explained. She needed a world built around her.
       </p>
     </div>
 
-    <div id="s02-image" class="reveal reveal-delay-2">
-      <img src="brand/sable-portrait-eyes-closed-01.png" alt="">
+    <div id="s02-image" class="reveal reveal-delay-2" style="overflow:hidden;">
+      <img src="brand/sable-portrait-eyes-closed-01.png" alt="" class="reveal-img" style="display:block;width:100%;height:auto;">
     </div>
 
   </section>
 
 
+  <!-- ── Sections 03+04 wrapper: shared abstract light background ─────────── -->
+  <div style="position:relative;">
+
+    <!-- Abstract light vertical — right side, spans both sections -->
+    <div style="position:absolute;top:0;right:0;width:40%;height:100%;background:url('brand/sable-abstract-light-vertical-01.png') center/cover;opacity:0.18;z-index:1;pointer-events:none;" aria-hidden="true"></div>
+
   <!-- ── Section 03: The Challenge ──────────────────────────────────────────── -->
   <section id="s03" class="dark-section">
     <div class="dark-overlay"></div>
-    <div style="position:absolute;inset:0;background:url('brand/sable-performance-crowd-01.png') center/cover;opacity:0.22;z-index:1;pointer-events:none;" class="bg-parallax" aria-hidden="true"></div>
-    <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
+    <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x); position:relative; z-index:2;">
 
       <p class="section-label reveal">the challenge</p>
 
@@ -718,8 +734,7 @@
         Fierce in person.
       </p>
       <p class="challenge-body reveal reveal-delay-2">
-        Most artist sites flatten that tension. They pick a lane.<br>
-        We did not pick a lane. We built something that lives in the contradiction.
+        We didn't pick a lane. We built something that lives in the contradiction.
       </p>
 
     </div>
@@ -729,8 +744,7 @@
   <!-- ── Section 04: The Discovery ──────────────────────────────────────────── -->
   <section id="s04" class="dark-section">
     <div class="dark-overlay"></div>
-    <div style="position:absolute;inset:0;background:url('brand/sable-abstract-light-vertical-01.png') center/cover;opacity:0.12;z-index:1;pointer-events:none;" class="bg-parallax" aria-hidden="true"></div>
-    <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
+    <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x); position:relative; z-index:2;">
 
       <p class="section-label reveal">the discovery</p>
 
@@ -745,26 +759,65 @@
         Two completely different registers. The same person in both.
       </p>
       <p class="discovery-body reveal">
-        That is where the identity came from. Not from a genre. Not from a scene.
+        That's where the identity came from. Not from a genre. Not from a scene.
         From the specific tension between who she is when the world is watching
         and who she is when the music takes over.
       </p>
 
       <p class="insight-line" id="insight-line">
         The creative insight: soft and sharp. Soul and grit.<br>
-        She holds both, and she does not resolve the contradiction for you.
+        She holds both, and she doesn't resolve the contradiction for you.
       </p>
 
       <div class="image-pair reveal">
-        <div class="image-pair-item">
-          <img src="brand/sable-studio-mic-01.png" alt="">
+        <div class="image-pair-item" style="overflow:hidden;">
+          <img src="brand/sable-studio-mic-01.png" alt="" class="reveal-img" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
-        <div class="image-pair-item">
-          <img src="brand/sable-hero-arrival-01.png" alt="">
+        <div class="image-pair-item" style="overflow:hidden;">
+          <img src="brand/sable-hero-arrival-01.png" alt="" class="reveal-img" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
       </div>
 
     </div>
+  </section>
+
+  </div><!-- end sections 03+04 wrapper -->
+
+
+  <!-- ── Section 04b: The Hero ───────────────────────────────────────────────── -->
+  <section id="s04b" style="background:#1C1712; padding: var(--section-pad-y) var(--pad-x);">
+
+    <p class="section-label reveal" style="color:#BF6B47;">the hero</p>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,5vw,80px); align-items:start; margin-bottom: clamp(48px,7vh,80px);">
+      <div>
+        <p class="discovery-body reveal">
+          The hero isn't a banner. It's the case for the whole identity.
+        </p>
+        <p class="discovery-body reveal reveal-delay-1">
+          She appears still first. Composed, present, entirely herself before
+          the performance begins. Then she walks out. The stage finds her.
+          The shot slows as she arrives, then fades to black.
+        </p>
+      </div>
+      <div>
+        <p class="discovery-body reveal reveal-delay-1">
+          Two registers. One unbroken movement. The video doesn't introduce Sable.
+          It shows you exactly what the brief was asking us to hold.
+        </p>
+      </div>
+    </div>
+
+    <!-- Homepage screenshot — natural aspect ratio, no crop -->
+    <div class="reveal reveal-delay-2" style="overflow:hidden; width:100%;">
+      <img
+        src="brand/sable-homepage-image-01.png"
+        alt="Sable — homepage"
+        style="display:block; width:100%; height:auto; transform:scale(1.02); transition: transform 1200ms cubic-bezier(0.16,1,0.3,1); will-change:transform;"
+        class="reveal-img"
+      >
+    </div>
+
   </section>
 
 
@@ -909,26 +962,24 @@
 
       <p class="section-label reveal">the work</p>
 
-      <p class="work-body reveal">The result is a fully integrated digital presence.</p>
+      <p class="work-body reveal">
+        A single page with three distinct worlds.
+      </p>
       <p class="work-body reveal reveal-delay-1">
-        A single page site with three distinct worlds: the arrival, where Sable
-        meets you on her own terms. The music, where the album Between the Words
-        lives alongside a buyable experience. The tour, where upcoming shows
-        connect directly to ticketing.
+        The arrival, where Sable meets you on her own terms. The music, where
+        the album Between the Words lives alongside a buyable experience.
+        The tour, where upcoming shows connect directly to ticketing.
       </p>
       <p class="work-body reveal reveal-delay-2">Nothing is decorative. Everything earns its place.</p>
 
       <p class="album-title-display reveal">Between the Words</p>
 
       <div class="work-showcase reveal">
-        <div class="work-showcase-main">
-          <img src="brand/sable-album-cover-01.png" class="showcase-img" alt="Between the Words — album artwork">
+        <div class="work-showcase-main" style="overflow:hidden;">
+          <img src="brand/sable-album-cover-01.png" class="showcase-img reveal-img" alt="Between the Words — album artwork">
         </div>
-        <div class="showcase-placeholder">
-          <p class="showcase-placeholder-text">site screenshots — to follow</p>
-        </div>
-        <div class="showcase-placeholder">
-          <p class="showcase-placeholder-text">site screenshots — to follow</p>
+        <div class="work-showcase-main" style="overflow:hidden; margin-top: clamp(16px,2vw,28px);">
+          <img src="brand/sable-homepage-image-02.png" class="showcase-img reveal-img" alt="Sable — homepage">
         </div>
       </div>
 
@@ -950,15 +1001,14 @@
         to resolve it, we lost her.
       </p>
       <p class="reflection-p2 reveal reveal-delay-1">
-        What we would do differently: generate the photography earlier.
+        If we did this again, we'd generate the photography earlier.
         The visual world came together quickly once the images existed.
-        Working from character references before the photography was built
-        added a step that could be removed next time.
+        Next time, we start there.
       </p>
     </div>
 
-    <div id="s07-image" class="reveal reveal-delay-2">
-      <img src="brand/sable-full-body-seated-01.png" alt="">
+    <div id="s07-image" class="reveal reveal-delay-2" style="overflow:hidden;">
+      <img src="brand/sable-full-body-seated-01.png" alt="" class="reveal-img" style="display:block;width:100%;height:auto;">
     </div>
 
   </section>
