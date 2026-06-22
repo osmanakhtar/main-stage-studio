@@ -338,6 +338,35 @@ Logo, palette, typography, tone of voice, and key messages all complete and docu
 
 ---
 
+## Phase 5 — Asset Generation
+
+### What you're doing
+Generating the image and video assets for the site before the build starts. This phase runs once brand expression is signed off and the HTML prototype exists. The output is a complete asset set and a placement manifest — the build phase works from real assets, not placeholders.
+
+### When to run this phase
+- Brand signed off
+- HTML prototype built and locked
+- Client constraints doc complete
+
+Do not run this phase before the prototype exists. The skill reads the HTML to map placements — without it, there is nothing to analyse.
+
+### Steps
+
+1. **Open a Claude Code session** in the client working directory.
+
+2. **Run the Higgsfield asset generation skill** — say: "Run the Higgsfield asset generation skill for this client." The skill will ask you to confirm the prototype path, the client folder path, and any specific instructions for this run before it starts.
+
+3. **Review the placement plan** — the skill presents a full brief before generating anything. Check the placements, prompts, and model assignments. Adjust anything that doesn't feel right before proceeding.
+
+4. **Review the cross-section outputs** — for hero placements, the skill generates across multiple models. Review the outputs and note which model produced the strongest result for each placement. Add notes to the manifest.
+
+5. **Confirm the manifest** — the manifest lives at `assets/generated/manifest.md` in the client folder. Confirm output URLs are recorded against each placement before closing the session.
+
+### Gate
+Manifest complete. Every placement has an output URL recorded. Hero cross-section reviewed and preferred option noted. Assets ready for the build phase.
+
+---
+
 ## Tool guidance — Claude desktop vs Claude Code
 
 | Phase | Tool | Why |
@@ -349,6 +378,7 @@ Logo, palette, typography, tone of voice, and key messages all complete and docu
 | Logo exploration | Claude desktop/web → Claude Code | Concept and rationale in desktop; SVG builds in Claude Code |
 | Colour / typography | Claude desktop/web | Decisions and documentation |
 | Prototype (future) | Claude Code | Build phase — see mss-build-guide.html |
+| Asset generation | Higgsfield asset generation skill via Claude Code | Runs after brand sign-off and prototype lock; outputs placement manifest for build phase |
 
 ---
 

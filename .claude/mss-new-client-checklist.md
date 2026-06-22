@@ -64,6 +64,14 @@
 
 ## 6. Web
 
+**Asset generation**
+- [ ] Brand signed off and prototype locked before starting
+- [ ] Higgsfield asset generation skill run from client working directory
+- [ ] Placement plan reviewed and approved before generation starts
+- [ ] Hero cross-section reviewed — preferred model noted in manifest
+- [ ] Manifest complete at assets/generated/manifest.md — all output URLs recorded
+- [ ] Free toggle confirmed on for all free-tier Higgsfield models before generating
+
 - [ ] HTML prototype built in Claude Code
 - [ ] Prototype reviewed and locked
 - [ ] LocalWP environment set up
