@@ -39,7 +39,6 @@
 | Tool | Purpose | Est. cost | Decision |
 |------|---------|-----------|----------|
 | Cloudways | Hosting — MSS + client sites | ~£20–30/mo | Confirm plan when first site goes live |
-| DAM — Cloudflare R2 or Bunny.net | Asset management | TBC | Resolve before build starts |
 
 ---
 
