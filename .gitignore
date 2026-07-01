@@ -16,6 +16,7 @@ build/
 
 # Large binary files — manage via DAM
 *.mov
+02_clients/ayesha/wetransfer_aj-art-work_2026-05-25_1210/
 
 # Zip files
 *.zip

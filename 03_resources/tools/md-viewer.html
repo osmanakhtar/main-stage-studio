@@ -55,7 +55,9 @@ html, body {
 
 #site-header .wordmark {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
   line-height: 1.1;
 }
 
@@ -572,9 +574,315 @@ html, body {
   display: block;
   margin: 8px 0;
 }
+
+/* ─── Export PDF button ─── */
+#btn-export-pdf {
+  margin-left: auto;
+  display: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--parchment);
+  border: 1px solid var(--terracotta);
+  color: var(--terracotta);
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+#btn-export-pdf:hover {
+  background: var(--near-black);
+  color: var(--parchment);
+}
+
+/* Print-only header element: hidden on screen */
+#print-header { display: none; }
+
+/* ─── Print stylesheet ─── */
+@media print {
+
+  @page {
+    size: A4;
+    margin: 2cm 2.5cm;
+
+    /* ── MSS page header: mark + wordmark on every page ──
+       Using @page margin boxes rather than position:fixed so the header
+       appears in the margin area (not the content area) and never overlaps
+       content on pages 2+. */
+    @top-left {
+      /* Composite SVG: mark + "Main Stage" (serif, near-black) + "STUDIO" (sans, terracotta)
+         all left-anchored together. Colours are baked into the SVG so they survive @page context. */
+      content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjAwIDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIHRyYW5zZm9ybT0ic2NhbGUoMC42KSI+PHJlY3QgeD0iMiIgeT0iMTYiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyMiIgcng9IjIuNSIgZmlsbD0iI0JGNkI0NyIvPjxyZWN0IHg9IjE0IiB5PSIyIiB3aWR0aD0iMjQiIGhlaWdodD0iMjIiIHJ4PSIyLjUiIGZpbGw9IiMxQzE3MTIiLz48cmVjdCB4PSIxNCIgeT0iMTYiIHdpZHRoPSIxMiIgaGVpZ2h0PSI4IiByeD0iMS41IiBmaWxsPSIjRjVFRkU1Ii8+PC9nPjx0ZXh0IHg9IjMwIiB5PSIxNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxQzE3MTIiPk1haW4gU3RhZ2U8L3RleHQ+PHRleHQgeD0iMTE3IiB5PSIxNSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjkiIGZpbGw9IiNCRjZCNDciIGxldHRlci1zcGFjaW5nPSIyLjUiPlNUVURJTzwvdGV4dD48L3N2Zz4=");
+      vertical-align: middle;
+      border-bottom: 1px solid #BF6B47;
+      padding-bottom: 5pt;
+    }
+    @top-center {
+      content: "";
+      border-bottom: 1px solid #BF6B47;
+      padding-bottom: 5pt;
+    }
+    @top-right {
+      content: "";
+      border-bottom: 1px solid #BF6B47;
+      padding-bottom: 5pt;
+    }
+
+    /* Suppress Chrome's built-in date / title / URL / page-count decorations */
+    @top-left-corner    { content: ""; }
+    @top-right-corner   { content: ""; }
+    @bottom-center      { content: ""; }
+    @bottom-left-corner { content: ""; }
+    @bottom-right-corner { content: ""; }
+  }
+
+  /* Reset any scroll-animation state so everything prints at full opacity */
+  * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  body {
+    background: #FFFFFF;
+    color: #1C1712;
+  }
+
+  /* Hide all screen chrome (and the DOM print-header — now handled by @page margin boxes) */
+  #site-header,
+  #sidebar,
+  #empty-state,
+  #main-breadcrumb,
+  #btn-export-pdf,
+  #drop-overlay,
+  #content-filename,
+  #file-input,
+  #print-header {
+    display: none !important;
+  }
+
+  /* Reset layout */
+  #shell {
+    display: block;
+    padding-top: 0;
+  }
+
+  #main {
+    margin-left: 0;
+    padding: 0;
+  }
+
+  #content {
+    display: block !important;
+    max-width: none;
+  }
+
+  /* ── Page-break avoidance ── */
+  #content h1,
+  #content h2,
+  #content h3,
+  #content h4,
+  #content h5,
+  #content h6 {
+    page-break-inside: avoid;
+    page-break-after: avoid;
+    break-inside: avoid;
+    break-after: avoid;
+  }
+
+  #content pre,
+  #content blockquote,
+  #content tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── Print typography ── */
+  #content h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 28pt;
+    color: #1C1712;
+    letter-spacing: -0.02em;
+    text-align: left;
+    border-bottom: none;
+    margin: 0 0 20pt;
+  }
+
+  #content h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 22pt;
+    color: #1C1712;
+    letter-spacing: -0.015em;
+    border-bottom: 1px solid #BF6B47;
+    padding-bottom: 4pt;
+    margin: 28pt 0 12pt;
+  }
+
+  #content h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 16pt;
+    color: #1C1712;
+    letter-spacing: -0.01em;
+    border-bottom: none;
+    margin: 20pt 0 8pt;
+  }
+
+  #content h4,
+  #content h5 {
+    font-size: 10pt;
+    margin: 16pt 0 6pt;
+  }
+
+  #content p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: #1C1712;
+    margin: 0 0 10pt;
+  }
+
+  #content li {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: #1C1712;
+  }
+
+  #content strong {
+    font-weight: 500;
+    color: #1C1712;
+  }
+
+  /* Em uses Cormorant Garamond italic in print for calligraphic feel */
+  #content em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* Links: near-black, no underline. Append URL only for external links. */
+  #content a {
+    color: #1C1712;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  #content a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    font-size: 8.5pt;
+    opacity: 0.6;
+    word-break: break-all;
+  }
+
+  /* Inline code */
+  #content code {
+    color: #BF6B47;
+    background: none;
+    padding: 0;
+    font-size: 0.9em;
+  }
+
+  /* Code blocks */
+  #content pre {
+    background: #F7F7F7;
+    border: 0.5px solid rgba(28,23,18,0.3);
+    padding: 10pt 12pt;
+    font-size: 9pt;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0 0 14pt;
+  }
+
+  #content pre code {
+    color: #1C1712;
+    background: none;
+    font-size: 9pt;
+    padding: 0;
+  }
+
+  /* Blockquotes */
+  #content blockquote {
+    border-left: 3px solid #BF6B47;
+    background: rgba(245,239,229,0.15);
+    padding: 10pt 16pt;
+    margin: 0 0 14pt;
+  }
+
+  #content blockquote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 11pt;
+    font-style: italic;
+    color: #1C1712;
+    margin: 0;
+  }
+
+  /* Horizontal rules */
+  #content hr {
+    border: none;
+    border-top: 1px solid rgba(191,107,71,0.4);
+    margin: 20pt 0;
+  }
+
+  /* Tables */
+  #content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 14pt;
+    font-size: 9.5pt;
+  }
+
+  #content th {
+    background: #F0EBE3;
+    color: #1C1712;
+    border: 0.5px solid rgba(28,23,18,0.3);
+    font-weight: 500;
+    padding: 5pt 8pt;
+  }
+
+  #content td {
+    background: #FFFFFF;
+    color: #1C1712;
+    border: 0.5px solid rgba(28,23,18,0.2);
+    padding: 4pt 8pt;
+  }
+
+  /* Disable alternating row tint — cleaner in print */
+  #content tr:nth-child(even) td {
+    background: #FFFFFF;
+  }
+
+  /* Images */
+  #content img {
+    max-width: 100%;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
 </style>
 </head>
 <body>
+
+<!-- Print-only page header: hidden on screen, shown via @media print on every page -->
+<div id="print-header">
+  <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="2" y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+    <rect x="14" y="2" width="24" height="22" rx="2.5" fill="#1C1712"/>
+    <rect x="14" y="16" width="12" height="8" rx="1.5" fill="#F5EFE5"/>
+  </svg>
+  <span class="ph-main">Main Stage</span>
+  <span class="ph-sub">Studio</span>
+</div>
 
 <!-- Drop overlay (shown during drag) -->
 <div id="drop-overlay">Drop your .md file</div>
@@ -591,6 +899,7 @@ html, body {
     <span class="wordmark-main">Main Stage</span>
     <span class="wordmark-sub">Studio</span>
   </div>
+  <button id="btn-export-pdf" title="Export to PDF">Export PDF</button>
 </header>
 
 <!-- Page shell -->
@@ -663,6 +972,9 @@ const fileInput        = document.getElementById('file-input');
 const btnSingle        = document.getElementById('btn-single-file');
 const btnOpenFolder    = document.getElementById('btn-open-folder');
 const fsApiNote        = document.getElementById('no-fsapi-note');
+const btnExportPdf     = document.getElementById('btn-export-pdf');
+
+let currentFilename = '';
 
 /* ─── Feature detect File System Access API ─── */
 const hasFSAPI = typeof window.showDirectoryPicker === 'function';
@@ -721,6 +1033,8 @@ function renderMarkdown(mdText, filename) {
 
   emptyState.style.display = 'none';
   contentEl.classList.add('visible');
+  currentFilename = filename;
+  btnExportPdf.style.display = 'block';
 }
 
 /* ─── Read a File object and render it (single-file mode) ─── */
@@ -952,6 +1266,52 @@ async function selectEntry(idx) {
 /* ─── Folder open buttons ─── */
 btnOpenFolder.addEventListener('click', openFolder);
 btnFolder.addEventListener('click', openFolder);
+
+/* ─── Export PDF ─── */
+btnExportPdf.addEventListener('click', printAsPdf);
+
+function printAsPdf() {
+  // Swap document.title so Chrome uses the md filename as the suggested PDF save name.
+  const originalTitle = document.title;
+  document.title = currentFilename.replace(/\.md$/i, '').replace(/[-_]/g, ' ');
+
+  const escaped = currentFilename
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"');
+  const styleEl = document.createElement('style');
+  styleEl.id = 'print-footer-style';
+  styleEl.textContent =
+    '@page {' +
+    '  @bottom-left {' +
+    '    content: "' + escaped + '";' +
+    '    font-family: "Plus Jakarta Sans", sans-serif;' +
+    '    font-weight: 300;' +
+    '    font-size: 8pt;' +
+    '    color: rgba(28,23,18,0.5);' +
+    '    border-top: 0.5px solid #BF6B47;' +
+    '    padding-top: 4pt;' +
+    '    vertical-align: top;' +
+    '  }' +
+    '  @bottom-right {' +
+    '    content: "Page " counter(page);' +
+    '    font-family: "Plus Jakarta Sans", sans-serif;' +
+    '    font-weight: 300;' +
+    '    font-size: 8pt;' +
+    '    color: rgba(28,23,18,0.5);' +
+    '    border-top: 0.5px solid #BF6B47;' +
+    '    padding-top: 4pt;' +
+    '    vertical-align: top;' +
+    '  }' +
+    '}';
+  document.head.appendChild(styleEl);
+  window.print();
+  window.addEventListener('afterprint', function cleanup() {
+    document.title = originalTitle;
+    const s = document.getElementById('print-footer-style');
+    if (s) s.remove();
+    window.removeEventListener('afterprint', cleanup);
+  });
+}
 </script>
 </body>
 </html>
