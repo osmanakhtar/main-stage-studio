@@ -48,11 +48,11 @@ Near-black top-right (leads). Terracotta bottom-left (recedes). Parchment cutout
 
 ## Shared stack
 - **Prototyping:** HTML/CSS in Claude Code
-- **Production:** WordPress + Bricks Builder
+- **Production:** Astro static sites (Bricks Builder retired 25 June 2026 — legacy docs in `_archive/bricks-era/`)
+- **Client review:** Stage on the Pi (`mss-review.duckdns.org`)
 - **Assets:** Higgsfield for video/3D, Claude for SVG and components
-- **Hosting:** Cloudways
-- **Local dev:** LocalWP
-- **DAM:** TBD — Cloudflare R2 or Bunny.net
+- **Hosting:** Cloudways (MSS production site remains WordPress + Bricks until Astro cutover)
+- **DAM:** Deprioritised — WebP compression + Cloudways direct serving is sufficient
 
 ---
 
