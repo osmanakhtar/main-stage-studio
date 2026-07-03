@@ -6,13 +6,13 @@
 
 ## Positioning
 
-**Who we serve:** Creative founders who lead with instinct and identity — people who know what they're building and why, but haven't yet found the words or the form to make it real. They're not looking for an agency to execute a brief. They're looking for someone who can think alongside them.
+**Who we serve:** People with something real to say that hasn't yet found its form — founders, established businesses that have lost calibration, creatives at any stage. The common thread is the gap between what something is and how it currently shows up. They're not looking for an agency to execute a brief. They're looking for someone who can think alongside them.
 
 **What we do:** We start with discovery, because the brief is rarely the real brief. From there we move through positioning, brand expression, and digital presence — each stage informing the next. Nothing gets handed over and abandoned.
 
-**How we're different:** PM discipline running underneath a creative process. The rigour keeps nothing from getting lost; the creative direction keeps it from feeling like a process. AI accelerates the execution — the vision and judgment stay human. We're drawn to founders whose work has positive impact, and we choose engagements accordingly.
+**How we're different:** PM discipline running underneath a creative process. The rigour keeps nothing from getting lost; the creative direction keeps it from feeling like a process. AI accelerates the execution — the vision and judgment stay human. We're drawn to people whose work means something beyond the commercial — the filter is intent, not industry.
 
-**Core proposition:** *"You know what you want. We know how to build it."*
+**Core proposition:** *"Your vision doesn't need permission. It needs form."*
 
 ---
 

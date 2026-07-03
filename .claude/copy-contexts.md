@@ -28,7 +28,7 @@ with the reader's experience first.
 
 **Worked example (MSS):**
 > Some things are hard to say not because they're unclear, but because no one has ever
-> given them the right form. Main Stage Studio works with creative founders who have a
+> given them the right form. Main Stage Studio works with people who have a
 > vision worth expressing. We listen until we understand it properly. Then we build
 > everything around it, the brand, the language, the digital presence, so that when people
 > encounter your work, they hear exactly what you meant.
