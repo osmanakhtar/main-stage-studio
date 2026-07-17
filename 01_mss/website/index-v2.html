@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Stage Studio — Brand, Web &amp; Content, Built and Run</title>
+  <meta name="description" content="Main Stage Studio builds your brand, website, and content — then runs them. One system, one place to review everything, a presence that doesn't go quiet.">
+  <meta property="og:title" content="Main Stage Studio — Launched is not the same as alive.">
+  <meta property="og:description" content="Brand, website, and content — built once, run every week. Reviewed and approved by you, in one place.">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='6' fill='%23F5EFE5'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment:    '#F5EFE5',
+            blush:        '#E8C9AE',
+            terracotta:   '#BF6B47',
+            ember:        '#8C4A2F',
+            'near-black': '#1C1712',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans:    ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --parchment:  #F5EFE5;
+      --blush:      #E8C9AE;
+      --terracotta: #BF6B47;
+      --ember:      #8C4A2F;
+      --near-black: #1C1712;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    html { background: var(--parchment); }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--parchment);
+      color: var(--near-black);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scroll progress ─────────────────────────────────────── */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 1px;
+      width: 0%;
+      background: var(--terracotta);
+      z-index: 100;
+      transition: width 0.05s linear;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    #nav {
+      transition: background-color 0.45s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow       0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    #nav.scrolled {
+      background: var(--parchment);
+      box-shadow: 0 1px 0 rgba(28,23,18,0.08);
+    }
+    .nav-link {
+      position: relative;
+      font-size: 0.8125rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      color: var(--near-black);
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--terracotta);
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── Directional fill button ─────────────────────────────── */
+    .btn-fill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow: hidden;
+      padding: 0.8rem 1.625rem;
+      background: var(--near-black);
+      color: var(--parchment);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      will-change: transform;
+    }
+    .btn-fill__bg {
+      position: absolute;
+      inset: 0;
+      background: var(--terracotta);
+      transform: translateX(-101%);
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+    }
+    .btn-fill.from-right  .btn-fill__bg { transform: translateX(101%); }
+    .btn-fill.from-top    .btn-fill__bg { transform: translateY(-101%); }
+    .btn-fill.from-bottom .btn-fill__bg { transform: translateY(101%); }
+    .btn-fill:hover       .btn-fill__bg { transform: translate(0,0); }
+    .btn-fill__label { position: relative; z-index: 1; }
+    .btn-fill:active { transform: translateY(1px) scale(0.98); }
+    .btn-fill:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8125rem;
+      letter-spacing: 0.04em;
+      color: var(--near-black);
+      text-decoration: none;
+      transition: color 0.3s ease, gap 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-ghost:hover { color: var(--terracotta); gap: 0.7rem; }
+
+    /* ── Hero line reveal ────────────────────────────────────── */
+    .line-clip { overflow: hidden; display: block; }
+    .line-clip__inner {
+      display: block;
+      transform: translateY(105%);
+      transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .lines-ready .line-clip__inner { transform: translateY(0); }
+
+    /* ── Section label ───────────────────────────────────────── */
+    .slabel {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+
+    /* ── Scroll reveal ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.22s; }
+    .rd3 { transition-delay: 0.36s; }
+    .rd4 { transition-delay: 0.5s; }
+
+    /* ── Work thumbnail image fade ───────────────────────────── */
+    .reveal .work-thumb-inner {
+      opacity: 0;
+      transition: opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s,
+                  transform 0.75s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in-view .work-thumb-inner { opacity: 1; }
+
+    /* ── MSS featured image ──────────────────────────────────── */
+    #mss-thumb-img {
+      opacity: 0;
+      transition: opacity 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    /* ── Marquee ─────────────────────────────────────────────── */
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-track { animation: marquee 36s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* ── Spotlight border card ───────────────────────────────── */
+    .spotlight-card {
+      position: relative;
+      isolation: isolate;
+      border: 1px solid rgba(28,23,18,0.08);
+      transition: border-color 0.3s ease;
+    }
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        480px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(191,107,71,0.22),
+        transparent 55%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .spotlight-card:hover::before { opacity: 1; }
+    .spotlight-card > * { position: relative; z-index: 1; }
+
+    /* ── Work thumbnail ──────────────────────────────────────── */
+    .work-thumb { overflow: hidden; }
+    .work-thumb-inner {
+      width: 100%; height: 100%;
+      transition: transform 0.75s cubic-bezier(0.16,1,0.3,1);
+    }
+    .spotlight-card:hover .work-thumb-inner { transform: scale(1.03); }
+    #work-mss.spotlight-card:hover #mss-thumb-img { transform: scale(1.03); }
+
+    /* ── System progress line ────────────────────────────────── */
+    #system-line {
+      position: absolute;
+      left: 0; top: 0;
+      width: 1px;
+      height: 100%;
+      background: var(--terracotta);
+      transform-origin: top center;
+      transform: scaleY(0);
+      will-change: transform;
+      opacity: 0.6;
+    }
+
+    /* ── Honesty callout ─────────────────────────────────────── */
+    .honesty-box {
+      border-left: 2px solid var(--terracotta);
+      background: rgba(245,239,229,0.03);
+    }
+
+    /* ── Pulse dot ───────────────────────────────────────────── */
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.3; transform: scale(0.75); }
+    }
+    .pulse-dot { animation: pulseDot 2.8s ease-in-out infinite; }
+
+    /* ── Form ────────────────────────────────────────────────── */
+    .flabel {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(28,23,18,0.4);
+      display: block;
+    }
+    .finput {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(28,23,18,0.16);
+      padding: 0.75rem 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--near-black);
+      outline: none;
+      transition: border-color 0.3s ease;
+      -webkit-appearance: none;
+    }
+    .finput:focus { border-bottom-color: var(--terracotta); }
+    .finput::placeholder { color: rgba(28,23,18,0.24); }
+    textarea.finput { resize: none; }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(28,23,18,0.09);
+    }
+    .hr-light { border-top-color: rgba(245,239,229,0.08); }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Scroll progress indicator -->
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+
+  <!-- ═══════════════════════════════════════ NAV -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between">
+
+    <a href="#" class="flex items-center gap-3 no-underline" aria-label="Main Stage Studio — home">
+      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#1C1712"/>
+        <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+        <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+      </svg>
+      <span class="flex items-baseline gap-[0.3em]">
+        <span class="font-display font-normal text-near-black" style="font-size:1.0625rem;letter-spacing:0.02em;">Main Stage</span>
+        <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5625rem;letter-spacing:0.24em;">Studio</span>
+      </span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#what-we-do"   class="nav-link font-sans">What we do</a>
+      <a href="#how-it-works" class="nav-link font-sans">How it works</a>
+      <a href="#work"         class="nav-link font-sans">Work</a>
+      <a href="#studio"       class="nav-link font-sans">The studio</a>
+      <a href="#contact" class="btn-fill ml-2">
+        <span class="btn-fill__bg"></span>
+        <span class="btn-fill__label">Start a project</span>
+      </a>
+    </div>
+
+    <button id="menu-toggle" class="md:hidden p-2 flex flex-col gap-[5px]" aria-label="Toggle menu" aria-expanded="false">
+      <span id="bar1" class="block w-5 h-px bg-near-black origin-center" style="transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);"></span>
+      <span id="bar2" class="block w-5 h-px bg-near-black" style="transition:opacity 0.2s ease;"></span>
+      <span id="bar3" class="block w-5 h-px bg-near-black origin-center" style="transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);"></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-parchment flex flex-col justify-center px-8"
+       style="transform:translateX(100%);transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);" aria-hidden="true">
+    <nav class="flex flex-col gap-8">
+      <a href="#what-we-do"   class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">What we do</a>
+      <a href="#how-it-works" class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">How it works</a>
+      <a href="#work"         class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">Work</a>
+      <a href="#studio"       class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">The studio</a>
+      <a href="#contact" class="btn-fill self-start mt-6 mobile-link">
+        <span class="btn-fill__bg"></span>
+        <span class="btn-fill__label">Start a project</span>
+      </a>
+    </nav>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ HERO -->
+  <section class="min-h-[100dvh] bg-parchment flex flex-col relative overflow-hidden px-6 md:px-12 lg:px-24">
+
+    <!-- Hero video — full-section background -->
+    <div class="absolute inset-0 pointer-events-none select-none overflow-hidden"
+         aria-hidden="true"
+         style="z-index:0;">
+      <video id="hero-video" autoplay muted playsinline
+        src="../../03_resources/assets/3d-mark-animation.mp4"
+        style="width:100%;height:100%;object-fit:cover;opacity:0;
+               transition:opacity 1.6s cubic-bezier(0.16,1,0.3,1);">
+      </video>
+    </div>
+    <!-- Parchment filter overlay -->
+    <div id="hero-wash" class="absolute inset-0 pointer-events-none" aria-hidden="true"
+         style="z-index:1;background:rgba(245,239,229,0.75);"></div>
+
+    <!-- Content -->
+    <div class="flex-1 flex flex-col justify-center pt-24 md:pt-28 pb-10 max-w-[1400px] w-full mx-auto relative z-10">
+
+      <!-- Label -->
+      <div class="line-clip mb-8 md:mb-10">
+        <span class="line-clip__inner slabel" style="transition-delay:0.1s;">Digital Studio · London</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 id="hero-headline" class="font-display font-normal text-near-black mb-6 md:mb-8" style="font-size:clamp(3rem,8vw,7.5rem);line-height:1.0;letter-spacing:-0.025em;">
+        <span class="line-clip" style="display:block;">
+          <span class="line-clip__inner" style="transition-delay:0.22s;">Launched is not</span>
+        </span>
+        <span class="line-clip text-terracotta" style="display:block;margin-top:0.08em;">
+          <span class="line-clip__inner" style="transition-delay:0.38s;color:var(--terracotta);">the same as alive.</span>
+        </span>
+      </h1>
+
+      <!-- Subhead -->
+      <div class="line-clip mb-8 md:mb-10">
+        <p class="line-clip__inner font-sans font-normal text-near-black" style="transition-delay:0.56s;font-size:clamp(1.125rem,2vw,1.375rem);line-height:1.4;max-width:36ch;">
+          Going live is the easy part. The job is every week after.
+        </p>
+      </div>
+
+      <!-- Body -->
+      <div>
+        <div class="line-clip mb-8">
+          <p class="line-clip__inner font-sans font-light text-near-black" style="transition-delay:0.72s;font-size:1.0625rem;line-height:1.72;max-width:52ch;opacity:0.65;">
+            Most businesses know exactly what a strong presence looks like. A website that reflects the quality of the work. Social accounts that stay alive past the first month. Words that actually sound like you.
+          </p>
+        </div>
+        <div class="line-clip mb-8">
+          <p class="line-clip__inner font-sans font-light text-near-black" style="transition-delay:0.84s;font-size:1.0625rem;line-height:1.72;max-width:52ch;opacity:0.65;">
+            What they don't have is the team to keep all of that running — and hiring one costs more than the problem.
+          </p>
+        </div>
+        <div class="line-clip mb-8">
+          <p class="line-clip__inner font-sans font-light text-near-black" style="transition-delay:0.96s;font-size:1.0625rem;line-height:1.72;max-width:52ch;opacity:0.65;">
+            Main Stage Studio builds your presence, then runs it. Brand, website, content: made in one system, reviewed by you in one place, kept moving week after week.
+          </p>
+        </div>
+        <div class="line-clip">
+          <div class="line-clip__inner flex items-center gap-6 flex-wrap" style="transition-delay:1.1s;">
+            <a href="#contact" class="btn-fill">
+              <span class="btn-fill__bg"></span>
+              <span class="btn-fill__label">Start a project</span>
+            </a>
+            <a href="#how-it-works" class="btn-ghost">
+              See how it works
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom rule -->
+    <div class="pb-8 max-w-[1400px] w-full mx-auto flex items-center gap-6 relative z-10">
+      <hr class="flex-1">
+      <span class="font-sans text-near-black shrink-0" style="font-size:0.5625rem;letter-spacing:0.22em;text-transform:uppercase;opacity:0.28;">Scroll</span>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ MARQUEE -->
+  <div class="bg-near-black overflow-hidden py-[13px]" aria-hidden="true">
+    <div class="marquee-track flex whitespace-nowrap">
+      <span class="flex items-center shrink-0">
+        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+      </span>
+      <span class="flex items-center shrink-0" aria-hidden="true">
+        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
+      </span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════ THE GAP -->
+  <section id="gap" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-14 md:gap-24">
+
+        <div class="reveal">
+          <p class="slabel mb-4">02 — The gap</p>
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;">
+            A team's job.<br>No team<br>to do it.
+          </h2>
+        </div>
+
+        <div class="flex flex-col gap-6 reveal rd1">
+          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:56ch;">
+            Every business has lived some version of this. The website went live and hasn't changed since. The Instagram had a strong first month. The copy was written by someone who was never in the room.
+          </p>
+          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:56ch;">
+            None of that is a motivation problem. Keeping a presence alive is a production job — planning, writing, designing, editing, publishing, every week — and it sits awkwardly between what you can staff and what you can sensibly outsource. Agencies charge team rates for it. Freelancers cover one skill of the five it needs.
+          </p>
+          <p class="font-sans font-normal text-near-black" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
+            That gap is what this studio was built to close.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ WHAT WE DO -->
+  <section id="what-we-do" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:#EAE0D0;">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="mb-14 reveal">
+        <p class="slabel mb-3">03 — What we do</p>
+        <h2 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.015em;">Built once. Run every week.</h2>
+        <p class="font-sans font-light text-near-black" style="font-size:1rem;line-height:1.7;opacity:0.55;max-width:52ch;">
+          Two ways of working. Most engagements start with the first and settle into the second.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Launch -->
+        <article class="spotlight-card p-8 md:p-10 reveal rd1" style="background:var(--parchment);">
+          <p class="slabel mb-4">Launch</p>
+          <h3 class="font-display font-normal text-near-black mb-6" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;">The build engagement</h3>
+          <div class="flex flex-col gap-5">
+            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+              We start with what you're actually trying to say — the brief is rarely the real brief, and finding the real one is the work. From there: positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
+            </p>
+            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+              You review every stage in one place and nothing moves forward without your sign-off. When it goes live, it's already set up to be run — not left.
+            </p>
+          </div>
+        </article>
+
+        <!-- Run -->
+        <article class="spotlight-card p-8 md:p-10 reveal rd2" style="background:var(--parchment);">
+          <p class="slabel mb-4">Run</p>
+          <h3 class="font-display font-normal text-near-black mb-6" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;">The ongoing engagement</h3>
+          <div class="flex flex-col gap-5">
+            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+              A monthly engagement that keeps your presence moving. A planned calendar, designed posts, edited clips, captions in your voice — every piece checked against your rules before you ever see it, and every piece approved by you before it goes anywhere.
+            </p>
+            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+              Your website stays alive the same way. Need the wording changed, a price updated, a treatment added? Ask for it, approve it, and it's live — no ticket queue, no small-change invoice.
+            </p>
+            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+              Building toward a launch, an event, a season? A Run can be shaped entirely around it.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ HOW IT WORKS -->
+  <section id="how-it-works" class="bg-near-black py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden">
+
+    <!-- Left progress line -->
+    <div id="system-line" aria-hidden="true"></div>
+
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="mb-14 reveal">
+        <p class="slabel mb-3">04 — How it works</p>
+        <h2 class="font-display font-normal text-parchment" style="font-size:clamp(2rem,4.5vw,3.75rem);line-height:1.08;letter-spacing:-0.015em;max-width:16ch;">One place to see everything. One gate everything passes through.</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_1.3fr] gap-14 md:gap-24">
+
+        <div class="reveal rd1">
+          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.8;opacity:0.5;max-width:44ch;">
+            Behind the studio is a production system we built for ourselves, because the run side of this work is only affordable if the mechanical parts are automated and the judgment parts never are.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-8 reveal rd2">
+          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.8;opacity:0.5;max-width:52ch;">
+            What you see of it is simple. Every piece of work — pages, posts, clips, copy changes — lands in one private review space, on one link, behind your login. You approve it, ask for a change, or flag it for a conversation. From your desk or your phone.
+          </p>
+          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.8;opacity:0.5;max-width:52ch;">
+            Sign-off isn't a courtesy. It's the gate the system enforces. Nothing ships without it — and everything that ships is exactly what you approved.
+          </p>
+
+          <div class="honesty-box pl-6 py-5 mt-2">
+            <p class="slabel mb-3" style="color:var(--blush);">On AI</p>
+            <p class="font-sans font-light text-parchment" style="font-size:0.9375rem;line-height:1.8;opacity:0.62;max-width:52ch;">
+              The tools have changed what's possible. A studio of one can now plan, produce, and publish at a pace that used to take a team. But the judgment about what to make, what it should say, and whether it's good enough hasn't changed hands — and here, it never will. A person picks the moment. A person signs the words. The system just makes sure the rest keeps up.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ WORK -->
+  <section id="work" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="flex items-end justify-between mb-14 reveal">
+        <div>
+          <p class="slabel mb-3">05 — Work</p>
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.015em;">The work</h2>
+        </div>
+        <a href="#contact" class="btn-ghost hidden md:inline-flex">
+          Start a project
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Featured: MSS building MSS -->
+      <article class="spotlight-card p-0 mb-6 reveal rd1" id="work-mss">
+        <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
+
+          <!-- Thumbnail -->
+          <a href="../portfolio/mss/case-study.html" class="block overflow-hidden" style="aspect-ratio:16/10;background:#F5EFE5;">
+            <img src="../../03_resources/assets/terracotta-and-near-black-mark-01.png"
+                 id="mss-thumb-img"
+                 alt="MSS mark: terracotta and near-black forms with glass intersection"
+                 class="w-full h-full object-cover"
+                 style="object-position:center;transform-origin:center;transition:opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);">
+          </a>
+
+          <!-- Detail -->
+          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
+            <div>
+              <div class="flex items-center gap-3 mb-5">
+                <span class="slabel">Case Study — Studio</span>
+                <span style="color:rgba(28,23,18,0.18);">·</span>
+                <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">In progress</span>
+              </div>
+              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Main Stage Studio</h3>
+              <p class="font-sans font-light text-near-black mb-8" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:38ch;">
+                The first client was the studio itself. Positioning, identity, voice, site — built in public with the same system every client gets, because the method had to prove itself here first.
+              </p>
+              <div class="flex flex-col gap-[6px]">
+                <div class="flex items-start gap-4">
+                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Services</span>
+                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Positioning · Brand Identity · Web Presence</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Type</span>
+                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Self-initiated · Solo Studio</span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
+              <div class="flex items-center gap-2">
+                <div class="w-[5px] h-[5px] rounded-full bg-terracotta pulse-dot shrink-0"></div>
+                <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.32;">You're looking at it</span>
+              </div>
+              <a href="../portfolio/mss/case-study.html" class="font-sans font-light text-terracotta group flex items-center gap-[6px]" style="font-size:0.8125rem;">
+                Read the case study
+                <span class="inline-block transition-transform duration-300 group-hover:translate-x-[4px]">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Sable -->
+      <article class="spotlight-card p-0 mt-6 mb-6 reveal rd2" id="work-sable">
+          <a href="../portfolio/sable/case-study.html" class="block work-thumb" style="aspect-ratio:4/3;background:#0E0D0B;">
+            <img src="../../03_resources/assets/sable-atmospheric.png"
+                 alt="Single gold horizontal line on charcoal, Sable brand concept"
+                 class="work-thumb-inner object-cover w-full h-full"
+                 style="object-position:center;">
+          </a>
+          <div class="p-6 md:p-7 border-t" style="border-color:rgba(28,23,18,0.08);">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="slabel">Case Study — Artist</span>
+              <span style="color:rgba(28,23,18,0.18);">·</span>
+              <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">Concept</span>
+            </div>
+            <h3 class="font-display font-normal text-near-black mb-3" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Sable</h3>
+            <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:38ch;">
+              A character with a world attached, and no way for anyone to enter it. Sable needed an identity that could hold the atmosphere of the work — and a stage built for it, not for the studio.
+            </p>
+            <div class="flex flex-col gap-[6px] mb-6">
+              <div class="flex items-start gap-4">
+                <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Services</span>
+                <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Positioning · Brand Identity</span>
+              </div>
+              <div class="flex items-start gap-4">
+                <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Sector</span>
+                <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Music · Independent Artist</span>
+              </div>
+            </div>
+            <div class="pt-5 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
+              <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.28;">Self-initiated · 2026</span>
+              <a href="../portfolio/sable/case-study.html" class="font-sans font-light text-terracotta group flex items-center gap-[6px]" style="font-size:0.8125rem;">
+                Read the case study
+                <span class="inline-block transition-transform duration-300 group-hover:translate-x-[4px]">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      <!-- Art by Ayesha Johar — secondary, offset -->
+      <article class="spotlight-card p-0 reveal rd3" id="work-ayesha">
+        <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr]">
+
+          <!-- Thumbnail -->
+          <div class="work-thumb overflow-hidden" style="aspect-ratio:4/3;background:#1C1712;">
+            <img src="../../03_resources/assets/art-by-ayesha-johar-cs-01.png"
+                 alt="Art by Ayesha Johar — case study thumbnail"
+                 class="work-thumb-inner object-cover w-full h-full"
+                 style="object-position:center;">
+          </div>
+
+          <!-- Detail -->
+          <div class="flex flex-col justify-between p-6 md:p-8 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
+            <div>
+              <div class="flex items-center gap-3 mb-4">
+                <span class="slabel">Artist Portfolio</span>
+                <span style="color:rgba(28,23,18,0.18);">·</span>
+                <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">In progress</span>
+              </div>
+              <h3 class="font-display font-normal text-near-black mb-3" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Art by Ayesha Johar</h3>
+              <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:38ch;">
+                Beauty and resistance are one thing. A web presence for the painter Ayesha Johar - built from the inside out.
+              </p>
+              <div class="flex flex-col gap-[6px]">
+                <div class="flex items-start gap-4">
+                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Services</span>
+                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Positioning · Brand Identity · Web Presence</span>
+                </div>
+                <div class="flex items-start gap-4">
+                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Sector</span>
+                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Visual Arts · Independent Creator</span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-5 mt-6 border-t" style="border-color:rgba(28,23,18,0.07);">
+              <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.25;">Visual assets incoming, late 2026</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ THE STUDIO -->
+  <section id="studio" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden">
+
+    <!-- Ghost proposition watermark -->
+    <div class="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
+      <span class="font-display text-near-black block w-full" style="font-size:clamp(4rem,10vw,9rem);line-height:1;opacity:0.025;letter-spacing:-0.03em;white-space:nowrap;padding-left:4vw;">
+        You don't need a bigger team.
+      </span>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto relative">
+      <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-24">
+
+        <div class="reveal">
+          <p class="slabel mb-4">06 — The studio</p>
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;">
+            Run by one person.<br>
+            <span class="text-terracotta">Held to one standard.</span>
+          </h2>
+        </div>
+
+        <div class="flex flex-col gap-6 reveal rd1">
+          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:55ch;">
+            Main Stage Studio is run by one person, on purpose. You get one accountable judgment from discovery to publish — no account manager, no handoffs, no dilution between what you said and what gets made.
+          </p>
+          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:55ch;">
+            The background is product management, and it shows up as one discipline above all: understand the problem properly before you touch the solution. That's why engagements here start with listening, and why the system underneath the studio exists at all — it was built the way you'd build a product, because it is one.
+          </p>
+          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:55ch;">
+            Drawn to people whose work means something beyond the commercial. If what you're building matters to you, it matters here.
+          </p>
+
+          <div class="pt-6 border-t" style="border-color:rgba(28,23,18,0.08);margin-top:0.5rem;">
+            <p class="slabel mb-5">What that gets you</p>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
+                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">One accountable judgment, not a rotating account team</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
+                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">The tools have changed what's possible. The judgment hasn't changed hands.</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
+                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">PM discipline — understand the problem before touching the solution</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
+                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">Drawn to work that means something beyond the commercial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ CONTACT -->
+  <section id="contact" class="py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:#EAE0D0;">
+    <div class="max-w-[1400px] mx-auto">
+
+      <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-24">
+
+        <div class="reveal">
+          <p class="slabel mb-4">07 — Start a project</p>
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;">
+            Ready when<br>you are.
+          </h2>
+          <p class="font-sans font-light text-near-black mt-6" style="font-size:1rem;line-height:1.72;opacity:0.55;max-width:36ch;">
+            Tell me what you're building and where it's showing up short. If I think we can help, the next step is a conversation — no deck, no discovery fee.
+          </p>
+        </div>
+
+        <form id="contact-form" action="https://formspree.io/f/mnjyqooa" method="POST" class="flex flex-col gap-9 reveal rd1" novalidate>
+
+          <div class="flex flex-col gap-[5px]">
+            <label for="name" class="flabel">Name</label>
+            <input type="text" id="name" name="name" class="finput" placeholder="Your name" autocomplete="name" required>
+            <p class="font-sans text-terracotta hidden" id="err-name" style="font-size:0.75rem;margin-top:3px;">Please enter your name.</p>
+          </div>
+
+          <div class="flex flex-col gap-[5px]">
+            <label for="email" class="flabel">Email</label>
+            <input type="email" id="email" name="email" class="finput" placeholder="your@email.com" autocomplete="email" required>
+            <p class="font-sans text-terracotta hidden" id="err-email" style="font-size:0.75rem;margin-top:3px;">Please enter a valid email address.</p>
+          </div>
+
+          <div class="flex flex-col gap-[5px]">
+            <label for="project" class="flabel">Tell me about your project</label>
+            <textarea id="project" name="project" class="finput" placeholder="What are you working on, and where are you with it?" rows="5" required></textarea>
+            <p class="font-sans text-terracotta hidden" id="err-project" style="font-size:0.75rem;margin-top:3px;">Please tell us about your project.</p>
+          </div>
+
+          <div class="flex items-center gap-6 flex-wrap">
+            <button type="submit" class="btn-fill" id="submit-btn">
+              <span class="btn-fill__bg"></span>
+              <span class="btn-fill__label">Send it over</span>
+            </button>
+            <p class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.4;">
+              Or email <a href="mailto:hello@mainstagestudio.co.uk" class="underline underline-offset-2 transition-colors hover:text-terracotta" style="opacity:1;font-size:1rem;">hello@mainstagestudio.co.uk</a>
+            </p>
+          </div>
+
+          <!-- Success -->
+          <div id="form-success" class="hidden items-start gap-4 py-5 px-5 border" style="border-color:rgba(28,23,18,0.1);background:rgba(28,23,18,0.03);">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" class="shrink-0 mt-0.5">
+              <circle cx="9" cy="9" r="8" stroke="#BF6B47" stroke-width="1.2"/>
+              <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#BF6B47" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <p class="font-sans font-medium text-near-black" style="font-size:0.9375rem;">Got it — thank you.</p>
+              <p class="font-sans font-light text-near-black mt-1" style="font-size:0.875rem;opacity:0.5;">I read everything that comes through here and you'll hear back from me within two working days.</p>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ FOOTER -->
+  <footer class="bg-near-black py-10 px-6 md:px-12 lg:px-24">
+    <div class="max-w-[1400px] mx-auto flex flex-col gap-8">
+
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+
+        <a href="#" class="flex items-center gap-3 no-underline" aria-label="Main Stage Studio — back to top">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
+            <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+            <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+          </svg>
+          <span class="flex items-baseline gap-[0.3em]">
+            <span class="font-display font-normal text-parchment" style="font-size:0.9375rem;letter-spacing:0.02em;">Main Stage</span>
+            <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5rem;letter-spacing:0.24em;">Studio</span>
+          </span>
+        </a>
+
+        <div class="flex items-center gap-7 flex-wrap">
+          <a href="#what-we-do"   class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">What we do</a>
+          <a href="#how-it-works" class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">How it works</a>
+          <a href="#work"         class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">Work</a>
+          <a href="#studio"       class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">The studio</a>
+          <a href="#contact"      class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">Start a project</a>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-6 border-t hr-light">
+        <p class="font-sans text-parchment" style="font-size:0.8125rem;opacity:0.28;">Brand, web &amp; content — built and run.</p>
+        <div class="flex items-center gap-6">
+          <a href="mailto:hello@mainstagestudio.co.uk" class="font-sans text-parchment no-underline" style="font-size:0.75rem;opacity:0.24;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.24">hello@mainstagestudio.co.uk</a>
+          <p class="font-sans text-parchment" style="font-size:0.6875rem;opacity:0.16;">&copy; 2026 Main Stage Studio</p>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <script>
+    // ── SCROLL PROGRESS ───────────────────────────────────────────────────
+    const progressBar = document.getElementById('scroll-progress');
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (window.scrollY / max * 100) + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+
+    // ── NAV ───────────────────────────────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ── HERO LINE REVEAL ──────────────────────────────────────────────────
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.body.classList.add('lines-ready');
+      });
+    });
+
+    // ── HERO VIDEO ────────────────────────────────────────────────────────
+    // Smaller viewports show more of the animation relative to the text column,
+    // so mobile needs LESS video presence and MORE wash, not more — inverse of desktop.
+    const heroVideo = document.getElementById('hero-video');
+    const heroWash  = document.getElementById('hero-wash');
+    if (heroVideo) {
+      heroVideo.playbackRate = 0.75;
+      const showVideo = () => {
+        const isMobile = window.innerWidth < 768;
+        heroVideo.style.opacity = isMobile ? '0.16' : '0.38';
+        if (heroWash) heroWash.style.background = isMobile
+          ? 'rgba(245,239,229,0.88)'
+          : 'rgba(245,239,229,0.75)';
+      };
+      heroVideo.addEventListener('canplay', showVideo, { once: true });
+      heroVideo.addEventListener('play', showVideo, { once: true });
+      heroVideo.addEventListener('ended', () => {
+        heroVideo.pause();
+      }, { once: true });
+      heroVideo.play().catch(() => {});
+    }
+
+    // ── MOBILE MENU ───────────────────────────────────────────────────────
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+    let menuOpen = false;
+
+    menuToggle.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.style.transform = menuOpen ? 'translateX(0)' : 'translateX(100%)';
+      mobileMenu.setAttribute('aria-hidden', String(!menuOpen));
+      menuToggle.setAttribute('aria-expanded', String(menuOpen));
+      document.body.style.overflow = menuOpen ? 'hidden' : '';
+      bar1.style.transform = menuOpen ? 'translateY(6px) rotate(45deg)' : '';
+      bar2.style.opacity   = menuOpen ? '0' : '1';
+      bar3.style.transform = menuOpen ? 'translateY(-6px) rotate(-45deg)' : '';
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (!menuOpen) return;
+        menuOpen = false;
+        mobileMenu.style.transform = 'translateX(100%)';
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        bar1.style.transform = bar3.style.transform = '';
+        bar2.style.opacity = '1';
+      });
+    });
+
+    // ── MSS FEATURED IMAGE FADE ───────────────────────────────────────────
+    const mssThumb = document.getElementById('mss-thumb-img');
+    if (mssThumb) {
+      mssThumb.style.opacity = '0';
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          mssThumb.style.opacity = '1';
+        }, 600);
+      });
+    }
+
+    // ── SCROLL REVEAL ─────────────────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── SPOTLIGHT BORDER ──────────────────────────────────────────────────
+    document.querySelectorAll('.spotlight-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top)  + 'px');
+      });
+    });
+
+    // ── SYSTEM PROGRESS LINE ──────────────────────────────────────────────
+    const systemSection = document.getElementById('how-it-works');
+    const systemLine    = document.getElementById('system-line');
+    const updateLine = () => {
+      if (!systemSection) return;
+      const r = systemSection.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, -r.top / (r.height - window.innerHeight)));
+      systemLine.style.transform = `scaleY(${progress})`;
+    };
+    window.addEventListener('scroll', updateLine, { passive: true });
+
+    // ── DIRECTIONAL FILL BUTTONS ──────────────────────────────────────────
+    document.querySelectorAll('.btn-fill').forEach(btn => {
+      btn.addEventListener('mouseenter', e => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        btn.classList.remove('from-right', 'from-top', 'from-bottom');
+        if      (x > r.width  * 0.7) btn.classList.add('from-right');
+        else if (y < r.height * 0.3) btn.classList.add('from-top');
+        else if (y > r.height * 0.7) btn.classList.add('from-bottom');
+      });
+    });
+
+    // ── FORM ──────────────────────────────────────────────────────────────
+    const form      = document.getElementById('contact-form');
+    const successEl = document.getElementById('form-success');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitLbl = submitBtn.querySelector('.btn-fill__label');
+
+    const validators = [
+      { id:'name',    err:'err-name',    ok: v => v.trim().length > 0 },
+      { id:'email',   err:'err-email',   ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+      { id:'project', err:'err-project', ok: v => v.trim().length > 0 },
+    ];
+
+    validators.forEach(({ id, err }) => {
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById(err).classList.add('hidden');
+      });
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      let valid = true;
+      validators.forEach(({ id, err, ok }) => {
+        const el  = document.getElementById(id);
+        const msg = document.getElementById(err);
+        const pass = ok(el.value);
+        msg.classList.toggle('hidden', pass);
+        if (!pass) valid = false;
+      });
+      if (!valid) return;
+
+      submitLbl.textContent = 'Sending…';
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch('https://formspree.io/f/mnjyqooa', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form),
+        });
+
+        if (response.ok) {
+          form.querySelectorAll('.flex.flex-col').forEach(el => {
+            el.style.opacity = '0.25';
+            el.style.pointerEvents = 'none';
+          });
+          form.querySelector('.flex.items-center.gap-6').style.opacity = '0.25';
+          successEl.classList.remove('hidden');
+          successEl.classList.add('flex');
+        } else {
+          submitLbl.textContent = 'Send it over';
+          submitBtn.disabled = false;
+          alert('Something went wrong. Please try emailing us directly at hello@mainstagestudio.co.uk');
+        }
+      } catch {
+        submitLbl.textContent = 'Send it over';
+        submitBtn.disabled = false;
+        alert('Something went wrong. Please try emailing us directly at hello@mainstagestudio.co.uk');
+      }
+    });
+  </script>
+
+</body>
+</html>

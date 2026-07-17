@@ -39,7 +39,7 @@ No filler. No throat-clearing. If a sentence doesn't add something, cut it.
 State things clearly. Don't hedge unnecessarily, but don't oversell either. Let the work and the thinking speak.
 
 **Talk to the human, not the brief.**
-The people we work with care about their work, their audience, their reputation. Some are founders. Some are established businesses finding their way back to what they stand for. Some are creatives who haven't yet been given the right platform. Lead with their world, not ours.
+The people we work with care about their work, their audience, their reputation. They're established small businesses or funded founders — real revenue, a run-rate problem: not enough consistent presence, without the overhead of a full team. Lead with their world, not ours.
 
 **Show the thinking, not the jargon.**
 "We bring strategic discipline" means nothing. "We figure out what makes you different before we design a single thing" means something.

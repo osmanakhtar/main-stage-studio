@@ -1,0 +1,50 @@
+name: MSS site — Deploy to production
+
+# Manual-only. Production goes live when the DNS cutover from WordPress happens.
+# Requires typing "deploy" to confirm — this is the final human gate.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "deploy" to confirm production deployment'
+        required: true
+
+concurrency:
+  group: mss-site-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'deploy' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: 01_mss/website/site/package-lock.json
+
+      - name: Install dependencies
+        working-directory: 01_mss/website/site
+        run: npm ci
+
+      - name: Build
+        working-directory: 01_mss/website/site
+        run: npm run build
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CLOUDWAYS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.CLOUDWAYS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy dist to production webroot
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            01_mss/website/site/dist/ \
+            "${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}:${{ secrets.CLOUDWAYS_WEBROOT_PROD }}/"

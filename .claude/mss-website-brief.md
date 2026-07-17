@@ -1,14 +1,18 @@
 # Main Stage Studio — Website Brief
 
 *Use alongside `mss-brand-identity.md`. That file is the visual source of truth.*
-*Last reviewed: 05 June 2026*
+*Last reviewed: 16 July 2026 — repositioning v3 (presence partner)*
 
 ---
 
 ## Proposition
-*"Your vision doesn't need permission. It needs form."*
+*"You don't need a bigger team. You need a better system."*
 
-Target: People with something real to say that hasn't yet found its form. Founders, established businesses that have lost calibration, creatives at any stage. The common thread is the gap between what something is and how it currently shows up. MSS starts with what they're trying to say, not what they think they need built.
+Target: Established small businesses and funded founders with a run-rate problem. Values filter unchanged — drawn to people whose work means something beyond the commercial, intent over industry.
+
+Positioning: presence partner — MSS builds and runs a client's brand, site, and content on retainer. The delivery pipeline (Astro, Higgsfield, Stage review) is the mechanism, not the pitch.
+
+Offer architecture: **Launch** (build engagement) / **Run** (ongoing retainer, the centre of gravity — Campaign folded in rather than named separately). New Run proposals anchor £1,500–£3,000/mo (qualitative on-site, used in proposals only).
 
 ---
 
@@ -56,15 +60,17 @@ Target: People with something real to say that hasn't yet found its form. Founde
 
 **Copy direction:** Opens with the reader's experience, not the studio's offer. Empathy before capability. States the offer without decorating it — no adjectives doing the work that substance should do. First impression register: direct, clear, warm. The reader should feel recognised before they feel sold to.
 
-**Locked hero copy (05 June 2026):**
+**Copy source of record (16 July 2026):** full hero, section, and page copy for v3 (presence partner) lives in `01_mss/strategy/mss-website-copy-v2.md` §2. That is the copy of record for the next build; it doesn't ship until the Astro rebuild (MSS site cutover holds for proof #2 — see `mss-decisions-log.md`).
 
-*Your vision doesn't need permission. It needs form.*
+**Retired hero copy (locked 05 June 2026, superseded 16 July 2026 — line moved to About, see below):**
 
-Most people with something real to say spend years waiting for the right moment, the right structure, the right framework that finally gives them permission to say it. That moment rarely arrives on its own.
+~~*Your vision doesn't need permission. It needs form.*~~
 
-Main Stage Studio exists for the people who stop waiting.
+~~Most people with something real to say spend years waiting for the right moment, the right structure, the right framework that finally gives them permission to say it. That moment rarely arrives on its own.~~
 
-We work with people who have something real to say and need a thought partner who can help them find the form to say it. The brief is rarely the real brief. That's always where we start.
+~~Main Stage Studio exists for the people who stop waiting.~~
+
+~~We work with people who have something real to say and need a thought partner who can help them find the form to say it. The brief is rarely the real brief. That's always where we start.~~
 
 ---
 
@@ -81,12 +87,13 @@ We work with people who have something real to say and need a thought partner wh
 
 ---
 
-### Process
-- Four stages: Discovery, Brand Expression, Design System, Web Presence
-- Editorial layout, each stage given space
-- The sequence is the point — each stage informs the next
+### What we do / How it works
+*(supersedes the old standalone "Process" section — 16 July 2026, repositioning v3)*
+- No longer a 4-stage process page section. Folded into two Phase 1 sections per `mss-website-copy-v2.md` §4–5: **What we do** (Launch / Run, the offer architecture) and **How it works** (the review-system story, told as the client's experience, ending on the AI honesty paragraph).
+- The old 4-stage build sequence — Discovery, Brand Expression, Design System, Web Presence — still describes the real Launch methodology internally, but doesn't surface as a named 4-stage journey on the homepage anymore. It resurfaces, expanded, on the Phase 2 `/how-it-works` page as "the Launch journey" (see plan §7 Phase 2 skeleton).
+- Editorial layout retained for both sections; system section runs on dark background for contrast (matches "How it works" as the trust/mechanism beat).
 
-**Copy direction:** The process is framed as a journey, not a service menu. Don't explain the methodology — make the reader feel the logic of it. Discovery framing register: warm but purposeful. The studio listens first.
+**Copy direction:** What we do is framed as two ways of working, not a service menu — most engagements start with Launch and settle into Run. How it works is told as the client's experience (one review space, one gate) not the internal machinery, closing on the honesty paragraph verbatim every time it appears.
 
 ---
 
@@ -120,18 +127,19 @@ Drawn to people whose work means something beyond the commercial. If what you're
 
 | Layer | Tool |
 |-------|------|
-| Build (primary) | WordPress + Bricks Builder |
+| Build (primary) | Astro static (Bricks Builder retired 25 June 2026 — see `_archive/bricks-era/`) |
 | Prototyping | HTML/CSS via Claude Code |
+| Client review | Stage on the Pi (`mss-review.duckdns.org`) |
 | Design assets | Higgsfield (video/3D), Claude (SVG, components) |
-| DAM | TBC — Cloudflare R2 or Bunny.net |
+| DAM | Deprioritised — WebP compression + Cloudways direct serving |
 | Hosting | Cloudways |
-| Local dev | LocalWP |
 
 ### Build approach
 1. HTML prototype in Claude Code — layout, typography, motion
-2. Review and lock
-3. Migrate to Bricks Builder on WordPress
+2. Stage review and sign-off
+3. Astro build from approved prototype (`data-stage-id` preserved)
 4. Drop in Higgsfield assets
+5. GitHub Actions: merge-to-main → Cloudways staging, manual-confirm dispatch → production
 
 ### Code principles
 - Asymmetric, editorial — not centred or symmetric
@@ -162,6 +170,4 @@ See `mss-brand-identity.md` for full mark specification and variants.
 ---
 
 ## Open Decisions
-- DAM solution — Cloudflare R2 vs Bunny.net (resolve before build)
-- Higgsfield hero asset — generate once identity fully locked
-- Contact/intake form — native WordPress or third party
+None outstanding on this file as of 16 July 2026 — see `mss-decisions-log.md` for anything current. (DAM, hero asset, and contact form were all resolved June 2026 and are tracked there.)

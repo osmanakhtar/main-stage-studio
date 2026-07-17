@@ -398,7 +398,7 @@
     .image-pair {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2px;
+      gap: clamp(16px, 2vw, 28px);
       margin-top: clamp(40px, 6vh, 72px);
     }
     .image-pair-item { aspect-ratio: 3 / 4; overflow: hidden; }
@@ -628,13 +628,26 @@
       #hero-left { border-right: none; order: 1; }
       #nav { padding: 0 20px; }
       #s02 { grid-template-columns: 1fr; padding-right: var(--pad-x); }
-      #s02-image { order: -1; margin-bottom: 32px; }
+      #s02-image { order: -1; margin-bottom: 32px; max-height: 65vh; overflow: hidden; }
+      #s02-image img { height: 100%; object-fit: cover; }
       #s07 { grid-template-columns: 1fr; padding-right: var(--pad-x); }
       #s07-image { min-height: 60vw; order: -1; margin-bottom: 32px; }
       #s05 { grid-template-columns: 1fr; }
-      .image-pair { grid-template-columns: 1fr; gap: 2px; }
+      .image-pair { grid-template-columns: 1fr; gap: clamp(16px, 4vw, 24px); }
       .image-pair-item { aspect-ratio: 4 / 3; }
-      .work-showcase { grid-template-columns: 1fr; }
+      .work-showcase { grid-template-columns: 1fr; gap: 32px; }
+      .work-showcase-main { max-height: 55vh; overflow: hidden; }
+      .work-showcase-main img { height: 100%; object-fit: cover; }
+      .work-showcase-main + .work-showcase-main { margin-top: 0 !important; }
+
+      /* s04b "the hero" two-column text block never got a mobile override */
+      #s04b > div[style*="grid-template-columns: 1fr 1fr"] {
+        display: block !important;
+      }
+      #s04b > div[style*="grid-template-columns: 1fr 1fr"] > div + div {
+        margin-top: 24px;
+      }
+      #s04b img { max-height: 60vh; object-fit: cover; width: 100%; }
     }
   </style>
 </head>

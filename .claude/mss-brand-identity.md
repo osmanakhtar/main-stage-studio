@@ -6,13 +6,15 @@
 
 ## Positioning
 
-**Who we serve:** People with something real to say that hasn't yet found its form — founders, established businesses that have lost calibration, creatives at any stage. The common thread is the gap between what something is and how it currently shows up. They're not looking for an agency to execute a brief. They're looking for someone who can think alongside them.
+**Who we serve:** Established small businesses and funded founders with a run-rate problem — not enough consistent output to build presence, without the overhead of a full team. Values filter unchanged: drawn to people whose work means something beyond the commercial, intent over industry.
 
-**What we do:** We start with discovery, because the brief is rarely the real brief. From there we move through positioning, brand expression, and digital presence — each stage informing the next. Nothing gets handed over and abandoned.
+**What we do:** Presence partner — MSS builds and runs a client's brand, site, and content on retainer. Launch (build engagement) gets a client live; Run (ongoing retainer, the centre of gravity) keeps them shipping without headcount. Nothing gets handed over and abandoned.
 
-**How we're different:** PM discipline running underneath a creative process. The rigour keeps nothing from getting lost; the creative direction keeps it from feeling like a process. AI accelerates the execution — the vision and judgment stay human. We're drawn to people whose work means something beyond the commercial — the filter is intent, not industry.
+**How we're different:** PM discipline running underneath a creative process. The rigour keeps nothing from getting lost; the creative direction keeps it from feeling like a process. AI accelerates the execution — the vision and judgment stay human. The delivery pipeline (Astro, Higgsfield, Stage review) is the mechanism, not the pitch.
 
-**Core proposition:** *"Your vision doesn't need permission. It needs form."*
+**Core proposition:** *"You don't need a bigger team. You need a better system."*
+
+*Retired 16 July 2026 (repositioning v3): "Your vision doesn't need permission. It needs form." — lineage preserved in the About section copy (`01_mss/strategy/mss-website-copy-v2.md` §7), not carried in the hero.*
 
 ---
 
