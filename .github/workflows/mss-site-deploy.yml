@@ -44,7 +44,7 @@ jobs:
 
       - name: Deploy dist to production webroot
         run: |
-          rsync -avz --delete \
+          rsync -avz --delete --omit-dir-times \
             -e "ssh -i ~/.ssh/deploy_key" \
             01_mss/website/site/dist/ \
             "${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}:${{ secrets.CLOUDWAYS_WEBROOT_PROD }}/"
