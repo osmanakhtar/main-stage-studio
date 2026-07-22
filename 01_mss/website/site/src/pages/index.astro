@@ -26,6 +26,7 @@ import '../styles/global.css';
       --terracotta: #BF6B47;
       --ember:      #8C4A2F;
       --near-black: #1C1712;
+      --muted:      #706B65;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; }
@@ -53,19 +54,34 @@ import '../styles/global.css';
 
     /* ── Nav ─────────────────────────────────────────────────── */
     #nav {
-      transition: background-color 0.45s cubic-bezier(0.16,1,0.3,1),
-                  box-shadow       0.45s cubic-bezier(0.16,1,0.3,1);
+      border-bottom: 1px solid transparent;
+      transition: background-color    0.45s cubic-bezier(0.16,1,0.3,1),
+                  border-bottom-color 0.45s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow          0.45s cubic-bezier(0.16,1,0.3,1);
     }
-    #nav.scrolled {
-      background: var(--parchment);
-      box-shadow: 0 1px 0 rgba(28,23,18,0.08);
+    #nav.scrolled-light {
+      background: var(--parchment) !important;
+      border-bottom-color: rgba(28,23,18,0.15) !important;
+      box-shadow: 0 1px 0 rgba(28,23,18,0.12);
     }
+    #nav.scrolled-dark {
+      background: var(--near-black) !important;
+      border-bottom-color: rgba(245,239,229,0.1) !important;
+      box-shadow: 0 1px 0 rgba(245,239,229,0.08);
+    }
+    #nav.scrolled-dark .wordmark-main,
+    #nav.scrolled-dark .nav-link { color: var(--parchment) !important; }
+    #nav.scrolled-dark #bar1,
+    #nav.scrolled-dark #bar2,
+    #nav.scrolled-dark #bar3 { background: var(--parchment) !important; }
+
     .nav-link {
       position: relative;
       font-size: 0.8125rem;
       letter-spacing: 0.05em;
       text-decoration: none;
       color: var(--near-black);
+      transition: color 0.45s cubic-bezier(0.16,1,0.3,1);
     }
     .nav-link::after {
       content: '';
@@ -112,6 +128,9 @@ import '../styles/global.css';
     .btn-fill__label { position: relative; z-index: 1; }
     .btn-fill:active { transform: translateY(1px) scale(0.98); }
     .btn-fill:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-fill.light { background: var(--parchment); color: var(--near-black); }
+    .btn-fill.light .btn-fill__bg { background: var(--near-black); }
+    .btn-fill.light:hover .btn-fill__label { color: var(--parchment); }
 
     .btn-ghost {
       display: inline-flex;
@@ -125,6 +144,42 @@ import '../styles/global.css';
     }
     .btn-ghost:hover { color: var(--terracotta); gap: 0.7rem; }
 
+    /* ── Hero video ──────────────────────────────────────────── */
+    .mss-hero-video-wrap {
+      position: relative;
+      height: 45vh;
+      width: 100%;
+      pointer-events: none;
+      user-select: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .mss-hero-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 1.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    @media (max-width: 767px) {
+      .mss-hero-video-wrap video {
+        -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 88%);
+        mask-image: linear-gradient(to bottom, black 30%, transparent 88%);
+      }
+    }
+    @media (min-width: 768px) {
+      .mss-hero-video-wrap {
+        position: absolute;
+        top: 0; bottom: 0; right: 0;
+        height: auto;
+        width: 52%;
+      }
+      .mss-hero-video-wrap video {
+        -webkit-mask-image: radial-gradient(ellipse 78% 72% at 58% 50%, black 10%, black 28%, transparent 68%);
+        mask-image: radial-gradient(ellipse 78% 72% at 58% 50%, black 10%, black 28%, transparent 68%);
+      }
+    }
+
     /* ── Hero line reveal ────────────────────────────────────── */
     .line-clip { overflow: hidden; display: block; }
     .line-clip__inner {
@@ -133,6 +188,9 @@ import '../styles/global.css';
       transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
     }
     .lines-ready .line-clip__inner { transform: translateY(0); }
+
+    /* ── Muted body copy ─────────────────────────────────────── */
+    .muted-text { color: var(--muted); }
 
     /* ── Section label ───────────────────────────────────────── */
     .slabel {
@@ -290,7 +348,7 @@ import '../styles/global.css';
         <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
       </svg>
       <span class="flex items-baseline gap-[0.3em]">
-        <span class="font-display font-normal text-near-black" style="font-size:1.0625rem;letter-spacing:0.02em;">Main Stage</span>
+        <span class="wordmark-main font-display font-normal text-near-black" style="font-size:1.0625rem;letter-spacing:0.02em;">Main Stage</span>
         <span class="font-sans font-normal text-terracotta uppercase" style="font-size:0.5625rem;letter-spacing:0.24em;">Studio</span>
       </span>
     </a>
@@ -300,7 +358,7 @@ import '../styles/global.css';
       <a href="#how-it-works" class="nav-link font-sans">How it works</a>
       <a href="#work"         class="nav-link font-sans">Work</a>
       <a href="#studio"       class="nav-link font-sans">The studio</a>
-      <a href="#contact" class="btn-fill ml-2">
+      <a href="#contact" id="nav-cta" class="btn-fill ml-2">
         <span class="btn-fill__bg"></span>
         <span class="btn-fill__label">Start a project</span>
       </a>
@@ -332,19 +390,12 @@ import '../styles/global.css';
   <!-- ═══════════════════════════════════════ HERO -->
   <section class="min-h-[100dvh] bg-parchment flex flex-col relative overflow-hidden px-6 md:px-12 lg:px-24">
 
-    <!-- Hero video — full-section background -->
-    <div class="absolute inset-0 pointer-events-none select-none overflow-hidden"
-         aria-hidden="true"
-         style="z-index:0;">
+    <!-- Hero video — masked visual, right side on desktop -->
+    <div class="mss-hero-video-wrap" aria-hidden="true">
       <video id="hero-video" autoplay muted playsinline
-        src="/assets/3d-mark-animation.mp4"
-        style="width:100%;height:100%;object-fit:cover;opacity:0;
-               transition:opacity 1.6s cubic-bezier(0.16,1,0.3,1);">
+        src="/assets/3d-mark-animation.mp4">
       </video>
     </div>
-    <!-- Parchment filter overlay -->
-    <div id="hero-wash" class="absolute inset-0 pointer-events-none" aria-hidden="true"
-         style="z-index:1;background:rgba(245,239,229,0.75);"></div>
 
     <!-- Content -->
     <div class="flex-1 flex flex-col justify-center pt-24 md:pt-28 pb-10 max-w-[1400px] w-full mx-auto relative z-10">
@@ -374,17 +425,17 @@ import '../styles/global.css';
       <!-- Body -->
       <div>
         <div class="line-clip mb-8">
-          <p class="line-clip__inner font-sans font-light text-near-black" style="transition-delay:0.72s;font-size:1.0625rem;line-height:1.72;max-width:52ch;opacity:0.65;">
+          <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.72s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
             Most businesses know exactly what a strong presence looks like. A website that reflects the quality of the work. Social accounts that stay alive past the first month. Words that actually sound like you.
           </p>
         </div>
         <div class="line-clip mb-8">
-          <p class="line-clip__inner font-sans font-light text-near-black" style="transition-delay:0.84s;font-size:1.0625rem;line-height:1.72;max-width:52ch;opacity:0.65;">
+          <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.84s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
             What they don't have is the team to keep all of that running — and hiring one costs more than the problem.
           </p>
         </div>
         <div class="line-clip mb-8">
-          <p class="line-clip__inner font-sans font-light text-near-black" style="transition-delay:0.96s;font-size:1.0625rem;line-height:1.72;max-width:52ch;opacity:0.65;">
+          <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.96s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
             Main Stage Studio builds your presence, then runs it. Brand, website, content: made in one system, reviewed by you in one place, kept moving week after week.
           </p>
         </div>
@@ -414,7 +465,7 @@ import '../styles/global.css';
 
 
   <!-- ═══════════════════════════════════════ MARQUEE -->
-  <div class="bg-near-black overflow-hidden py-[13px]" aria-hidden="true">
+  <div class="bg-near-black overflow-hidden py-[13px]" data-nav-dark="true" aria-hidden="true">
     <div class="marquee-track flex whitespace-nowrap">
       <span class="flex items-center shrink-0">
         <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
@@ -469,10 +520,10 @@ import '../styles/global.css';
         </div>
 
         <div class="flex flex-col gap-6 reveal rd1">
-          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:56ch;">
+          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
             Every business has lived some version of this. The website went live and hasn't changed since. The Instagram had a strong first month. The copy was written by someone who was never in the room.
           </p>
-          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:56ch;">
+          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
             None of that is a motivation problem. Keeping a presence alive is a production job — planning, writing, designing, editing, publishing, every week — and it sits awkwardly between what you can staff and what you can sensibly outsource. Agencies charge team rates for it. Freelancers cover one skill of the five it needs.
           </p>
           <p class="font-sans font-normal text-near-black" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
@@ -492,7 +543,7 @@ import '../styles/global.css';
       <div class="mb-14 reveal">
         <p class="slabel mb-3">03 — What we do</p>
         <h2 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.015em;">Built once. Run every week.</h2>
-        <p class="font-sans font-light text-near-black" style="font-size:1rem;line-height:1.7;opacity:0.55;max-width:52ch;">
+        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
           Two ways of working. Most engagements start with the first and settle into the second.
         </p>
       </div>
@@ -504,10 +555,10 @@ import '../styles/global.css';
           <p class="slabel mb-4">Launch</p>
           <h3 class="font-display font-normal text-near-black mb-6" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;">The build engagement</h3>
           <div class="flex flex-col gap-5">
-            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
               We start with what you're actually trying to say — the brief is rarely the real brief, and finding the real one is the work. From there: positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
             </p>
-            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
               You review every stage in one place and nothing moves forward without your sign-off. When it goes live, it's already set up to be run — not left.
             </p>
           </div>
@@ -518,13 +569,13 @@ import '../styles/global.css';
           <p class="slabel mb-4">Run</p>
           <h3 class="font-display font-normal text-near-black mb-6" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;">The ongoing engagement</h3>
           <div class="flex flex-col gap-5">
-            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
               A monthly engagement that keeps your presence moving. A planned calendar, designed posts, edited clips, captions in your voice — every piece checked against your rules before you ever see it, and every piece approved by you before it goes anywhere.
             </p>
-            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
               Your website stays alive the same way. Need the wording changed, a price updated, a treatment added? Ask for it, approve it, and it's live — no ticket queue, no small-change invoice.
             </p>
-            <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.75;opacity:0.62;">
+            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
               Building toward a launch, an event, a season? A Run can be shaped entirely around it.
             </p>
           </div>
@@ -536,7 +587,7 @@ import '../styles/global.css';
 
 
   <!-- ═══════════════════════════════════════ HOW IT WORKS -->
-  <section id="how-it-works" class="bg-near-black py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden">
+  <section id="how-it-works" class="bg-near-black py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden" data-nav-dark="true">
 
     <!-- Left progress line -->
     <div id="system-line" aria-hidden="true"></div>
@@ -616,7 +667,7 @@ import '../styles/global.css';
                 <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">In progress</span>
               </div>
               <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Main Stage Studio</h3>
-              <p class="font-sans font-light text-near-black mb-8" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:38ch;">
+              <p class="font-sans font-light text-near-black mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
                 The first client was the studio itself. Positioning, identity, voice, site — built in public with the same system every client gets, because the method had to prove itself here first.
               </p>
               <div class="flex flex-col gap-[6px]">
@@ -659,7 +710,7 @@ import '../styles/global.css';
               <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">Concept</span>
             </div>
             <h3 class="font-display font-normal text-near-black mb-3" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Sable</h3>
-            <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:38ch;">
+            <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
               A character with a world attached, and no way for anyone to enter it. Sable needed an identity that could hold the atmosphere of the work — and a stage built for it, not for the studio.
             </p>
             <div class="flex flex-col gap-[6px] mb-6">
@@ -703,7 +754,7 @@ import '../styles/global.css';
                 <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">In progress</span>
               </div>
               <h3 class="font-display font-normal text-near-black mb-3" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Art by Ayesha Johar</h3>
-              <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;opacity:0.6;max-width:38ch;">
+              <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
                 Beauty and resistance are one thing. A web presence for the painter Ayesha Johar - built from the inside out.
               </p>
               <div class="flex flex-col gap-[6px]">
@@ -750,13 +801,13 @@ import '../styles/global.css';
         </div>
 
         <div class="flex flex-col gap-6 reveal rd1">
-          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:55ch;">
+          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;">
             Main Stage Studio is run by one person, on purpose. You get one accountable judgment from discovery to publish — no account manager, no handoffs, no dilution between what you said and what gets made.
           </p>
-          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:55ch;">
+          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;">
             The background is product management, and it shows up as one discipline above all: understand the problem properly before you touch the solution. That's why engagements here start with listening, and why the system underneath the studio exists at all — it was built the way you'd build a product, because it is one.
           </p>
-          <p class="font-sans font-light text-near-black" style="font-size:1.0625rem;line-height:1.75;opacity:0.65;max-width:55ch;">
+          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;">
             Drawn to people whose work means something beyond the commercial. If what you're building matters to you, it matters here.
           </p>
 
@@ -853,7 +904,7 @@ import '../styles/global.css';
 
 
   <!-- ═══════════════════════════════════════ FOOTER -->
-  <footer class="bg-near-black py-10 px-6 md:px-12 lg:px-24">
+  <footer class="bg-near-black py-10 px-6 md:px-12 lg:px-24" data-nav-dark="true">
     <div class="max-w-[1400px] mx-auto flex flex-col gap-8">
 
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
@@ -902,8 +953,23 @@ import '../styles/global.css';
 
     // ── NAV ───────────────────────────────────────────────────────────────
     const nav = document.getElementById('nav');
+    const navCta = document.getElementById('nav-cta');
     window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 20);
+      if (window.scrollY > 40) {
+        nav.style.pointerEvents = 'none';
+        const el = document.elementFromPoint(
+          window.innerWidth / 2,
+          nav.getBoundingClientRect().bottom + 2
+        );
+        nav.style.pointerEvents = '';
+        const isDark = el && el.closest('[data-nav-dark]');
+        nav.classList.toggle('scrolled-dark', !!isDark);
+        nav.classList.toggle('scrolled-light', !isDark);
+        if (navCta) navCta.classList.toggle('light', !!isDark);
+      } else {
+        nav.classList.remove('scrolled-light', 'scrolled-dark');
+        if (navCta) navCta.classList.remove('light');
+      }
     }, { passive: true });
 
     // ── HERO LINE REVEAL ──────────────────────────────────────────────────
@@ -914,19 +980,10 @@ import '../styles/global.css';
     });
 
     // ── HERO VIDEO ────────────────────────────────────────────────────────
-    // Smaller viewports show more of the animation relative to the text column,
-    // so mobile needs LESS video presence and MORE wash, not more — inverse of desktop.
     const heroVideo = document.getElementById('hero-video');
-    const heroWash  = document.getElementById('hero-wash');
     if (heroVideo) {
       heroVideo.playbackRate = 0.75;
-      const showVideo = () => {
-        const isMobile = window.innerWidth < 768;
-        heroVideo.style.opacity = isMobile ? '0.16' : '0.38';
-        if (heroWash) heroWash.style.background = isMobile
-          ? 'rgba(245,239,229,0.88)'
-          : 'rgba(245,239,229,0.75)';
-      };
+      const showVideo = () => { heroVideo.style.opacity = '1'; };
       heroVideo.addEventListener('canplay', showVideo, { once: true });
       heroVideo.addEventListener('play', showVideo, { once: true });
       heroVideo.addEventListener('ended', () => {
