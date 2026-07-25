@@ -1,0 +1,189 @@
+{
+  "description": "Curated image library for Vera Aesthetics social content — 14 reused Higgsfield stills (person-free / anonymous / generic-face skin, treatment and clinic-room shots), native to the navy/bone/gold palette. DEMONSTRATION assets: results imagery is illustrative, never fabricated real patients. Excluded and never used: real-practitioner (Nafisa) images, identity-preserved reference shots, PureMed branding. Sources point at the q=90 WebP derivatives in assets/webp/ (177M of PNG masters compress to 7.4M with no visible loss; verified SSIM 0.95-0.98, indistinguishable at 100% zoom on skin texture). The PNG masters stay in assets/ as the archival originals, local and Dropbox only, git-excluded. 4:5 crops are the IG masters; 3:4 are web/story alternates. Source paths are projectRoot-relative (the vera/ folder).",
+  "updated": "2026-07-24",
+  "images": [
+    {
+      "file": "results-skin-neck-4x5.webp",
+      "label": "Skin, neck & lower face — hydrated glow",
+      "tags": [
+        "results",
+        "skin-health",
+        "education"
+      ],
+      "context": "Hero skin-quality post ('your skin, better rested'). Anonymous, illustrative. IG 4:5 master.",
+      "face": "anon",
+      "aspect": "4:5",
+      "source": "assets/webp/results-skin-neck-4x5.webp",
+      "master": "assets/results-skin-neck-4x5.png"
+    },
+    {
+      "file": "results-skin-neck-3x4.webp",
+      "label": "Skin, neck & lower face — hydrated glow (3:4)",
+      "tags": [
+        "results",
+        "skin-health"
+      ],
+      "context": "Web/story crop variant.",
+      "face": "anon",
+      "aspect": "3:4",
+      "source": "assets/webp/results-skin-neck-3x4.webp",
+      "master": "assets/results-skin-neck-3x4.png"
+    },
+    {
+      "file": "results-skin-jawline-4x5.webp",
+      "label": "Cheekbone & jawline — luminous skin",
+      "tags": [
+        "results",
+        "skin-health",
+        "education"
+      ],
+      "context": "Skin-health education carousel cover ('skin that ages well'). IG 4:5 master.",
+      "face": "anon",
+      "aspect": "4:5",
+      "source": "assets/webp/results-skin-jawline-4x5.webp",
+      "master": "assets/results-skin-jawline-4x5.png"
+    },
+    {
+      "file": "results-skin-jawline-3x4.webp",
+      "label": "Cheekbone & jawline — luminous skin (3:4)",
+      "tags": [
+        "results",
+        "skin-health"
+      ],
+      "context": "Web/story crop variant.",
+      "face": "anon",
+      "aspect": "3:4",
+      "source": "assets/webp/results-skin-jawline-3x4.webp",
+      "master": "assets/results-skin-jawline-3x4.png"
+    },
+    {
+      "file": "results-skin-macro-2k.webp",
+      "label": "Cheek / upper-lip macro texture",
+      "tags": [
+        "education",
+        "results",
+        "skin-health"
+      ],
+      "context": "'What healthy skin actually looks like' education. Skin only, no identifiable face.",
+      "face": "skin-only",
+      "aspect": "~4:3",
+      "source": "assets/webp/results-skin-macro-2k.webp",
+      "master": "assets/results-skin-macro-2k.png"
+    },
+    {
+      "file": "results-skin-macro-alt.webp",
+      "label": "Skin macro texture (alt)",
+      "tags": [
+        "education",
+        "results",
+        "skin-health"
+      ],
+      "context": "Education carousel inner slide. Skin only.",
+      "face": "skin-only",
+      "aspect": "~4:3",
+      "source": "assets/webp/results-skin-macro-alt.webp",
+      "master": "assets/results-skin-macro-alt.png"
+    },
+    {
+      "file": "treatment-rf-handpiece-4x5.webp",
+      "label": "RF handpiece near jaw (treatment b-roll)",
+      "tags": [
+        "experience",
+        "treatment"
+      ],
+      "context": "'What to expect on the day' treatment walkthrough. Device is nameable; no POM. IG 4:5 master.",
+      "face": "generic",
+      "aspect": "4:5",
+      "source": "assets/webp/treatment-rf-handpiece-4x5.webp",
+      "master": "assets/treatment-rf-handpiece-4x5.png"
+    },
+    {
+      "file": "treatment-rf-handpiece-3x4.webp",
+      "label": "RF handpiece near jaw (3:4)",
+      "tags": [
+        "experience",
+        "treatment"
+      ],
+      "context": "Web/story crop variant.",
+      "face": "generic",
+      "aspect": "3:4",
+      "source": "assets/webp/treatment-rf-handpiece-3x4.webp",
+      "master": "assets/treatment-rf-handpiece-3x4.png"
+    },
+    {
+      "file": "treatment-marking-4x5.webp",
+      "label": "Gloved hands marking guide dots",
+      "tags": [
+        "education",
+        "treatment",
+        "experience"
+      ],
+      "context": "Process/precision education. Anonymous. IG 4:5 master.",
+      "face": "anon",
+      "aspect": "4:5",
+      "source": "assets/webp/treatment-marking-4x5.webp",
+      "master": "assets/treatment-marking-4x5.png"
+    },
+    {
+      "file": "treatment-marking-3x4.webp",
+      "label": "Gloved hands marking guide dots (3:4)",
+      "tags": [
+        "education",
+        "treatment"
+      ],
+      "context": "Web/story crop variant.",
+      "face": "anon",
+      "aspect": "3:4",
+      "source": "assets/webp/treatment-marking-3x4.webp",
+      "master": "assets/treatment-marking-3x4.png"
+    },
+    {
+      "file": "experience-laser-room-4x5.webp",
+      "label": "Clinic room — device on trolley, empty chair",
+      "tags": [
+        "experience"
+      ],
+      "context": "'Inside the clinic' tour post. Person-free, on-brand navy environment. IG 4:5 master.",
+      "face": "none",
+      "aspect": "4:5",
+      "source": "assets/webp/experience-laser-room-4x5.webp",
+      "master": "assets/experience-laser-room-4x5.png"
+    },
+    {
+      "file": "experience-laser-room-3x4.webp",
+      "label": "Clinic room — device on trolley (3:4)",
+      "tags": [
+        "experience"
+      ],
+      "context": "Web/story crop variant.",
+      "face": "none",
+      "aspect": "3:4",
+      "source": "assets/webp/experience-laser-room-3x4.webp",
+      "master": "assets/experience-laser-room-3x4.png"
+    },
+    {
+      "file": "experience-consult-4x5.webp",
+      "label": "Consultation desk — practitioner & patient",
+      "tags": [
+        "experience"
+      ],
+      "context": "'The consultation is the product' post. Generic faces, ambience only. IG 4:5 master.",
+      "face": "generic",
+      "aspect": "4:5",
+      "source": "assets/webp/experience-consult-4x5.webp",
+      "master": "assets/experience-consult-4x5.png"
+    },
+    {
+      "file": "experience-consult-3x4.webp",
+      "label": "Consultation desk (3:4)",
+      "tags": [
+        "experience"
+      ],
+      "context": "Web/story crop variant.",
+      "face": "generic",
+      "aspect": "3:4",
+      "source": "assets/webp/experience-consult-3x4.webp",
+      "master": "assets/experience-consult-3x4.png"
+    }
+  ]
+}

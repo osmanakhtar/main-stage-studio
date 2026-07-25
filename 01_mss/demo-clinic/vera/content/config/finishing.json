@@ -1,0 +1,82 @@
+{
+  "description": "Vera finishing brand package — same finishing/assembly engine as FSC/PureMed (content-finish.js + content-reel.js) pointed at Vera's navy/bone/gold theme. Grades are soft and warm to suit calm clinic footage; the reel transition dips to white, not black. Reels are OPTIONAL for the POC (static + carousel run by default); this exists so the option works. Canon for the engine: fightstar-championship/fsc-clip-finishing-plan.md.",
+  "logoBug": {
+    "logo": "assets/vera-mark-light.png",
+    "position": "bottom-right",
+    "widthPct": 12,
+    "opacity": 0.95,
+    "defaultOn": true,
+    "note": "Bone leaf mark (light raster), bottom-right — reads over the soft/warm clinic grades. ffmpeg has no SVG decoder, so the overlay uses the PNG (assets/vera-mark.svg is the editable source; assets/vera-mark.png is the navy variant)."
+  },
+  "colorGrades": [
+    {
+      "id": "vera-soft",
+      "type": "filters",
+      "chain": "eq=contrast=1.04:saturation=0.96:brightness=0.02",
+      "note": "Soft clinical lift — airy, slightly desaturated. Calm, light-filled room."
+    },
+    {
+      "id": "vera-warm",
+      "type": "filters",
+      "chain": "eq=contrast=1.05:saturation=1.04:brightness=0.02,colorbalance=rs=0.02:rm=0.02:bs=-0.02",
+      "note": "Gentle warm cast to sit with the bone/gold palette without going clinical-cyan."
+    }
+  ],
+  "idents": [
+    {
+      "id": "vera-mark-in",
+      "template": "logo-reveal",
+      "durationS": 1.5,
+      "params": { "logo": "primary" },
+      "note": "Quiet mark reveal over navy."
+    }
+  ],
+  "stings": [
+    {
+      "id": "vera-outro",
+      "template": "logo-cta",
+      "durationS": 2.0,
+      "params": { "logo": "primary", "cta": "@veraaesthetics" },
+      "note": "Mark + handle CTA closer. Soft, no urgency."
+    }
+  ],
+  "transitions": [
+    { "id": "cut", "note": "Hard cut — plain concat." },
+    {
+      "id": "dip-white",
+      "template": "xfade",
+      "params": { "transition": "fadewhite", "durationS": 0.45 },
+      "note": "Dip to white — the airy clinic take, not FSC's dip-black."
+    },
+    {
+      "id": "crossfade",
+      "template": "xfade",
+      "params": { "transition": "fade", "durationS": 0.5 },
+      "note": "Straight crossfade."
+    }
+  ],
+  "overlaySet": [
+    {
+      "id": "grain",
+      "kind": "overlay",
+      "template": "grain",
+      "params": { "opacity": 0.03 },
+      "note": "Very subtle film grain."
+    },
+    {
+      "id": "vignette",
+      "kind": "overlay",
+      "template": "vignette",
+      "params": { "strength": 0.28 },
+      "note": "Soft edge falloff."
+    },
+    {
+      "id": "lower-third",
+      "kind": "overlay",
+      "template": "strap",
+      "params": { "position": "bottom-left", "yPct": 0.88 },
+      "note": "Navy bar (theme primary), Fraunces display. Text from the clip's overlay.strap / finish.lowerThird."
+    }
+  ],
+  "audioDefaults": { "clipGainDb": 0 }
+}

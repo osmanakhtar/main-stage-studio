@@ -1,0 +1,33 @@
+{
+  "description": "Vera's campaign vocabulary. Replaces the engine default (the FSC-era fighter/multi-fighter/event/rivalry/brand) so the Campaign Builder speaks clinic, not fight promotion. 'subjects' is the cardinality of the subject binding and drives both validation and the subject picker: none | one | two | many | event. Vera's subject axis is its services (client.json topicLabel = Service).",
+  "types": [
+    {
+      "id": "brand",
+      "label": "brand",
+      "description": "No specific service. The whole pillar mix is in play, weighted as configured. This is the shape of the 12-post POC campaign.",
+      "subjects": "none"
+    },
+    {
+      "id": "service",
+      "label": "service",
+      "description": "One service, followed through education, experience and results. The consultation-led arc for a single treatment.",
+      "subjects": "one",
+      "subjectLabel": "One service",
+      "hint": "Pick exactly one. POM-sensitive services stay consultation-led and unnamed in copy."
+    },
+    {
+      "id": "multi-service",
+      "label": "multi-service",
+      "description": "Several services together: the menu, a pathway, or how treatments combine over a course.",
+      "subjects": "many",
+      "subjectLabel": "Services",
+      "hint": "Pick one or more."
+    },
+    {
+      "id": "seasonal",
+      "label": "seasonal",
+      "description": "Timing-led rather than service-led: skin-health season, party-season prep, a new-year reset. The hook is timeliness, never price or urgency.",
+      "subjects": "none"
+    }
+  ]
+}

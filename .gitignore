@@ -26,3 +26,13 @@ build/
 
 # Binary apps
 *.app
+
+# Vera POC (01_mss/demo-clinic/vera) — master/derivative split.
+# The PNG masters are the irreplaceable archival originals (Higgsfield sub is
+# lapsed): 177M, kept local + Dropbox only. The committed working assets are the
+# q=90 WebP derivatives in assets/webp/ (9M, visually indistinguishable).
+01_mss/demo-clinic/vera/assets/*.png
+!01_mss/demo-clinic/vera/assets/vera-mark*.png
+
+# Rendered slide outputs — regenerable from the post manifests
+01_mss/demo-clinic/vera/content/posts/*/slides/

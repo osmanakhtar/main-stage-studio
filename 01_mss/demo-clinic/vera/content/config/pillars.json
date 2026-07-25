@@ -1,0 +1,43 @@
+{
+  "description": "Vera Aesthetics content pillars — the six-pillar clinic model proven in the POC campaign calendar. Weights reflect the calendar spread (Education 3, Experience 3, Results 2, Practitioner 2, Offers 1, Patient voice 1 across 12 posts). Education, Experience and Practitioner authority carry the campaign; Results/Offers/Patient-voice fill in.",
+  "pillars": [
+    {
+      "id": "education",
+      "name": "Education",
+      "weight": 25,
+      "rotateTopics": true,
+      "guidance": "Explain one treatment, skin concern, or safety question clearly and honestly: what it is, who it suits, what to expect. Lead with the reader's worry, not the service. Prescription-only treatments are never named — use 'wrinkle-softening treatment'. Educational without lecturing; the reader who understands the treatment trusts the clinic that taught them."
+    },
+    {
+      "id": "experience",
+      "name": "Experience",
+      "weight": 25,
+      "rotateTopics": true,
+      "guidance": "The room, the visit, the day. Calm, unhurried, no upsell at the door. What a first visit actually feels like, what to expect on treatment day. Reduces fear of the unknown for the nervous first-timer. Behind-the-scenes clinic and device b-roll live here."
+    },
+    {
+      "id": "results",
+      "name": "Results",
+      "weight": 17,
+      "guidance": "Quiet skin-quality and longevity posts, never a loud before/after. 'Most people won't know what changed; they'll just think you look well.' Subtle is the point. Always marked illustrative for the demo; individual results vary. Before/after is never the hero."
+    },
+    {
+      "id": "practitioner",
+      "name": "Practitioner authority",
+      "weight": 17,
+      "guidance": "Why nurse-prescriber-led matters: judgment, restraint, honest suitability assessment including when the answer is no. Handled as text-forward quote cards, not photography (no real practitioner exists for a fictional clinic). The honesty positioning is the whole differentiator."
+    },
+    {
+      "id": "offers",
+      "name": "Offers",
+      "weight": 8,
+      "guidance": "Seasonal, timing-led, never discount-led or urgent. The hook is timeliness ('skin-health season starts now'), not price. Soft, honest CTA: 'If it's right for your skin, we'll tell you. If it isn't, we'll tell you that too.' No POM naming, no price on POM-sensitive services."
+    },
+    {
+      "id": "patient-voice",
+      "name": "Patient voice",
+      "weight": 8,
+      "guidance": "Illustrative testimonial treatment as a quote card. 'I look like me, just less tired.' Labelled illustrative for the demo; in a real clinic this needs genuine, consented wording. Optional generic ambience only, never fabricated real patients."
+    }
+  ]
+}

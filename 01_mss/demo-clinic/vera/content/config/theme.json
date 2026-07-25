@@ -1,0 +1,62 @@
+{
+  "description": "Vera Aesthetics visual theme — navy/bone/gold system. Source of truth: ../../vera-brand-identity.md and the template spec ../../vera-posts.html. Slide canvas is 1080×1350 (4:5). Deliberately distinct from the MSS house identity and from PureMed.",
+  "palette": {
+    "primary": "#1E2B4D",
+    "accent": "#C6A667",
+    "warm": "#F5F2EC",
+    "grey": "#DCD9D2",
+    "kicker": "#C6A667",
+    "blueGradient": ["#141A2B", "#1E2B4D", "#2A3A63"],
+    "textOnDark": "#F5F2EC",
+    "textMuted": "#C2BEB5",
+    "bodyText": "#141A2B"
+  },
+  "fonts": {
+    "display": "Fraunces",
+    "displayFallback": "Georgia, serif",
+    "body": "Hanken Grotesk",
+    "bodyFallback": "system-ui, -apple-system, sans-serif",
+    "files": {
+      "display": "brand/fonts/Fraunces-Variable.ttf",
+      "body": "brand/fonts/HankenGrotesk-Variable.ttf",
+      "bodySemi": "brand/fonts/HankenGrotesk-Variable.ttf"
+    },
+    "note": "Neither family is installed on the machine, so without these embedded files the slide renderer silently falls back to Georgia and system-ui. Both are OFL variable fonts from Google Fonts (licences alongside the TTFs). bodySemi points at the same variable file as body: the weight axis covers 600."
+  },
+  "logo": {
+    "primary": "assets/vera-mark.png",
+    "light": "assets/vera-mark-light.png",
+    "iconWhite": "assets/vera-mark-light.png",
+    "note": "iconWhite is an alias, not a third asset: Studio's own Brand mode (content-branding.js) only recognises the FSC-era key names fullTextWhite/iconWhite/fullTextBlue, so without it the app chrome shows no logo."
+  },
+  "slideRules": {
+    "headlineColor": "#F5F2EC",
+    "headlineColorNote": "Bone. REQUIRED: the shared slide renderer (scripts/slides/graphics.js) draws every text card on a dark gradient and defaults the headline to palette.primary. Vera's primary IS the navy background, so without this override headlines render navy-on-navy and are invisible.",
+    "styles": "bone (warm off-white bg, ink text, gold eyebrow + gold hairline rule), navy (deep-navy bg, bone text, gold eyebrow — the signature/cover/close), stone (soft greige neutral), photo (bg image + navy scrim from 34% to 72%, bone text bottom-anchored)",
+    "frame": "no inset frame; a 64×2px gold rule under the eyebrow/headline carries the accent",
+    "eyebrow": "Hanken Grotesk 600, uppercase, .24em tracking, gold",
+    "footerOnEverySlide": true,
+    "footer": "leaf mark + lowercase 'vera' wordmark in Fraunces, bottom-left; swipe indicator or CTA bottom-right"
+  },
+  "account": {
+    "name": "Vera Aesthetics",
+    "handle": "@veraaesthetics",
+    "avatarText": "v",
+    "avatarBg": "#1E2B4D",
+    "avatarColor": "#C6A667"
+  },
+  "footer": {
+    "text": "vera",
+    "accent": "",
+    "note": "Lowercase wordmark only. The renderer colours footer.accent with palette.primary, which is navy-on-navy (invisible) for Vera, and the brand's footer lockup is the mark plus 'vera' anyway."
+  },
+  "preview": {
+    "pageBg": "#F5F2EC",
+    "cardBg": "#FFFFFF",
+    "cardBorder": "#DCD9D2",
+    "titleFont": "display",
+    "titleColor": "#1E2B4D",
+    "bodyText": "#141A2B",
+    "metaText": "#6b6f7b"
+  }
+}

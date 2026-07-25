@@ -5,47 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MD Viewer — Main Stage Studio</title>
 
-<!-- Brand fonts -->
+<!-- Brand fonts (both brands' fonts loaded up front so switching is instant) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Tab icon — swapped per-brand by setBrand() below -->
+<link rel="icon" id="favicon" type="image/png">
 
 <!-- Markdown parser -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <!-- HTML sanitizer -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<!-- Word (.docx) export — docx.js builds real OOXML, so table styling and
+     hyperlinks survive in Word, Pages, and Google Docs (html-docx-js embedded
+     raw HTML that most openers rendered unstyled) -->
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
+<!-- Excel (.xlsx) export — SheetJS turns parsed CSV rows into a real workbook. -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
-/* ─── Brand tokens ─── */
-:root {
-  --parchment:  #F5EFE5;
-  --blush:      #E8C9AE;
-  --terracotta: #BF6B47;
-  --ember:      #8C4A2F;
-  --near-black: #1C1712;
+/* ─── Brand tokens: Main Stage Studio (default) ─── */
+:root,
+[data-brand="mss"] {
+  --bg:            #F5EFE5;
+  --header-bg:     #1C1712;
+  --header-text:   #F5EFE5;
+  --text:          #1C1712;
+  --text-strong:   #1C1712;
+  --text-muted:    rgba(28,23,18,0.6);
+  --accent:        #BF6B47;
+  --accent-strong: #8C4A2F;
+  --code-bg:       #E8C9AE;
+  --divider:       rgba(28,23,18,0.15);
+  --divider-soft:  rgba(28,23,18,0.12);
+  --tint-hover:    rgba(232,201,174,0.4);
+  --tint-active:   rgba(232,201,174,0.6);
+  --tint-quote:    rgba(232,201,174,0.28);
+  --tint-row:      rgba(232,201,174,0.18);
 
-  --header-h: 52px;
-  --sidebar-w: 240px;
+  --heading-font:      'Cormorant Garamond', serif;
+  --heading-transform: none;
+  --heading-weight:    400;
+  --body-font:         'Plus Jakarta Sans', sans-serif;
+  --body-weight:       300;
+
+  /* Print (PDF export) palette */
+  --print-text:     #1C1712;
+  --print-accent:   #BF6B47;
+  --print-th-bg:    #F0EBE3;
+  --print-code-bg:  #F7F7F7;
+  --print-quote-bg: rgba(245,239,229,0.15);
+  --print-border:   rgba(28,23,18,0.3);
+  --print-border-soft: rgba(28,23,18,0.2);
+}
+
+/* ─── Brand tokens: FightStar Championship ─── */
+[data-brand="fsc"] {
+  --bg:            #0B0F17;
+  --header-bg:     #0D1B2E;
+  --header-text:   #FFFFFF;
+  --text:          #D7DEE9;
+  --text-strong:   #FFFFFF;
+  --text-muted:    #8B98AC;
+  --accent:        #1A6FE8;
+  --accent-strong: #5B9BFF;
+  --code-bg:       #16223A;
+  --divider:       rgba(255,255,255,0.14);
+  --divider-soft:  rgba(255,255,255,0.1);
+  --tint-hover:    rgba(26,111,232,0.16);
+  --tint-active:   rgba(26,111,232,0.28);
+  --tint-quote:    rgba(26,111,232,0.14);
+  --tint-row:      rgba(255,255,255,0.04);
+
+  --heading-font:      'Bebas Neue', 'Arial Narrow', sans-serif;
+  --heading-transform: uppercase;
+  --heading-weight:    400;
+  --body-font:         'Barlow Condensed', Arial, sans-serif;
+  --body-weight:       400;
+
+  /* Print (PDF export) palette — light page, navy/blue ink */
+  --print-text:     #0D1B2E;
+  --print-accent:   #1A6FE8;
+  --print-th-bg:    #E7EEFC;
+  --print-code-bg:  #F2F5FB;
+  --print-quote-bg: rgba(26,111,232,0.06);
+  --print-border:   rgba(13,27,46,0.28);
+  --print-border-soft: rgba(13,27,46,0.16);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
   height: 100%;
-  background: var(--parchment);
-  color: var(--near-black);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 300;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body-font);
+  font-weight: var(--body-weight);
   font-size: 16px;
   line-height: 1.7;
+  transition: background 0.15s, color 0.15s;
 }
+
+/* Elements scoped to a single brand — hidden by default, shown by data-brand match */
+.brand-block { display: none; }
+[data-brand="mss"] .brand-block.mss { display: flex; align-items: baseline; }
+[data-brand="fsc"] .brand-block.fsc { display: flex; align-items: baseline; }
 
 /* ─── Fixed top header ─── */
 #site-header {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: var(--header-h);
-  background: var(--near-black);
+  height: var(--header-h, 52px);
+  background: var(--header-bg);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -54,56 +126,76 @@ html, body {
 }
 
 #site-header .wordmark {
-  display: flex;
-  flex-direction: row;
   align-items: baseline;
   gap: 6px;
   line-height: 1.1;
 }
 
 #site-header .wordmark-main {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-family: var(--heading-font);
+  font-weight: var(--heading-weight);
   font-size: 15px;
-  color: var(--parchment);
+  color: var(--header-text);
   letter-spacing: 0.01em;
+  text-transform: var(--heading-transform);
 }
 
 #site-header .wordmark-sub {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Barlow Condensed', sans-serif;
   font-weight: 500;
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--accent);
+}
+
+#site-header .logo-icon { flex-shrink: 0; }
+
+/* ─── Brand switcher ─── */
+#brand-select {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--header-text);
+  padding: 5px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+#brand-select option {
+  color: #1C1712;
+  background: #F5EFE5;
 }
 
 /* ─── Page shell below header ─── */
 #shell {
   display: flex;
-  padding-top: var(--header-h);
+  padding-top: var(--header-h, 52px);
   min-height: 100vh;
 }
 
 /* ─── Left sidebar ─── */
 #sidebar {
-  width: var(--sidebar-w);
+  width: var(--sidebar-w, 240px);
   flex-shrink: 0;
-  border-right: 1px solid rgba(28,23,18,0.15);
+  border-right: 1px solid var(--divider);
   padding: 24px 0;
   position: fixed;
-  top: var(--header-h);
+  top: var(--header-h, 52px);
   bottom: 0;
   left: 0;
   overflow-y: auto;
-  background: var(--parchment);
+  background: var(--bg);
 }
 
 #sidebar.hidden { display: none; }
 
 #sidebar-header {
   padding: 0 18px 16px;
-  border-bottom: 1px solid rgba(28,23,18,0.1);
+  border-bottom: 1px solid var(--divider-soft);
   margin-bottom: 8px;
 }
 
@@ -113,7 +205,7 @@ html, body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   font-weight: 300;
-  color: rgba(28,23,18,0.45);
+  color: var(--text-muted);
   line-height: 1.5;
   word-break: break-word;
 }
@@ -129,10 +221,10 @@ html, body {
   opacity: 0.55;
 }
 
-/* Current (last) segment in terracotta */
+/* Current (last) segment in accent colour */
 #sidebar-breadcrumb .bc-current,
 #main-breadcrumb .bc-current {
-  color: var(--terracotta);
+  color: var(--accent);
   font-weight: 400;
 }
 
@@ -142,13 +234,15 @@ html, body {
   display: none;
 }
 
-#btn-folder {
+#btn-folder,
+#btn-refresh,
+#btn-sort {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   background: none;
-  border: 1px solid rgba(28,23,18,0.25);
-  color: var(--near-black);
+  border: 1px solid var(--divider);
+  color: var(--text);
   padding: 6px 10px;
   cursor: pointer;
   width: 100%;
@@ -156,9 +250,46 @@ html, body {
   transition: border-color 0.15s, color 0.15s;
 }
 
-#btn-folder:hover {
-  border-color: var(--terracotta);
-  color: var(--terracotta);
+#btn-folder:hover,
+#btn-refresh:hover,
+#btn-sort:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#btn-refresh,
+#btn-sort { margin-top: 6px; }
+
+#btn-sort.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* File-type filter chips (MD / CSV / JSON) */
+#type-filter {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+#type-filter button {
+  flex: 1;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  background: none;
+  border: 1px solid var(--divider);
+  color: var(--text-muted);
+  padding: 4px 0;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+#type-filter button.on {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--tint-hover);
 }
 
 #file-list {
@@ -182,33 +313,80 @@ html, body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 13px;
   font-weight: 300;
-  color: var(--near-black);
+  color: var(--text);
   cursor: pointer;
   line-height: 1.4;
   transition: background 0.1s, color 0.1s;
 }
 
 #file-list button:hover {
-  background: rgba(232,201,174,0.4);
-  color: var(--terracotta);
+  background: var(--tint-hover);
+  color: var(--accent);
 }
 
 #file-list button.active {
-  background: rgba(232,201,174,0.6);
-  color: var(--ember);
+  background: var(--tint-active);
+  color: var(--accent-strong);
   font-weight: 400;
 }
 
 /* Numbered prefix on ordered files */
 #file-list .file-num {
   font-size: 10px;
-  color: rgba(28,23,18,0.3);
+  color: var(--text-muted);
+  opacity: 0.7;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
   min-width: 18px;
   flex-shrink: 0;
   padding-right: 6px;
   line-height: inherit;
+}
+
+/* Trailing metadata after the filename (file-type tag + recency age) */
+#file-list .file-meta {
+  margin-left: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-left: 8px;
+}
+
+/* File-type tag (CSV/JSON) */
+#file-list .file-ext-tag {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+/* "NEW since last visit" chip — file changed since it was last opened here */
+#file-list .file-new {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+
+/* Recency age label — only rendered for files modified within the recent window */
+#file-list .file-age {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+#file-list .file-age::before {
+  content: '●';
+  font-size: 7px;
+  margin-right: 4px;
+  vertical-align: 1px;
 }
 
 /* Subdirectory group label */
@@ -218,7 +396,7 @@ html, body {
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--accent);
   padding: 18px 18px 4px;
   list-style: none;
   opacity: 0.8;
@@ -234,7 +412,7 @@ html, body {
 #file-list .other-files-sep::before {
   content: '';
   display: block;
-  border-top: 1px solid rgba(28,23,18,0.12);
+  border-top: 1px solid var(--divider-soft);
   margin-bottom: 6px;
 }
 
@@ -244,7 +422,7 @@ html, body {
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(28,23,18,0.35);
+  color: var(--text-muted);
   list-style: none;
   padding: 0 18px 4px;
 }
@@ -255,7 +433,7 @@ html, body {
   padding: 48px 56px 80px;
   min-width: 0;
   /* shift right when sidebar is visible */
-  margin-left: var(--sidebar-w);
+  margin-left: var(--sidebar-w, 240px);
   transition: margin-left 0.2s;
 }
 
@@ -266,14 +444,14 @@ html, body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(245,239,229,0.88);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
   z-index: 200;
   align-items: center;
   justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--heading-font);
   font-size: 28px;
   font-weight: 400;
-  color: var(--terracotta);
+  color: var(--accent);
   letter-spacing: -0.01em;
   pointer-events: none;
 }
@@ -290,18 +468,19 @@ html, body {
 }
 
 #empty-state h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-family: var(--heading-font);
+  font-weight: var(--heading-weight);
   font-size: 32px;
   letter-spacing: -0.02em;
-  color: var(--near-black);
+  text-transform: var(--heading-transform);
+  color: var(--text-strong);
 }
 
 #empty-state p {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 300;
   font-size: 15px;
-  color: rgba(28,23,18,0.6);
+  color: var(--text-muted);
   max-width: 42ch;
   line-height: 1.65;
 }
@@ -318,38 +497,38 @@ html, body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
-  background: var(--terracotta);
-  color: var(--parchment);
+  background: var(--accent);
+  color: var(--bg);
   border: none;
   padding: 10px 18px;
   cursor: pointer;
   transition: background 0.15s;
 }
 
-.btn-primary:hover { background: var(--ember); }
+.btn-primary:hover { background: var(--accent-strong); }
 
 .btn-secondary {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   background: none;
-  border: 1px solid rgba(28,23,18,0.3);
-  color: var(--near-black);
+  border: 1px solid var(--divider);
+  color: var(--text);
   padding: 10px 18px;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
 
 .btn-secondary:hover {
-  border-color: var(--terracotta);
-  color: var(--terracotta);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 #no-fsapi-note {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
   font-weight: 300;
-  color: rgba(28,23,18,0.5);
+  color: var(--text-muted);
   font-style: italic;
   margin-top: 4px;
 }
@@ -357,13 +536,14 @@ html, body {
 /* Hidden native file inputs */
 #file-input { display: none; }
 
-/* ─── Rendered markdown content ─── */
+/* ─── Rendered markdown/CSV content ─── */
 #content {
   max-width: 65ch;
   display: none;
 }
 
 #content.visible { display: block; }
+#content.wide { max-width: none; } /* CSV tables need the full column width */
 
 /* File title shown above content */
 #content-filename {
@@ -372,43 +552,46 @@ html, body {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--accent);
   margin-bottom: 32px;
   display: block;
 }
 
 /* ─── Markdown rendering styles ─── */
 #content h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-family: var(--heading-font);
+  font-weight: var(--heading-weight);
   font-size: 42px;
   line-height: 1.15;
   letter-spacing: -0.025em;
-  color: var(--near-black);
+  text-transform: var(--heading-transform);
+  color: var(--text-strong);
   margin: 0 0 28px;
   text-align: left;
 }
 
 #content h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-family: var(--heading-font);
+  font-weight: var(--heading-weight);
   font-size: 28px;
   line-height: 1.2;
   letter-spacing: -0.015em;
-  color: var(--near-black);
+  text-transform: var(--heading-transform);
+  color: var(--text-strong);
   margin: 48px 0 16px;
   padding-bottom: 8px;
-  /* Terracotta accent rule under h2 */
-  border-bottom: 1.5px solid var(--terracotta);
+  /* Accent rule under h2 */
+  border-bottom: 1.5px solid var(--accent);
 }
 
 #content h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-family: var(--heading-font);
+  font-weight: var(--heading-weight);
   font-size: 22px;
   line-height: 1.25;
   letter-spacing: -0.01em;
-  color: var(--near-black);
+  text-transform: var(--heading-transform);
+  color: var(--text-strong);
   margin: 36px 0 12px;
 }
 
@@ -420,7 +603,7 @@ html, body {
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--terracotta);
+  color: var(--accent);
   margin: 28px 0 8px;
 }
 
@@ -428,14 +611,14 @@ html, body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 400;
   font-size: 13px;
-  color: rgba(28,23,18,0.65);
+  color: var(--text-muted);
   margin: 24px 0 8px;
 }
 
 #content p {
   margin: 0 0 18px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 300;
+  font-family: var(--body-font);
+  font-weight: var(--body-weight);
   font-size: 16px;
   line-height: 1.75;
 }
@@ -447,8 +630,8 @@ html, body {
 }
 
 #content li {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 300;
+  font-family: var(--body-font);
+  font-weight: var(--body-weight);
   font-size: 16px;
   line-height: 1.7;
   margin-bottom: 6px;
@@ -457,25 +640,25 @@ html, body {
 /* Task list checkboxes (GFM) */
 #content input[type="checkbox"] {
   margin-right: 6px;
-  accent-color: var(--terracotta);
+  accent-color: var(--accent);
 }
 
 #content a {
-  color: var(--terracotta);
+  color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid rgba(191,107,71,0.35);
+  border-bottom: 1px solid var(--tint-active);
   transition: color 0.15s, border-color 0.15s;
 }
 
 #content a:hover,
 #content a:focus {
-  color: var(--ember);
-  border-bottom-color: var(--ember);
+  color: var(--accent-strong);
+  border-bottom-color: var(--accent-strong);
 }
 
-#content a:visited { color: var(--ember); }
+#content a:visited { color: var(--accent-strong); }
 
-#content strong { font-weight: 500; }
+#content strong { font-weight: 500; color: var(--text-strong); }
 #content em { font-style: italic; }
 
 #content del {
@@ -487,15 +670,15 @@ html, body {
 #content code {
   font-family: ui-monospace, 'Cascadia Code', 'Menlo', monospace;
   font-size: 13.5px;
-  color: var(--terracotta);
-  background: var(--blush);
+  color: var(--accent);
+  background: var(--code-bg);
   padding: 1px 5px;
   border-radius: 2px;
 }
 
 /* Fenced code blocks */
 #content pre {
-  background: var(--blush);
+  background: var(--code-bg);
   padding: 20px 22px;
   overflow-x: auto;
   margin: 0 0 24px;
@@ -504,7 +687,7 @@ html, body {
 
 #content pre code {
   /* Reset inline code styles inside a block */
-  color: var(--near-black);
+  color: var(--text-strong);
   background: none;
   padding: 0;
   font-size: 13px;
@@ -513,8 +696,8 @@ html, body {
 
 /* Blockquotes */
 #content blockquote {
-  border-left: 3px solid var(--terracotta);
-  background: rgba(232,201,174,0.28);
+  border-left: 3px solid var(--accent);
+  background: var(--tint-quote);
   margin: 0 0 24px;
   padding: 14px 20px;
 }
@@ -522,17 +705,17 @@ html, body {
 #content blockquote p {
   margin: 0;
   font-style: italic;
-  color: var(--near-black);
+  color: var(--text-strong);
 }
 
 /* Horizontal rules */
 #content hr {
   border: none;
-  border-top: 1px solid rgba(28,23,18,0.18);
+  border-top: 1px solid var(--divider);
   margin: 40px 0;
 }
 
-/* Tables */
+/* Tables (shared by markdown tables and rendered CSVs) */
 #content table {
   width: 100%;
   border-collapse: collapse;
@@ -541,30 +724,66 @@ html, body {
 }
 
 #content th {
-  background: var(--blush);
-  color: var(--near-black);
+  background: var(--code-bg);
+  color: var(--text-strong);
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 500;
   font-size: 13px;
   letter-spacing: 0.03em;
   text-align: left;
   padding: 10px 14px;
-  border: 1px solid rgba(28,23,18,0.2);
+  border: 1px solid var(--divider);
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+  min-width: 76px;
+  user-select: none;
+}
+
+#content th.sortable { cursor: pointer; }
+#content th.sortable:hover { color: var(--accent); }
+#content th .sort-arrow {
+  margin-left: 5px;
+  opacity: 0.6;
+  font-size: 10px;
 }
 
 #content td {
   padding: 9px 14px;
-  border: 1px solid rgba(28,23,18,0.12);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 300;
+  border: 1px solid var(--divider-soft);
+  font-family: var(--body-font);
+  font-weight: var(--body-weight);
   font-size: 14px;
   line-height: 1.55;
-  background: var(--parchment);
+  background: var(--bg);
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+  min-width: 76px;
 }
 
 /* Alternating row tint */
 #content tr:nth-child(even) td {
-  background: rgba(232,201,174,0.18);
+  background: var(--tint-row);
+}
+
+/* CSV tables can run wide — scroll horizontally rather than compress columns */
+.csv-table-wrap {
+  overflow-x: auto;
+  margin: 0 0 28px;
+  border: 1px solid var(--divider);
+}
+
+.csv-table-wrap table { margin: 0; border: none; }
+.csv-table-wrap td,
+.csv-table-wrap th { border-top: none; border-left: none; border-right: 1px solid var(--divider-soft); }
+
+/* Caption noting a CSV was regrouped into a day-by-day document layout */
+#content p.csv-group-note {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: -8px 0 28px;
 }
 
 /* Images */
@@ -575,30 +794,61 @@ html, body {
   margin: 8px 0;
 }
 
-/* ─── Export PDF button ─── */
-#btn-export-pdf {
-  margin-left: auto;
+/* ─── Header action buttons ─── */
+.btn-export {
+  margin-left: 10px;
   display: none;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 400;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  background: var(--parchment);
-  border: 1px solid var(--terracotta);
-  color: var(--terracotta);
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  color: var(--accent);
   padding: 7px 14px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
-#btn-export-pdf:hover {
-  background: var(--near-black);
-  color: var(--parchment);
+#btn-export-pdf { margin-left: auto; }
+
+.btn-export:hover {
+  background: var(--header-bg);
+  color: var(--header-text);
+  filter: brightness(1.4);
 }
 
-/* Print-only header element: hidden on screen */
-#print-header { display: none; }
+/* ─── JSON "plain English" raw-source toggle ─── */
+.json-raw-toggle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 40px 0 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.json-raw-toggle:hover { color: var(--accent-strong); }
+
+.json-raw {
+  background: var(--code-bg);
+  padding: 16px 18px;
+  overflow-x: auto;
+  border-radius: 2px;
+  margin: 0 0 24px;
+}
+
+.json-raw code {
+  font-family: ui-monospace, 'Cascadia Code', 'Menlo', monospace;
+  font-size: 12.5px;
+  color: var(--text-strong);
+  background: none;
+  padding: 0;
+}
 
 /* ─── Print stylesheet ─── */
 @media print {
@@ -606,36 +856,6 @@ html, body {
   @page {
     size: A4;
     margin: 2cm 2.5cm;
-
-    /* ── MSS page header: mark + wordmark on every page ──
-       Using @page margin boxes rather than position:fixed so the header
-       appears in the margin area (not the content area) and never overlaps
-       content on pages 2+. */
-    @top-left {
-      /* Composite SVG: mark + "Main Stage" (serif, near-black) + "STUDIO" (sans, terracotta)
-         all left-anchored together. Colours are baked into the SVG so they survive @page context. */
-      content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjAwIDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIHRyYW5zZm9ybT0ic2NhbGUoMC42KSI+PHJlY3QgeD0iMiIgeT0iMTYiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyMiIgcng9IjIuNSIgZmlsbD0iI0JGNkI0NyIvPjxyZWN0IHg9IjE0IiB5PSIyIiB3aWR0aD0iMjQiIGhlaWdodD0iMjIiIHJ4PSIyLjUiIGZpbGw9IiMxQzE3MTIiLz48cmVjdCB4PSIxNCIgeT0iMTYiIHdpZHRoPSIxMiIgaGVpZ2h0PSI4IiByeD0iMS41IiBmaWxsPSIjRjVFRkU1Ii8+PC9nPjx0ZXh0IHg9IjMwIiB5PSIxNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxQzE3MTIiPk1haW4gU3RhZ2U8L3RleHQ+PHRleHQgeD0iMTE3IiB5PSIxNSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjkiIGZpbGw9IiNCRjZCNDciIGxldHRlci1zcGFjaW5nPSIyLjUiPlNUVURJTzwvdGV4dD48L3N2Zz4=");
-      vertical-align: middle;
-      border-bottom: 1px solid #BF6B47;
-      padding-bottom: 5pt;
-    }
-    @top-center {
-      content: "";
-      border-bottom: 1px solid #BF6B47;
-      padding-bottom: 5pt;
-    }
-    @top-right {
-      content: "";
-      border-bottom: 1px solid #BF6B47;
-      padding-bottom: 5pt;
-    }
-
-    /* Suppress Chrome's built-in date / title / URL / page-count decorations */
-    @top-left-corner    { content: ""; }
-    @top-right-corner   { content: ""; }
-    @bottom-center      { content: ""; }
-    @bottom-left-corner { content: ""; }
-    @bottom-right-corner { content: ""; }
   }
 
   /* Reset any scroll-animation state so everything prints at full opacity */
@@ -648,19 +868,23 @@ html, body {
 
   body {
     background: #FFFFFF;
-    color: #1C1712;
+    color: var(--print-text);
   }
 
-  /* Hide all screen chrome (and the DOM print-header — now handled by @page margin boxes) */
+  /* Hide all screen chrome (print header/footer are injected as @page margin
+     boxes by printAsPdf() at print time, sized per current brand) */
   #site-header,
   #sidebar,
   #empty-state,
   #main-breadcrumb,
   #btn-export-pdf,
+  #btn-export-word,
+  #btn-export-xls,
   #drop-overlay,
   #content-filename,
   #file-input,
-  #print-header {
+  .json-raw-toggle,
+  .json-raw {
     display: none !important;
   }
 
@@ -702,33 +926,36 @@ html, body {
 
   /* ── Print typography ── */
   #content h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-weight);
     font-size: 28pt;
-    color: #1C1712;
+    color: var(--print-text);
     letter-spacing: -0.02em;
+    text-transform: var(--heading-transform);
     text-align: left;
     border-bottom: none;
     margin: 0 0 20pt;
   }
 
   #content h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-weight);
     font-size: 22pt;
-    color: #1C1712;
+    color: var(--print-text);
     letter-spacing: -0.015em;
-    border-bottom: 1px solid #BF6B47;
+    text-transform: var(--heading-transform);
+    border-bottom: 1px solid var(--print-accent);
     padding-bottom: 4pt;
     margin: 28pt 0 12pt;
   }
 
   #content h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 400;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-weight);
     font-size: 16pt;
-    color: #1C1712;
+    color: var(--print-text);
     letter-spacing: -0.01em;
+    text-transform: var(--heading-transform);
     border-bottom: none;
     margin: 20pt 0 8pt;
   }
@@ -740,37 +967,37 @@ html, body {
   }
 
   #content p {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 300;
+    font-family: var(--body-font);
+    font-weight: var(--body-weight);
     font-size: 10.5pt;
     line-height: 1.65;
-    color: #1C1712;
+    color: var(--print-text);
     margin: 0 0 10pt;
   }
 
   #content li {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 300;
+    font-family: var(--body-font);
+    font-weight: var(--body-weight);
     font-size: 10.5pt;
     line-height: 1.65;
-    color: #1C1712;
+    color: var(--print-text);
   }
 
   #content strong {
     font-weight: 500;
-    color: #1C1712;
+    color: var(--print-text);
   }
 
-  /* Em uses Cormorant Garamond italic in print for calligraphic feel */
+  /* Em uses the brand display font italic in print for a calligraphic feel */
   #content em {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--heading-font);
     font-style: italic;
     font-weight: 400;
   }
 
-  /* Links: near-black, no underline. Append URL only for external links. */
+  /* Links: brand ink colour, no underline. Append URL only for external links. */
   #content a {
-    color: #1C1712;
+    color: var(--print-text);
     text-decoration: none;
     border-bottom: none;
   }
@@ -786,7 +1013,7 @@ html, body {
 
   /* Inline code */
   #content code {
-    color: #BF6B47;
+    color: var(--print-accent);
     background: none;
     padding: 0;
     font-size: 0.9em;
@@ -794,8 +1021,8 @@ html, body {
 
   /* Code blocks */
   #content pre {
-    background: #F7F7F7;
-    border: 0.5px solid rgba(28,23,18,0.3);
+    background: var(--print-code-bg);
+    border: 0.5px solid var(--print-border);
     padding: 10pt 12pt;
     font-size: 9pt;
     white-space: pre-wrap;
@@ -804,7 +1031,7 @@ html, body {
   }
 
   #content pre code {
-    color: #1C1712;
+    color: var(--print-text);
     background: none;
     font-size: 9pt;
     padding: 0;
@@ -812,49 +1039,56 @@ html, body {
 
   /* Blockquotes */
   #content blockquote {
-    border-left: 3px solid #BF6B47;
-    background: rgba(245,239,229,0.15);
+    border-left: 3px solid var(--print-accent);
+    background: var(--print-quote-bg);
     padding: 10pt 16pt;
     margin: 0 0 14pt;
   }
 
   #content blockquote p {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--heading-font);
     font-weight: 400;
     font-size: 11pt;
     font-style: italic;
-    color: #1C1712;
+    color: var(--print-text);
     margin: 0;
   }
 
   /* Horizontal rules */
   #content hr {
     border: none;
-    border-top: 1px solid rgba(191,107,71,0.4);
+    border-top: 1px solid var(--print-border-soft);
     margin: 20pt 0;
   }
 
   /* Tables */
-  #content table {
+  #content table,
+  .csv-table-wrap table {
     width: 100%;
     border-collapse: collapse;
     margin: 0 0 14pt;
     font-size: 9.5pt;
   }
 
+  .csv-table-wrap { overflow: visible; border: none; }
+
   #content th {
-    background: #F0EBE3;
-    color: #1C1712;
-    border: 0.5px solid rgba(28,23,18,0.3);
+    background: var(--print-th-bg);
+    color: var(--print-text);
+    border: 0.5px solid var(--print-border);
     font-weight: 500;
     padding: 5pt 8pt;
+    white-space: normal;
   }
+
+  #content th .sort-arrow { display: none; }
 
   #content td {
     background: #FFFFFF;
-    color: #1C1712;
-    border: 0.5px solid rgba(28,23,18,0.2);
+    color: var(--print-text);
+    border: 0.5px solid var(--print-border-soft);
     padding: 4pt 8pt;
+    white-space: normal;
   }
 
   /* Disable alternating row tint — cleaner in print */
@@ -873,33 +1107,36 @@ html, body {
 </head>
 <body>
 
-<!-- Print-only page header: hidden on screen, shown via @media print on every page -->
-<div id="print-header">
-  <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="2" y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
-    <rect x="14" y="2" width="24" height="22" rx="2.5" fill="#1C1712"/>
-    <rect x="14" y="16" width="12" height="8" rx="1.5" fill="#F5EFE5"/>
-  </svg>
-  <span class="ph-main">Main Stage</span>
-  <span class="ph-sub">Studio</span>
-</div>
-
 <!-- Drop overlay (shown during drag) -->
-<div id="drop-overlay">Drop your .md file</div>
+<div id="drop-overlay">Drop your .md, .csv, or .json file</div>
 
 <!-- Fixed header -->
 <header id="site-header">
   <!-- MSS canonical mark -->
-  <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="2" y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
-    <rect x="14" y="2" width="24" height="22" rx="2.5" fill="#1C1712"/>
-    <rect x="14" y="16" width="12" height="8" rx="1.5" fill="#F5EFE5"/>
-  </svg>
-  <div class="wordmark">
-    <span class="wordmark-main">Main Stage</span>
-    <span class="wordmark-sub">Studio</span>
+  <span class="brand-block mss logo-icon">
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="2" y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+      <rect x="14" y="2" width="24" height="22" rx="2.5" fill="#1C1712"/>
+      <rect x="14" y="16" width="12" height="8" rx="1.5" fill="#F5EFE5"/>
+    </svg>
+  </span>
+  <span class="brand-block fsc logo-icon">
+    <img src="data:image/png;base64,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" alt="" width="32" height="32">
+  </span>
+
+  <div class="wordmark" style="display:flex">
+    <span class="brand-block mss"><span class="wordmark-main">Main Stage</span>&nbsp;<span class="wordmark-sub">Studio</span></span>
+    <span class="brand-block fsc"><span class="wordmark-main">FightStar</span>&nbsp;<span class="wordmark-sub">Championship</span></span>
   </div>
-  <button id="btn-export-pdf" title="Export to PDF">Export PDF</button>
+
+  <select id="brand-select" title="Client brand template">
+    <option value="mss">Main Stage Studio</option>
+    <option value="fsc">FightStar Championship</option>
+  </select>
+
+  <button id="btn-export-pdf" class="btn-export" title="Export to PDF">Export PDF</button>
+  <button id="btn-export-word" class="btn-export" title="Export to Word">Export Word</button>
+  <button id="btn-export-xls" class="btn-export" title="Export to Excel">Export XLS</button>
 </header>
 
 <!-- Page shell -->
@@ -912,6 +1149,13 @@ html, body {
            folder's name — FSAPI doesn't expose the parent path. -->
       <nav id="sidebar-breadcrumb" aria-label="Location"></nav>
       <button id="btn-folder" title="Choose a different folder">Change folder</button>
+      <button id="btn-refresh" title="Re-scan this folder for new or changed files without re-picking it">↻ Refresh folder</button>
+      <button id="btn-sort" title="Toggle between the default order and most recently updated first">Sort: recent first</button>
+      <div id="type-filter" title="Show only these file types">
+        <button type="button" data-type="md" class="on">MD</button>
+        <button type="button" data-type="csv" class="on">CSV</button>
+        <button type="button" data-type="json" class="on">JSON</button>
+      </div>
     </div>
     <ul id="file-list" role="listbox"></ul>
   </nav>
@@ -921,8 +1165,8 @@ html, body {
 
     <!-- Empty state -->
     <div id="empty-state">
-      <h2>Markdown Viewer</h2>
-      <p>Drop a .md file anywhere on the page, or use one of the options below to load content.</p>
+      <h2>Document Viewer</h2>
+      <p>Drop a .md, .csv, or .json file anywhere on the page, or use one of the options below to load content. Pick a client brand template from the header dropdown before exporting.</p>
       <div class="actions">
         <button class="btn-primary" id="btn-single-file">Open file</button>
         <button class="btn-secondary" id="btn-open-folder">Open folder</button>
@@ -947,7 +1191,7 @@ html, body {
 </div>
 
 <!-- Hidden native file input for single-file upload -->
-<input type="file" id="file-input" accept=".md,text/markdown,text/plain">
+<input type="file" id="file-input" accept=".md,.csv,.json,text/markdown,text/csv,application/json,text/plain">
 
 <script>
 /* ─── marked.js config for GFM ─── */
@@ -956,12 +1200,41 @@ marked.setOptions({
   breaks: false,
 });
 
+/* ─── Shared brand logo for light/white-page contexts (PDF header + Word export) ───
+   Same asset, one definition — keeps every exported document format on-brand together. */
+const PRINT_HEADER_LOGO = {
+  mss: {
+    mime: 'image/svg+xml',
+    b64: 'PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjAwIDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIHRyYW5zZm9ybT0ic2NhbGUoMC42KSI+PHJlY3QgeD0iMiIgeT0iMTYiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyMiIgcng9IjIuNSIgZmlsbD0iI0JGNkI0NyIvPjxyZWN0IHg9IjE0IiB5PSIyIiB3aWR0aD0iMjQiIGhlaWdodD0iMjIiIHJ4PSIyLjUiIGZpbGw9IiMxQzE3MTIiLz48cmVjdCB4PSIxNCIgeT0iMTYiIHdpZHRoPSIxMiIgaGVpZ2h0PSI4IiByeD0iMS41IiBmaWxsPSIjRjVFRkU1Ii8+PC9nPjx0ZXh0IHg9IjMwIiB5PSIxNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxQzE3MTIiPk1haW4gU3RhZ2U8L3RleHQ+PHRleHQgeD0iMTE3IiB5PSIxNSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjkiIGZpbGw9IiNCRjZCNDciIGxldHRlci1zcGFjaW5nPSIyLjUiPlNUVURJTzwvdGV4dD48L3N2Zz4=',
+  },
+  fsc: {
+    mime: 'image/png',
+    b64: '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',
+  },
+};
+
+/* ─── Per-brand tab icon ───
+   MSS: the canonical wordmark block, rasterised from the CLAUDE.md SVG.
+   FSC: the star icon mark from fightstar-championship/brand/logos/PNG/Logo-icon-blue.png. */
+const FAVICONS = {
+  mss: 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABlmWCKAAAB0UlEQVR4Ae2Xv0rDUBTGT5pQjRRbBbEVBBWXivoIDg4+i0/QNxB8ESeLawcFEcXZwX8ZFGMrdXBoRRtr/0StcuHepnAc8+Vkuueeb8j3fb8SaoXfDxnP+dkpNV+bxu3vuLC4RMXiSuQujpeWGcDN9RVtbW6M9JLNZunSux+5j9siZb5wELTMK20OgkCb4z4MBRB3Q/99/8QHYHU+WmH1qEz9zucgPK9ap9v3HtmOPZj9B5/2ywcq2HQ6TXePdTXH/eA0vAvyK3vKR3uyQNulHTXXak9aAGoBckiF/b5mZSylfxW73a62z+WmtDnug2MamGg808luidqhNViFlk2Vw2Mly+cL6oxwGArgx5T79kLun7vx6VlaXVtH8BrpIfFfgcQH4Lgzc+S4Gep12pGIZOaXI+9RLof+C6AY4/pI/E9AAuCigqoTAlCb5foSArhJoeqEANRmub6EAG5SqDohALVZri8hgJsUqk4IQG2W60sI4CaFqhMCUJvl+hICuEmh6oQA1Ga5voQAblKoOiEAtVmuLyGAmxSqTghAbZbrSwjgJoWqEwJQm+X6EgK4SaHqhADUZrm+hABuUqg6IQC1Wa4vIYCbFKpOCEBtlusr8QR8ATxKVsEjoPtZAAAAAElFTkSuQmCC',
+  fsc: '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',
+};
+
+function setFavicon(brand) {
+  const link = document.getElementById('favicon');
+  const b64 = FAVICONS[brand];
+  if (link && b64) link.href = 'data:image/png;base64,' + b64;
+}
+
 /* ─── Element refs ─── */
 const sidebar          = document.getElementById('sidebar');
 const sidebarBreadcrumb = document.getElementById('sidebar-breadcrumb');
 const mainBreadcrumb   = document.getElementById('main-breadcrumb');
 const fileList         = document.getElementById('file-list');
 const btnFolder        = document.getElementById('btn-folder');
+const btnRefresh       = document.getElementById('btn-refresh');
+const btnSort          = document.getElementById('btn-sort');
 const mainEl           = document.getElementById('main');
 const emptyState       = document.getElementById('empty-state');
 const contentEl        = document.getElementById('content');
@@ -973,8 +1246,45 @@ const btnSingle        = document.getElementById('btn-single-file');
 const btnOpenFolder    = document.getElementById('btn-open-folder');
 const fsApiNote        = document.getElementById('no-fsapi-note');
 const btnExportPdf     = document.getElementById('btn-export-pdf');
+const btnExportWord    = document.getElementById('btn-export-word');
+const btnExportXls     = document.getElementById('btn-export-xls');
+const brandSelect      = document.getElementById('brand-select');
 
 let currentFilename = '';
+let currentFileType  = 'md'; // 'md' | 'csv' | 'json' — drives PDF page orientation
+let currentRawText   = ''; // source text of the loaded file, kept for XLS export
+let rootFolderName   = '';   // set when a folder is opened, used for brand auto-detect
+
+/* ─── Brand switching ─── */
+const savedBrand = localStorage.getItem('md-viewer-brand');
+let userSetBrand = !!savedBrand;
+
+function setBrand(id, manual) {
+  document.documentElement.setAttribute('data-brand', id);
+  brandSelect.value = id;
+  setFavicon(id);
+  if (manual) {
+    userSetBrand = true;
+    localStorage.setItem('md-viewer-brand', id);
+  }
+}
+
+setBrand(savedBrand || 'mss', false);
+
+brandSelect.addEventListener('change', () => setBrand(brandSelect.value, true));
+
+// Guess the brand from a folder/file path — only applied when the user
+// hasn't manually picked a brand (or persisted one) this session.
+function guessBrandFromPath(pathStr) {
+  if (/fightstar|\bfsc\b/i.test(pathStr)) return 'fsc';
+  return null;
+}
+
+function maybeAutoDetectBrand(pathStr) {
+  if (userSetBrand) return;
+  const guess = guessBrandFromPath(pathStr);
+  if (guess) setBrand(guess, false);
+}
 
 /* ─── Feature detect File System Access API ─── */
 const hasFSAPI = typeof window.showDirectoryPicker === 'function';
@@ -988,7 +1298,7 @@ if (!hasFSAPI) {
 
 // Renders a breadcrumb into the sidebar header.
 // segments: array of strings, e.g. ['my-folder'] or ['parent', 'child'].
-// Only the last segment is shown in terracotta; the rest are dimmed.
+// Only the last segment is shown in the brand accent colour; the rest are dimmed.
 function setSidebarBreadcrumb(segments) {
   sidebarBreadcrumb.innerHTML = '';
   segments.forEach((seg, i) => {
@@ -1016,32 +1326,413 @@ function setMainBreadcrumb(filename) {
   mainBreadcrumb.style.display = 'block';
 }
 
-/* ─── Render a markdown string into the content pane ─── */
-function renderMarkdown(mdText, filename) {
-  const rawHtml   = marked.parse(mdText);
-  const cleanHtml = DOMPurify.sanitize(rawHtml, {
-    // Allow the checkbox inputs that GFM task lists produce
-    ADD_TAGS: ['input'],
-    ADD_ATTR: ['type', 'checked', 'disabled'],
-  });
-  mdOutput.innerHTML = cleanHtml;
+/* ─── CSV parsing (RFC4180-ish: quoted fields, embedded commas/newlines) ─── */
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = '';
+  let inQuotes = false;
 
-  // Display the filename as a label (strip .md, replace hyphens/underscores)
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else { inQuotes = false; }
+      } else {
+        field += c;
+      }
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ',') {
+      row.push(field); field = '';
+    } else if (c === '\r') {
+      // skip — paired \n (if present) ends the row
+    } else if (c === '\n') {
+      row.push(field); rows.push(row); row = []; field = '';
+    } else {
+      field += c;
+    }
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+
+  // Drop a trailing blank line produced by a final newline in the file
+  return rows.filter((r, i) => !(i === rows.length - 1 && r.length === 1 && r[0] === ''));
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Builds a styled, sortable HTML table for a given header/body slice (used both
+// as the flat fallback and for each group's mini-table in the grouped layout).
+function csvRowsToTableHtml(header, body, colOffset) {
+  let html = '<div class="csv-table-wrap"><table class="csv-table"><thead><tr>';
+  header.forEach((h, i) => {
+    html += `<th class="sortable" data-col="${i}">${escapeHtml(humanizeKey(h))}<span class="sort-arrow"></span></th>`;
+  });
+  html += '</tr></thead><tbody>';
+  body.forEach(r => {
+    html += '<tr>';
+    header.forEach((_, i) => {
+      html += `<td>${escapeHtml(r[i + colOffset] ?? '')}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+// A log/calendar-shaped CSV (repeated values down the first column, e.g. one
+// row per day or several rows per day) reads better as a document than as one
+// giant flat table — group by the first column and give each group a heading.
+function csvRowsShouldGroup(body) {
+  if (body.length < 2) return false;
+  const firstColValues = body.map(r => r[0]);
+  const uniqueCount = new Set(firstColValues).size;
+  return uniqueCount > 1 && uniqueCount < body.length;
+}
+
+// Renders each first-column group as its own heading, with either a compact
+// "Label: value" line (single-row groups) or a mini-table (multi-row groups)
+// underneath — a content calendar becomes a scannable day-by-day document
+// instead of a spreadsheet you have to track across dozens of rows.
+function csvToGroupedDocumentHtml(header, body) {
+  const groupLabel = humanizeKey(header[0]);
+  const restHeader = header.slice(1);
+
+  const groupOrder = [];
+  const groupMap = new Map();
+  body.forEach(r => {
+    const key = r[0] ?? '';
+    if (!groupMap.has(key)) {
+      groupMap.set(key, []);
+      groupOrder.push(key);
+    }
+    groupMap.get(key).push(r);
+  });
+
+  let html = '';
+  groupOrder.forEach(key => {
+    const rowsInGroup = groupMap.get(key);
+    html += `<h3>${escapeHtml(key || '(blank)')}</h3>`;
+    if (rowsInGroup.length === 1) {
+      const r = rowsInGroup[0];
+      html += '<p>' + restHeader.map((c, i) =>
+        `<strong>${escapeHtml(humanizeKey(c))}:</strong> ${escapeHtml(r[i + 1] ?? '') || '<em>—</em>'}`
+      ).join(' &nbsp;·&nbsp; ') + '</p>';
+    } else {
+      html += csvRowsToTableHtml(restHeader, rowsInGroup, 1);
+    }
+  });
+
+  // Small caption noting how the CSV was regrouped, so it's clear this isn't the raw row order
+  html = `<p class="csv-group-note"><em>Grouped by ${escapeHtml(groupLabel)} — ${groupOrder.length} entries, ${body.length} source rows.</em></p>` + html;
+  return html;
+}
+
+// Entry point: reads a CSV string and returns readable document HTML —
+// grouped sections for log/calendar-shaped data, a flat sortable table otherwise.
+function csvToDocumentHtml(text) {
+  const rows = parseCSV(text);
+  if (!rows.length) return '<p><em>Empty CSV file.</em></p>';
+
+  const header = rows[0];
+  const body = rows.slice(1);
+
+  if (csvRowsShouldGroup(body)) {
+    return csvToGroupedDocumentHtml(header, body);
+  }
+  return csvRowsToTableHtml(header, body, 0);
+}
+
+// Natural compare: numbers, then dates, then locale string comparison.
+function compareCellValues(a, b) {
+  const na = parseFloat(a), nb = parseFloat(b);
+  const bothNumeric = a.trim() !== '' && b.trim() !== '' && !isNaN(na) && !isNaN(nb) &&
+    /^-?[\d.,]+%?$/.test(a.trim()) && /^-?[\d.,]+%?$/.test(b.trim());
+  if (bothNumeric) return na - nb;
+
+  const da = Date.parse(a), db = Date.parse(b);
+  if (!isNaN(da) && !isNaN(db)) return da - db;
+
+  return a.localeCompare(b);
+}
+
+// Attaches click-to-sort behaviour to every table rendered into the content pane
+// (both CSV tables and any GFM markdown tables).
+function attachTableSort(root) {
+  root.querySelectorAll('table').forEach(table => {
+    const thead = table.querySelector('thead');
+    const tbody = table.querySelector('tbody');
+    if (!thead || !tbody) return;
+
+    thead.querySelectorAll('th').forEach((th, colIdx) => {
+      th.classList.add('sortable');
+      if (!th.querySelector('.sort-arrow')) {
+        const arrow = document.createElement('span');
+        arrow.className = 'sort-arrow';
+        th.appendChild(arrow);
+      }
+      th.addEventListener('click', () => {
+        const dir = th.dataset.sortDir === 'asc' ? 'desc' : 'asc';
+        thead.querySelectorAll('th').forEach(t => { t.dataset.sortDir = ''; t.querySelector('.sort-arrow').textContent = ''; });
+        th.dataset.sortDir = dir;
+        th.querySelector('.sort-arrow').textContent = dir === 'asc' ? '▲' : '▼';
+
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((r1, r2) => {
+          const c1 = r1.children[colIdx] ? r1.children[colIdx].textContent : '';
+          const c2 = r2.children[colIdx] ? r2.children[colIdx].textContent : '';
+          const cmp = compareCellValues(c1, c2);
+          return dir === 'asc' ? cmp : -cmp;
+        });
+        rows.forEach(r => tbody.appendChild(r));
+      });
+    });
+  });
+}
+
+/* ─── JSON "plain English" interpreter ───
+   Turns arbitrary JSON (client theme configs, archetypes, coverage maps, etc.)
+   into a readable breakdown: humanized labels, nested sections, bullet lists
+   for primitive arrays, and tables for arrays of uniform objects. A raw-JSON
+   toggle is appended for anyone who needs to verify against the source. */
+
+// camelCase / snake_case / kebab-case -> "Title Case With Spaces"
+function humanizeKey(key) {
+  return String(key)
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function formatJsonPrimitive(val) {
+  if (val === null || val === undefined || val === '') return '<em>Not set</em>';
+  if (typeof val === 'boolean') return val ? 'Yes' : 'No';
+  if (typeof val === 'number') return String(val);
+  const s = String(val);
+  if (/^https?:\/\/\S+$/.test(s)) {
+    return `<a href="${escapeHtml(s)}" target="_blank" rel="noopener">${escapeHtml(s)}</a>`;
+  }
+  return escapeHtml(s);
+}
+
+// True when every element is a non-array object and they all share the same key set —
+// that shape reads best as a table (e.g. a list of fighters, posts, or config entries).
+function isUniformObjectArray(arr) {
+  if (!arr.length || !arr.every(x => x && typeof x === 'object' && !Array.isArray(x))) return false;
+  const keySets = arr.map(x => Object.keys(x).sort().join('|'));
+  return keySets.every(k => k === keySets[0]);
+}
+
+function jsonArrayToTable(arr) {
+  const keys = Object.keys(arr[0]);
+  let html = '<div class="csv-table-wrap"><table class="csv-table"><thead><tr>';
+  keys.forEach((k, i) => {
+    html += `<th class="sortable" data-col="${i}">${escapeHtml(humanizeKey(k))}<span class="sort-arrow"></span></th>`;
+  });
+  html += '</tr></thead><tbody>';
+  arr.forEach(item => {
+    html += '<tr>';
+    keys.forEach(k => {
+      const v = item[k];
+      const cell = (v && typeof v === 'object') ? escapeHtml(JSON.stringify(v)) : formatJsonPrimitive(v);
+      html += `<td>${cell}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+function jsonValueToHtml(value, depth) {
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '<p><em>None</em></p>';
+    if (value.every(v => v === null || typeof v !== 'object')) {
+      return '<ul>' + value.map(v => `<li>${formatJsonPrimitive(v)}</li>`).join('') + '</ul>';
+    }
+    if (isUniformObjectArray(value)) {
+      return jsonArrayToTable(value);
+    }
+    // Heterogeneous array of objects — render each as its own labelled sub-section
+    return value.map((v, i) => {
+      const label = (v && typeof v === 'object' && (v.name || v.id || v.title))
+        ? String(v.name || v.id || v.title)
+        : `Item ${i + 1}`;
+      const headingTag = 'h' + Math.min(depth + 3, 6);
+      return `<${headingTag}>${escapeHtml(label)}</${headingTag}>` + jsonValueToHtml(v, depth + 1);
+    }).join('');
+  }
+
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value);
+    if (!entries.length) return '<p><em>Empty</em></p>';
+    let html = '';
+    entries.forEach(([key, val]) => {
+      const label = humanizeKey(key);
+      if (val && typeof val === 'object') {
+        const headingTag = 'h' + Math.min(depth + 3, 6);
+        html += `<${headingTag}>${escapeHtml(label)}</${headingTag}>`;
+        html += jsonValueToHtml(val, depth + 1);
+      } else {
+        html += `<p><strong>${escapeHtml(label)}:</strong> ${formatJsonPrimitive(val)}</p>`;
+      }
+    });
+    return html;
+  }
+
+  return `<p>${formatJsonPrimitive(value)}</p>`;
+}
+
+function jsonToPlainEnglishHtml(data, filename) {
+  const title = filename.replace(/\.json$/i, '').replace(/[-_]/g, ' ');
+  let html = `<h1>${escapeHtml(title)}</h1>`;
+
+  // Surface a top-level "description" string as an intro, then skip it in the breakdown below
+  let rest = data;
+  if (data && typeof data === 'object' && !Array.isArray(data)) {
+    const descKey = Object.keys(data).find(k => k.toLowerCase() === 'description' && typeof data[k] === 'string');
+    if (descKey) {
+      html += `<blockquote><p>${escapeHtml(data[descKey])}</p></blockquote>`;
+      rest = { ...data };
+      delete rest[descKey];
+    }
+  }
+  html += jsonValueToHtml(rest, 0);
+
+  const rawId = 'json-raw-' + Math.random().toString(36).slice(2, 8);
+  html += `<h4 class="json-raw-toggle" data-target="${rawId}">Show Raw JSON</h4>`;
+  html += `<pre id="${rawId}" class="json-raw" style="display:none;"><code>${escapeHtml(JSON.stringify(data, null, 2))}</code></pre>`;
+
+  return html;
+}
+
+// Toggle raw-JSON visibility (event delegation — content is replaced on every render)
+mdOutput.addEventListener('click', (e) => {
+  const toggle = e.target.closest('.json-raw-toggle');
+  if (!toggle) return;
+  const target = document.getElementById(toggle.dataset.target);
+  if (!target) return;
+  const showing = target.style.display !== 'none';
+  target.style.display = showing ? 'none' : 'block';
+  toggle.textContent = showing ? 'Show Raw JSON' : 'Hide Raw JSON';
+});
+
+/* ─── Linkify: make URLs clickable everywhere ───
+   Markdown links come through marked as real anchors, but bare URLs in CSV
+   cells, JSON strings, code spans, and reference lists are plain text. This
+   pass walks the rendered DOM and wraps them in anchors — clickable on
+   screen, and carried into both exports (Chrome keeps link annotations when
+   printing to PDF; the Word export emits them as real hyperlinks). */
+const URL_RE = /\bhttps?:\/\/[^\s<>"')\]}]+/g;
+
+function linkifyUrls(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue || node.nodeValue.indexOf('http') === -1) return NodeFilter.FILTER_REJECT;
+      // Already inside a link — leave it alone
+      if (node.parentElement && node.parentElement.closest('a')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach(node => {
+    const text = node.nodeValue;
+    URL_RE.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    let match;
+    while ((match = URL_RE.exec(text)) !== null) {
+      // Trailing punctuation reads as sentence/markdown syntax, not URL
+      const url = match[0].replace(/[.,;:!?)\]}]+$/, '');
+      frag.appendChild(document.createTextNode(text.slice(last, match.index)));
+      const a = document.createElement('a');
+      a.href = url;
+      a.textContent = url;
+      frag.appendChild(a);
+      last = match.index + url.length;
+    }
+    if (!frag.childNodes.length) return;
+    frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+}
+
+// External links open in a new tab so the viewer (and its loaded folder) isn't lost.
+function decorateLinks(root) {
+  root.querySelectorAll('a[href^="http"]').forEach(a => {
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+}
+
+/* ─── Render a markdown, CSV, or JSON string into the content pane ─── */
+function renderDoc(text, filename, type) {
+  let cleanHtml;
+  if (type === 'csv') {
+    cleanHtml = DOMPurify.sanitize(csvToDocumentHtml(text));
+    contentEl.classList.add('wide');
+  } else if (type === 'json') {
+    let parsed;
+    let errorHtml = null;
+    try {
+      parsed = JSON.parse(text);
+    } catch (err) {
+      errorHtml = `<p><em>This file isn't valid JSON: ${escapeHtml(err.message)}</em></p>`;
+    }
+    cleanHtml = DOMPurify.sanitize(errorHtml || jsonToPlainEnglishHtml(parsed, filename));
+    contentEl.classList.add('wide');
+  } else {
+    const rawHtml = marked.parse(text);
+    cleanHtml = DOMPurify.sanitize(rawHtml, {
+      // Allow the checkbox inputs that GFM task lists produce
+      ADD_TAGS: ['input'],
+      ADD_ATTR: ['type', 'checked', 'disabled'],
+    });
+    contentEl.classList.remove('wide');
+  }
+  mdOutput.innerHTML = cleanHtml;
+  linkifyUrls(mdOutput);
+  decorateLinks(mdOutput);
+  attachTableSort(mdOutput);
+
+  // Display the filename as a label (strip extension, replace hyphens/underscores)
   filenameLabel.textContent = filename
-    .replace(/\.md$/i, '')
+    .replace(/\.(md|csv|json)$/i, '')
     .replace(/[-_]/g, ' ');
 
   emptyState.style.display = 'none';
   contentEl.classList.add('visible');
   currentFilename = filename;
+  currentFileType = type;
+  currentRawText  = text;
   btnExportPdf.style.display = 'block';
+  btnExportWord.style.display = 'block';
+  btnExportXls.style.display = type === 'csv' ? 'block' : 'none';
+}
+
+function fileTypeOf(name) {
+  if (/\.csv$/i.test(name)) return 'csv';
+  if (/\.json$/i.test(name)) return 'json';
+  return 'md';
 }
 
 /* ─── Read a File object and render it (single-file mode) ─── */
 async function loadFile(file) {
   if (!file) return;
   const text = await file.text();
-  renderMarkdown(text, file.name);
+  maybeAutoDetectBrand(file.name);
+  renderDoc(text, file.name, fileTypeOf(file.name));
   // Show the filename as a breadcrumb above the content (no path available)
   setMainBreadcrumb(file.name);
 }
@@ -1072,7 +1763,7 @@ document.addEventListener('drop', (e) => {
   e.preventDefault();
   dropOverlay.classList.remove('visible');
   const file = e.dataTransfer.files[0];
-  if (file && (file.name.endsWith('.md') || file.type === 'text/markdown')) {
+  if (file && (/\.(md|csv|json)$/i.test(file.name) || file.type === 'text/markdown' || file.type === 'text/csv' || file.type === 'application/json')) {
     loadFile(file);
     // Clear any active sidebar selection since this is a one-off drop
     document.querySelectorAll('#file-list button').forEach(b => b.classList.remove('active'));
@@ -1080,22 +1771,127 @@ document.addEventListener('drop', (e) => {
 });
 
 /* ─── Folder browsing via File System Access API ─── */
-let folderEntries = []; // Array of { name, path, handle, orderNum }
+let folderEntries    = []; // Array of { name, path, handle, orderNum, type, mtime }
+let currentIdx       = -1; // Index into folderEntries of the active file
+let currentDirHandle = null; // The open directory handle, kept so we can re-scan it in place
 
-// Recursively collect all .md files under a directory handle.
+// Recursively collect all .md/.csv/.json files under a directory handle.
 // path is the relative path from the root (empty string for root-level files).
-async function collectMdFiles(dirHandle, path) {
+async function collectDocFiles(dirHandle, path) {
   const results = [];
   for await (const [name, handle] of dirHandle.entries()) {
-    if (handle.kind === 'file' && name.endsWith('.md')) {
-      results.push({ name, path, handle, orderNum: null });
+    if (handle.kind === 'file' && /\.(md|csv|json)$/i.test(name)) {
+      let mtime = 0;
+      try { mtime = (await handle.getFile()).lastModified; } catch {}
+      results.push({ name, path, handle, orderNum: null, type: fileTypeOf(name), mtime });
     } else if (handle.kind === 'directory') {
       const subPath = path ? `${path}/${name}` : name;
-      results.push(...await collectMdFiles(handle, subPath));
+      results.push(...await collectDocFiles(handle, subPath));
     }
   }
   return results;
 }
+
+/* ─── Recency ───
+   Files modified inside this window get an accent dot + age label in the sidebar;
+   older files show nothing, keeping the list clean. */
+const RECENT_MS = 48 * 60 * 60 * 1000;
+
+function formatAge(mtime) {
+  if (!mtime) return null;
+  const age = Date.now() - mtime;
+  if (age < 0 || age >= RECENT_MS) return null;
+  const mins = Math.floor(age / 60000);
+  if (mins < 60) return mins <= 1 ? 'now' : `${mins}m`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h`;
+  return 'yesterday';
+}
+
+/* ─── "NEW since last visit" tracking ───
+   Per-folder map of when each file was last opened in this viewer. A file is
+   NEW when its mtime is later than that (or later than the folder's baseline,
+   for files never opened). The baseline is set on the folder's first-ever open
+   so a fresh folder doesn't light up entirely. Keyed by folder name — FSAPI
+   doesn't expose the parent path. */
+const VISITS_KEY = 'md-viewer-visits';
+
+function loadVisits() {
+  try { return JSON.parse(localStorage.getItem(VISITS_KEY)) || {}; } catch { return {}; }
+}
+
+let visits = loadVisits();
+let folderVisits = null; // record for the currently open folder
+
+function saveVisits() {
+  try { localStorage.setItem(VISITS_KEY, JSON.stringify(visits)); } catch {}
+}
+
+function entryKey(entry) {
+  return entry.path ? `${entry.path}/${entry.name}` : entry.name;
+}
+
+function isNewSinceLastVisit(entry) {
+  if (!folderVisits || !entry.mtime) return false;
+  const seen = folderVisits.files[entryKey(entry)];
+  return entry.mtime > (seen !== undefined ? seen : folderVisits.firstSeen);
+}
+
+function markViewed(entry) {
+  if (!folderVisits) return;
+  folderVisits.files[entryKey(entry)] = Date.now();
+  saveVisits();
+}
+
+/* ─── Sort mode: default (curated .order.json / alphabetical) vs newest-first ─── */
+let sortMode = localStorage.getItem('md-viewer-sort') === 'recent' ? 'recent' : 'default';
+
+function updateSortButton() {
+  btnSort.textContent = sortMode === 'recent' ? 'Sort: default order' : 'Sort: recent first';
+  btnSort.classList.toggle('active', sortMode === 'recent');
+}
+
+btnSort.addEventListener('click', () => {
+  sortMode = sortMode === 'recent' ? 'default' : 'recent';
+  localStorage.setItem('md-viewer-sort', sortMode);
+  updateSortButton();
+  buildFileList();
+});
+
+updateSortButton();
+
+/* ─── File-type filter: which of md/csv/json show in the sidebar ─── */
+const TYPE_FILTER_KEY = 'md-viewer-type-filter';
+let typeFilter = new Set(['md', 'csv', 'json']);
+try {
+  const savedTypes = JSON.parse(localStorage.getItem(TYPE_FILTER_KEY));
+  if (Array.isArray(savedTypes) && savedTypes.length) typeFilter = new Set(savedTypes);
+} catch {}
+
+const typeFilterEl = document.getElementById('type-filter');
+
+function updateTypeFilterButtons() {
+  typeFilterEl.querySelectorAll('button').forEach(btn => {
+    btn.classList.toggle('on', typeFilter.has(btn.dataset.type));
+  });
+}
+
+typeFilterEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const type = btn.dataset.type;
+  if (typeFilter.has(type)) {
+    if (typeFilter.size === 1) return; // never allow an empty view
+    typeFilter.delete(type);
+  } else {
+    typeFilter.add(type);
+  }
+  localStorage.setItem(TYPE_FILTER_KEY, JSON.stringify([...typeFilter]));
+  updateTypeFilterButtons();
+  buildFileList();
+});
+
+updateTypeFilterButtons();
 
 // Reads .order.json from the root of the picked directory.
 // Returns a string[] if found and valid, or null to fall back to alphabetical.
@@ -1146,17 +1942,28 @@ function applyOrder(orderedList) {
   folderEntries = [...validOrdered, ...unordered];
 }
 
-async function openFolder() {
-  if (!hasFSAPI) return;
-  let dirHandle;
-  try {
-    dirHandle = await window.showDirectoryPicker({ mode: 'read' });
-  } catch {
-    // User cancelled — do nothing
-    return;
-  }
+// Scan a directory handle and (re)build the sidebar from it. Shared by the
+// folder picker and the in-place Refresh button. On a refresh, preserveSelection
+// keeps the currently open file selected if it still exists, so re-scanning to
+// pick up a newly added file doesn't yank you away from what you were reading.
+async function loadFolder(dirHandle, { preserveSelection = false } = {}) {
+  currentDirHandle = dirHandle;
 
-  folderEntries = await collectMdFiles(dirHandle, '');
+  // Remember the open file so we can re-select it after a refresh
+  const prevKey = (preserveSelection && currentIdx >= 0 && folderEntries[currentIdx])
+    ? entryKey(folderEntries[currentIdx])
+    : null;
+
+  folderEntries = await collectDocFiles(dirHandle, '');
+  currentIdx = -1; // No active file until the (re)selection below
+  rootFolderName = dirHandle.name;
+
+  // Attach (or seed) the last-visit record for this folder
+  if (!visits[rootFolderName]) visits[rootFolderName] = { firstSeen: Date.now(), files: {} };
+  folderVisits = visits[rootFolderName];
+  saveVisits();
+
+  maybeAutoDetectBrand(rootFolderName);
 
   // Check for .order.json; apply ordered listing if present and valid
   const orderedList = await readOrderFile(dirHandle);
@@ -1181,44 +1988,81 @@ async function openFolder() {
   mainEl.classList.remove('no-sidebar');
   mainBreadcrumb.style.display = 'none';
 
-  // Auto-select first file
-  if (folderEntries.length > 0) {
-    selectEntry(0);
+  // Re-select the file that was open before the refresh if it survived;
+  // otherwise auto-select the first file that passes the type filter.
+  let target = -1;
+  if (prevKey) target = folderEntries.findIndex(e => entryKey(e) === prevKey);
+  if (target === -1 && folderEntries.length > 0) {
+    const firstVisible = folderEntries.findIndex(e => typeFilter.has(e.type));
+    target = firstVisible === -1 ? 0 : firstVisible;
   }
+  if (target !== -1) selectEntry(target);
+}
+
+async function openFolder() {
+  if (!hasFSAPI) return;
+  let dirHandle;
+  try {
+    dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+  } catch {
+    // User cancelled — do nothing
+    return;
+  }
+  await loadFolder(dirHandle);
+}
+
+// Re-scan the folder already open — no picker, no page reload. Newly added
+// files appear (flagged NEW) and the open file stays selected.
+async function refreshFolder() {
+  if (!currentDirHandle) return;
+  await loadFolder(currentDirHandle, { preserveSelection: true });
 }
 
 function buildFileList() {
   fileList.innerHTML = '';
 
-  const hasOrdered   = folderEntries.some(e => e.orderNum !== null);
-  const hasUnordered = folderEntries.some(e => e.orderNum === null);
+  // Display order: folderEntries as stored (curated/alphabetical), or a flat
+  // newest-first list in recent mode. dataset.idx always keeps the original
+  // folderEntries index so selectEntry works regardless of display order.
+  const recentSort = sortMode === 'recent';
+  const display = folderEntries
+    .map((entry, idx) => ({ entry, idx }))
+    .filter(({ entry }) => typeFilter.has(entry.type));
+  if (recentSort) display.sort((a, b) => (b.entry.mtime || 0) - (a.entry.mtime || 0));
+
+  const hasOrdered   = display.some(({ entry }) => entry.orderNum !== null);
+  const hasUnordered = display.some(({ entry }) => entry.orderNum === null);
   let separatorAdded = false;
   let currentPath    = null;
 
-  folderEntries.forEach((entry, idx) => {
-    // Insert the "other files" separator once, between the ordered and unordered sections
-    if (hasOrdered && hasUnordered && entry.orderNum === null && !separatorAdded) {
-      separatorAdded = true;
-      currentPath = null; // Reset so dir headings re-render correctly after the break
+  display.forEach(({ entry, idx }) => {
+    // Section separators and directory headings only make sense in the default
+    // order — recent mode is a flat list.
+    if (!recentSort) {
+      // Insert the "other files" separator once, between the ordered and unordered sections
+      if (hasOrdered && hasUnordered && entry.orderNum === null && !separatorAdded) {
+        separatorAdded = true;
+        currentPath = null; // Reset so dir headings re-render correctly after the break
 
-      const sepLi = document.createElement('li');
-      sepLi.className = 'other-files-sep';
-      fileList.appendChild(sepLi);
+        const sepLi = document.createElement('li');
+        sepLi.className = 'other-files-sep';
+        fileList.appendChild(sepLi);
 
-      const labelLi = document.createElement('li');
-      labelLi.className = 'other-files-label';
-      labelLi.textContent = 'Other files';
-      fileList.appendChild(labelLi);
-    }
+        const labelLi = document.createElement('li');
+        labelLi.className = 'other-files-label';
+        labelLi.textContent = 'Other files';
+        fileList.appendChild(labelLi);
+      }
 
-    // Insert a directory heading whenever the subdirectory path changes (skip root-level)
-    if (entry.path !== currentPath) {
-      currentPath = entry.path;
-      if (currentPath !== '') {
-        const label = document.createElement('li');
-        label.className = 'dir-group';
-        label.textContent = currentPath.replace(/\//g, ' › ');
-        fileList.appendChild(label);
+      // Insert a directory heading whenever the subdirectory path changes (skip root-level)
+      if (entry.path !== currentPath) {
+        currentPath = entry.path;
+        if (currentPath !== '') {
+          const label = document.createElement('li');
+          label.className = 'dir-group';
+          label.textContent = currentPath.replace(/\//g, ' › ');
+          fileList.appendChild(label);
+        }
       }
     }
 
@@ -1227,9 +2071,10 @@ function buildFileList() {
     btn.type = 'button';
     btn.role = 'option';
     btn.dataset.idx = idx; // store index so selectEntry can match by dataset rather than DOM order
+    if (idx === currentIdx) btn.classList.add('active');
 
-    // Numbered prefix for ordered entries
-    if (entry.orderNum !== null) {
+    // Numbered prefix for ordered entries (curated order only)
+    if (!recentSort && entry.orderNum !== null) {
       const numSpan = document.createElement('span');
       numSpan.className = 'file-num';
       numSpan.textContent = entry.orderNum;
@@ -1238,9 +2083,41 @@ function buildFileList() {
 
     btn.appendChild(
       document.createTextNode(
-        entry.name.replace(/\.md$/i, '').replace(/[-_]/g, ' ')
+        entry.name.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ')
       )
     );
+
+    const age   = formatAge(entry.mtime);
+    const isNew = isNewSinceLastVisit(entry);
+    if (entry.type === 'csv' || entry.type === 'json' || age || isNew) {
+      const meta = document.createElement('span');
+      meta.className = 'file-meta';
+
+      if (entry.type === 'csv' || entry.type === 'json') {
+        const tag = document.createElement('span');
+        tag.className = 'file-ext-tag';
+        tag.textContent = entry.type.toUpperCase();
+        meta.appendChild(tag);
+      }
+
+      if (isNew) {
+        const newSpan = document.createElement('span');
+        newSpan.className = 'file-new';
+        newSpan.textContent = 'NEW';
+        newSpan.title = 'Changed since you last opened it here';
+        meta.appendChild(newSpan);
+      }
+
+      if (age) {
+        const ageSpan = document.createElement('span');
+        ageSpan.className = 'file-age';
+        ageSpan.textContent = age;
+        ageSpan.title = new Date(entry.mtime).toLocaleString();
+        meta.appendChild(ageSpan);
+      }
+
+      btn.appendChild(meta);
+    }
 
     btn.addEventListener('click', () => selectEntry(idx));
     li.appendChild(btn);
@@ -1252,53 +2129,89 @@ async function selectEntry(idx) {
   const entry = folderEntries[idx];
   if (!entry) return;
 
+  currentIdx = idx;
+
   // Match active state by dataset.idx rather than DOM position (dir-group labels sit between buttons)
   document.querySelectorAll('#file-list button').forEach(btn => {
     btn.classList.toggle('active', parseInt(btn.dataset.idx, 10) === idx);
   });
 
+  maybeAutoDetectBrand(`${rootFolderName}/${entry.path}/${entry.name}`);
+
   // Read fresh from disk each time — reflects any edits the user has made since loading
   const file = await entry.handle.getFile();
+
+  // The fresh read also refreshes this file's recency indicator, and opening
+  // the file clears its NEW marker
+  const mtimeChanged = file.lastModified !== entry.mtime;
+  const wasNew = isNewSinceLastVisit(entry) || (mtimeChanged && file.lastModified > entry.mtime);
+  entry.mtime = file.lastModified;
+  markViewed(entry);
+  if (mtimeChanged || wasNew) buildFileList();
+
   const text = await file.text();
-  renderMarkdown(text, entry.name);
+  renderDoc(text, entry.name, entry.type);
 }
 
 /* ─── Folder open buttons ─── */
 btnOpenFolder.addEventListener('click', openFolder);
 btnFolder.addEventListener('click', openFolder);
+btnRefresh.addEventListener('click', refreshFolder);
 
 /* ─── Export PDF ─── */
 btnExportPdf.addEventListener('click', printAsPdf);
 
 function printAsPdf() {
-  // Swap document.title so Chrome uses the md filename as the suggested PDF save name.
+  // Swap document.title so Chrome uses the file's name as the suggested PDF save name.
   const originalTitle = document.title;
-  document.title = currentFilename.replace(/\.md$/i, '').replace(/[-_]/g, ' ');
+  document.title = currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+
+  const brand = document.documentElement.getAttribute('data-brand') || 'mss';
+  const printHeaderMime = PRINT_HEADER_LOGO[brand].mime;
+  const printHeaderSvgB64 = PRINT_HEADER_LOGO[brand].b64;
+  const headerRuleColor = brand === 'fsc' ? '#1A6FE8' : '#BF6B47';
+  const footerColor = brand === 'fsc' ? 'rgba(13,27,46,0.55)' : 'rgba(28,23,18,0.5)';
+  const footerFont = brand === 'fsc' ? "'Barlow Condensed', Arial, sans-serif" : "'Plus Jakarta Sans', sans-serif";
 
   const escaped = currentFilename
     .replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"');
+
   const styleEl = document.createElement('style');
   styleEl.id = 'print-footer-style';
   styleEl.textContent =
     '@page {' +
+    (currentFileType === 'csv' ? ' size: A4 landscape; margin: 1.5cm 1.8cm;' : '') +
+    '  @top-left {' +
+    '    content: url("data:' + printHeaderMime + ';base64,' + printHeaderSvgB64 + '");' +
+    '    vertical-align: middle;' +
+    '    border-bottom: 1px solid ' + headerRuleColor + ';' +
+    '    padding-bottom: 5pt;' +
+    '  }' +
+    '  @top-center { content: ""; border-bottom: 1px solid ' + headerRuleColor + '; padding-bottom: 5pt; }' +
+    '  @top-right  { content: ""; border-bottom: 1px solid ' + headerRuleColor + '; padding-bottom: 5pt; }' +
+    '  @top-left-corner    { content: ""; }' +
+    '  @top-right-corner   { content: ""; }' +
+    '  @bottom-center      { content: ""; }' +
+    '  @bottom-left-corner { content: ""; }' +
+    '  @bottom-right-corner { content: ""; }' +
     '  @bottom-left {' +
     '    content: "' + escaped + '";' +
-    '    font-family: "Plus Jakarta Sans", sans-serif;' +
+    '    font-family: ' + footerFont + ';' +
     '    font-weight: 300;' +
     '    font-size: 8pt;' +
-    '    color: rgba(28,23,18,0.5);' +
-    '    border-top: 0.5px solid #BF6B47;' +
+    '    color: ' + footerColor + ';' +
+    '    border-top: 0.5px solid ' + headerRuleColor + ';' +
     '    padding-top: 4pt;' +
     '    vertical-align: top;' +
     '  }' +
     '  @bottom-right {' +
     '    content: "Page " counter(page);' +
-    '    font-family: "Plus Jakarta Sans", sans-serif;' +
+    '    font-family: ' + footerFont + ';' +
     '    font-weight: 300;' +
     '    font-size: 8pt;' +
-    '    color: rgba(28,23,18,0.5);' +
-    '    border-top: 0.5px solid #BF6B47;' +
+    '    color: ' + footerColor + ';' +
+    '    border-top: 0.5px solid ' + headerRuleColor + ';' +
     '    padding-top: 4pt;' +
     '    vertical-align: top;' +
     '  }' +
@@ -1311,6 +2224,415 @@ function printAsPdf() {
     if (s) s.remove();
     window.removeEventListener('afterprint', cleanup);
   });
+}
+
+/* ─── Export Word (.docx) ───
+   Client-side, via docx.js: the rendered #md-output DOM is walked and rebuilt
+   as real OOXML — native Word tables with brand shading and borders, real
+   hyperlinks, a letterhead, and a footer with page numbers. Styling survives
+   in Word (Mac and Windows), Pages, and Google Docs alike, unlike the old
+   html-docx-js route which embedded raw HTML most openers rendered plain. */
+function brandVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+// Word's HTML/MHTML importer doesn't reliably render rgba()/hsla() colors —
+// borders and fills defined that way (our --print-border, --tint-* vars) end up
+// invisible in the exported .docx even though they render fine on screen/PDF.
+// Composite the colour onto a white page via canvas and read back a solid hex
+// value, so every colour Word receives is a plain #RRGGBBB it can't misread.
+function resolveColorOnWhite(cssColor) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1;
+  canvas.height = 1;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, 1, 1);
+  ctx.fillStyle = cssColor;
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+  return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+
+function hexToRgbaString(hex, alpha) {
+  const clean = hex.replace('#', '');
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+const DOCX_MONO_FONT = 'Courier New';
+
+function firstFontFamily(stack) {
+  return stack.split(',')[0].replace(/['"]/g, '').trim();
+}
+
+function docxHex(cssColor) {
+  return resolveColorOnWhite(cssColor).replace('#', '');
+}
+
+// Brand palette + fonts resolved once per export. Word wants solid RRGGBB
+// values, so every token (including the rgba() border/tint vars) is
+// composited onto white first.
+function docxTheme() {
+  const brand = document.documentElement.getAttribute('data-brand') || 'mss';
+  return {
+    brand,
+    headingFont: firstFontFamily(brandVar('--heading-font')),
+    headingCaps: brandVar('--heading-transform') === 'uppercase',
+    bodyFont: firstFontFamily(brandVar('--body-font')),
+    text: docxHex(brandVar('--print-text')),
+    accent: docxHex(brandVar('--print-accent')),
+    thBg: docxHex(brandVar('--header-bg')),   // header row = the brand's header bar
+    thText: docxHex(brandVar('--header-text')),
+    codeBg: docxHex(brandVar('--print-code-bg')),
+    quoteBg: docxHex(brandVar('--print-quote-bg')),
+    border: docxHex(brandVar('--print-border')),
+    borderSoft: docxHex(brandVar('--print-border-soft')),
+    zebra: docxHex(hexToRgbaString(brandVar('--print-accent'), 0.07)),
+    muted: docxHex(brand === 'fsc' ? 'rgba(13,27,46,0.55)' : 'rgba(28,23,18,0.5)'),
+  };
+}
+
+// Inline content (text, strong/em/del, code spans, links, checkboxes) → runs.
+// style carries the inherited formatting down the tree.
+function docxInlineRuns(node, theme, style) {
+  const out = [];
+  node.childNodes.forEach(child => {
+    if (child.nodeType === Node.TEXT_NODE) {
+      const text = child.nodeValue.replace(/\s+/g, ' ');
+      if (!text) return;
+      out.push(new docx.TextRun({
+        text,
+        bold: style.bold,
+        italics: style.italics,
+        strike: style.strike,
+        font: style.code ? DOCX_MONO_FONT : style.font,
+        size: style.size,
+        color: style.color,
+        allCaps: style.allCaps,
+        shading: style.code ? { type: docx.ShadingType.CLEAR, fill: theme.codeBg } : undefined,
+        underline: style.underline ? {} : undefined,
+      }));
+      return;
+    }
+    if (child.nodeType !== Node.ELEMENT_NODE) return;
+    const tag = child.tagName;
+    if (tag === 'BR') { out.push(new docx.TextRun({ text: '', break: 1 })); return; }
+    if (tag === 'IMG') return;
+    if (tag === 'INPUT') { out.push(new docx.TextRun({ text: child.checked ? '☑ ' : '☐ ' })); return; }
+    if (tag === 'A') {
+      const href = child.getAttribute('href') || '';
+      if (/^https?:/i.test(href)) {
+        out.push(new docx.ExternalHyperlink({
+          link: href,
+          children: docxInlineRuns(child, theme, { ...style, color: theme.accent, underline: true }),
+        }));
+      } else {
+        out.push(...docxInlineRuns(child, theme, style));
+      }
+      return;
+    }
+    const next = { ...style };
+    if (tag === 'STRONG' || tag === 'B') next.bold = true;
+    else if (tag === 'EM' || tag === 'I') next.italics = true;
+    else if (tag === 'DEL' || tag === 'S') next.strike = true;
+    else if (tag === 'CODE') { next.code = true; next.color = theme.accent; }
+    out.push(...docxInlineRuns(child, theme, next));
+  });
+  return out;
+}
+
+function docxCellBorders(color) {
+  const line = { style: docx.BorderStyle.SINGLE, size: 4, color };
+  return { top: line, bottom: line, left: line, right: line };
+}
+
+function docxTable(tableEl, theme) {
+  const rows = [];
+  tableEl.querySelectorAll(':scope > thead > tr').forEach(tr => {
+    rows.push(new docx.TableRow({
+      tableHeader: true,
+      children: Array.from(tr.children).map(th => new docx.TableCell({
+        shading: { type: docx.ShadingType.CLEAR, fill: theme.thBg },
+        borders: docxCellBorders(theme.border),
+        margins: { top: 90, bottom: 90, left: 110, right: 110 },
+        children: [new docx.Paragraph({
+          children: docxInlineRuns(th, theme, { bold: true, color: theme.thText, size: 19 }),
+        })],
+      })),
+    }));
+  });
+  tableEl.querySelectorAll(':scope > tbody > tr').forEach((tr, i) => {
+    rows.push(new docx.TableRow({
+      children: Array.from(tr.children).map(td => new docx.TableCell({
+        shading: i % 2 === 1 ? { type: docx.ShadingType.CLEAR, fill: theme.zebra } : undefined,
+        borders: docxCellBorders(theme.borderSoft),
+        margins: { top: 70, bottom: 70, left: 110, right: 110 },
+        children: [new docx.Paragraph({
+          children: docxInlineRuns(td, theme, { size: 19 }),
+        })],
+      })),
+    }));
+  });
+  return new docx.Table({
+    width: { size: 100, type: docx.WidthType.PERCENTAGE },
+    rows,
+  });
+}
+
+// Nested lists: each li becomes a bullet/numbered paragraph, sub-lists recurse
+// a level deeper. Each ol gets its own numbering instance so counts restart.
+function docxList(listEl, theme, ctx, level) {
+  const out = [];
+  const ordered = listEl.tagName === 'OL';
+  const instance = ordered ? ctx.olInstance++ : 0;
+  listEl.querySelectorAll(':scope > li').forEach(li => {
+    const nested = Array.from(li.querySelectorAll(':scope > ul, :scope > ol'));
+    const inlineOnly = li.cloneNode(true);
+    inlineOnly.querySelectorAll(':scope > ul, :scope > ol').forEach(n => n.remove());
+    out.push(new docx.Paragraph({
+      children: docxInlineRuns(inlineOnly, theme, {}),
+      spacing: { after: 80 },
+      ...(ordered
+        ? { numbering: { reference: 'md-ol', level: Math.min(level, 2), instance } }
+        : { bullet: { level: Math.min(level, 2) } }),
+    }));
+    nested.forEach(n => out.push(...docxList(n, theme, ctx, level + 1)));
+  });
+  return out;
+}
+
+const DOCX_HEADING_SIZES = { H1: 52, H2: 36, H3: 28 };
+
+function docxBlock(el, theme, ctx) {
+  const tag = el.tagName;
+
+  if (tag === 'H1' || tag === 'H2' || tag === 'H3') {
+    return [new docx.Paragraph({
+      children: docxInlineRuns(el, theme, {
+        size: DOCX_HEADING_SIZES[tag],
+        font: theme.headingFont,
+        allCaps: theme.headingCaps,
+      }),
+      spacing: { before: tag === 'H1' ? 0 : 280, after: tag === 'H1' ? 240 : 140 },
+      ...(tag === 'H2' ? { border: { bottom: { style: docx.BorderStyle.SINGLE, size: 6, color: theme.accent, space: 4 } } } : {}),
+    })];
+  }
+
+  if (tag === 'H4' || tag === 'H5') {
+    return [new docx.Paragraph({
+      children: docxInlineRuns(el, theme, { bold: true, size: 20, color: theme.accent, allCaps: true }),
+      spacing: { before: 200, after: 100 },
+    })];
+  }
+
+  if (tag === 'H6') {
+    return [new docx.Paragraph({
+      children: docxInlineRuns(el, theme, { size: 20, color: theme.muted }),
+      spacing: { before: 160, after: 100 },
+    })];
+  }
+
+  if (tag === 'P') {
+    const note = el.classList.contains('csv-group-note');
+    return [new docx.Paragraph({
+      children: docxInlineRuns(el, theme, note ? { italics: true, size: 18, color: theme.muted } : {}),
+      spacing: { after: 200 },
+    })];
+  }
+
+  if (tag === 'UL' || tag === 'OL') {
+    return [...docxList(el, theme, ctx, 0), new docx.Paragraph({ children: [], spacing: { after: 60 } })];
+  }
+
+  if (tag === 'TABLE') {
+    return [docxTable(el, theme), new docx.Paragraph({ children: [], spacing: { after: 120 } })];
+  }
+
+  if (tag === 'BLOCKQUOTE') {
+    const parts = el.children.length ? Array.from(el.children) : [el];
+    return parts.map(p => new docx.Paragraph({
+      children: docxInlineRuns(p, theme, { italics: true }),
+      shading: { type: docx.ShadingType.CLEAR, fill: theme.quoteBg },
+      border: { left: { style: docx.BorderStyle.SINGLE, size: 24, color: theme.accent, space: 8 } },
+      indent: { left: 240 },
+      spacing: { after: 200 },
+    }));
+  }
+
+  if (tag === 'PRE') {
+    const lines = el.textContent.replace(/\n+$/, '').split('\n');
+    const box = { style: docx.BorderStyle.SINGLE, size: 4, color: theme.borderSoft, space: 6 };
+    return [new docx.Paragraph({
+      children: lines.map((line, i) => new docx.TextRun({
+        text: line || ' ',
+        font: DOCX_MONO_FONT,
+        size: 18,
+        break: i > 0 ? 1 : undefined,
+      })),
+      shading: { type: docx.ShadingType.CLEAR, fill: theme.codeBg },
+      border: { top: box, bottom: box, left: box, right: box },
+      spacing: { after: 200 },
+    })];
+  }
+
+  if (tag === 'HR') {
+    return [new docx.Paragraph({
+      children: [],
+      border: { bottom: { style: docx.BorderStyle.SINGLE, size: 6, color: theme.borderSoft } },
+      spacing: { after: 240 },
+    })];
+  }
+
+  // Wrappers (.csv-table-wrap and anything else) — recurse into children
+  return docxBlocks(el, theme, ctx);
+}
+
+function docxBlocks(container, theme, ctx) {
+  const out = [];
+  container.childNodes.forEach(node => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      out.push(...docxBlock(node, theme, ctx));
+    } else if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim()) {
+      out.push(new docx.Paragraph({
+        children: [new docx.TextRun({ text: node.nodeValue.trim() })],
+        spacing: { after: 200 },
+      }));
+    }
+  });
+  return out;
+}
+
+// Letterhead logo, as PNG bytes: the FSC asset is already a PNG; the MSS SVG
+// wordmark is rasterised through a canvas (Word can't place SVG reliably).
+async function docxLogoRun(brand) {
+  const { mime, b64 } = PRINT_HEADER_LOGO[brand];
+  const img = new Image();
+  img.src = 'data:' + mime + ';base64,' + b64;
+  await img.decode();
+  let data;
+  if (mime === 'image/png') {
+    data = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  } else {
+    const scale = 4;
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth * scale;
+    canvas.height = img.naturalHeight * scale;
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    data = new Uint8Array(await blob.arrayBuffer());
+  }
+  return new docx.ImageRun({
+    data,
+    transformation: {
+      width: Math.round(img.naturalWidth * 0.9),
+      height: Math.round(img.naturalHeight * 0.9),
+    },
+  });
+}
+
+btnExportWord.addEventListener('click', () => {
+  exportWord().catch(err => {
+    console.error(err);
+    alert('Word export failed: ' + err.message);
+  });
+});
+
+async function exportWord() {
+  const theme = docxTheme();
+  const title = currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+
+  // Work on a clone with the screen-only chrome stripped
+  const clone = mdOutput.cloneNode(true);
+  clone.querySelectorAll('.json-raw-toggle, .json-raw, .sort-arrow').forEach(el => el.remove());
+
+  const ctx = { olInstance: 1 };
+  const children = [
+    new docx.Paragraph({
+      children: [await docxLogoRun(theme.brand)],
+      border: { bottom: { style: docx.BorderStyle.SINGLE, size: 12, color: theme.accent, space: 6 } },
+      spacing: { after: 360 },
+    }),
+    ...docxBlocks(clone, theme, ctx),
+  ];
+
+  // CSVs export landscape, same as the PDF path
+  const landscape = currentFileType === 'csv';
+
+  const doc = new docx.Document({
+    title,
+    styles: {
+      default: {
+        document: { run: { font: theme.bodyFont, size: 21, color: theme.text } },
+      },
+    },
+    numbering: {
+      config: [{
+        reference: 'md-ol',
+        levels: [0, 1, 2].map(level => ({
+          level,
+          format: docx.LevelFormat.DECIMAL,
+          text: '%' + (level + 1) + '.',
+          alignment: docx.AlignmentType.START,
+          style: { paragraph: { indent: { left: 720 * (level + 1), hanging: 360 } } },
+        })),
+      }],
+    },
+    sections: [{
+      properties: {
+        page: {
+          ...(landscape ? { size: { orientation: docx.PageOrientation.LANDSCAPE } } : {}),
+          margin: landscape
+            ? { top: 850, bottom: 850, left: 1020, right: 1020 }
+            : { top: 1134, bottom: 1134, left: 1417, right: 1417 },
+        },
+      },
+      footers: {
+        default: new docx.Footer({
+          children: [new docx.Paragraph({
+            alignment: docx.AlignmentType.RIGHT,
+            border: { top: { style: docx.BorderStyle.SINGLE, size: 4, color: theme.accent, space: 4 } },
+            children: [
+              new docx.TextRun({ text: currentFilename + '   ·   ', size: 16, color: theme.muted }),
+              new docx.TextRun({ children: ['Page ', docx.PageNumber.CURRENT], size: 16, color: theme.muted }),
+            ],
+          })],
+        }),
+      },
+      children,
+    }],
+  });
+
+  const blob = await docx.Packer.toBlob(doc);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = title.trim().replace(/\s+/g, '-').toLowerCase() + '.docx';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+/* ─── Export XLS (CSV only) ─── */
+btnExportXls.addEventListener('click', () => {
+  try {
+    exportXls();
+  } catch (err) {
+    console.error(err);
+    alert('Excel export failed: ' + err.message);
+  }
+});
+
+function exportXls() {
+  const title = currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+  const rows = parseCSV(currentRawText);
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, title.trim().replace(/\s+/g, '-').toLowerCase() + '.xlsx');
 }
 </script>
 </body>

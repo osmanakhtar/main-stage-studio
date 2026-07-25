@@ -1,0 +1,36 @@
+{
+  "client": "vera",
+  "name": "Vera Aesthetics",
+  "location": "United Kingdom (demonstration clinic)",
+  "timezone": "Europe/London",
+  "cadenceDays": 2,
+  "postTimeLocal": "18:00",
+  "postTimeStatus": "POC default — Mon/Wed/Fri/Sun campaign cadence",
+  "platforms": ["instagram"],
+  "bookingUrl": null,
+  "reviewEngagement": "vera-content",
+  "meta": {
+    "pageId": null,
+    "igUserId": null,
+    "note": "DEMONSTRATION brand — runs on an MSS-owned reference IG account. Manual publish only for the POC; Meta auto-publish is deferred to Phase 2."
+  },
+  "assetBaseUrl": null,
+  "demonstration": true,
+  "demonstrationNote": "Vera Aesthetics is a fictional clinic built by Main Stage Studio to prove the content engine end to end. It is not a real business and takes no patients. Every public surface labels it as an MSS demonstration. All results imagery is illustrative, never fabricated real patients.",
+  "branding": {
+    "logo": "assets/vera-mark-light.png",
+    "position": "bottom-right",
+    "widthPct": 14,
+    "opacity": 0.95,
+    "defaultOn": true,
+    "note": "Bone leaf mark (light raster) for the logo bug on photo/still slides — those carry a navy scrim, so the bone version reads. On the navy/bone/gold card text slides the mark is already part of the template footer. ffmpeg has no SVG decoder, so the overlay must use the PNG raster (assets/vera-mark.png is the navy variant for light backgrounds; assets/vera-mark.svg is the editable source)."
+  },
+  "topicLabel": "Service",
+  "treatments": [
+    { "id": "wrinkle-softening", "name": "Wrinkle-softening treatment", "hero": false, "pomSensitive": true },
+    { "id": "dermal-filler", "name": "Dermal filler", "hero": false, "pomSensitive": false },
+    { "id": "skin-health", "name": "Skin health (boosters, polynucleotides)", "hero": true, "pomSensitive": false },
+    { "id": "skincare-facials", "name": "Medical-grade skincare & facials", "hero": false, "pomSensitive": false },
+    { "id": "consultation", "name": "Consultation-led planning", "hero": true, "pomSensitive": false }
+  ]
+}

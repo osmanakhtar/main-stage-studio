@@ -1,0 +1,67 @@
+{
+  "id": "vera-render-check",
+  "date": "2026-07-27",
+  "time": "18:00",
+  "timezone": "Europe/London",
+  "pillar": "education",
+  "format": "carousel",
+  "brandOverlay": true,
+  "platforms": [
+    "instagram"
+  ],
+  "state": "drafted",
+  "assets": [
+    {
+      "type": "text",
+      "kicker": "Myth",
+      "headline": "Will it make you look frozen?",
+      "body": "The question everyone asks, and no one answers honestly."
+    },
+    {
+      "type": "text",
+      "template": {
+        "id": "quote-card"
+      },
+      "headline": "A prescriber who never says no isn t being generous.",
+      "kicker": "Vera, nurse prescriber"
+    },
+    {
+      "type": "text",
+      "template": {
+        "id": "stat-card"
+      },
+      "numeral": "01",
+      "kicker": "Ask this first",
+      "headline": "Is the injector a prescriber?",
+      "body": "If they cannot prescribe, they cannot manage what goes wrong."
+    },
+    {
+      "type": "text",
+      "template": {
+        "id": "cta-close"
+      },
+      "headline": "Consultations are open.",
+      "body": "No pressure, ever."
+    },
+    {
+      "type": "still",
+      "file": "content/assets/stills/experience-laser-room-4x5.webp",
+      "template": {
+        "id": "hook-cover"
+      },
+      "headline": "Inside the clinic",
+      "kicker": "No rush. No pressure."
+    },
+    {
+      "type": "still",
+      "file": "content/assets/stills/results-skin-neck-4x5.webp",
+      "headline": "Your skin, better rested"
+    }
+  ],
+  "reviewNote": "",
+  "platformPostIds": {},
+  "created": "2026-07-24T13:58:29.873Z",
+  "updated": "2026-07-24T14:41:02.872Z",
+  "fixture": true,
+  "fixtureNote": "NOT a real campaign post. A render-check fixture: one slide per template the Vera campaign needs, used to verify theme/font/template fidelity. Evidence: ../../../vera-studio-render-check.png"
+}
