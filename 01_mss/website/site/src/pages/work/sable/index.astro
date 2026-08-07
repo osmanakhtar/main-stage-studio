@@ -13,7 +13,6 @@ import atmospheric      from '../../../assets/sable-atmospheric.png';
 import portraitClosed   from '../../../assets/sable-portrait-eyes-closed-01.png';
 import studioMic        from '../../../assets/sable-studio-mic-01.png';
 import heroArrival      from '../../../assets/sable-hero-arrival-01.png';
-import homepageOne      from '../../../assets/sable-homepage-image-01.png';
 import homepageTwo      from '../../../assets/sable-homepage-image-02.png';
 import albumCover       from '../../../assets/sable-album-cover-01.png';
 import fullBodySeated   from '../../../assets/sable-full-body-seated-01.png';
@@ -75,7 +74,11 @@ const palette = [
   <meta property="og:title" content="Sable, a case study | Main Stage Studio">
   <meta property="og:description" content="Some artists know exactly who they are. They just haven't found the form yet. A self-initiated brand identity and web build.">
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-400-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-300-latin.woff2" crossorigin>
@@ -493,29 +496,54 @@ const palette = [
     }
     .js-anim .insight-line.visible { opacity: 1; clip-path: inset(0 0% 0 0); }
 
-    /* Same trick as .clip-frame, doubled: each item is 4/5, so the item
-       width that lands on the cap is cap * 0.8, and the pair needs two of
-       those plus the gap. Keeps both portraits at their true ratio rather
-       than squashing them towards landscape. */
-    .image-pair {
+    /* ── s03/s04: text left, portraits stacked right ─────────────
+       "The challenge" and "the discovery" used to be two full-width
+       stacked sections, each carrying its own --section-pad-y top and
+       bottom, with the portrait pair sitting *below* the discovery copy.
+       That's three screens of scroll for two paragraphs' worth of read.
+       Putting the portraits in a sticky right column against a single,
+       tightened text column gets both sections into one viewport-ish
+       span and gives the ember wash something to actually hold. */
+    .s03-04-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(16px, 2vw, 28px);
-      margin-top: clamp(40px, 6vh, 72px);
-      max-width: min(100%, var(--media-w), calc(var(--media-max-h) * 1.6 + clamp(16px, 2vw, 28px)));
-      margin-inline: 0;
+      grid-template-columns: minmax(0, 1.35fr) minmax(240px, 400px);
+      gap: clamp(40px, 5vw, 88px);
+      align-items: start;
     }
-    /* 4:5 rather than 3:4. Two 3:4 portraits side by side make a very tall
-       block, and the crop was already fighting it (see object-position
-       below). 4:5 keeps the portrait feel and gives back about 60px. */
-    .image-pair-item { aspect-ratio: 4 / 5; overflow: hidden; }
+    /* The two sections used to each carry --section-pad-y top and bottom,
+       which is where most of the empty space between "the challenge" and
+       "the discovery" came from. A flat, uniform gap between paragraphs
+       and between the two sections reads as one continuous piece. */
+    .s03-04-text section + section { margin-top: clamp(32px, 4vh, 48px); }
+    .s03-04-text .body-copy { margin-bottom: 20px; }
+    .s03-04-text .insight-line { margin: clamp(32px, 4vh, 48px) 0 0; }
+
+    .s03-04-portraits {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 1.6vw, 22px);
+      position: sticky;
+      top: calc(var(--nav-height) + clamp(24px, 4vh, 48px));
+    }
+    /* 4:5 rather than 3:4: keeps the portrait feel without squashing
+       either shot towards landscape when stacked in a narrower column. */
+    .portrait-stack-item { aspect-ratio: 4 / 5; overflow: hidden; }
     /* Both sources are full-length portraits and a centred 3:4 crop takes the
        top of the head off each of them. The section is about how she holds
        herself in front of a camera, so the face has to survive the crop. */
-    .image-pair-item img {
+    .portrait-stack-item img {
       width: 100%; height: 100%;
       object-fit: cover; object-position: center 22%;
       display: block;
+    }
+    @media (max-width: 899px) {
+      .s03-04-grid { grid-template-columns: 1fr; }
+      .s03-04-portraits {
+        position: static;
+        flex-direction: row;
+        margin-top: clamp(32px, 5vh, 48px);
+      }
+      .portrait-stack-item { aspect-ratio: 4 / 3; flex: 1; }
     }
 
     /* ── Clip frame ──────────────────────────────────────────────
@@ -883,8 +911,6 @@ const palette = [
       #s02-image { order: -1; margin-bottom: 32px; max-height: 65vh; }
       #s02-image img { height: 100%; object-fit: cover; }
       #s07-image { min-height: 60vw; order: -1; margin-bottom: 32px; }
-      .image-pair { grid-template-columns: 1fr; gap: clamp(16px, 4vw, 24px); }
-      .image-pair-item { aspect-ratio: 4 / 3; }
     }
 
     /* ── Reduced motion ──────────────────────────────────────────
@@ -992,86 +1018,95 @@ const palette = [
          These two are a single .dark-section, not two. The background
          spans both, so if each section carried its own .dark-overlay
          the shared image would be uncovered in two independent halves
-         with a seam at the boundary. One block, one overlay, one fade. -->
+         with a seam at the boundary. One block, one overlay, one fade.
+
+         Text and portraits run side by side rather than stacked: the
+         copy for both "the challenge" and "the discovery" sits in one
+         left column, and the two portraits stand vertically in a right
+         column over the ember wash, sticky so they hold position while
+         the (now much shorter) copy column scrolls past them. -->
     <div id="s03-04" class="dark-section on-dark">
       <div class="ember-column" style={`background-image:url(${emberBg.src});`} aria-hidden="true"></div>
       <div class="dark-overlay"></div>
 
-      <!-- ── 03 The challenge ───────────────────────────────────── -->
-      <section id="s03">
-        <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
-          <p class="section-label">the challenge</p>
-          <p class="body-copy reveal">
-            The brief on the surface: build a digital presence for an emerging artist.
-          </p>
-          <p class="body-copy reveal rd1">
-            <span class="challenge-accent">The real brief:</span> find a visual and verbal language as distinctive as she is. Something that could hold the contradiction at the centre of her work. Vulnerable in the music. Guarded in the world. Soulful in sound. Fierce in person.
-          </p>
-          <p class="body-copy reveal rd2">
-            We didn't pick a lane. We built something that lives in the contradiction.
-          </p>
+      <div class="section-inner s03-04-grid" style="padding: var(--section-pad-y) var(--pad-x) clamp(48px, 6vh, 72px);">
+        <div class="s03-04-text">
+
+          <!-- ── 03 The challenge ───────────────────────────────── -->
+          <section id="s03">
+            <p class="section-label">the challenge</p>
+            <p class="body-copy reveal">
+              The brief on the surface: build a digital presence for an emerging artist.
+            </p>
+            <p class="body-copy reveal rd1">
+              <span class="challenge-accent">The real brief:</span> find a visual and verbal language as distinctive as she is. Something that could hold the contradiction at the centre of her work. Vulnerable in the music. Guarded in the world. Soulful in sound. Fierce in person.
+            </p>
+            <p class="body-copy reveal rd2">
+              We didn't pick a lane. We built something that lives in the contradiction.
+            </p>
+          </section>
+
+          <!-- ── 04 The discovery ───────────────────────────────── -->
+          <section id="s04">
+            <p class="section-label">the discovery</p>
+
+            <p class="body-copy reveal">We started with the images.</p>
+            <p class="body-copy reveal rd1">
+              Not mood boards or references. The actual character. The way she holds herself in front of a camera. Eyes closed in the portrait shots, completely present in herself. Direct and commanding in performance, mic in hand, walking toward a crowd on a wooden floor that becomes a stage.
+            </p>
+            <p class="body-copy reveal rd2">
+              Two completely different registers. The same person in both.
+            </p>
+            <p class="body-copy reveal">
+              That's where the identity came from. Not from a genre. Not from a scene. From the specific tension between who she is when the world is watching and who she is when the music takes over.
+            </p>
+
+            <p class="insight-line" id="insight-line">
+              The creative insight: soft and sharp. Soul and grit.<br>
+              She holds both, and she doesn't resolve the contradiction for you.
+            </p>
+          </section>
+
         </div>
-      </section>
 
-
-      <!-- ── 04 The discovery ───────────────────────────────────── -->
-      <section id="s04">
-        <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
-          <p class="section-label">the discovery</p>
-
-          <p class="body-copy reveal">We started with the images.</p>
-          <p class="body-copy reveal rd1">
-            Not mood boards or references. The actual character. The way she holds herself in front of a camera. Eyes closed in the portrait shots, completely present in herself. Direct and commanding in performance, mic in hand, walking toward a crowd on a wooden floor that becomes a stage.
-          </p>
-          <p class="body-copy reveal rd2">
-            Two completely different registers. The same person in both.
-          </p>
-          <p class="body-copy reveal">
-            That's where the identity came from. Not from a genre. Not from a scene. From the specific tension between who she is when the world is watching and who she is when the music takes over.
-          </p>
-
-          <p class="insight-line" id="insight-line">
-            The creative insight: soft and sharp. Soul and grit.<br>
-            She holds both, and she doesn't resolve the contradiction for you.
-          </p>
-
-          <div class="image-pair reveal">
-            <div class="image-pair-item">
-              <Image src={studioMic}
-                     alt="Sable in the studio, mic in hand"
-                     class="reveal-img"
-                     width={686}
-                     widths={[350, 686, 1372]}
-                     sizes="(min-width: 1560px) 686px, (min-width: 768px) 45vw, 100vw"
-                     format="webp"
-                     quality={76}
-                     loading="lazy"
-                     decoding="async" />
-            </div>
-            <div class="image-pair-item">
-              <Image src={heroArrival}
-                     alt="Sable in warm low light, eyes closed, jewellery catching the only source in the room"
-                     class="reveal-img"
-                     width={686}
-                     widths={[350, 686, 768]}
-                     sizes="(min-width: 1560px) 686px, (min-width: 768px) 45vw, 100vw"
-                     format="webp"
-                     quality={76}
-                     loading="lazy"
-                     decoding="async" />
-            </div>
+        <div class="s03-04-portraits reveal">
+          <div class="portrait-stack-item">
+            <Image src={studioMic}
+                   alt="Sable in the studio, mic in hand"
+                   class="reveal-img"
+                   width={560}
+                   widths={[350, 560, 1120]}
+                   sizes="(min-width: 900px) 32vw, 100vw"
+                   format="webp"
+                   quality={76}
+                   loading="lazy"
+                   decoding="async" />
+          </div>
+          <div class="portrait-stack-item">
+            <Image src={heroArrival}
+                   alt="Sable in warm low light, eyes closed, jewellery catching the only source in the room"
+                   class="reveal-img"
+                   width={560}
+                   widths={[350, 560, 768]}
+                   sizes="(min-width: 900px) 32vw, 100vw"
+                   format="webp"
+                   quality={76}
+                   loading="lazy"
+                   decoding="async" />
           </div>
         </div>
-      </section>
+      </div>
     </div>
 
 
     <!-- ── 04b The hero ─────────────────────────────────────────
          This section argues that the hero film is the case for the whole
-         identity, and the standalone version then showed a still of it.
-         The film is here now, click-to-play, with the homepage below it. -->
+         identity. It used to show that argument twice: the playable film,
+         then a static screenshot of the same film sitting on the homepage
+         underneath it. One visual carries both ideas now, the film is
+         where it lands, so the screenshot and its caption are gone. -->
     <section id="s04b" class="on-dark" style="background:var(--near-black);">
-     <div class="shell" style="padding: var(--section-pad-y) var(--pad-x);">
+     <div class="shell" style="padding: clamp(48px, 6vh, 72px) var(--pad-x) var(--section-pad-y);">
       <p class="section-label">the hero</p>
 
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(32px,5vw,80px); align-items:start; margin-bottom: clamp(48px,7vh,80px);">
@@ -1090,7 +1125,7 @@ const palette = [
         </div>
       </div>
 
-      <figure class="reveal rd1 frame-inset" style="margin:0 0 clamp(32px,5vh,56px);">
+      <figure class="reveal rd1 frame-inset" style="margin:0;">
         <div class="clip-frame">
           <video poster="/assets/sable-hero.webp"
                  preload="none"
@@ -1109,21 +1144,7 @@ const palette = [
             </span>
           </button>
         </div>
-        <figcaption class="shot-cap">The hero film, as it runs on the site</figcaption>
-      </figure>
-
-      <figure class="reveal rd2 frame-inset" style="margin:0; overflow:hidden;">
-        <Image src={homepageOne}
-               alt="The Sable homepage: the wordmark set lowercase over the hero film"
-               class="reveal-img"
-               width={1120}
-               widths={[560, 1120, 1920]}
-               sizes="(min-width: 1280px) 1120px, 100vw"
-               format="webp"
-               quality={78}
-               loading="lazy"
-               decoding="async" />
-        <figcaption class="shot-cap">The arrival, where the film lands</figcaption>
+        <figcaption class="shot-cap">The hero film, as it runs on the site: where the arrival lands</figcaption>
       </figure>
      </div>
     </section>
