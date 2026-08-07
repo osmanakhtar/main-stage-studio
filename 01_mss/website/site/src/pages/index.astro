@@ -1,23 +1,88 @@
 ---
+import { Image, getImage } from 'astro:assets';
 import '../styles/global.css';
+
+// Imported from src/assets (not public/) so Astro can re-encode to WebP, emit a
+// responsive srcset, and stamp intrinsic dimensions. Source files were 5.4MB,
+// 3.6MB and 2.2MB PNGs being displayed at ~450px wide.
+import puremedThumb from '../assets/puremed-hero-consultation.webp';
+
+// Work section, second row. Sable is the brand-and-web side of the positioning
+// and links to its own case study; Ayesha is upcoming and deliberately does not
+// link anywhere, so it gets a plain card rather than the spotlight treatment.
+import sableThumb from '../assets/sable-atmospheric.png';
+import ayeshaThumb from '../assets/art-by-ayesha-johar-cs-01.png';
+
+// Gap section anchor + What We Do card texture. Higgsfield-generated (Seedream 4.5,
+// 6 Aug 2026), same offset near-black/terracotta motif as the logo mark, extending
+// the existing visual language rather than adding a new one. Kept to two placements,
+// not one per section/card, per the brand doc's "no generic card overuse" principle.
+// The Gap anchor is generated for this shape, not cropped down into it.
+// Cropping the old 3:4 macro to a wide band left the forms enlarged: a
+// close-up stays a close-up whatever you trim off it. This is a new Seedream
+// 4.5 generation at 21:9, shot far back and near surface level so the three
+// slabs read as a thin line across an empty ground, then cut to 6:1 at
+// 3000x500. Raw generation and brief: 01_mss/assets/generated/scenes/.
+import gapAnchorSrc from '../assets/gap-anchor-wide.png';
+import wwdTextureSrc from '../assets/wwd-texture.png';
+import hiwAnchorSrc from '../assets/hiw-anchor.png';
+// getImage (not <Image>) because this one is applied as a CSS background-image on
+// the card divs, not rendered as its own <img> element.
+const wwdTexture = await getImage({ src: wwdTextureSrc, format: 'webp', quality: 55, width: 1600 });
+
+// The featured card is 3fr of a 3fr/2fr split inside a 1400px container (840px),
+// full width below md. The three secondary cards are (1400 - 48) / 3 = 450px.
+const featureSizes   = '(min-width: 768px) 840px, 100vw';
+const featureWidths  = [420, 720, 840, 1260, 1680];
+// Second row is two cards across the same 1400px container, minus the 24px
+// gutter: (1400 - 24) / 2 = 688px.
+const thumbSizes     = '(min-width: 768px) 688px, 100vw';
+const thumbWidths    = [420, 688, 1032, 1376];
+
+// Tooling clips. Same files the PureMed case study uses, captured from the live
+// tools by 01_mss/website/tools/clips/. They live in public/assets because
+// Astro's image pipeline does not process video and a poster needs a plain URL.
+const homeClips = [
+  {
+    src:      '/assets/stage-live-edit.webm',
+    fallback: '/assets/stage-live-edit.mp4',
+    poster:   '/assets/stage-live-edit.webp',
+    len:      '33s',
+    t:        'The edit, from the client’s side',
+    d:        'A clinic owner signed into her own site, not a separate tool, the page itself, and rewrote a line, swapped a photo, and submitted the change. No ticket, no invoice, no waiting on a developer. It still doesn’t go live until it clears the same gate a new build would.',
+  },
+  {
+    src:    '/assets/puremed-pipeline.mp4',
+    poster: '/assets/puremed-pipeline.webp',
+    len:    '26s',
+    t:      'The production side, checking itself',
+    d:      'Governance is built into the rules engine, not bolted on after. Every post is checked against what a regulated business is permitted to say before a human ever reads it, so nothing in breach of policy or legislation reaches a client for approval. Anything questionable is held. Only then is the month rendered for sign-off.',
+  },
+];
 ---
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Main Stage Studio: Brand, Web &amp; Content, Built and Run</title>
-  <meta name="description" content="Main Stage Studio builds your brand, website, and content, then runs them. One system, one place to review everything, a presence that doesn't go quiet.">
-  <meta property="og:title" content="Main Stage Studio: Launched is not the same as alive.">
-  <meta property="og:description" content="Brand, website, and content: built once, run every week. Reviewed and approved by you, in one place.">
+  <title>Main Stage Studio | Presence &amp; Systems for Regulated Businesses</title>
+  <meta name="description" content="Main Stage Studio builds and runs your brand, website, and content, and the operational systems underneath, for businesses that can't afford to get it wrong.">
+  <meta property="og:title" content="Main Stage Studio: You don't need a bigger team. You need a better system.">
+  <meta property="og:description" content="Presence and the systems underneath it, built once and run every week, or built to spec. Reviewed and approved by you, in one place.">
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
-  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='6' fill='%23F5EFE5'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='6' fill='%23F5EFE5'/%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Fonts are self-hosted: no render-blocking third-party stylesheet, no extra DNS/TLS. -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-400-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-300-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-400-latin.woff2" crossorigin>
+
+  <!-- Marks the document as JS-capable before first paint, so the reveal animations
+       below can be opt-in. Without this class every animated element stays visible,
+       which means no-JS and slow-JS visitors still get a readable page. -->
+  <script is:inline>document.documentElement.classList.add('js-anim');</script>
 
   <style>
     :root {
@@ -26,10 +91,18 @@ import '../styles/global.css';
       --terracotta: #BF6B47;
       --ember:      #8C4A2F;
       --near-black: #1C1712;
-      --muted:      #706B65;
+      /* Tuned to clear 4.5:1 on BOTH parchment (6.04) and the #EAE0D0
+         alternating sections (5.29). The old #6B655D failed on #EAE0D0. */
+      --muted:      #5F5952;
+      --muted-dark: #A9A198;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    /* NOTE: do not reintroduce `margin: 0` here. Astro scopes this rule to
+       [data-astro-cid-*] and ships it UNLAYERED, which outranks every Tailwind
+       utility in @layer utilities and silently kills mb-*, mt-*, and mx-auto
+       across the whole page. Tailwind's Preflight already zeroes margins in
+       @layer base, where utilities can correctly override it. */
+    *, *::before, *::after { box-sizing: border-box; }
 
     html { background: var(--parchment); }
 
@@ -92,6 +165,11 @@ import '../styles/global.css';
       transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
     }
     .nav-link:hover::after { width: 100%; }
+    /* Active section. The underline is the same mechanism as hover, held open,
+       so the nav tells you where you are on a page that runs ~8 viewports. */
+    .nav-link.active::after { width: 100%; }
+    .nav-link.active { color: var(--ember); }
+    #nav.scrolled-dark .nav-link.active { color: var(--terracotta) !important; }
 
     /* ── Directional fill button ─────────────────────────────── */
     .btn-fill {
@@ -100,7 +178,7 @@ import '../styles/global.css';
       align-items: center;
       gap: 0.5rem;
       overflow: hidden;
-      padding: 0.8rem 1.625rem;
+      padding: 0.95rem 2rem;
       background: var(--near-black);
       color: var(--parchment);
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -129,7 +207,7 @@ import '../styles/global.css';
     .btn-fill:active { transform: translateY(1px) scale(0.98); }
     .btn-fill:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-fill.light { background: var(--parchment); color: var(--near-black); }
-    .btn-fill.light .btn-fill__bg { background: var(--near-black); }
+    .btn-fill.light .btn-fill__bg { background: var(--terracotta); }
     .btn-fill.light:hover .btn-fill__label { color: var(--parchment); }
 
     .btn-ghost {
@@ -158,6 +236,9 @@ import '../styles/global.css';
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
+    }
+    /* Gated so the poster frame still shows if JS never runs. */
+    .js-anim .mss-hero-video-wrap video {
       opacity: 0;
       transition: opacity 1.6s cubic-bezier(0.16,1,0.3,1);
     }
@@ -181,61 +262,123 @@ import '../styles/global.css';
     }
 
     /* ── Hero line reveal ────────────────────────────────────── */
+    /* A CSS animation, not a JS-toggled transition. The hero previously shipped
+       at translateY(105%) inside overflow:hidden and only became readable once
+       a script added a class from inside a double requestAnimationFrame. That
+       made the single most important message on the site dependent on JS both
+       loading AND rAF actually running (it does not run in a background tab).
+       As an animation it plays on its own, needs no JS, and `both` fill mode
+       holds the start and end states. */
     .line-clip { overflow: hidden; display: block; }
-    .line-clip__inner {
-      display: block;
-      transform: translateY(105%);
-      transition: transform 1.4s cubic-bezier(0.16,1,0.3,1);
-    }
-    .lines-ready .line-clip__inner { transform: translateY(0); }
+    .line-clip__inner { display: block; }
 
-    /* ── Muted body copy ─────────────────────────────────────── */
+    @keyframes lineRise {
+      from { transform: translateY(105%); }
+      to   { transform: translateY(0); }
+    }
+    .js-anim .line-clip__inner {
+      animation: lineRise 1.4s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    /* ── Muted body copy: one grey system, tuned per background ── */
     .muted-text { color: var(--muted); }
+    .muted-text-dark { color: var(--muted-dark); }
 
     /* ── Section label ───────────────────────────────────────── */
+    /* Ember, not terracotta: at 10px with 0.22em tracking these need 4.5:1,
+       and terracotta only reaches 3.39 on parchment / 2.97 on #EAE0D0.
+       Ember gives 5.86 / 5.13. On near-black, terracotta clears at 4.58,
+       so the dark sections keep the brighter accent. */
     .slabel {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 0.625rem;
       font-weight: 500;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--terracotta);
+      color: var(--ember);
     }
+    .bg-near-black .slabel { color: var(--terracotta); }
+
+    /* ── Marquee ─────────────────────────────────────────────── */
+    /* Sits between the hero and The Gap, on near-black, so the hero (parchment)
+       has a hard edge to end against instead of running straight into another
+       parchment section. Also gives the nav's dark/light scroll-swap a real
+       trigger point right after the hero. */
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-track { animation: marquee 32s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* ── Tooling clips ───────────────────────────────────────── */
+    /* Recordings of the review gate and the production pipeline, shown inside
+       "How it works" because that section already claims both and had nothing
+       behind the claim. Same assets as the PureMed case study; captured by
+       01_mss/website/tools/clips/.
+
+       Click-to-play with preload="none". The section argues the studio ships
+       fast static sites, so the clips must not load for people who scroll past. */
+    .clip-frame {
+      position: relative;
+      background: #0E0D0B;
+      border: 1px solid rgba(245,239,229,0.14);
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+    }
+    .clip-frame video {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .clip-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      width: 100%; height: 100%;
+      padding: 1.1rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .clip-play:hover { background: rgba(28,23,18,0.22); }
+    .clip-frame.is-playing .clip-play { display: none; }
+    .clip-play span {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 1.05rem 0.55rem 0.9rem;
+      background: var(--parchment);
+      color: var(--near-black);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .clip-play:hover span { transform: translateY(-2px); }
 
     /* ── Scroll reveal ───────────────────────────────────────── */
-    .reveal {
+    /* Also gated: without JS the whole page body used to render at opacity 0. */
+    .js-anim .reveal {
       opacity: 0;
       transform: translateY(30px);
       transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
                   transform 0.85s cubic-bezier(0.16,1,0.3,1);
     }
-    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .js-anim .reveal.in-view { opacity: 1; transform: translateY(0); }
     .rd1 { transition-delay: 0.1s; }
     .rd2 { transition-delay: 0.22s; }
     .rd3 { transition-delay: 0.36s; }
     .rd4 { transition-delay: 0.5s; }
 
     /* ── Work thumbnail image fade ───────────────────────────── */
-    .reveal .work-thumb-inner {
+    .js-anim .reveal .work-thumb-inner {
       opacity: 0;
       transition: opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s,
                   transform 0.75s cubic-bezier(0.16,1,0.3,1);
     }
-    .reveal.in-view .work-thumb-inner { opacity: 1; }
-
-    /* ── MSS featured image ──────────────────────────────────── */
-    #mss-thumb-img {
-      opacity: 0;
-      transition: opacity 1.4s cubic-bezier(0.16,1,0.3,1);
-    }
-
-    /* ── Marquee ─────────────────────────────────────────────── */
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    .marquee-track { animation: marquee 36s linear infinite; }
-    .marquee-track:hover { animation-play-state: paused; }
+    .js-anim .reveal.in-view .work-thumb-inner { opacity: 1; }
 
     /* ── Spotlight border card ───────────────────────────────── */
     .spotlight-card {
@@ -268,7 +411,6 @@ import '../styles/global.css';
       transition: transform 0.75s cubic-bezier(0.16,1,0.3,1);
     }
     .spotlight-card:hover .work-thumb-inner { transform: scale(1.03); }
-    #work-mss.spotlight-card:hover #mss-thumb-img { transform: scale(1.03); }
 
     /* ── System progress line ────────────────────────────────── */
     #system-line {
@@ -282,6 +424,16 @@ import '../styles/global.css';
       will-change: transform;
       opacity: 0.6;
     }
+
+    /* ── Gap anchor band ─────────────────────────────────────── */
+    /* 6:1 across the container, roughly 210px at a 1440 viewport. The asset
+       is generated at that shape rather than cropped out of a portrait
+       macro, so nothing is enlarged to fill it. Below md it opens to 4:1:
+       at 6:1 a 342px-wide phone gets a 57px strip, which is too thin for
+       the slabs to read, and the tighter ratio only trims the outer ends of
+       a band whose three colours all sit in the middle. */
+    #gap-anchor { aspect-ratio: 4 / 1; }
+    @media (min-width: 768px) { #gap-anchor { aspect-ratio: 6 / 1; } }
 
     /* ── Honesty callout ─────────────────────────────────────── */
     .honesty-box {
@@ -302,7 +454,9 @@ import '../styles/global.css';
       font-weight: 500;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: rgba(28,23,18,0.4);
+      /* was rgba(28,23,18,0.4) = 2.41:1, unreadable, and these are the only
+         thing identifying each field. Now 5.29:1 on #EAE0D0. */
+      color: var(--muted);
       display: block;
     }
     .finput {
@@ -319,9 +473,61 @@ import '../styles/global.css';
       transition: border-color 0.3s ease;
       -webkit-appearance: none;
     }
-    .finput:focus { border-bottom-color: var(--terracotta); }
-    .finput::placeholder { color: rgba(28,23,18,0.24); }
+    .finput:focus { border-bottom-color: var(--ember); }
+    /* was 0.24 = 1.64:1. Now 4.53:1, still lighter than entered text. */
+    .finput::placeholder { color: rgba(28,23,18,0.62); }
     textarea.finput { resize: none; }
+
+    /* The select had -webkit-appearance:none with nothing replacing the native
+       chevron, so the first field in the form looked exactly like a text input. */
+    select.finput {
+      appearance: none;
+      padding-right: 1.75rem;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235F5952' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.125rem center;
+      background-size: 12px 8px;
+    }
+
+    /* ── Focus visibility ────────────────────────────────────── */
+    /* The page had exactly one :focus rule (.finput). Everything else fell back
+       to the UA ring, which .btn-fill then clipped with its own overflow:hidden. */
+    :focus-visible {
+      outline: 2px solid var(--ember);
+      outline-offset: 3px;
+    }
+    .bg-near-black :focus-visible,
+    footer :focus-visible,
+    #mobile-menu :focus-visible {
+      outline-color: var(--blush);
+    }
+    /* .btn-fill needs the ring pushed clear of its clipped box. */
+    .btn-fill:focus-visible { outline-offset: 4px; }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -100px;
+      z-index: 200;
+      background: var(--near-black);
+      color: var(--parchment);
+      font-size: 0.8125rem;
+      letter-spacing: 0.04em;
+      padding: 0.75rem 1.25rem;
+      text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .footer-link {
+      color: var(--parchment);
+      text-decoration: none;
+      opacity: 0.72;
+      transition: opacity 0.2s ease;
+    }
+    .footer-link:hover, .footer-link:focus-visible { opacity: 1; }
+    .footer-meta { color: var(--parchment); opacity: 0.6; }
 
     hr {
       border: none;
@@ -329,10 +535,41 @@ import '../styles/global.css';
     }
     .hr-light { border-top-color: rgba(245,239,229,0.08); }
 
+    /* ── Reduced motion ──────────────────────────────────────── */
+    /* The page runs staggered line reveals, scroll fades on nearly every block,
+       a cursor spotlight on six cards, a progress bar, a scaling rule, directional
+       button fills and an infinite pulse. All of it is decorative, so all of it
+       goes. Content must land in its final state, not mid-transition. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+      }
+
+      .js-anim .line-clip__inner { animation: none !important; transform: none !important; }
+      .js-anim .reveal { opacity: 1 !important; transform: none !important; }
+      .js-anim .reveal .work-thumb-inner,
+      .js-anim .mss-hero-video-wrap video { opacity: 1 !important; }
+
+      .pulse-dot { animation: none !important; }
+      .spotlight-card::before { display: none; }
+      .btn-fill__bg { display: none; }
+      .btn-fill:hover { background: var(--ember); }
+      .btn-fill.light:hover { background: var(--blush); }
+      #system-line { display: none; }
+      .spotlight-card:hover .work-thumb-inner { transform: none !important; }
+    }
+
   </style>
 </head>
 
 <body>
+
+  <a href="#main" class="skip-link font-sans">Skip to content</a>
 
   <!-- Scroll progress indicator -->
   <div id="scroll-progress" aria-hidden="true"></div>
@@ -341,10 +578,10 @@ import '../styles/global.css';
   <!-- ═══════════════════════════════════════ NAV -->
   <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between">
 
-    <a href="#" class="flex items-center gap-3 no-underline" aria-label="Main Stage Studio home">
+    <a href="#" class="flex items-end gap-3 no-underline" aria-label="Main Stage Studio home">
       <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#1C1712"/>
         <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+        <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#1C1712"/>
         <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
       </svg>
       <span class="flex items-baseline gap-[0.3em]">
@@ -353,18 +590,22 @@ import '../styles/global.css';
       </span>
     </a>
 
-    <div class="hidden md:flex items-center gap-8">
+    <!-- lg, not md. Four links plus the CTA plus the wordmark need about 880px
+         to sit on one line, so at the md breakpoint (768px) the desktop nav was
+         still showing and every label was wrapping onto two lines inside its own
+         flex item. The hamburger now takes over before anything is squeezed. -->
+    <div class="hidden lg:flex items-center gap-8 whitespace-nowrap">
+      <a href="#credential"   class="nav-link font-sans">Track record</a>
       <a href="#what-we-do"   class="nav-link font-sans">What we do</a>
       <a href="#how-it-works" class="nav-link font-sans">How it works</a>
       <a href="#work"         class="nav-link font-sans">Work</a>
-      <a href="#studio"       class="nav-link font-sans">The studio</a>
       <a href="#contact" id="nav-cta" class="btn-fill ml-2">
         <span class="btn-fill__bg"></span>
         <span class="btn-fill__label">Start a project</span>
       </a>
     </div>
 
-    <button id="menu-toggle" class="md:hidden p-2 flex flex-col gap-[5px]" aria-label="Toggle menu" aria-expanded="false">
+    <button id="menu-toggle" class="lg:hidden p-2 flex flex-col gap-[5px]" aria-label="Toggle menu" aria-expanded="false">
       <span id="bar1" class="block w-5 h-px bg-near-black origin-center" style="transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);"></span>
       <span id="bar2" class="block w-5 h-px bg-near-black" style="transition:opacity 0.2s ease;"></span>
       <span id="bar3" class="block w-5 h-px bg-near-black origin-center" style="transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);"></span>
@@ -372,13 +613,16 @@ import '../styles/global.css';
   </nav>
 
   <!-- Mobile menu -->
+  <!-- `inert` (not just aria-hidden) while closed: the panel stays in the DOM at
+       translateX(100%) with four focusable links inside, so without it keyboard
+       users tab straight into off-screen content at every viewport. -->
   <div id="mobile-menu" class="fixed inset-0 z-40 bg-parchment flex flex-col justify-center px-8"
-       style="transform:translateX(100%);transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);" aria-hidden="true">
+       style="transform:translateX(100%);transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);" aria-hidden="true" inert>
     <nav class="flex flex-col gap-8">
+      <a href="#credential"   class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">Track record</a>
       <a href="#what-we-do"   class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">What we do</a>
       <a href="#how-it-works" class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">How it works</a>
       <a href="#work"         class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">Work</a>
-      <a href="#studio"       class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">The studio</a>
       <a href="#contact" class="btn-fill self-start mt-6 mobile-link">
         <span class="btn-fill__bg"></span>
         <span class="btn-fill__label">Start a project</span>
@@ -387,60 +631,68 @@ import '../styles/global.css';
   </div>
 
 
+  <main id="main">
+
   <!-- ═══════════════════════════════════════ HERO -->
   <section class="min-h-[100dvh] bg-parchment flex flex-col relative overflow-hidden px-6 md:px-12 lg:px-24">
 
-    <!-- Hero video — masked visual, right side on desktop -->
+    <!-- Hero video: masked visual, right side on desktop -->
+    <!-- poster + intrinsic size: the mp4 is 2.6MB, so without a poster this is
+         52% of the hero showing nothing until it buffers. The file is now muxed
+         with +faststart (moov ahead of mdat) so it can start before full download. -->
     <div class="mss-hero-video-wrap" aria-hidden="true">
       <video id="hero-video" autoplay muted playsinline
+        preload="metadata"
+        poster="/assets/hero-mark-poster.webp"
+        width="1112" height="834"
         src="/assets/3d-mark-animation.mp4">
       </video>
     </div>
 
     <!-- Content -->
-    <div class="flex-1 flex flex-col justify-center pt-24 md:pt-28 pb-10 max-w-[1400px] w-full mx-auto relative z-10">
+    <div class="flex-1 flex flex-col justify-center pt-24 md:pt-28 pb-16 max-w-[1400px] w-full mx-auto relative z-10" style="max-width:1400px;">
+      <div style="max-width:min(100%, 640px);">
 
       <!-- Label -->
       <div class="line-clip mb-8 md:mb-10">
-        <span class="line-clip__inner slabel" style="transition-delay:0.1s;">Digital Studio · London</span>
+        <span class="line-clip__inner slabel" style="animation-delay:0.1s;">Digital Studio · London</span>
       </div>
 
       <!-- Headline -->
-      <h1 id="hero-headline" class="font-display font-normal text-near-black mb-6 md:mb-8" style="font-size:clamp(3rem,8vw,7.5rem);line-height:1.0;letter-spacing:-0.025em;">
-        <span class="line-clip" style="display:block;">
-          <span class="line-clip__inner" style="transition-delay:0.22s;">Launched is not</span>
+      <h1 id="hero-headline" class="font-display font-normal text-near-black mb-8 md:mb-10" style="font-size:clamp(2.75rem,7vw,6.75rem);line-height:1.15;letter-spacing:-0.025em;max-width:14ch;">
+        <span class="line-clip" style="display:block;padding-bottom:0.16em;margin-bottom:-0.16em;">
+          <span class="line-clip__inner" style="animation-delay:0.22s;">You don't need</span>
         </span>
-        <span class="line-clip text-terracotta" style="display:block;margin-top:0.08em;">
-          <span class="line-clip__inner" style="transition-delay:0.38s;color:var(--terracotta);">the same as alive.</span>
+        <span class="line-clip" style="display:block;padding-bottom:0.16em;margin-bottom:-0.16em;">
+          <span class="line-clip__inner" style="animation-delay:0.38s;">a bigger team.</span>
+        </span>
+        <span class="line-clip text-terracotta" style="display:block;margin-top:0.08em;padding-bottom:0.16em;margin-bottom:-0.16em;">
+          <span class="line-clip__inner" style="animation-delay:0.56s;color:var(--terracotta);">You need</span>
+        </span>
+        <span class="line-clip text-terracotta" style="display:block;padding-bottom:0.16em;">
+          <span class="line-clip__inner" style="animation-delay:0.68s;color:var(--terracotta);">a better system.</span>
         </span>
       </h1>
-
-      <!-- Subhead -->
-      <div class="line-clip mb-6 md:mb-8">
-        <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.56s;font-size:clamp(1.0625rem,1.6vw,1.25rem);line-height:1.4;max-width:36ch;">
-          Going live is the easy part. The job is every week after.
-        </p>
-      </div>
 
       <!-- Body -->
       <div>
         <div class="line-clip mb-8">
-          <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.72s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
-            Most businesses know exactly what a strong presence looks like. A website that reflects the quality of the work. Social accounts that stay alive past the first month. Words that actually sound like you.
+          <p class="line-clip__inner font-sans font-light muted-text" style="animation-delay:0.72s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
+            Most businesses know exactly what a strong presence looks like. A website that reflects the quality of the work. Content that stays alive past the first month. Words that actually sound like you, and that hold up to scrutiny as well as they read.
           </p>
         </div>
         <div class="line-clip mb-8">
-          <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.84s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
-            What they don't have is the team to keep all of that running, and hiring one costs more than the problem.
+          <p class="line-clip__inner font-sans font-light muted-text" style="animation-delay:0.84s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
+            What they don't have is the team to keep all of that running, and hiring one costs more than the problem does.
           </p>
         </div>
         <div class="line-clip mb-8">
-          <p class="line-clip__inner font-sans font-light muted-text" style="transition-delay:0.96s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
+          <p class="line-clip__inner font-sans font-light muted-text" style="animation-delay:0.96s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
             Main Stage Studio builds your presence, then runs it. Brand, website, content: made in one system, reviewed by you in one place, kept moving week after week.
           </p>
         </div>
         <div class="line-clip mt-2">
-          <div class="line-clip__inner flex items-center gap-10 flex-wrap" style="transition-delay:1.1s;">
+          <div class="line-clip__inner flex items-center gap-6 flex-wrap" style="animation-delay:1.1s;display:flex;">
             <a href="#contact" class="btn-fill">
               <span class="btn-fill__bg"></span>
               <span class="btn-fill__label">Start a project</span>
@@ -454,12 +706,7 @@ import '../styles/global.css';
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Bottom rule -->
-    <div class="pb-8 max-w-[1400px] w-full mx-auto flex items-center gap-6 relative z-10">
-      <hr class="flex-1">
-      <span class="font-sans text-near-black shrink-0" style="font-size:0.5625rem;letter-spacing:0.22em;text-transform:uppercase;opacity:0.28;">Scroll</span>
+      </div>
     </div>
   </section>
 
@@ -468,39 +715,31 @@ import '../styles/global.css';
   <div class="bg-near-black overflow-hidden py-[13px]" data-nav-dark="true" aria-hidden="true">
     <div class="marquee-track flex whitespace-nowrap">
       <span class="flex items-center shrink-0">
-        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Websites</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Content</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Campaigns</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Copy</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Compliance-Checked</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
-        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
-        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Systems</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
       </span>
       <span class="flex items-center shrink-0" aria-hidden="true">
-        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Websites</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Content</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Campaigns</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Copy</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-terracotta uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;">Built Once</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Compliance-Checked</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Run Every Week</span>
-        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Reviewed By You</span>
-        <span class="text-blush text-xs" style="opacity:0.25;">·</span>
-        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Never Left Quiet</span>
+        <span class="font-sans text-parchment uppercase px-10" style="font-size:0.5625rem;letter-spacing:0.24em;opacity:0.3;">Systems</span>
         <span class="text-blush text-xs" style="opacity:0.25;">·</span>
       </span>
     </div>
@@ -510,24 +749,81 @@ import '../styles/global.css';
   <!-- ═══════════════════════════════════════ THE GAP -->
   <section id="gap" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
     <div class="max-w-[1400px] mx-auto">
+
+      <!-- Heading spans the container rather than sitting in a 1fr column.
+           At 64px "A launch is a moment." measures 539px and that column is
+           480px, so capped at 11ch the claim was setting in four lines inside
+           a half-empty box. Full width it breaks once, where the sentence
+           breaks, and the size does not have to shrink to allow it. -->
+      <div class="mb-14 md:mb-20 reveal">
+        <p class="slabel mb-4">The gap</p>
+        <!-- Shape 1 of 6: two short sentences, accent on the second. -->
+        <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.12;letter-spacing:-0.015em;max-width:22ch;">
+          A launch is a moment.<br>
+          <span class="text-terracotta">Running it is the job.</span>
+        </h2>
+      </div>
+
+      <!-- The argument, split at its own hinge: what happens, then why it
+           happens. Two columns rather than one 56ch block beside an empty
+           cell, which is what the old grid left once the heading moved up. -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-20 reveal rd1">
+        <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
+          Every regulated business has lived some version of this. The site went live and hasn't caught up with what's changed since. The content had a strong first month, then whoever was doing it got pulled back onto client work. The copy was written by someone who never had to think about what they're actually allowed to say, and it shows to the one person in the room who does.
+        </p>
+        <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
+          None of that is a motivation problem. Keeping a presence alive, in a way that survives scrutiny as well as it survives a scroll, is a production job that sits awkwardly between what a small regulated firm can staff and what it's safe to outsource. Generalist agencies don't know what you can't say. Freelancers cover one skill of the five it needs. That gap is what this studio was built to close.
+        </p>
+      </div>
+
+      <!-- The section's one visual anchor, and now its floor. Not decorative
+           filler: the same offset-forms geometry as the logo mark, a material
+           study rather than an illustration of "the gap" itself. A letterbox
+           band, not a feature image, so it stays punctuation and does not
+           compete with the Work section, which is the only place on the page
+           where a photograph is allowed to lead. One quiet parallax drift as
+           it crosses the viewport: no loop, no hover state. -->
+      <div id="gap-anchor" class="overflow-hidden mt-16 md:mt-24 reveal rd2">
+        <Image src={gapAnchorSrc}
+             alt=""
+             role="presentation"
+             id="gap-anchor-img"
+             class="w-full h-full object-cover"
+             width={1400}
+             widths={[700, 1400, 2100]}
+             sizes="(min-width: 1400px) 1400px, 100vw"
+             format="webp"
+             quality={72}
+             loading="lazy"
+             decoding="async"
+             style="will-change:transform;" />
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════ RUNNING SYSTEMS (credential) -->
+  <section id="credential" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:#EAE0D0;">
+    <div class="max-w-[1400px] mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-14 md:gap-24">
 
         <div class="reveal">
-          <p class="slabel mb-4">02 · The gap</p>
-          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;">
-            A team's job.<br>No team<br>to do it.
+          <p class="slabel mb-4">Track record</p>
+          <!-- Shape 2 of 6: one continuous sentence, no accent. The quiet one. -->
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.12;letter-spacing:-0.015em;max-width:13ch;text-wrap:balance;">
+            Running systems that couldn't afford to fail.
           </h2>
         </div>
 
         <div class="flex flex-col gap-6 reveal rd1">
           <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
-            Every business has lived some version of this. The website went live and hasn't changed since. The Instagram had a strong first month. The copy was written by someone who was never in the room.
+            Main Stage Studio runs on a proven track record, not a portfolio built to look the part. It was built by someone who spent years inside the parts of business that aren't allowed to get it wrong, onboarding systems used by millions of customers, industries where a mistake isn't a bad review, it's a breach.
           </p>
           <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
-            None of that is a motivation problem. Keeping a presence alive is a production job: planning, writing, designing, editing, publishing, every week. It sits awkwardly between what you can staff and what you can sensibly outsource. Agencies charge team rates for it. Freelancers cover one skill of the five it needs.
+            That discipline is the quality bar here, not a story told about it. It's the same instinct wherever it's aimed: understand exactly where the real risk sits before anything gets designed, whether what's being designed is a website, a content calendar, or the system your business actually runs on.
           </p>
-          <p class="font-sans font-normal text-near-black" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
-            That gap is what this studio was built to close.
+          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:56ch;">
+            None of it turns your presence into a compliance document, or your operations into red tape. It means building inside the frameworks your business already answers to, not around them, so what goes live is a compliant system from the outset, not something retrofitted to survive scrutiny later.
           </p>
         </div>
 
@@ -537,50 +833,90 @@ import '../styles/global.css';
 
 
   <!-- ═══════════════════════════════════════ WHAT WE DO -->
-  <section id="what-we-do" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:#EAE0D0;">
+  <section id="what-we-do" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
     <div class="max-w-[1400px] mx-auto">
 
-      <div class="mb-14 reveal">
-        <p class="slabel mb-3">03 · What we do</p>
-        <h2 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.015em;">Built once. Run every week.</h2>
+      <!-- Heading and standfirst side by side, not stacked. Capped at 14ch the
+           heading set in three lines down the left edge with the standfirst
+           under it at 52ch, which left the entire right half of a 1248px
+           container empty and reading as an accident. The column split is
+           1.35fr/1fr rather than the 1fr/1.4fr used elsewhere because the
+           heading runs at 72px here and needs about 610px to break after
+           "and"; items-end sits the standfirst on the heading's last line, so
+           the two blocks share a baseline instead of both floating. -->
+      <div class="grid grid-cols-1 md:grid-cols-[1.35fr_1fr] gap-6 md:gap-24 md:items-end mb-16 reveal">
+        <div>
+          <p class="slabel mb-4">What we do</p>
+          <!-- Shape 3 of 6: one flowing block, accent carrying the second line. -->
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.1;letter-spacing:-0.015em;">
+            How you show up, and<br>
+            <span class="text-terracotta">what holds it up.</span>
+          </h2>
+        </div>
         <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
-          Two ways of working: Launch, then Run. Most engagements start with the build and settle into the retainer.
+          Most engagements are about how you show up. Some are about what's actually running underneath. This studio does both, and doesn't pretend they're the same job.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Four cards, one consistent box treatment, so the section reads as a
+           set rather than three mismatched headings plus an afterthought.
+           Retainer and Systems are the two things you can actually engage us
+           for, so both get the filled card. Launch and Campaign are routes
+           into a Retainer, not peers of it, so both get the lighter bordered
+           card at a shared, smaller heading size. -->
+      <div class="flex flex-col gap-6 mb-6">
 
-        <!-- Launch -->
-        <article class="spotlight-card p-8 md:p-10 reveal rd1" style="background:var(--parchment);">
-          <p class="slabel mb-4">Launch</p>
-          <h3 class="font-display font-normal text-near-black mb-6" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;">The build engagement</h3>
+        <!-- The Retainer: the core offer, in plain English -->
+        <div class="p-8 md:p-10 reveal" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
+          <p class="slabel mb-3">Presence · Retainer</p>
+          <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">The monthly retainer</h3>
           <div class="flex flex-col gap-5">
-            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              We start with what you're actually trying to say. The brief is rarely the real brief, and finding the real one is the work. From there: positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
+            <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
+              This is the heartbeat: the technology and content that keep your business running, week after week. A planned calendar, designed posts, edited clips, captions in your voice, every piece checked against your specific rules before you ever see it, and every piece approved by you before it goes anywhere.
             </p>
-            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              You review every stage in one place and nothing moves forward without your sign-off. When it goes live, it's already set up to be run, not left.
+            <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
+              Your website stays alive the same way: need the wording changed, a price updated, a service added? Ask for it, approve it, and it's live, no ticket queue, no small-change invoice.
             </p>
           </div>
-        </article>
+        </div>
 
-        <!-- Run -->
-        <article class="spotlight-card p-8 md:p-10 reveal rd2" style="background:var(--parchment);">
-          <p class="slabel mb-4">Run</p>
-          <h3 class="font-display font-normal text-near-black mb-6" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;">The ongoing engagement</h3>
-          <div class="flex flex-col gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Launch: the way in -->
+          <div class="p-8 md:p-10 border reveal rd1" style="border-color:rgba(28,23,18,0.14);">
+            <p class="slabel mb-3">Presence · Launch</p>
+            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Launch</h3>
+            <div class="flex flex-col gap-4">
+              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+                The brief you bring is rarely the brief that gets built. Finding the real one comes first, then positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
+              </p>
+              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+                You review every stage in one place, and nothing moves forward without your sign-off.
+              </p>
+            </div>
+          </div>
+
+          <!-- Campaign: a time-boxed variant of the Retainer -->
+          <div class="p-8 md:p-10 border reveal rd2" style="border-color:rgba(28,23,18,0.14);">
+            <p class="slabel mb-3">Presence · Campaign</p>
+            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Campaign</h3>
             <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              A monthly engagement that keeps your presence moving. A planned calendar, designed posts, edited clips, captions in your voice. Every piece is checked against your rules before you ever see it, and every piece is approved by you before it goes anywhere.
-            </p>
-            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              Your website stays alive the same way. Need the wording changed, a price updated, a treatment added? Ask for it, approve it, and it's live: no ticket queue, no small-change invoice.
-            </p>
-            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              Building toward a launch, an event, a season? A Run can be shaped entirely around it.
+              Building toward a launch, a new service, or a renewal season? A time-boxed campaign gets built around it, and it's often where a Retainer engagement actually starts.
             </p>
           </div>
-        </article>
 
+        </div>
+      </div>
+
+      <!-- Systems -->
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12 p-8 md:p-10 mb-16 reveal rd4" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
+        <div>
+          <p class="slabel mb-3">Systems</p>
+          <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Not packaged.<br>Scoped to fit.</h3>
+        </div>
+        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
+          Some of what a regulated business needs isn't public. It's the onboarding flow, the intake process, the decision logic that has to be right every single time, not just look right. That work is scoped and quoted on its own terms, not packaged, because bespoke and fixed-price don't mix honestly. If that's what you need, the first step is a conversation, not a price list.
+        </p>
       </div>
     </div>
   </section>
@@ -594,247 +930,292 @@ import '../styles/global.css';
 
     <div class="max-w-[1400px] mx-auto">
 
-      <div class="mb-14 reveal">
-        <p class="slabel mb-3">04 · How it works</p>
-        <h2 class="font-display font-normal text-parchment" style="font-size:clamp(2rem,4.5vw,3.75rem);line-height:1.08;letter-spacing:-0.015em;max-width:16ch;">One place to see everything. One gate everything passes through.</h2>
+      <div class="mb-16 reveal">
+        <p class="slabel mb-4">How it works</p>
+        <!-- Shape 4 of 6: two words and a full stop. The shortest heading on the page. -->
+        <h2 class="font-display font-normal text-parchment" style="font-size:clamp(2.5rem,6vw,5rem);line-height:1.05;letter-spacing:-0.02em;max-width:9ch;text-wrap:balance;">
+          One place. One gate.
+        </h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-[1fr_1.3fr] gap-14 md:gap-24">
 
         <div class="reveal rd1">
-          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.8;opacity:0.5;max-width:44ch;">
-            Behind the studio is a production system we built for ourselves, because the run side of this work is only affordable if the mechanical parts are automated and the judgment parts never are.
+          <p class="font-sans font-light muted-text-dark mb-8" style="font-size:1rem;line-height:1.8;max-width:44ch;">
+            Behind the studio is a production system built for the studio's own use, because the Retainer side of this work is only affordable if the mechanical parts are automated and the judgment parts never are.
           </p>
+          <!-- Same offset-forms motif as the Gap section, recoloured for this
+               dark section: near-black recedes into the background, terracotta
+               and a parchment glow carry the shape. Not a substitute for the
+               real tool footage below, just a quiet anchor above it.
+
+               Fills the column rather than sitting at 220px inside it. Same
+               reasoning as the Gap band: at 220px in a 500px column its right
+               edge lined up with nothing on the page, which is what made it
+               read as an accident rather than a choice. It stays portrait
+               because this composition is vertical, and at full column width
+               the left column now ends roughly where the right one does
+               instead of leaving a column-height void beside it. -->
+          <div id="hiw-anchor" class="overflow-hidden" style="aspect-ratio:3/4;">
+            <Image src={hiwAnchorSrc}
+                 alt=""
+                 role="presentation"
+                 id="hiw-anchor-img"
+                 class="w-full h-full object-cover"
+                 width={520}
+                 widths={[320, 520, 780, 1040]}
+                 sizes="(min-width: 768px) 40vw, 100vw"
+                 format="webp"
+                 quality={72}
+                 loading="lazy"
+                 decoding="async"
+                 style="will-change:transform;" />
+          </div>
         </div>
 
         <div class="flex flex-col gap-8 reveal rd2">
-          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.8;opacity:0.5;max-width:52ch;">
+          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:52ch;">
             What you see of it is simple. Every piece of work (pages, posts, clips, copy changes) lands in one private review space, on one link, behind your login. You approve it, ask for a change, or flag it for a conversation. From your desk or your phone.
           </p>
-          <p class="font-sans font-light text-parchment" style="font-size:1rem;line-height:1.8;opacity:0.5;max-width:52ch;">
+          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:52ch;">
             Sign-off isn't a courtesy. It's the gate the system enforces. Nothing ships without it. Everything that ships is exactly what you approved.
+          </p>
+          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:52ch;">
+            It's the same system that runs weekly content for a live combat sports promotion, one person, one system, event pace, every week, without missing a date. If it holds there, it holds for something smaller.
           </p>
 
           <div class="honesty-box pl-6 py-5 mt-2">
             <p class="slabel mb-3" style="color:var(--blush);">On AI</p>
-            <p class="font-sans font-light text-parchment" style="font-size:0.9375rem;line-height:1.8;opacity:0.62;max-width:52ch;">
+            <p class="font-sans font-light muted-text-dark" style="font-size:0.9375rem;line-height:1.8;max-width:52ch;">
               The tools have changed what's possible. A studio of one can now plan, produce, and publish at a pace that used to take a team. But the judgment about what to make, what it should say, and whether it's good enough hasn't changed hands, and here, it never will. A person picks the moment. A person signs the words. The system just makes sure the rest keeps up.
             </p>
           </div>
+
+          <!-- The one line worth keeping from the old "The promise" section,
+               which said the same thing as this one at lower volume. -->
+          <p class="font-display font-normal text-parchment mt-2" style="font-size:clamp(1.5rem,2.6vw,2.125rem);line-height:1.15;letter-spacing:-0.01em;max-width:22ch;text-wrap:balance;">
+            The system does the labour. <span class="text-terracotta">You keep the moment.</span>
+          </p>
         </div>
 
+      </div>
+
+      <!-- The gate and the pipeline, running. This section made both claims
+           for a long time with nothing to show for either. -->
+      <div class="mt-20 md:mt-28 pt-14 reveal" style="border-top:1px solid rgba(245,239,229,0.14);">
+        <p class="slabel mb-10">Both of those, running</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+          {homeClips.map(clip => (
+            <figure class="m-0">
+              <div class="clip-frame">
+                <video poster={clip.poster}
+                       preload="none"
+                       muted loop playsinline
+                       width="1280" height="800"
+                       aria-label={clip.t}>
+                  <source src={clip.src} type={clip.src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+                  {clip.fallback && <source src={clip.fallback} type="video/mp4" />}
+                </video>
+                <button type="button" class="clip-play" aria-label={`Play recording: ${clip.t}`}>
+                  <span>
+                    <svg width="10" height="12" viewBox="0 0 11 13" aria-hidden="true">
+                      <path d="M11 6.5 0 13V0z" fill="#1C1712"/>
+                    </svg>
+                    Play · {clip.len}
+                  </span>
+                </button>
+              </div>
+              <figcaption class="mt-5">
+                <p class="font-display font-normal text-parchment mb-2" style="font-size:1.25rem;line-height:1.25;max-width:26ch;">{clip.t}</p>
+                <p class="font-sans font-light muted-text-dark" style="font-size:0.9375rem;line-height:1.75;max-width:46ch;">{clip.d}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <p class="font-sans font-light mt-10" style="font-size:0.8125rem;line-height:1.7;color:rgba(245,239,229,0.5);max-width:70ch;">
+          Both captured from the live tools on a real client engagement, not staged for this page.
+        </p>
       </div>
     </div>
   </section>
 
 
   <!-- ═══════════════════════════════════════ WORK -->
+  <!-- Two case studies with real pages behind them, plus one engagement that
+       is booked rather than built. The rule that came out of the last pass
+       still holds: the cursor-spotlight hover is only allowed on a card that
+       actually goes somewhere. Ayesha has no page yet, so it has no spotlight,
+       no thumbnail zoom, and no "read the case study" affordance.
+
+       Two case studies rather than one is also the point now that the offer
+       reads as presence and systems: PureMed is the regulated web build,
+       Sable is the identity-and-web build that starts from nothing. -->
   <section id="work" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
     <div class="max-w-[1400px] mx-auto">
 
-      <div class="flex items-end justify-between mb-14 reveal">
-        <div>
-          <p class="slabel mb-3">05 · Work</p>
-          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.05;letter-spacing:-0.015em;">The work</h2>
-        </div>
-        <a href="#contact" class="btn-ghost hidden md:inline-flex">
-          Start a project
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-            <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+      <div class="mb-16 reveal">
+        <p class="slabel mb-4">Work</p>
+        <!-- Shape 5 of 6: one short line, accent on the last two words. -->
+        <h2 class="font-display font-normal text-near-black mb-8" style="font-size:clamp(2.25rem,4.2vw,4.5rem);line-height:1.1;letter-spacing:-0.015em;max-width:22ch;text-wrap:balance;">
+          Built and <span class="text-terracotta">signed off.</span>
+        </h2>
+        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
+          Two engagements written up properly, rather than a grid of thumbnails. One a regulated clinic rebuilt to survive scrutiny, one an identity built from nothing for an artist who doesn't fit a category. A third is under way and gets the same treatment once there is a site to show.
+        </p>
       </div>
 
-      <!-- Featured: MSS building MSS -->
-      <article class="spotlight-card p-0 mb-6 reveal rd1" id="work-mss">
+      <!-- Featured: PureMed Aesthetics. The whole card is the link, so the
+           spotlight hover now points at something real. -->
+      <a href="/work/puremed" class="spotlight-card block no-underline reveal rd1 mb-6" id="work-puremed">
         <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
 
-          <!-- Thumbnail -->
-          <a href="../portfolio/mss/case-study.html" class="block overflow-hidden" style="aspect-ratio:16/10;background:#F5EFE5;">
-            <img src="/assets/terracotta-and-near-black-mark-01.png"
-                 id="mss-thumb-img"
-                 alt="MSS mark: terracotta and near-black forms with glass intersection"
-                 class="w-full h-full object-cover"
-                 style="object-position:center;transform-origin:center;transition:opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);">
-          </a>
+          <div class="work-thumb overflow-hidden" style="aspect-ratio:16/10;background:#0E0D0B;">
+            <Image src={puremedThumb}
+                 alt="Nafisa Mughal consulting with a client, PureMed Aesthetics"
+                 class="work-thumb-inner object-cover w-full h-full"
+                 width={840}
+                 widths={featureWidths}
+                 sizes={featureSizes}
+                 format="webp"
+                 quality={78}
+                 loading="lazy"
+                 decoding="async"
+                 style="object-position:center top;" />
+          </div>
 
-          <!-- Detail -->
           <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
             <div>
-              <div class="flex items-center gap-3 mb-5">
-                <span class="slabel">Case Study · Studio</span>
-                <span style="color:rgba(28,23,18,0.18);">·</span>
-                <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">In progress</span>
+              <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+                <span class="slabel">Case Study · Regulated</span>
+                <span class="muted-text" style="opacity:0.5;">·</span>
+                <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Built, awaiting go-live</span>
               </div>
-              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Main Stage Studio</h3>
-              <p class="font-sans font-light text-near-black mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
-                The first client was the studio itself. Positioning, identity, voice, site: built in public with the same system every client gets, because the method had to prove itself here first.
+              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">PureMed Aesthetics</h3>
+              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
+                A medically-led aesthetics clinic, rebuilt from a site that scored 23 out of 100 on its own CRO audit. Eleven treatments, every claim checked against what the sector is allowed to say before any of it was signed off.
               </p>
-              <div class="flex flex-col gap-[6px]">
-                <div class="flex items-start gap-4">
-                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Services</span>
-                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Positioning · Brand Identity · Web Presence</span>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-baseline gap-4">
+                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
+                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Medical Aesthetics</span>
                 </div>
-                <div class="flex items-start gap-4">
-                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Type</span>
-                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Self-initiated · Solo Studio</span>
+                <div class="flex items-baseline gap-4">
+                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
+                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Copy · Web Presence</span>
                 </div>
               </div>
             </div>
             <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
-              <div class="flex items-center gap-2">
-                <div class="w-[5px] h-[5px] rounded-full bg-terracotta pulse-dot shrink-0"></div>
-                <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.32;">You're looking at it</span>
-              </div>
-              <a href="../portfolio/mss/case-study.html" class="font-sans font-light text-terracotta group flex items-center gap-[6px]" style="font-size:0.8125rem;">
+              <span class="btn-ghost" aria-hidden="true">
                 Read the case study
-                <span class="inline-block transition-transform duration-300 group-hover:translate-x-[4px]">→</span>
-              </a>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
             </div>
           </div>
         </div>
-      </article>
+      </a>
 
-      <!-- Sable -->
-      <article class="spotlight-card p-0 mt-6 mb-6 reveal rd2" id="work-sable">
-          <a href="../portfolio/sable/case-study.html" class="block work-thumb" style="aspect-ratio:4/3;background:#0E0D0B;">
-            <img src="/assets/sable-atmospheric.png"
-                 alt="Single gold horizontal line on charcoal, Sable brand concept"
+      <!-- Second row: one linked case study, one booked engagement. Same
+           box treatment and the same two-row meta table as the feature
+           above, so the three read as one set at two sizes. -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Sable -->
+        <a href="/work/sable" class="spotlight-card block no-underline reveal rd2" id="work-sable">
+          <div class="work-thumb overflow-hidden" style="aspect-ratio:4/3;background:#0E0D0B;">
+            <Image src={sableThumb}
+                 alt="A single line of gold light across charcoal, the Sable brand's atmospheric mark"
                  class="work-thumb-inner object-cover w-full h-full"
-                 style="object-position:center;">
-          </a>
-          <div class="p-6 md:p-7 border-t" style="border-color:rgba(28,23,18,0.08);">
-            <div class="flex items-center gap-3 mb-4">
+                 width={688}
+                 widths={thumbWidths}
+                 sizes={thumbSizes}
+                 format="webp"
+                 quality={76}
+                 loading="lazy"
+                 decoding="async" />
+          </div>
+
+          <div class="p-8 md:p-10 border-t" style="border-color:rgba(28,23,18,0.08);">
+            <div class="flex items-baseline gap-3 mb-5 flex-wrap">
               <span class="slabel">Case Study · Artist</span>
-              <span style="color:rgba(28,23,18,0.18);">·</span>
-              <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">Concept</span>
+              <span class="muted-text" style="opacity:0.5;">·</span>
+              <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
             </div>
-            <h3 class="font-display font-normal text-near-black mb-3" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Sable</h3>
-            <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
-              A character with a world attached, and no way for anyone to enter it. Sable needed an identity that could hold the atmosphere of the work, and a stage built for it, not for the studio.
+            <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Sable</h3>
+            <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:40ch;">
+              A character with a world attached, and no way for anyone to enter it. Sable needed an identity that could hold the atmosphere of the work, and a stage built for it rather than for the studio.
             </p>
-            <div class="flex flex-col gap-[6px] mb-6">
-              <div class="flex items-start gap-4">
-                <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Services</span>
-                <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Positioning · Brand Identity</span>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-baseline gap-4">
+                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
+                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Music · Independent Artist</span>
               </div>
-              <div class="flex items-start gap-4">
-                <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Sector</span>
-                <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Music · Independent Artist</span>
+              <div class="flex items-baseline gap-4">
+                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
+                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Brand Identity · Web Build</span>
               </div>
             </div>
-            <div class="pt-5 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
-              <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.28;">Self-initiated · 2026</span>
-              <a href="../portfolio/sable/case-study.html" class="font-sans font-light text-terracotta group flex items-center gap-[6px]" style="font-size:0.8125rem;">
+            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
+              <span class="btn-ghost" aria-hidden="true">
                 Read the case study
-                <span class="inline-block transition-transform duration-300 group-hover:translate-x-[4px]">→</span>
-              </a>
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Art by Ayesha Johar. Booked, not built: no link, so no spotlight
+             and no thumbnail zoom. The status line replaces the "read the
+             case study" row rather than sitting next to a dead one. -->
+        <article class="block border reveal rd3" id="work-ayesha" style="border-color:rgba(28,23,18,0.10);">
+          <div class="overflow-hidden" style="aspect-ratio:4/3;background:#1C1712;">
+            <Image src={ayeshaThumb}
+                 alt="A detail from Ayesha Johar's painted work"
+                 class="object-cover w-full h-full"
+                 width={688}
+                 widths={thumbWidths}
+                 sizes={thumbSizes}
+                 format="webp"
+                 quality={76}
+                 loading="lazy"
+                 decoding="async" />
+          </div>
+
+          <div class="p-8 md:p-10 border-t" style="border-color:rgba(28,23,18,0.08);">
+            <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+              <span class="slabel">Artist Portfolio</span>
+              <span class="muted-text" style="opacity:0.5;">·</span>
+              <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">In progress</span>
+            </div>
+            <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Art by Ayesha Johar</h3>
+            <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:40ch;">
+              Beauty and resistance treated as one thing rather than two. A web presence for the painter Ayesha Johar, built from the inside out: positioning and brand strategy are delivered, the site follows once the work is photographed.
+            </p>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-baseline gap-4">
+                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
+                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Visual Arts · Independent Creator</span>
+              </div>
+              <div class="flex items-baseline gap-4">
+                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
+                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Brand Identity · Web Build</span>
+              </div>
+            </div>
+            <div class="pt-6 mt-8 border-t flex items-center gap-2" style="border-color:rgba(28,23,18,0.07);">
+              <span class="w-[5px] h-[5px] rounded-full bg-terracotta pulse-dot shrink-0"></span>
+              <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Web build to follow, late 2026</span>
             </div>
           </div>
         </article>
 
-      <!-- Art by Ayesha Johar — secondary, offset -->
-      <article class="spotlight-card p-0 reveal rd3" id="work-ayesha">
-        <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr]">
-
-          <!-- Thumbnail -->
-          <div class="work-thumb overflow-hidden" style="aspect-ratio:4/3;background:#1C1712;">
-            <img src="/assets/art-by-ayesha-johar-cs-01.png"
-                 alt="Art by Ayesha Johar, case study thumbnail"
-                 class="work-thumb-inner object-cover w-full h-full"
-                 style="object-position:center;">
-          </div>
-
-          <!-- Detail -->
-          <div class="flex flex-col justify-between p-6 md:p-8 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
-            <div>
-              <div class="flex items-center gap-3 mb-4">
-                <span class="slabel">Artist Portfolio</span>
-                <span style="color:rgba(28,23,18,0.18);">·</span>
-                <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.35;">In progress</span>
-              </div>
-              <h3 class="font-display font-normal text-near-black mb-3" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Art by Ayesha Johar</h3>
-              <p class="font-sans font-light text-near-black mb-6" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
-                Beauty and resistance are one thing. A web presence for the painter Ayesha Johar - built from the inside out.
-              </p>
-              <div class="flex flex-col gap-[6px]">
-                <div class="flex items-start gap-4">
-                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Services</span>
-                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Positioning · Brand Identity · Web Presence</span>
-                </div>
-                <div class="flex items-start gap-4">
-                  <span class="font-sans text-near-black uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;opacity:0.35;margin-top:1px;">Sector</span>
-                  <span class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.7;">Visual Arts · Independent Creator</span>
-                </div>
-              </div>
-            </div>
-            <div class="pt-5 mt-6 border-t" style="border-color:rgba(28,23,18,0.07);">
-              <span class="font-sans text-near-black uppercase" style="font-size:0.5rem;letter-spacing:0.2em;opacity:0.25;">Visual assets incoming, late 2026</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-
-  <!-- ═══════════════════════════════════════ THE STUDIO -->
-  <section id="studio" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden">
-
-    <!-- Ghost proposition watermark -->
-    <div class="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
-      <span class="font-display text-near-black block w-full" style="font-size:clamp(4rem,10vw,9rem);line-height:1;opacity:0.025;letter-spacing:-0.03em;white-space:nowrap;padding-left:4vw;">
-        You don't need a bigger team.
-      </span>
-    </div>
-
-    <div class="max-w-[1400px] mx-auto relative">
-      <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-24">
-
-        <div class="reveal">
-          <p class="slabel mb-4">06 · The studio</p>
-          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;">
-            Run by one person.<br>
-            <span class="text-terracotta">Held to one standard.</span>
-          </h2>
-        </div>
-
-        <div class="flex flex-col gap-6 reveal rd1">
-          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;">
-            Main Stage Studio is run by one person, on purpose. You get one accountable judgment from discovery to publish: no account manager, no handoffs, no dilution between what you said and what gets made.
-          </p>
-          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;">
-            The background is product management, and it shows up as one discipline above all: understand the problem properly before you touch the solution. That's why engagements here start with listening, and why the system underneath the studio exists at all. It was built the way you'd build a product, because it is one.
-          </p>
-          <p class="font-sans font-light muted-text" style="font-size:1.0625rem;line-height:1.75;max-width:55ch;">
-            Drawn to people whose work means something beyond the commercial. If what you're building matters to you, it matters here.
-          </p>
-
-          <div class="pt-6 border-t" style="border-color:rgba(28,23,18,0.08);margin-top:0.5rem;">
-            <p class="slabel mb-5">What that gets you</p>
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center gap-3">
-                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
-                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">One accountable judgment, not a rotating account team</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
-                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">The tools have changed what's possible. The judgment hasn't changed hands.</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
-                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">PM discipline: understand the problem before touching the solution</span>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-[4px] h-[4px] rounded-full bg-terracotta shrink-0"></div>
-                <span class="font-sans font-light text-near-black" style="font-size:0.9375rem;opacity:0.62;">Drawn to work that means something beyond the commercial</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
+
     </div>
   </section>
 
@@ -846,54 +1227,66 @@ import '../styles/global.css';
       <div class="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-14 md:gap-24">
 
         <div class="reveal">
-          <p class="slabel mb-4">07 · Start a project</p>
-          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;">
-            Ready when<br>you are.
+          <p class="slabel mb-4">Start a project</p>
+          <!-- Shape 6 of 6: a single plain line, no accent. The label above used
+               to read "08 · Start a project" over a heading reading "Start a
+               project.", which was the same words twice. -->
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,4.5vw,4rem);line-height:1.05;letter-spacing:-0.015em;max-width:14ch;text-wrap:balance;">
+            Tell us what you're building.
           </h2>
-          <p class="font-sans font-light text-near-black mt-6" style="font-size:1rem;line-height:1.72;opacity:0.55;max-width:36ch;">
-            Tell me what you're building and where it's showing up short. If I think we can help, the next step is a conversation: no deck, no discovery fee.
+          <p class="font-sans font-light muted-text mt-6" style="font-size:1rem;line-height:1.72;max-width:36ch;">
+            Whether it's the site people see or the system running underneath, the next step is a conversation, not a deck. No discovery fee, no sales process.
           </p>
         </div>
 
         <form id="contact-form" action="https://formspree.io/f/mnjyqooa" method="POST" class="flex flex-col gap-9 reveal rd1" novalidate>
 
           <div class="flex flex-col gap-[5px]">
+            <label for="need" class="flabel">What are you looking for?</label>
+            <select id="need" name="need" class="finput" required>
+              <option value="" disabled selected>Choose one</option>
+              <option value="Presence">Presence (brand, site, content)</option>
+              <option value="Systems">Systems (an operational build)</option>
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-[5px]">
             <label for="name" class="flabel">Name</label>
-            <input type="text" id="name" name="name" class="finput" placeholder="Your name" autocomplete="name" required>
-            <p class="font-sans text-terracotta hidden" id="err-name" style="font-size:0.75rem;margin-top:3px;">Please enter your name.</p>
+            <input type="text" id="name" name="name" class="finput" placeholder="Your name" autocomplete="name" required aria-describedby="err-name">
+            <p role="alert" class="font-sans text-ember hidden" id="err-name" style="font-size:0.75rem;margin-top:3px;">Please enter your name.</p>
           </div>
 
           <div class="flex flex-col gap-[5px]">
             <label for="email" class="flabel">Email</label>
-            <input type="email" id="email" name="email" class="finput" placeholder="your@email.com" autocomplete="email" required>
-            <p class="font-sans text-terracotta hidden" id="err-email" style="font-size:0.75rem;margin-top:3px;">Please enter a valid email address.</p>
+            <input type="email" id="email" name="email" class="finput" placeholder="your@email.com" autocomplete="email" required aria-describedby="err-email">
+            <p role="alert" class="font-sans text-ember hidden" id="err-email" style="font-size:0.75rem;margin-top:3px;">Please enter a valid email address.</p>
           </div>
 
           <div class="flex flex-col gap-[5px]">
-            <label for="project" class="flabel">Tell me about your project</label>
-            <textarea id="project" name="project" class="finput" placeholder="What are you working on, and where are you with it?" rows="5" required></textarea>
-            <p class="font-sans text-terracotta hidden" id="err-project" style="font-size:0.75rem;margin-top:3px;">Please tell us about your project.</p>
+            <label for="project" class="flabel">Tell us about your project</label>
+            <textarea id="project" name="project" class="finput" placeholder="What are you working on, and where are you with it?" rows="5" required aria-describedby="err-project"></textarea>
+            <p role="alert" class="font-sans text-ember hidden" id="err-project" style="font-size:0.75rem;margin-top:3px;">Please tell us about your project.</p>
           </div>
 
           <div class="flex items-center gap-6 flex-wrap">
             <button type="submit" class="btn-fill" id="submit-btn">
               <span class="btn-fill__bg"></span>
-              <span class="btn-fill__label">Send it over</span>
+              <span class="btn-fill__label">Send brief</span>
             </button>
-            <p class="font-sans font-light text-near-black" style="font-size:0.8125rem;opacity:0.4;">
-              Or email <a href="mailto:hello@mainstagestudio.co.uk" class="underline underline-offset-2 transition-colors hover:text-terracotta" style="opacity:1;font-size:1rem;">hello@mainstagestudio.co.uk</a>
+            <p class="font-sans font-light muted-text" style="font-size:0.8125rem;">
+              Or email <a href="mailto:hello@mainstagestudio.co.uk" class="underline underline-offset-2 transition-colors hover:text-terracotta text-near-black" style="font-size:1rem;">hello@mainstagestudio.co.uk</a>
             </p>
           </div>
 
           <!-- Success -->
-          <div id="form-success" class="hidden items-start gap-4 py-5 px-5 border" style="border-color:rgba(28,23,18,0.1);background:rgba(28,23,18,0.03);">
+          <div id="form-success" role="status" aria-live="polite" class="hidden items-start gap-4 py-5 px-5 border" style="border-color:rgba(28,23,18,0.1);background:rgba(28,23,18,0.03);">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" class="shrink-0 mt-0.5">
               <circle cx="9" cy="9" r="8" stroke="#BF6B47" stroke-width="1.2"/>
               <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="#BF6B47" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div>
-              <p class="font-sans font-medium text-near-black" style="font-size:0.9375rem;">Got it. Thank you.</p>
-              <p class="font-sans font-light text-near-black mt-1" style="font-size:0.875rem;opacity:0.5;">I read everything that comes through here and you'll hear back from me within two working days.</p>
+              <p class="font-sans font-light text-near-black" style="font-size:0.9375rem;line-height:1.6;">Got it, thank you. We read everything that comes through here and you'll hear back within two working days.</p>
             </div>
           </div>
 
@@ -903,16 +1296,19 @@ import '../styles/global.css';
   </section>
 
 
+  </main>
+
+
   <!-- ═══════════════════════════════════════ FOOTER -->
   <footer class="bg-near-black py-10 px-6 md:px-12 lg:px-24" data-nav-dark="true">
     <div class="max-w-[1400px] mx-auto flex flex-col gap-8">
 
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
 
-        <a href="#" class="flex items-center gap-3 no-underline" aria-label="Main Stage Studio, back to top">
+        <a href="#" class="flex items-end gap-3 no-underline" aria-label="Main Stage Studio, back to top">
           <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
             <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
+            <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#3D3128"/>
             <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
           </svg>
           <span class="flex items-baseline gap-[0.3em]">
@@ -921,20 +1317,22 @@ import '../styles/global.css';
           </span>
         </a>
 
+        <!-- Was opacity 0.32 (2.69:1) with inline mouse handlers, which gave
+             hover-only feedback and no keyboard equivalent. Now 0.72 (8.53:1)
+             via a class that also responds to :focus-visible. -->
         <div class="flex items-center gap-7 flex-wrap">
-          <a href="#what-we-do"   class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">What we do</a>
-          <a href="#how-it-works" class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">How it works</a>
-          <a href="#work"         class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">Work</a>
-          <a href="#studio"       class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">The studio</a>
-          <a href="#contact"      class="font-sans text-parchment no-underline" style="font-size:0.8125rem;opacity:0.32;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.32">Start a project</a>
+          <a href="#what-we-do"   class="font-sans footer-link" style="font-size:0.8125rem;">What we do</a>
+          <a href="#how-it-works" class="font-sans footer-link" style="font-size:0.8125rem;">How it works</a>
+          <a href="#work"         class="font-sans footer-link" style="font-size:0.8125rem;">Work</a>
+          <a href="#contact"      class="font-sans footer-link" style="font-size:0.8125rem;">Start a project</a>
         </div>
       </div>
 
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-6 border-t hr-light">
-        <p class="font-sans text-parchment" style="font-size:0.8125rem;opacity:0.28;">Brand, web &amp; content: built and run.</p>
+        <p class="font-sans muted-text-dark" style="font-size:0.8125rem;">Presence and the systems underneath it, built and run.</p>
         <div class="flex items-center gap-6">
-          <a href="mailto:hello@mainstagestudio.co.uk" class="font-sans text-parchment no-underline" style="font-size:0.75rem;opacity:0.24;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.24">hello@mainstagestudio.co.uk</a>
-          <p class="font-sans text-parchment" style="font-size:0.6875rem;opacity:0.16;">&copy; 2026 Main Stage Studio</p>
+          <a href="mailto:hello@mainstagestudio.co.uk" class="font-sans footer-link" style="font-size:0.75rem;">hello@mainstagestudio.co.uk</a>
+          <p class="font-sans footer-meta" style="font-size:0.6875rem;">&copy; 2026 Main Stage Studio</p>
         </div>
       </div>
 
@@ -973,11 +1371,7 @@ import '../styles/global.css';
     }, { passive: true });
 
     // ── HERO LINE REVEAL ──────────────────────────────────────────────────
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.body.classList.add('lines-ready');
-      });
-    });
+    // Now handled entirely in CSS (@keyframes lineRise). No JS involved.
 
     // ── HERO VIDEO ────────────────────────────────────────────────────────
     const heroVideo = document.getElementById('hero-video');
@@ -1000,38 +1394,69 @@ import '../styles/global.css';
     const bar3 = document.getElementById('bar3');
     let menuOpen = false;
 
-    menuToggle.addEventListener('click', () => {
-      menuOpen = !menuOpen;
-      mobileMenu.style.transform = menuOpen ? 'translateX(0)' : 'translateX(100%)';
-      mobileMenu.setAttribute('aria-hidden', String(!menuOpen));
-      menuToggle.setAttribute('aria-expanded', String(menuOpen));
-      document.body.style.overflow = menuOpen ? 'hidden' : '';
-      bar1.style.transform = menuOpen ? 'translateY(6px) rotate(45deg)' : '';
-      bar2.style.opacity   = menuOpen ? '0' : '1';
-      bar3.style.transform = menuOpen ? 'translateY(-6px) rotate(-45deg)' : '';
-    });
+    const setMenu = open => {
+      menuOpen = open;
+      mobileMenu.style.transform = open ? 'translateX(0)' : 'translateX(100%)';
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+      // inert keeps the four off-screen links out of the tab order while closed.
+      if (open) mobileMenu.removeAttribute('inert');
+      else      mobileMenu.setAttribute('inert', '');
+      menuToggle.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+      bar1.style.transform = open ? 'translateY(6px) rotate(45deg)'   : '';
+      bar2.style.opacity   = open ? '0' : '1';
+      bar3.style.transform = open ? 'translateY(-6px) rotate(-45deg)' : '';
+    };
+
+    menuToggle.addEventListener('click', () => setMenu(!menuOpen));
+
     document.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', () => {
-        if (!menuOpen) return;
-        menuOpen = false;
-        mobileMenu.style.transform = 'translateX(100%)';
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        bar1.style.transform = bar3.style.transform = '';
-        bar2.style.opacity = '1';
-      });
+      link.addEventListener('click', () => { if (menuOpen) setMenu(false); });
     });
 
-    // ── MSS FEATURED IMAGE FADE ───────────────────────────────────────────
-    const mssThumb = document.getElementById('mss-thumb-img');
-    if (mssThumb) {
-      mssThumb.style.opacity = '0';
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          mssThumb.style.opacity = '1';
-        }, 600);
+    // Escape closes the menu and returns focus to the toggle.
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && menuOpen) { setMenu(false); menuToggle.focus(); }
+    });
+
+    // Widening past the breakpoint with the menu open left a full-screen
+    // parchment panel stranded over the desktop layout, with no visible
+    // toggle left to close it.
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', e => {
+      if (e.matches && menuOpen) setMenu(false);
+    });
+
+    // ── ACTIVE SECTION IN NAV ─────────────────────────────────────────────
+    // Same IntersectionObserver approach as the reveals below. The rootMargin
+    // collapses the viewport to a thin band across the middle, so exactly one
+    // section qualifies at a time: whichever is crossing the centre line.
+    const navLinks = [...document.querySelectorAll('#nav .nav-link[href^="#"]')];
+    const linkFor  = new Map();
+    navLinks.forEach(link => {
+      const section = document.querySelector(link.getAttribute('href'));
+      if (section) linkFor.set(section, link);
+    });
+
+    const setActive = link => {
+      navLinks.forEach(l => l.classList.toggle('active', l === link));
+    };
+
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) setActive(linkFor.get(e.target));
       });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+    linkFor.forEach((_link, section) => sectionObserver.observe(section));
+
+    // Above the first tracked section (the hero) nothing should be marked.
+    const firstSection = [...linkFor.keys()][0];
+    if (firstSection) {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.boundingClientRect.top > 0) setActive(null);
+        });
+      }, { threshold: 0 }).observe(firstSection);
     }
 
     // ── SCROLL REVEAL ─────────────────────────────────────────────────────
@@ -1052,6 +1477,32 @@ import '../styles/global.css';
         card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
         card.style.setProperty('--my', (e.clientY - r.top)  + 'px');
       });
+    });
+
+    // ── GAP ANCHOR PARALLAX ───────────────────────────────────────────────
+    // A single quiet drift as the image crosses the viewport, not a loop or a
+    // hover state, the section's only motion, in keeping with "punctuation,
+    // not decoration". Clamped range keeps it inside the image's own overflow
+    // wrapper so nothing clips or reveals the parchment behind it.
+    [['gap-anchor', 'gap-anchor-img'], ['hiw-anchor', 'hiw-anchor-img']].forEach(([wrapId, imgId]) => {
+      const wrap = document.getElementById(wrapId);
+      const img  = document.getElementById(imgId);
+      if (!wrap || !img) return;
+      // The drift has to stay inside the overhang the scale creates, or the
+      // parchment behind shows at the edges. A fixed 12px was safe on the
+      // 668px portrait anchor and is not on the 208px Gap band, so the range
+      // is derived from each element's own height: scale 1.08 gives
+      // height * 0.04 of overhang per side, and 0.8 of that is the budget.
+      const SCALE = 1.08;
+      const update = () => {
+        const r = wrap.getBoundingClientRect();
+        const progress = 1 - Math.min(1, Math.max(0, r.top / window.innerHeight));
+        const range = r.height * (SCALE - 1) * 0.8;
+        const offset = (progress - 0.5) * range;
+        img.style.transform = `translateY(${offset}px) scale(${SCALE})`;
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      update();
     });
 
     // ── SYSTEM PROGRESS LINE ──────────────────────────────────────────────
@@ -1085,27 +1536,34 @@ import '../styles/global.css';
     const submitLbl = submitBtn.querySelector('.btn-fill__label');
 
     const validators = [
+      { id:'need',    err:null,          ok: v => v.trim().length > 0 },
       { id:'name',    err:'err-name',    ok: v => v.trim().length > 0 },
       { id:'email',   err:'err-email',   ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
       { id:'project', err:'err-project', ok: v => v.trim().length > 0 },
     ];
 
     validators.forEach(({ id, err }) => {
+      if (!err) return;
       document.getElementById(id).addEventListener('input', () => {
         document.getElementById(err).classList.add('hidden');
+        document.getElementById(id).removeAttribute('aria-invalid');
       });
     });
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
       let valid = true;
+      let firstInvalid = null;
       validators.forEach(({ id, err, ok }) => {
-        const el  = document.getElementById(id);
-        const msg = document.getElementById(err);
+        const el   = document.getElementById(id);
         const pass = ok(el.value);
-        msg.classList.toggle('hidden', pass);
-        if (!pass) valid = false;
+        if (err) document.getElementById(err).classList.toggle('hidden', pass);
+        if (pass) el.removeAttribute('aria-invalid');
+        else      el.setAttribute('aria-invalid', 'true');
+        if (!pass) { valid = false; firstInvalid = firstInvalid || el; }
       });
+      // Send focus to the first problem rather than leaving the user to hunt.
+      if (firstInvalid) firstInvalid.focus();
       if (!valid) return;
 
       submitLbl.textContent = 'Sending…';
@@ -1136,6 +1594,28 @@ import '../styles/global.css';
         submitBtn.disabled = false;
         alert('Something went wrong. Please try emailing us directly at hello@mainstagestudio.co.uk');
       }
+    });
+
+    // Tooling clips: click-to-play, then native controls so the clip can be
+    // scrubbed. Nothing downloads until the first press (preload="none").
+    document.querySelectorAll('.clip-frame').forEach(frame => {
+      const video = frame.querySelector('video');
+      const button = frame.querySelector('.clip-play');
+      if (!video || !button) return;
+
+      button.addEventListener('click', () => {
+        frame.classList.add('is-playing');
+        video.controls = true;
+        video.play();
+        video.focus();
+      });
+
+      // Pause on scroll-out so two clips never run at once unseen.
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting && !video.paused) video.pause();
+        });
+      }, { threshold: 0.25 }).observe(frame);
     });
   </script>
 

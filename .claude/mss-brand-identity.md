@@ -22,8 +22,10 @@
 
 ### Mark — canonical description
 - Two offset squares with deliberate negative space at the intersection
-- **Near-black square — top-right, leads, sits on top** (vision stepping forward)
-- **Terracotta square — bottom-left, recedes behind** (structure, the process beneath)
+- **Near-black square — top-right, leads, sits on top** (the studio's structure and systems, a shadow that supports from underneath even while positioned to lead)
+- **Terracotta square — bottom-left, recedes behind** (the client — their vision, their presence — carried and elevated by that structure)
+
+Corrected 6 Aug 2026: the mark's spatial description (position, which square leads/recedes) was always right; the *meaning* attached to each colour was backwards in earlier drafts of this doc. Black is not "the vision" — black is MSS's own discipline and systems, invisible infrastructure. Terracotta is the client, the thing being supported and made visible. Any imagery, copy, or generated asset built on "black = vision" reasoning predates this correction and should be checked.
 - Parchment cutout at the intersection — the stage, the moment of emergence
 - Corner radius: 2.5px on both squares, 1.5px on cutout
 

@@ -1,0 +1,28 @@
+{
+  "client": "Main Stage Studio",
+  "type": "scene-collection",
+  "generated_at": "2026-08-07",
+  "placements": [
+    {
+      "id": "scene-gap-band-slabs",
+      "type": "scene",
+      "aspect_ratio": "21:9",
+      "section_selector": null,
+      "copy_context": "Wide letterbox band for The Gap section of the MSS homepage. Replaces gap-anchor.png, a 3:4 macro whose 3:1 crop read as visibly zoomed and too thick. Composed for a wide band rather than cropped from a portrait: three matte board slabs in a low horizontal line, camera far back and near surface level, generous empty ground. Three offset forms in near-black, terracotta and pale sand are the logo mark's geometry.",
+      "parent_scene_id": null,
+      "assets": [
+        {
+          "model": "seedream-4.5",
+          "variant": "v1",
+          "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_33ylt5CvJwzQ3wD9Au6wHSPDMkv/hf_20260807_135107_f0f97eb4-1c06-4254-96f6-ac693e2b0fa1.png",
+          "filename": "mss-scene-gap-band-slabs-seedream45-v1.png",
+          "format": "png",
+          "local_path": "01_mss/assets/generated/scenes/mss-scene-gap-band-slabs-seedream45-v1.png",
+          "compressed_path": null,
+          "preferred": true,
+          "notes": "6048x2592, 21:9, quality high, seed from job f0f97eb4. Chosen from three variants. Production crop lives at website/site/src/assets/gap-anchor-wide.png: crop=6048:1008:0:798 scaled to 3000x500 (6:1), which centres the slab band with air above and ground below. Astro re-encodes to responsive WebP from there. Rejected: job 1d684144 (slab band sat too high, one slab ran out of frame), job 6139b866 (hallucinated a trade-show background with people, purple signage and lettering, all three explicitly excluded in the brief)."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,950 @@
+---
+import { Image } from 'astro:assets';
+import '../../../styles/sable-site.css';
+import albumCover from '../../../assets/sable-album-cover-01.png';
+
+// Sable's own site, ported 7 Aug 2026 from 01_mss/portfolio/sable/web/index.html
+// so the case study's closing "enter" has somewhere to go. That file loaded
+// Tailwind from a CDN script, Google Fonts over the network, and a 27MB mp4 with
+// preload="auto" as the first thing on the page.
+//
+// It is a prototype for a self-initiated brief, and the return bar at the bottom
+// says so. It is also noindex: an invented artist's site ranking on its own,
+// detached from the case study that frames it, would read as a real one.
+
+const tracks = [
+  ['01', 'still here',        '3:42'],
+  ['02', 'under your skin',   '4:18'],
+  ['03', 'low light',         '3:55'],
+  ['04', 'what you left',     '5:01'],
+  ['05', 'body of water',     '4:33'],
+  ['06', 'the long way',      '4:47'],
+  ['07', 'known by now',      '3:38'],
+  ['08', 'between the words', '5:14'],
+  ['09', 'close your eyes',   '4:02'],
+  ['10', 'after all this',    '6:21'],
+];
+
+const shows = [
+  { d: '05 sep', v: 'The Waiting Room',        c: 'London',     full: '05 sep 2026' },
+  { d: '12 sep', v: 'Ouseburn Valley',         c: 'Newcastle',  full: '12 sep 2026' },
+  { d: '19 sep', v: 'Thekla',                  c: 'Bristol',    full: '19 sep 2026' },
+  { d: '26 sep', v: 'Brudenell Social Club',   c: 'Leeds',      full: '26 sep 2026' },
+  { d: '03 oct', v: 'Broadcast',               c: 'Glasgow',    full: '03 oct 2026' },
+  { d: '10 oct', v: 'Clwb Ifor Bach',          c: 'Cardiff',    full: '10 oct 2026' },
+  { d: '17 oct', v: 'The Actress and Bishop',  c: 'Birmingham', full: '17 oct 2026' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sable</title>
+  <meta name="description" content="born in london. the rest is in the music.">
+  <!-- Invented artist. This page is a portfolio prototype and is not indexed;
+       the case study at /work/sable is the page that should rank. -->
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%230D0C0B'/%3E%3Crect x='6' y='19' width='28' height='2' fill='%23C89442'/%3E%3C/svg%3E">
+
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/playfair-display-400-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-300-latin.woff2" crossorigin>
+
+  <script is:inline>document.documentElement.classList.add('js-anim');</script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { background: #0D0C0B; scroll-behavior: smooth; }
+
+    body {
+      background: #F0E8D8;
+      color: #0D0C0B;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Hero wordmark ───────────────────────────────────────────── */
+    .hero-wordmark {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(68px, 10.5vw, 152px);
+      letter-spacing: 0.09em;
+      line-height: 1;
+      color: #F0E8D8;
+    }
+
+    #hero-text, #name-return { will-change: opacity; }
+    #hero-video { will-change: filter; }
+    #freeze-overlay { will-change: opacity; pointer-events: none; }
+
+    /* ── CTA underline ───────────────────────────────────────────── */
+    /* NOTE: font-family, not the `font` shorthand, and no `color: inherit`.
+       This <style> block ships unlayered, so it outranks everything in
+       @layer utilities: `color: inherit` here silently beat text-bone and
+       text-gold on every CTA and rendered them all in the body colour,
+       which on the dark sections is near-black on near-black. The `font`
+       shorthand does the same thing to font-light. Buttons only actually
+       need the family reset; every .cta already carries its own colour. */
+    .cta {
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .cta::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: currentColor;
+      transition: width 300ms ease;
+    }
+    .cta:hover::after, .cta:focus-visible::after { width: 100%; }
+    .cta.nav-active::after { width: 100%; background: #C89442; transition: none; }
+
+    /* ── Music ───────────────────────────────────────────────────── */
+    #music {
+      background: #0D0C0B;
+      padding: clamp(80px, 10vh, 120px) clamp(24px, 5vw, 80px);
+    }
+    .music-grid {
+      display: grid;
+      grid-template-columns: 45fr 55fr;
+      gap: clamp(32px, 5vw, 80px);
+      align-items: start;
+    }
+    .music-cover img { width: 100%; display: block; aspect-ratio: 1; object-fit: cover; }
+
+    .track-item {
+      display: grid;
+      grid-template-columns: 26px 1fr 38px;
+      gap: 10px;
+      align-items: baseline;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(200,148,66,0.22);
+    }
+    .track-item:first-child { border-top: 1px solid rgba(200,148,66,0.22); }
+    /* Ash (#3D3530) is 1.9:1 on night and was carrying the track numbers, the
+       durations and every secondary line on the dark sections. It stays as a
+       surface colour; the muted text tone is lifted to 4.6:1. */
+    .track-num, .track-dur {
+      font-weight: 300; font-size: 10px;
+      letter-spacing: 0.1em; color: #8B8177;
+      font-variant-numeric: tabular-nums;
+    }
+    .track-dur { text-align: right; }
+    .track-name { font-weight: 300; font-size: 13px; letter-spacing: 0.04em; color: #F0E8D8; }
+
+    /* ── Tour ────────────────────────────────────────────────────── */
+    #tour {
+      background: #F0E8D8;
+      padding: clamp(80px, 10vh, 120px) clamp(24px, 5vw, 80px);
+    }
+    .tour-headline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(32px, 5vw, 64px);
+      letter-spacing: 0.01em;
+      line-height: 1;
+      color: #0D0C0B;
+      margin-bottom: clamp(40px, 6vh, 64px);
+    }
+    .show-list { max-width: 680px; }
+    .show-row {
+      display: grid;
+      grid-template-columns: 72px 1fr 160px 72px;
+      align-items: baseline;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(13,12,11,0.12);
+    }
+    .show-row:first-child { border-top: 1px solid rgba(13,12,11,0.12); }
+    .show-date, .show-city { font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: #5A5049; }
+    .show-venue { font-weight: 300; font-size: 14px; letter-spacing: 0.02em; color: #0D0C0B; }
+
+    /* The tickets control only appeared on row hover, which meant it did not
+       exist for keyboard users and did not exist on a phone until the
+       @media (hover:none) override further down. It is now always in the
+       layout and only its emphasis changes. */
+    .tickets-btn {
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: inherit;
+      font-weight: 300; font-size: 10px;
+      letter-spacing: 0.28em; color: #8C6A2E;
+      text-align: right;
+      opacity: 0.55;
+      transition: opacity 200ms ease;
+    }
+    .show-row:hover .tickets-btn,
+    .tickets-btn:hover,
+    .tickets-btn:focus-visible { opacity: 1; }
+    .tickets-btn::after {
+      content: ''; display: block; height: 1px;
+      background: currentColor; width: 0;
+      transition: width 300ms ease;
+    }
+    .tickets-btn:hover::after, .tickets-btn:focus-visible::after { width: 100%; }
+
+    /* ── Overlays ────────────────────────────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0; z-index: 60;
+      background: rgba(13,12,11,0.97);
+      opacity: 0; pointer-events: none;
+      transition: opacity 350ms ease;
+      will-change: opacity;
+    }
+    .overlay.is-open { opacity: 1; pointer-events: auto; }
+
+    .overlay-close {
+      position: absolute; top: 28px; right: clamp(24px, 5vw, 48px);
+      background: none; border: none; cursor: pointer;
+      color: #F0E8D8; font-size: 20px; font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300; line-height: 1; padding: 6px;
+      transition: opacity 200ms ease;
+    }
+    .overlay-close:hover { opacity: 0.5; }
+
+    .overlay-body {
+      position: absolute;
+      top: 50%; left: clamp(24px, 5vw, 80px);
+      transform: translateY(-50%);
+      max-width: 340px;
+      width: calc(100% - clamp(48px, 10vw, 160px));
+    }
+    .overlay-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400; font-size: clamp(22px, 2.8vw, 32px);
+      letter-spacing: 0.01em; color: #F0E8D8; line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .overlay-meta {
+      font-weight: 300; font-size: 11px;
+      letter-spacing: 0.18em; color: #8B8177;
+      margin-bottom: 4px; line-height: 1.6;
+    }
+    .overlay-price {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400; font-size: clamp(28px, 4vw, 44px);
+      color: #F0E8D8; margin: 28px 0 32px; letter-spacing: 0.02em;
+    }
+    .overlay-tier-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(240,232,216,0.12);
+    }
+    .overlay-tier-row:first-child { border-top: 1px solid rgba(240,232,216,0.12); }
+    .overlay-tier-name  { font-weight: 300; font-size: 13px; letter-spacing: 0.06em; color: #F0E8D8; }
+    .overlay-tier-price { font-weight: 300; font-size: 13px; letter-spacing: 0.06em; color: #8B8177; }
+
+    .overlay-input {
+      background: transparent; border: none;
+      border-bottom: 1px solid rgba(240,232,216,0.3);
+      color: #F0E8D8;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300; font-size: 16px;
+      outline: none; padding: 8px 0;
+      width: 100%; border-radius: 0; -webkit-appearance: none;
+      margin-top: 32px;
+    }
+    .overlay-input::placeholder { color: rgba(240,232,216,0.45); }
+    .overlay-submit {
+      background: none; border: none; cursor: pointer;
+      position: relative; display: inline-block; padding: 0 0 2px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300; font-size: 11px;
+      letter-spacing: 0.3em; color: #C89442;
+      margin-top: 20px;
+    }
+    .overlay-submit::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: #C89442;
+      transition: width 300ms ease;
+    }
+    .overlay-submit:hover::after, .overlay-submit:focus-visible::after { width: 100%; }
+    .overlay-or       { font-weight: 300; font-size: 11px; letter-spacing: 0.12em; color: #8B8177; margin-top: 28px; }
+    .overlay-footnote { font-weight: 300; font-size: 10px; letter-spacing: 0.14em; color: #8B8177; margin-top: 28px; }
+
+    /* ── Connect ─────────────────────────────────────────────────── */
+    #connect-input {
+      background: transparent; border: none;
+      border-bottom: 1px solid rgba(240,232,216,0.35);
+      outline: none; color: #F0E8D8;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300; font-size: 16px;
+      padding: 8px 0;
+      width: clamp(220px, 30vw, 340px);
+      border-radius: 0; -webkit-appearance: none;
+    }
+    #connect-input::placeholder { color: rgba(240,232,216,0.42); letter-spacing: 0.18em; }
+    #connect-input:focus { border-bottom-color: rgba(240,232,216,0.65); transition: border-bottom-color 200ms ease; }
+    #connect-input.input-error { border-bottom-color: #C89442; }
+
+    #connect-error {
+      font-weight: 300; font-size: 11px; letter-spacing: 0.14em;
+      color: #C89442;
+    }
+    #connect-success {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(18px, 2vw, 26px);
+      letter-spacing: 0.01em; line-height: 1.4;
+      color: #F0E8D8;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 600ms ease;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────────── */
+    #nav { transition: background-color 400ms ease, backdrop-filter 400ms ease; }
+    #nav.nav--light a, #nav.nav--light .cta { color: #0D0C0B !important; }
+
+    /* Over the top of the hero the nav has no background at all, and the
+       opening seconds of the film are a lit studio wall: bone-on-white.
+       A short scrim under the nav costs nothing visually and makes the
+       links readable for the one part of the page where they sit on
+       whatever frame happens to be playing. */
+    #nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13,12,11,0.62), rgba(13,12,11,0));
+      opacity: 1;
+      transition: opacity 400ms ease;
+      pointer-events: none;
+      z-index: -1;
+    }
+    #nav.nav--solid::before { opacity: 0; }
+
+    #menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      background: none; border: none; padding: 6px; cursor: pointer;
+    }
+    @media (max-width: 767px) { #menu-btn { display: flex; } }
+    .bar {
+      display: block; width: 22px; height: 1px;
+      background: #F0E8D8;
+      transition: transform 300ms ease;
+      transform-origin: center;
+    }
+    #nav.nav--light .bar { background: #0D0C0B; }
+    #menu-btn.is-open .bar:first-child { transform: translateY(4.5px)  rotate(45deg); }
+    #menu-btn.is-open .bar:last-child  { transform: translateY(-4.5px) rotate(-45deg); }
+
+    #mobile-nav {
+      position: fixed; inset: 0; z-index: 40;
+      background: #0D0C0B;
+      display: flex; flex-direction: column; justify-content: center;
+      padding-left: clamp(24px, 8vw, 56px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 350ms ease;
+    }
+    #mobile-nav.is-open { opacity: 1; pointer-events: auto; }
+    .mobile-nav-link {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(40px, 10vw, 64px);
+      letter-spacing: 0.06em;
+      color: #F0E8D8; text-decoration: none;
+      line-height: 1.2; display: block;
+      margin-bottom: clamp(16px, 3vh, 28px);
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 300ms ease, transform 300ms ease;
+    }
+    #mobile-nav.is-open .mobile-nav-link:nth-child(1) { opacity: 1; transform: none; transition-delay: 80ms; }
+    #mobile-nav.is-open .mobile-nav-link:nth-child(2) { opacity: 1; transform: none; transition-delay: 140ms; }
+    #mobile-nav.is-open .mobile-nav-link:nth-child(3) { opacity: 1; transform: none; transition-delay: 200ms; }
+
+    /* ── Return to the studio ────────────────────────────────────
+       The prototype opened in a new tab from the case study, so there was
+       never a way back inside the page itself. On a real route there has
+       to be one, and it doubles as the disclosure that this is a portfolio
+       piece rather than a live artist's site. */
+    #return-bar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 55;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 10px clamp(24px, 5vw, 80px);
+      background: rgba(13,12,11,0.86);
+      border-top: 1px solid rgba(240,232,216,0.12);
+      backdrop-filter: blur(10px);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #B7ADA2;
+    }
+    #return-bar a {
+      color: #F0E8D8;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200,148,66,0.5);
+      padding-bottom: 1px;
+      transition: border-color 250ms ease;
+    }
+    #return-bar a:hover { border-bottom-color: #C89442; }
+    /* Keeps the footer clear of the fixed bar. */
+    body { padding-bottom: 46px; }
+    @media (max-width: 560px) { body { padding-bottom: 68px; } }
+
+    /* ── Arrival transition ──────────────────────────────────────
+       The case study fades to near-black before handing over. This page
+       fades up out of the same black so the two halves join. */
+    #arrive-veil {
+      position: fixed; inset: 0; z-index: 90;
+      background: #0D0C0B;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .js-anim #arrive-veil {
+      opacity: 1;
+      animation: veilOut 900ms cubic-bezier(0.16,1,0.3,1) 120ms both;
+    }
+    @keyframes veilOut { to { opacity: 0; visibility: hidden; } }
+
+    :focus-visible { outline: 2px solid #C89442; outline-offset: 3px; }
+
+    .skip-link {
+      position: absolute; left: 1rem; top: -100px; z-index: 95;
+      background: #F0E8D8; color: #0D0C0B;
+      font-size: 12px; letter-spacing: 0.1em;
+      padding: 10px 16px; text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    @media (max-width: 767px) {
+      .music-grid { grid-template-columns: 1fr; }
+      .show-row { grid-template-columns: 64px 1fr auto; }
+      .show-city { display: none; }
+    }
+
+    /* ── Reduced motion ──────────────────────────────────────────
+       The hero is a 15-second film that autoplays, desaturates, darkens and
+       then resolves onto a wordmark. All of that is choreography. With
+       reduced motion the film does not play, the poster frame stands in,
+       and the page arrives already at its resting state. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+      }
+      .js-anim #arrive-veil { display: none; }
+      #hero-text { opacity: 0 !important; }
+      #name-return { opacity: 1 !important; }
+      #freeze-overlay { opacity: 0.35 !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="arrive-veil" aria-hidden="true"></div>
+
+  <a href="#music" class="skip-link">Skip to content</a>
+
+  <!-- ── Nav ──────────────────────────────────────────────────────── -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between" style="padding: 28px clamp(24px, 5vw, 40px);">
+
+    <a href="#arrival" class="cta font-serif text-bone" style="font-size:13px;letter-spacing:0.42em;font-weight:400;">sable</a>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="#music"   class="cta font-sans font-light text-bone" style="font-size:11px;letter-spacing:0.28em;">music</a>
+      <a href="#tour"    class="cta font-sans font-light text-bone" style="font-size:11px;letter-spacing:0.28em;">tour</a>
+      <a href="#connect" class="cta font-sans font-light text-bone" style="font-size:11px;letter-spacing:0.28em;">connect</a>
+    </div>
+
+    <button id="menu-btn" aria-label="open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </nav>
+
+  <!-- inert while closed: three full-size links sat in the tab order behind
+       an invisible overlay at every viewport width. -->
+  <div id="mobile-nav" role="dialog" aria-label="navigation" aria-hidden="true" inert>
+    <a href="#music"   class="mobile-nav-link" data-mobile-link>music</a>
+    <a href="#tour"    class="mobile-nav-link" data-mobile-link>tour</a>
+    <a href="#connect" class="mobile-nav-link" data-mobile-link>connect</a>
+  </div>
+
+
+  <!-- ── 01 Arrival ───────────────────────────────────────────────── -->
+  <section id="arrival" class="relative overflow-hidden bg-night" style="min-height:100dvh;">
+
+    <!-- The prototype pointed straight at the 27MB master with preload="auto"
+         and no poster, so the hero was a black rectangle until it buffered.
+         Now 3.1MB VP9 with an H.264 fallback and a 12KB poster frame. -->
+    <video id="hero-video"
+           class="absolute inset-0 w-full h-full object-cover"
+           poster="/assets/sable-hero.webp"
+           width="1920" height="1080"
+           autoplay muted playsinline preload="auto"
+           aria-hidden="true">
+      <source src="/assets/sable-hero.webm" type="video/webm" />
+      <source src="/assets/sable-hero.mp4" type="video/mp4" />
+    </video>
+
+    <div class="absolute inset-0 z-10" style="background:rgba(13,12,11,0.36);"></div>
+    <!-- Bottom scrim. The flat 36% wash above is tuned for the darker half of
+         the film; the opening shot is a lit wall, and the wordmark, the line
+         and the "listen" link all sit in the bottom-left corner of it. -->
+    <div class="absolute inset-x-0 bottom-0 z-10" style="height:62%;background:linear-gradient(to top, rgba(13,12,11,0.78), rgba(13,12,11,0));" aria-hidden="true"></div>
+    <div id="freeze-overlay" class="absolute inset-0 z-20" style="background:#000;opacity:0;"></div>
+
+    <div id="hero-text" class="absolute z-30" style="left:clamp(24px,5vw,80px);bottom:clamp(64px,9vh,110px);">
+      <div>
+        <h1 class="hero-wordmark">sable</h1>
+        <p class="font-sans font-light text-gold" style="font-size:11px;letter-spacing:0.52em;margin-top:10px;">london</p>
+      </div>
+
+      <div style="height:clamp(40px,6vh,64px);"></div>
+
+      <p class="font-serif text-bone" style="font-size:clamp(19px,2vw,27px);letter-spacing:0.02em;line-height:1.35;font-weight:400;">
+        born in london. the rest is in the music.
+      </p>
+
+      <a href="#music" class="cta font-sans font-light text-bone" style="font-size:11px;letter-spacing:0.3em;margin-top:30px;display:inline-block;">
+        listen
+      </a>
+    </div>
+
+    <!-- The wordmark returns alone once the film has settled. aria-hidden
+         because it repeats the h1 above it word for word. -->
+    <div id="name-return" class="absolute z-30" style="left:clamp(24px,5vw,80px);bottom:clamp(64px,9vh,110px);opacity:0;" aria-hidden="true">
+      <p class="hero-wordmark">sable</p>
+      <p class="font-sans font-light text-gold" style="font-size:11px;letter-spacing:0.52em;margin-top:10px;">london</p>
+    </div>
+
+  </section>
+
+
+  <!-- ── 02 Music ─────────────────────────────────────────────────── -->
+  <section id="music">
+    <div class="music-grid">
+
+      <div class="music-cover">
+        <Image src={albumCover}
+               alt="Between the Words, the album artwork"
+               width={720}
+               widths={[360, 720, 1080]}
+               sizes="(min-width: 768px) 45vw, 100vw"
+               format="webp"
+               quality={80}
+               loading="lazy"
+               decoding="async" />
+      </div>
+
+      <div>
+        <p class="font-sans font-light text-gold" style="font-size:11px;letter-spacing:0.45em;margin-bottom:clamp(28px,4vh,44px);">
+          the music
+        </p>
+
+        <p class="font-serif text-bone" style="font-size:clamp(18px,1.9vw,26px);font-weight:400;line-height:1.45;letter-spacing:0.01em;margin-bottom:2px;">
+          some things don't have a name yet.
+        </p>
+        <p class="font-serif text-bone" style="font-size:clamp(18px,1.9vw,26px);font-weight:400;line-height:1.45;letter-spacing:0.01em;margin-bottom:clamp(20px,3vh,32px);">
+          this does.
+        </p>
+
+        <p class="font-serif" style="font-size:clamp(13px,1.3vw,17px);font-weight:400;letter-spacing:0.06em;line-height:1.6;color:rgba(240,232,216,0.62);margin-bottom:clamp(24px,4vh,36px);">
+          between the words &nbsp;·&nbsp; sable
+        </p>
+
+        <div style="margin-bottom:clamp(28px,4vh,44px);">
+          {tracks.map(([n, name, dur]) => (
+            <div class="track-item">
+              <span class="track-num">{n}</span>
+              <span class="track-name">{name}</span>
+              <span class="track-dur">{dur}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style="display:flex;align-items:baseline;gap:32px;flex-wrap:wrap;">
+          <button id="buy-btn" type="button" class="cta font-sans font-light text-bone" style="font-size:11px;letter-spacing:0.28em;">
+            buy the album
+          </button>
+          <!-- Was an <a href="#">. There is no streaming service behind a
+               fictional album, so it does not claim to be a link. -->
+          <button type="button" class="cta font-sans font-light text-bone" data-unbuilt style="font-size:11px;letter-spacing:0.28em;">
+            stream
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── 03 Tour ──────────────────────────────────────────────────── -->
+  <section id="tour">
+
+    <p class="font-sans font-light" style="font-size:11px;letter-spacing:0.45em;margin-bottom:clamp(16px,2.5vh,24px);color:#8C6A2E;">
+      live
+    </p>
+
+    <p class="tour-headline">autumn 2026</p>
+
+    <div class="show-list">
+      {shows.map(s => (
+        <div class="show-row" data-venue={s.v} data-city={s.c} data-date={s.full}>
+          <span class="show-date">{s.d}</span>
+          <span class="show-venue">{s.v}</span>
+          <span class="show-city">{s.c}</span>
+          <button type="button" class="tickets-btn" aria-label={`Tickets for ${s.v}, ${s.c}, ${s.full}`}>tickets</button>
+        </div>
+      ))}
+    </div>
+  </section>
+
+
+  <!-- ── Checkout overlay ─────────────────────────────────────────── -->
+  <div id="checkout-overlay" class="overlay" role="dialog" aria-label="buy the album" aria-modal="true" aria-hidden="true" inert>
+    <button class="overlay-close" data-overlay-close aria-label="close">&#215;</button>
+    <div class="overlay-body">
+      <p class="overlay-title">between the words</p>
+      <p class="overlay-meta">digital album</p>
+      <p class="overlay-price">£8</p>
+      <form novalidate data-demo-form>
+        <label for="checkout-email" class="sr-only">your email</label>
+        <input id="checkout-email" class="overlay-input" type="email" placeholder="your email" autocomplete="email" spellcheck="false">
+        <button type="submit" class="overlay-submit">pay with card</button>
+      </form>
+      <p class="overlay-or">or &nbsp;<button type="button" class="cta" data-unbuilt style="color:#C89442;font:inherit;">stream free on sable</button></p>
+    </div>
+  </div>
+
+
+  <!-- ── Ticketing overlay ────────────────────────────────────────── -->
+  <div id="ticketing-overlay" class="overlay" role="dialog" aria-label="get tickets" aria-modal="true" aria-hidden="true" inert>
+    <button class="overlay-close" data-overlay-close aria-label="close">&#215;</button>
+    <div class="overlay-body">
+      <p class="overlay-title">sable</p>
+      <p class="overlay-meta" id="ticket-venue-line">live at venue, city</p>
+      <p class="overlay-meta" id="ticket-date-line">date</p>
+      <div style="margin:28px 0;">
+        <div class="overlay-tier-row">
+          <span class="overlay-tier-name">general admission</span>
+          <span class="overlay-tier-price">£12</span>
+        </div>
+        <div class="overlay-tier-row">
+          <span class="overlay-tier-name">early entry</span>
+          <span class="overlay-tier-price">£16</span>
+        </div>
+      </div>
+      <form novalidate data-demo-form>
+        <label for="ticket-email" class="sr-only">your email</label>
+        <input id="ticket-email" class="overlay-input" type="email" placeholder="your email" autocomplete="email" spellcheck="false">
+        <button type="submit" class="overlay-submit">get tickets</button>
+      </form>
+      <p class="overlay-footnote">all shows are standing. doors 7pm.</p>
+    </div>
+  </div>
+
+
+  <!-- ── 04 Connect ───────────────────────────────────────────────── -->
+  <section id="connect" class="bg-night" style="padding:clamp(100px,14vh,160px) clamp(24px,5vw,80px);">
+
+    <p class="font-serif text-bone" style="font-size:clamp(24px,2.8vw,36px);font-weight:400;letter-spacing:0.02em;margin-bottom:clamp(44px,6vh,64px);">
+      stay close.
+    </p>
+
+    <form id="connect-form" novalidate style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;">
+      <label for="connect-input" class="sr-only">email address</label>
+      <input id="connect-input" type="email" name="email" autocomplete="email" spellcheck="false" placeholder="your email" aria-describedby="connect-error">
+      <!-- The prototype signalled a bad address with a border colour change
+           and nothing else. A colour is not a message. -->
+      <p id="connect-error" role="alert" hidden>that address doesn't look right.</p>
+      <button id="write-btn" type="submit" class="cta font-sans font-light text-gold" style="font-size:11px;letter-spacing:0.3em;margin-top:12px;">
+        write
+      </button>
+    </form>
+
+    <p id="connect-success" role="status">thank you for being in it with me.</p>
+
+  </section>
+
+
+  <!-- ── Footer ───────────────────────────────────────────────────── -->
+  <footer class="bg-night" style="padding:clamp(44px,6vh,64px) clamp(24px,5vw,80px);">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div>
+        <p class="font-serif text-bone" style="font-size:13px;letter-spacing:0.42em;font-weight:400;">sable</p>
+        <p class="font-sans font-light text-gold" style="font-size:11px;letter-spacing:0.52em;margin-top:8px;">london</p>
+      </div>
+      <p class="font-sans font-light" style="font-size:10px;letter-spacing:0.14em;color:#8B8177;">c. 2026</p>
+    </div>
+  </footer>
+
+
+  <div id="return-bar">
+    <span>Prototype · invented artist</span>
+    <span aria-hidden="true" style="opacity:0.4;">·</span>
+    <a href="/work/sable">Back to the case study</a>
+    <span aria-hidden="true" style="opacity:0.4;">·</span>
+    <a href="/">Main Stage Studio</a>
+  </div>
+
+
+  <script>
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Hero lifecycle ──────────────────────────────────────────────
+    // Cut points, in seconds, against a 15.04s film. Adjust together if the
+    // edit changes: DARK_AT is deliberately 3s before the end so the overlay
+    // is still transitioning when playback stops and keeps deepening past it.
+    const TEXT_OUT_AT  = 8.0;
+    const TEXT_OUT_DUR = 1.5;
+    const GRAY_AT      = 11.5;
+    const GRAY_DUR     = 1.5;
+    const DARK_AT      = 12.0;
+    const DARK_DUR     = 6.0;
+    const DARK_FINAL   = 0.5;
+
+    const video      = document.getElementById('hero-video');
+    const heroText   = document.getElementById('hero-text');
+    const freezeOver = document.getElementById('freeze-overlay');
+    const nameReturn = document.getElementById('name-return');
+
+    if (video && !reduced) {
+      const applied = { textOut: false, gray: false, dark: false };
+
+      video.addEventListener('timeupdate', () => {
+        const t = video.currentTime;
+
+        if (t >= TEXT_OUT_AT && !applied.textOut) {
+          applied.textOut = true;
+          heroText.style.transition = `opacity ${TEXT_OUT_DUR}s ease`;
+          heroText.style.opacity    = '0';
+        }
+        if (t >= GRAY_AT && !applied.gray) {
+          applied.gray = true;
+          video.style.transition = `filter ${GRAY_DUR}s ease`;
+          video.style.filter     = 'grayscale(1)';
+        }
+        if (t >= DARK_AT && !applied.dark) {
+          applied.dark = true;
+          freezeOver.style.transition = `opacity ${DARK_DUR}s linear`;
+          freezeOver.style.opacity    = String(DARK_FINAL);
+        }
+      });
+
+      video.addEventListener('ended', () => {
+        video.currentTime = video.duration - 0.01;
+        setTimeout(() => {
+          nameReturn.style.transition = 'opacity 1.5s ease';
+          nameReturn.style.opacity    = '1';
+        }, 3500);
+      });
+
+      // Autoplay can be refused (low power mode, data saver). Without this the
+      // page would sit on the poster with the opening text never clearing.
+      const p = video.play();
+      if (p && p.catch) {
+        p.catch(() => {
+          heroText.style.transition = 'opacity 1.2s ease';
+          heroText.style.opacity = '0';
+          nameReturn.style.transition = 'opacity 1.2s ease';
+          nameReturn.style.opacity = '1';
+          freezeOver.style.opacity = '0.35';
+        });
+      }
+    }
+
+    // ── Nav: scrolled state, and light over the one bone section ────
+    const nav = document.getElementById('nav');
+    let tourInView = false;
+
+    function updateNav() {
+      if (tourInView) {
+        nav.style.backgroundColor = 'rgba(240,232,216,0.92)';
+        nav.style.backdropFilter  = 'blur(10px)';
+        nav.classList.add('nav--light');
+        nav.classList.add('nav--solid');
+      } else if (window.scrollY > 60) {
+        nav.style.backgroundColor = 'rgba(13,12,11,0.82)';
+        nav.style.backdropFilter  = 'blur(10px)';
+        nav.classList.remove('nav--light');
+        nav.classList.add('nav--solid');
+      } else {
+        nav.style.backgroundColor = 'transparent';
+        nav.style.backdropFilter  = 'none';
+        nav.classList.remove('nav--light');
+        nav.classList.remove('nav--solid');
+      }
+    }
+    window.addEventListener('scroll', updateNav, { passive: true });
+    // The prototype never called this on load, so a reload partway down the
+    // page rendered the nav transparent over whatever was behind it.
+    updateNav();
+
+    new IntersectionObserver(entries => {
+      entries.forEach(e => { tourInView = e.isIntersecting; updateNav(); });
+    }, { threshold: 0.2 }).observe(document.getElementById('tour'));
+
+    // ── Active nav link ─────────────────────────────────────────────
+    // One observer over the three sections, instead of one per section plus
+    // a duplicate loop. Last section past the top of the viewport wins.
+    const navLinks = {
+      music:   document.querySelector('a[href="#music"]'),
+      tour:    document.querySelector('a[href="#tour"]'),
+      connect: document.querySelector('a[href="#connect"]'),
+    };
+    const visible = new Set();
+    new IntersectionObserver(entries => {
+      entries.forEach(e => e.isIntersecting ? visible.add(e.target.id) : visible.delete(e.target.id));
+      Object.values(navLinks).forEach(l => l && l.classList.remove('nav-active'));
+      const current = ['connect', 'tour', 'music'].find(id => visible.has(id));
+      if (current && navLinks[current]) navLinks[current].classList.add('nav-active');
+    }, { threshold: 0.25 }).observe(document.getElementById('music'));
+
+    ['tour', 'connect'].forEach(id => {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => e.isIntersecting ? visible.add(e.target.id) : visible.delete(e.target.id));
+        Object.values(navLinks).forEach(l => l && l.classList.remove('nav-active'));
+        const current = ['connect', 'tour', 'music'].find(x => visible.has(x));
+        if (current && navLinks[current]) navLinks[current].classList.add('nav-active');
+      }, { threshold: 0.25 }).observe(document.getElementById(id));
+    });
+
+    // ── Connect form ────────────────────────────────────────────────
+    const connectForm = document.getElementById('connect-form');
+    connectForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const input   = document.getElementById('connect-input');
+      const err     = document.getElementById('connect-error');
+      const success = document.getElementById('connect-success');
+      const value   = input.value.trim();
+
+      if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        input.classList.add('input-error');
+        input.setAttribute('aria-invalid', 'true');
+        err.hidden = false;
+        input.addEventListener('input', () => {
+          input.classList.remove('input-error');
+          input.removeAttribute('aria-invalid');
+          err.hidden = true;
+        }, { once: true });
+        input.focus();
+        return;
+      }
+
+      connectForm.style.transition = 'opacity 400ms ease';
+      connectForm.style.opacity = '0';
+      connectForm.style.pointerEvents = 'none';
+      setTimeout(() => {
+        connectForm.hidden = true;
+        success.style.opacity = '1';
+        success.style.pointerEvents = 'auto';
+      }, 420);
+    });
+
+    // The two overlay forms are demonstrations of the checkout and ticketing
+    // flows, not live payment. They acknowledge and stop.
+    document.querySelectorAll('[data-demo-form]').forEach(form => {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = form.querySelector('.overlay-submit');
+        if (btn && !btn.dataset.done) {
+          btn.dataset.done = '1';
+          btn.textContent = 'not live in this prototype';
+        }
+      });
+    });
+
+    // Controls that are part of the design but have nothing behind them.
+    document.querySelectorAll('[data-unbuilt]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.done) return;
+        btn.dataset.done = '1';
+        const was = btn.textContent;
+        btn.textContent = 'not live in this prototype';
+        setTimeout(() => { btn.textContent = was; delete btn.dataset.done; }, 2400);
+      });
+    });
+
+    // ── Overlays ────────────────────────────────────────────────────
+    // The prototype opened these with no focus management at all: the dialog
+    // appeared, focus stayed on the page behind it, and Escape was the only
+    // way a keyboard user could get out without tabbing through the whole
+    // document. inert handles the background, and focus is moved and returned.
+    let lastFocused = null;
+
+    function openOverlay(id) {
+      const o = document.getElementById(id);
+      lastFocused = document.activeElement;
+      o.removeAttribute('inert');
+      o.setAttribute('aria-hidden', 'false');
+      o.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      o.querySelector('[data-overlay-close]').focus();
+    }
+    function closeOverlay(o) {
+      o.classList.remove('is-open');
+      o.setAttribute('aria-hidden', 'true');
+      o.setAttribute('inert', '');
+      document.body.style.overflow = '';
+      if (lastFocused) { lastFocused.focus(); lastFocused = null; }
+    }
+
+    document.querySelectorAll('.overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) closeOverlay(o); });
+      o.querySelector('[data-overlay-close]').addEventListener('click', () => closeOverlay(o));
+    });
+
+    document.getElementById('buy-btn').addEventListener('click', () => openOverlay('checkout-overlay'));
+
+    document.querySelectorAll('.tickets-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const { venue, city, date } = btn.closest('.show-row').dataset;
+        document.getElementById('ticket-venue-line').textContent = `live at ${venue}, ${city}`;
+        document.getElementById('ticket-date-line').textContent  = date;
+        openOverlay('ticketing-overlay');
+      });
+    });
+
+    // ── Mobile nav ──────────────────────────────────────────────────
+    const menuBtn   = document.getElementById('menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    function setMenu(open) {
+      menuBtn.classList.toggle('is-open', open);
+      mobileNav.classList.toggle('is-open', open);
+      mobileNav.setAttribute('aria-hidden', String(!open));
+      if (open) mobileNav.removeAttribute('inert');
+      else      mobileNav.setAttribute('inert', '');
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'close menu' : 'open menu');
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    menuBtn.addEventListener('click', () => setMenu(!mobileNav.classList.contains('is-open')));
+    document.querySelectorAll('[data-mobile-link]').forEach(l => l.addEventListener('click', () => setMenu(false)));
+
+    // Widening past the breakpoint with the menu open used to leave a
+    // full-screen panel stranded over the desktop layout.
+    const wide = window.matchMedia('(min-width: 768px)');
+    wide.addEventListener('change', e => { if (e.matches) setMenu(false); });
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      const open = document.querySelector('.overlay.is-open');
+      if (open) { closeOverlay(open); return; }
+      if (mobileNav.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); }
+    });
+  </script>
+
+</body>
+</html>

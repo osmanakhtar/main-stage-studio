@@ -30,7 +30,7 @@
 
 | Item | Purpose | Cost | Date | Notes |
 |------|---------|------|------|-------|
-| Bricks Builder | WordPress page builder, lifetime licence | £535.75 | 17 June 2026 | Purchased and confirmed. Covers MSS, Ayesha, and the personal projects (PureMed, Locked In Learning) as shared infrastructure only, not a shared brand — the Studio 2 venture this row used to reference was reversed 17 June 2026. |
+| ~~Bricks Builder~~ | ~~WordPress page builder, lifetime licence~~ | ~~£535.75~~ | 17 June 2026 | Purchased and confirmed 17 June 2026. Cancelled and refunded 27 June 2026 as part of the Astro pivot — no longer a studio cost. |
 
 ---
 

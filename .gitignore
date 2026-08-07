@@ -1,3 +1,9 @@
+# Nested git repos, versioned independently.
+# PureMed Aesthetics has its own repo (osmanakhtar/puremed-aesthetics) with its
+# own deploy workflows; puremed-publish is that repo's Loop 2 publish worktree.
+02_clients/puremed/
+02_clients/puremed-publish/
+
 # Dependencies
 node_modules/
 

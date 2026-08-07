@@ -5,6 +5,12 @@
 *Derived from the Main Stage Studio go-live session, 14 June 2026.*
 *Last reviewed: 14 June 2026*
 
+> **Legacy — WordPress/Bricks sites only.** Bricks/WordPress was retired 25 June 2026
+> in favour of Astro static sites on Cloudways. New site deployments follow
+> `01_mss/strategy/mss-astro-cloudways-setup.md` and `.github/DEPLOY.md` instead of
+> the LocalWP → Bricks process documented below. Kept for reference only, in case a
+> legacy WordPress/Bricks site ever needs this process again.
+
 ---
 
 ## Prerequisites

@@ -74,12 +74,10 @@
 
 - [ ] HTML prototype built in Claude Code
 - [ ] Prototype reviewed and locked
-- [ ] LocalWP environment set up
-- [ ] WordPress + Bricks Builder installed
-- [ ] Bricks licence activated on staging domain
-- [ ] Prototype migrated to Bricks
+- [ ] Astro project set up, Cloudways app provisioned (see `01_mss/strategy/mss-astro-cloudways-setup.md`)
+- [ ] Prototype built out as the Astro static site
 - [ ] Content populated
-- [ ] Client review — feedback captured
+- [ ] Client review via Stage — feedback captured
 - [ ] Revisions complete
 - [ ] Go-live checklist run (see `mss-go-live-checklist.md`)
 

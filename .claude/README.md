@@ -10,7 +10,7 @@
 This is the auto-loaded context for any Claude Code or Claude desktop session working
 on Main Stage Studio. Everything in here is meant to be true *every session*, regardless
 of task. If you're looking for something that's only relevant to a specific job (a
-go-live, a Bricks debugging session), that's not here — see "Where the strategy folder
+go-live, an Astro build session), that's not here — see "Where the strategy folder
 fits" below.
 
 For the conceptual model of how all of this fits together, read
@@ -28,7 +28,7 @@ source of drift in this system — it happened twice in one session on 19 June a
 
 | Location | Scope | What belongs here |
 |----------|-------|---------------------|
-| `~/.claude/` (global, `osmanakhtar/.claude`) | Every project on this machine | Claude Code settings, MCP connections, auto-memory, and skills that are genuinely portable craft — not tied to MSS specifically. Currently: the Bricks skill family, copywriting, creative-director, design-taste-frontend. |
+| `~/.claude/` (global, `osmanakhtar/.claude`) | Every project on this machine | Claude Code settings, MCP connections, auto-memory, and skills that are genuinely portable craft — not tied to MSS specifically. Currently: copywriting, creative-director, design-taste-frontend. (The Bricks skill family is legacy-only since the 25 June 2026 Astro pivot — kept for legacy WordPress/Bricks site fixes.) |
 | `~/workspace/main-stage-studio/.claude/` (this folder) | This repo only | MSS-specific knowledge: brand, voice, decisions, workflows, prompts, production rules. Anything that would be wrong or missing-in-action if a session forgot it. |
 | A future client repo's own `.claude/` (does not exist yet) | That repo only | Follows the same logic as this folder, scoped to one client — their brand, their voice, their site's quirks. Would only appear if a client site gets migrated to its own GitHub repo, per the convention in `mss-new-site-deployment-guide.md`. Never contains MSS strategy. This folder never contains a client's brand details. Each repo's `.claude/` only knows about itself. |
 
@@ -54,8 +54,9 @@ If yes → `.claude/`. The decisions log, brand identity, and production-ops rul
 all here because you'd never want a session operating without them.
 
 If no, it's only relevant to a bounded task → `01_mss/strategy/`. The deployment
-guide, Bricks build guide, and session kickoff prompts live here because most
-sessions, writing copy, reviewing a brief, never need them.
+guide and session kickoff prompts live here because most sessions, writing copy,
+reviewing a brief, never need them. (The old Bricks build guide and quick-fixes docs
+are archived in `_archive/bricks-era/`, retired with the 25 June 2026 Astro pivot.)
 
 **A third, quieter category currently living inside `strategy/` without its own
 home:** point-in-time project artifacts — the copy review, the homepage audit. These
@@ -67,23 +68,19 @@ worth naming so it doesn't get mistaken for active reference.
 
 ---
 
-## Bricks skill session ordering
+## Bricks skill session ordering (legacy)
 
+Bricks was retired for new builds on 25 June 2026 in favour of Astro static sites on
+Cloudways; the MSS production site itself completed its Astro cutover 22 July 2026.
 The four Bricks skills (`bricks-site-connection`, `bricks-lowcode-skill`,
-`bricks-html-importer`, `bricks-mss-site-notes`) divide responsibilities cleanly. Within
-a typical build session, use them in this order:
+`bricks-html-importer`, `bricks-mss-site-notes`) are kept installed only for the
+unlikely case of a legacy WordPress/Bricks site fix, not for any current build. New
+work uses the Astro workflow in `01_mss/strategy/mss-astro-cloudways-setup.md` and
+`.github/DEPLOY.md` instead. For reference, the old session order was:
 
 1. `bricks-site-connection` — open the session, authenticate, troubleshoot connection issues
 2. `bricks-html-importer` — run the HTML-to-Bricks conversion workflow
 3. `bricks-lowcode-skill` — consulted throughout the build for element, style, and pattern decisions
-
-**When something new comes up that none of the skills cover:**
-
-- New component or pattern → `bricks-lowcode-skill`'s Compound Pattern Library
-- New hosting or environment quirk → `bricks-site-connection`'s troubleshooting table
-- Workflow or sequencing change → `bricks-html-importer`'s phase structure
-
-This is a map to the skills, not a replacement for reading them.
 
 ---
 
@@ -109,7 +106,7 @@ If you need a document to look good in a browser, use the markdown viewer in
 | Scope a new client engagement | `mss-decisions-log.md` (current positioning) → `mss-client-workflow-guide.md` → `mss-new-client-checklist.md` |
 | Write any copy, MSS or client | `mss-tone-of-voice.md` (or the client's own voice file) → the `copywriting` skill → `copy-contexts.md` |
 | Open or publish a case study | `mss-case-study-workflow-guide.md` → `mss-new-case-study-checklist.md` |
-| Build or fix something in Bricks | `mss-production-ops.md` (the rules) → `bricks-html-importer` skill → `01_mss/strategy/mss-bricks-build-guide.md` and `mss-bricks-quick-fixes.md` as needed |
+| Build or deploy an Astro site | `01_mss/strategy/mss-astro-cloudways-setup.md` → `.github/DEPLOY.md` |
 | Take a site live, or deploy a change | `01_mss/strategy/mss-new-site-deployment-guide.md` |
 | Check whether something is actually decided | `mss-decisions-log.md` — always wins if anything else disagrees |
 | Update studio spend or subscriptions | `mss-spend-tracker.md` |

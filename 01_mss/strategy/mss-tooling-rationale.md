@@ -4,9 +4,14 @@
 *Extracted from Architecture Design v0.3 (May 2026). Superseded sections noted inline.*
 *Last reviewed: 20 June 2026*
 
+> **Superseded 25 June 2026:** Bricks/WordPress was retired in favour of Astro static
+> sites on Cloudways (see `mss-decisions-log.md` Website > Stack and
+> `mss-astro-cloudways-setup.md`). The "Why Bricks Builder" section below is kept as
+> a historical record of the original reasoning, not current tooling guidance.
+
 ---
 
-## Why Bricks Builder
+## Why Bricks Builder (historical — Bricks retired 25 June 2026)
 
 **Platform:** WordPress (self-hosted, wordpress.org) + Bricks Builder
 

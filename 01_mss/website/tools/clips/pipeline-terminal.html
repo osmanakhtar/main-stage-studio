@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>pipeline</title>
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #0F1B27;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+  }
+
+  .stage { width: 1140px; }
+
+  /* Caption strip. The first cut of this clip was raw stdout and nothing else,
+     and it read as "something broke" rather than "the check worked". The
+     narration is the fix: every command gets a plain-English line saying what
+     it is for. */
+  .cap {
+    display: flex; align-items: baseline; gap: 14px;
+    height: 78px;
+    padding: 0 4px 20px;
+    font-family: 'Georgia', serif;
+  }
+  .cap-n {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: #C6A77D;
+    flex: none;
+    padding-top: 5px;
+  }
+  .cap-t {
+    font-size: 21px;
+    line-height: 1.35;
+    color: #EAF1F8;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .cap-t.on { opacity: 1; transform: none; }
+
+  .term {
+    height: 596px;
+    background: #142434;
+    border-radius: 10px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .bar {
+    height: 38px; flex: none;
+    background: #1B2E42;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .bar .t {
+    margin-left: 12px;
+    color: rgba(255,255,255,0.42);
+    font-size: 12px; letter-spacing: 0.04em;
+  }
+  .body {
+    flex: 1; padding: 20px 26px;
+    font-size: 14.5px; line-height: 1.8;
+    color: #D6E2EE;
+    white-space: pre-wrap;
+    overflow: hidden;
+  }
+  .p  { color: #C6A77D; }
+  .c  { color: #FFFFFF; }
+  .ok { color: #7FD1A8; }
+  .wa { color: #E8C06A; }
+  .di { color: rgba(214,226,238,0.55); }
+  .cursor {
+    display: inline-block; width: 8px; height: 16px;
+    background: #C6A77D; vertical-align: -2px;
+    animation: bl 1s steps(1) infinite;
+  }
+  @keyframes bl { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="cap">
+      <span class="cap-n" id="capn"></span>
+      <span class="cap-t" id="capt"></span>
+    </div>
+    <div class="term">
+      <div class="bar">
+        <span class="dot" style="background:#E8695E"></span>
+        <span class="dot" style="background:#E8C06A"></span>
+        <span class="dot" style="background:#7FD1A8"></span>
+        <span class="t">puremed &mdash; content pipeline</span>
+      </div>
+      <div class="body" id="out"></div>
+    </div>
+  </div>
+
+<script>
+// Every terminal line below is verbatim stdout from a real run against
+// other-projects/puremed/ on 6 Aug 2026. The captions are written for the
+// recording; the output is not.
+//
+// The earlier cut linted the whole directory in one command, which pulled in
+// 2099-01-01-finishing-proof. That is a test fixture with no copy.md, so the
+// run ended on a red ERROR that had nothing to do with the client's content
+// and read as a broken tool. This cut lints the real August posts one at a
+// time, which is a supported flag and a truer picture of the working day.
+const script = [
+  { t: 'cap', n: '01', s: 'What is waiting in the pipeline, and what state each post is in.' },
+  { t: 'prompt' },
+  { t: 'type', s: 'node content-state.js --client puremed --list' },
+  { t: 'wait', ms: 420 },
+  { t: 'out', cls: 'di', s: 'review         2026-08-01-laser-lift' },
+  { t: 'out', cls: 'di', s: 'review         2026-08-03-liquid-facelift' },
+  { t: 'out', cls: 'di', s: 'review         2026-08-05-trust' },
+  { t: 'out', cls: 'di', s: 'review         2026-08-07-anti-wrinkle' },
+  { t: 'out', cls: 'di', s: 'drafted        2099-01-01-finishing-proof' },
+  { t: 'wait', ms: 1600 },
+  { t: 'blank' },
+
+  { t: 'cap', n: '02', s: 'Every post is checked against what a clinic is allowed to say. This one is clean.' },
+  { t: 'prompt' },
+  { t: 'type', s: 'node content-lint.js --client puremed --post 2026-08-01-laser-lift' },
+  { t: 'wait', ms: 560 },
+  { t: 'blank' },
+  { t: 'out', cls: 'ok', s: '1 post(s) linted: 0 error(s), 0 warning(s)' },
+  { t: 'wait', ms: 1600 },
+  { t: 'blank' },
+
+  { t: 'cap', n: '03', s: 'This one is not. The check holds it until the framing is confirmed.' },
+  { t: 'prompt' },
+  { t: 'type', s: 'node content-lint.js --client puremed --post 2026-08-07-anti-wrinkle' },
+  { t: 'wait', ms: 620 },
+  { t: 'out', cls: 'wa', s: 'WARN  2026-08-07-anti-wrinkle/copy.md:1 "anti-wrinkle" — pomSensitive' },
+  { t: 'out', cls: 'wa', s: '      topic — confirm consultation-led framing, no price, no drug' },
+  { t: 'out', cls: 'wa', s: '      references' },
+  { t: 'blank' },
+  { t: 'out', cls: 'di', s: '1 post(s) linted: 0 error(s), 1 warning(s)' },
+  { t: 'wait', ms: 2500 },
+  { t: 'blank' },
+
+  { t: 'cap', n: '04', s: 'Only then is the month rendered as the feed the clinic will approve.' },
+  { t: 'prompt' },
+  { t: 'type', s: 'node content-preview.js --client puremed' },
+  { t: 'wait', ms: 700 },
+  { t: 'out', cls: 'ok', s: 'preview/index.html — 5 post card(s), assets copied,' },
+  { t: 'out', cls: 'ok', s: 'stage-manifest.json written' },
+  { t: 'wait', ms: 2400 }
+];
+
+const out = document.getElementById('out');
+const capn = document.getElementById('capn');
+const capt = document.getElementById('capt');
+let cur = null;
+
+function span(cls, text) {
+  const s = document.createElement('span');
+  if (cls) s.className = cls;
+  s.textContent = text;
+  out.appendChild(s);
+  return s;
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function setCap(n, text) {
+  capt.classList.remove('on');
+  await sleep(capn.textContent ? 420 : 0);
+  capn.textContent = n;
+  capt.textContent = text;
+  await sleep(40);
+  capt.classList.add('on');
+  await sleep(750);
+}
+
+async function run() {
+  await sleep(600);
+  for (const step of script) {
+    if (step.t === 'cap') {
+      await setCap(step.n, step.s);
+    } else if (step.t === 'prompt') {
+      span('p', '→ puremed ');
+      cur = span('c', '');
+      const cs = document.createElement('span');
+      cs.className = 'cursor';
+      out.appendChild(cs);
+      cur._cursor = cs;
+    } else if (step.t === 'type') {
+      for (const ch of step.s) {
+        cur.textContent += ch;
+        await sleep(22 + Math.random() * 28);
+      }
+      await sleep(280);
+      if (cur._cursor) cur._cursor.remove();
+      span('', '\n');
+    } else if (step.t === 'out') {
+      span(step.cls, step.s + '\n');
+      await sleep(80);
+    } else if (step.t === 'blank') {
+      span('', '\n');
+    } else if (step.t === 'wait') {
+      await sleep(step.ms);
+    }
+    // Keep the newest line in frame once the buffer fills.
+    out.scrollTop = out.scrollHeight;
+  }
+  window.__done = true;
+}
+run();
+</script>
+</body>
+</html>

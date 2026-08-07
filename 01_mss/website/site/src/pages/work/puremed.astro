@@ -1,0 +1,832 @@
+---
+import { Image } from 'astro:assets';
+import '../../styles/global.css';
+import consultation from '../../assets/puremed-hero-consultation.webp';
+
+// Screenshots of the go-live site, captured 6 Aug 2026 from the Astro build at
+// 02_clients/puremed/site/dist via tools/clips/shoot-site.js. That build is the
+// two-page site Nafisa reviewed element by element on Stage, and the one going
+// live: Home, plus a single Treatments page carrying a section per treatment.
+// The client folder's web/ directory holds ten standalone HTML prototypes that
+// were explored and dropped. An earlier pass of this page shot those instead and
+// presented them as shipped, claiming thirteen pages against an actual two.
+import pmHome from '../../assets/pm-home.png';
+import pmTreatments from '../../assets/pm-treatments.png';
+import pmHomeMobile from '../../assets/pm-home-mobile.png';
+import pmTreatmentsMobile from '../../assets/pm-treatments-mobile.png';
+
+// Only the lead treatment ships as a screenshot here. The page originally
+// tiled all eleven, which read as cataloguing the client's content rather
+// than demonstrating the studio's method: one shown well makes the "full
+// section, not a line" claim; the other ten are described in prose instead.
+import txLaserLift from '../../assets/pm-tx-laser-lift.png';
+
+// This page deliberately does not look like the MSS site. Per the studio's
+// case-study checklist, the design voice belongs to the client's world: PureMed's
+// locked palette (navy, champagne gold, white, warm white), bright and airy, no
+// dark sections. Black is explicitly excluded from this brand.
+//
+// One departure from the client's spec, noted honestly: PureMed's body font is
+// Inter. This page uses Plus Jakarta Sans, which the project's own constraints
+// doc names as the preferred alternative, rather than loading a third family for
+// a single page.
+
+const built = [
+  {
+    t: 'Positioning, before pixels',
+    d: 'Medically-led, competing on expertise and natural outcomes rather than price. That decision set the hierarchy for every page that followed, and ruled out the discount-led patterns the sector defaults to.',
+  },
+  {
+    t: 'One page, a section each',
+    d: 'The treatments page is not a catalogue of links out to somewhere else. Each of the eleven treatments holds a full section on it: its own anchor, its own timings, its own how-it-works and its own booking button, with the navigation deep-linking straight to the one you came for. Someone weighing two treatments against each other never has to leave the page to do it.',
+  },
+  {
+    t: 'Claims checked before sign-off',
+    d: 'Every treatment claim was checked against what the sector is permitted to say before the client ever saw the page, not retrofitted after a complaint. In aesthetics the wording is the regulated surface.',
+  },
+  {
+    t: 'One lead treatment, carried everywhere',
+    d: 'Laser Lift leads the navigation, the homepage grid, the messaging hierarchy and the cross-links. It opens the treatments page under the only gold label on it. One clear entry point rather than eleven equal ones.',
+  },
+  {
+    t: 'A site the clinic can change herself',
+    d: 'Copy, prices and service details are editable in place and published through the same review gate. A wording change does not become a ticket or a small-change invoice.',
+  },
+];
+
+const palette = [
+  { n: 'Primary Blue',    h: '#23476A', use: 'CTAs, headings, icons, links' },
+  { n: 'Hover Blue',      h: '#2D5B88', use: 'Interactive states' },
+  { n: 'Champagne Gold',  h: '#C6A77D', use: 'Accent only: rules, stars, icons' },
+  { n: 'White',           h: '#FFFFFF', use: 'Primary background' },
+  { n: 'Warm White',      h: '#F8F8F6', use: 'Alternating sections' },
+  { n: 'Light Grey',      h: '#F3F4F6', use: 'Cards, subtle separation' },
+];
+
+// Screen recordings captured 6 Aug 2026 by running the real scripts against
+// 02_clients/puremed/. The terminal clip replays verbatim stdout; the
+// review clip is the actual generated preview page, with PureMed's own posts
+// and captions. Nothing in either is mocked up for the page.
+const clips = [
+  {
+    src:    '/assets/puremed-pipeline.mp4',
+    poster: '/assets/puremed-pipeline.webp',
+    len: '26s',
+    t: 'The claim check runs before a person reads the post',
+    d: 'Every post is checked against what a clinic is permitted to say before it reaches anyone for review. Two of August’s posts pass clean. The third is a prescription-only-medicine topic, so the check holds it until the framing is confirmed as consultation-led, with no price and no drug names. That is decision three above, running as code rather than sitting in a document nobody opens.',
+  },
+  {
+    src:    '/assets/puremed-review-gate.mp4',
+    poster: '/assets/puremed-review-gate.webp',
+    len: '18s',
+    t: 'The same gate, every month, for the posts',
+    d: 'The monthly social content arrives in the same place: designed slides, both captions, the scheduled date, rendered as the feed it is about to become. Nafisa reads it in the order a patient would and marks each post approved, changed, or flagged. The decisions come back into the pipeline and the post moves state accordingly.',
+  },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureMed Aesthetics, a case study | Main Stage Studio</title>
+  <meta name="description" content="Rebuilding a medically-led aesthetics clinic from a site that scored 23 out of 100 on its own CRO audit. Thirteen pages, every treatment claim checked before sign-off.">
+  <meta property="og:title" content="PureMed Aesthetics, a case study | Main Stage Studio">
+  <meta property="og:description" content="In medical aesthetics the constraint is the asset. A case study on positioning a clinic around the practitioner rather than the price list.">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-400-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-300-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-400-latin.woff2" crossorigin>
+
+  <script is:inline>document.documentElement.classList.add('js-anim');</script>
+
+  <style>
+    :root {
+      --nav-height: 64px;
+
+      --navy:       #23476A;
+      --navy-hover: #2D5B88;
+      --gold:       #C6A77D;
+      --white:      #FFFFFF;
+      --warm:       #F8F8F6;
+      --grey:       #F3F4F6;
+      /* 5.48:1 on white, 5.15:1 on warm white. Gold is 2.28:1 on white, so it
+         is never used for text here, only for rules and marks. */
+      --ink-muted:  #5A6B7D;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { background: var(--white); scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--white);
+      color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      /* Clears the fixed nav. */
+      padding-top: var(--nav-height);
+    }
+
+    .wrap { max-width: 1120px; margin-inline: auto; }
+    .measure { max-width: 62ch; }
+
+    .display {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+      text-wrap: balance;
+    }
+
+    .eyebrow {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+
+    .body-copy {
+      font-weight: 300;
+      font-size: 1.0625rem;
+      line-height: 1.75;
+      color: var(--ink-muted);
+    }
+
+    /* Gold hairline, the one place the accent colour appears at size. */
+    .rule-gold {
+      width: 56px;
+      height: 2px;
+      background: var(--gold);
+      border: none;
+    }
+
+    .meta-key {
+      font-size: 0.5625rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* Numbered list built from dividers rather than boxes. */
+    .built-row {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(35,71,106,0.12);
+    }
+    .built-row:last-child { border-bottom: 1px solid rgba(35,71,106,0.12); }
+    /* Was gold. Gold is 2.28:1 on white, and the clinic's own brand rule says
+       gold is never text, only rules and icons. Both reasons point the same way. */
+    .built-num {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.5rem;
+      color: var(--ink-muted);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .swatch {
+      height: 88px;
+      border: 1px solid rgba(35,71,106,0.10);
+    }
+
+    /* ── Tooling clips ──────────────────────────────────────────
+       Screen recordings of the pipeline and the review preview running
+       against PureMed's own content. Click to play rather than autoplay:
+       the clips total 1.6MB, and a case study that argues for a fast site
+       should not spend that on visitors who never press play. Hence
+       preload="none" and a poster that carries the frame on its own.
+
+       Note on the dark terminal in the first clip: this brand excludes
+       black, and the page holds that rule everywhere it is a surface. The
+       clip is a recording of a developer tool, not a brand surface, so it
+       stays as captured and sits inside a light frame. */
+    .clip { margin: 0; }
+
+    .clip-frame {
+      position: relative;
+      background: var(--grey);
+      border: 1px solid rgba(35,71,106,0.10);
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+    }
+    .clip-video {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* The control covers the whole frame so the click target is the video,
+       but the visible affordance is a pill in the corner. A centred play
+       circle sat directly on top of the lint warning, which is the one line
+       in the first poster worth reading before you press anything. */
+    .clip-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      width: 100%; height: 100%;
+      padding: 1.25rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .clip-play:hover { background: rgba(35,71,106,0.08); }
+    .clip-frame.is-playing .clip-play { display: none; }
+
+    .clip-play span {
+      display: inline-flex; align-items: center; gap: 0.625rem;
+      padding: 0.6rem 1.1rem 0.6rem 0.95rem;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(35,71,106,0.22);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .clip-play:hover span { transform: translateY(-2px); }
+
+    /* ── Shipped pages ─────────────────────────────────────────
+       Screenshots sit on a thin rule and a light surface rather than in
+       cards, so the row reads as a set of pages rather than as a feature
+       grid. Same reasoning as .built-row. */
+    .shot {
+      border: 1px solid rgba(35,71,106,0.10);
+      background: var(--white);
+      overflow: hidden;
+      display: block;
+    }
+    .shot img { display: block; width: 100%; height: auto; }
+
+    .shot-cap {
+      margin-top: 0.75rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* Phone frames. A rounded mask is enough to read as a device without
+       drawing a literal handset, which always dates. */
+    .phone {
+      border: 1px solid rgba(35,71,106,0.12);
+      border-radius: 22px;
+      overflow: hidden;
+      background: var(--white);
+      max-width: 260px;
+    }
+    .phone img { display: block; width: 100%; height: auto; }
+
+    .clip-meta {
+      display: flex; align-items: baseline; gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+    /* Gold as a numeral, consistent with .built-num's reasoning: the accent
+       reads as a mark here, never as running text. */
+    .clip-num {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.25rem;
+      color: var(--ink-muted);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      flex: none;
+    }
+
+    /* ── Nav ────────────────────────────────────────────────────
+       Geometry, position and behaviour are fixed across the portfolio and
+       match the Sable case study exactly: 64px bar, backbar left, section
+       label right, hairline under. Only the six colour values differ, and
+       they come from the client's palette like everything else on the page.
+       See work/sable/index.astro for the other half of the pair. */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: var(--nav-height);
+      background: var(--white);
+      /* Sable rules hers in blush. Gold is PureMed's equivalent tint, and a
+         rule is one of the two uses its brand permits the colour. */
+      border-bottom: 1px solid rgba(198,167,125,0.55);
+      display: flex;
+      align-items: center;
+    }
+    #nav > .wrap {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Sable's bar is full-bleed because her page gutter is full-bleed. This
+       page runs a 1120px column, so the nav spans the viewport and its
+       contents sit on the page grid. Same rule, different grid. */
+    .backbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--ink-muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      transition: color 0.25s ease, gap 0.25s ease;
+    }
+    .backbar:hover { color: var(--navy); gap: 0.95rem; }
+
+    /* Sable sets this in terracotta, her page's accent. The matching move
+       here would be gold, but gold is 2.28:1 on white and this brand's own
+       rule bars it from text. Muted ink carries the label; gold takes the
+       hairline and the progress bar instead. */
+    .nav-meta {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* ── Scroll progress ────────────────────────────────────────
+       Sable's runs vertically in her gold. Same bar, same axis, PureMed's
+       accent. A 2px mark, which is a use the brand allows. */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 2px;
+      height: 0%;
+      background: var(--gold);
+      z-index: 60;
+      will-change: height;
+      transition: height 60ms linear;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.25rem;
+      transition: background 0.25s ease;
+    }
+    .cta:hover { background: var(--navy-hover); }
+    .cta:active { transform: translateY(1px); }
+
+    :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; }
+    .oncolour :focus-visible { outline-color: var(--gold); }
+
+    .skip-link {
+      position: absolute; left: 1rem; top: -100px; z-index: 50;
+      background: var(--navy); color: var(--white);
+      font-size: 0.8125rem; padding: 0.75rem 1.25rem; text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .reveal { opacity: 1; }
+    .js-anim .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .js-anim .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+      }
+      .js-anim .reveal { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- The only MSS-branded element on the page: the way back. -->
+  <nav id="nav">
+    <div class="wrap px-6 md:px-10">
+      <a href="/#work" class="backbar">
+        <svg width="14" height="14" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M12 6.5H1M5.5 11.5l-5-5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Main Stage Studio
+      </a>
+      <span class="nav-meta">Portfolio</span>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- ── Hero ────────────────────────────────────────────────── -->
+    <section class="wrap px-6 md:px-10 pt-16 md:pt-24 pb-16">
+      <p class="eyebrow mb-6">Medical Aesthetics</p>
+      <h1 class="display mb-8" style="font-size:clamp(2.75rem,7vw,5.5rem);max-width:13ch;">
+        The constraint was the asset.
+      </h1>
+      <hr class="rule-gold mb-8">
+      <p class="body-copy measure" style="font-size:1.1875rem;">
+        PureMed Aesthetics is a medically-led clinic run by Nafisa Mughal, treating women who want to age well without looking like they have had work done. The clinic's advantage was its practitioner. Its website was selling on everything else.
+      </p>
+
+      <dl class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-14 pt-8" style="border-top:1px solid rgba(35,71,106,0.12);">
+        <div>
+          <dt class="meta-key mb-2">Sector</dt>
+          <dd class="text-sm font-light">Medical aesthetics</dd>
+        </div>
+        <div>
+          <dt class="meta-key mb-2">Scope</dt>
+          <dd class="text-sm font-light">Positioning, copy, web presence</dd>
+        </div>
+        <div>
+          <dt class="meta-key mb-2">Shipped</dt>
+          <dd class="text-sm font-light">2 pages, 11 treatments</dd>
+        </div>
+        <div>
+          <dt class="meta-key mb-2">Status</dt>
+          <dd class="text-sm font-light">Built and approved, awaiting go-live</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ── Image ───────────────────────────────────────────────── -->
+    <!-- Warm surface + a bordered frame, not floating bare on the hero's
+         white. The hero and this section were both plain white in a row,
+         the client's own design system calls Warm White out specifically
+         for "alternating sections", this is the first alternation. -->
+    <section class="pt-20 md:pt-28 pb-20 md:pb-28 reveal" style="background:var(--warm);">
+      <div class="wrap px-6 md:px-10">
+      <!-- Not .shot: that class forces img height:auto for plain screenshots,
+           which would fight this image's forced 16:9 object-cover crop. -->
+      <div class="overflow-hidden" style="aspect-ratio:16/9;background:var(--warm);border:1px solid rgba(35,71,106,0.10);">
+        <Image src={consultation}
+               alt="Nafisa Mughal in consultation with a client at PureMed Aesthetics"
+               class="w-full h-full object-cover"
+               width={1120}
+               widths={[560, 1120, 1680]}
+               sizes="(min-width: 1120px) 1120px, 100vw"
+               format="webp"
+               quality={80}
+               loading="eager"
+               fetchpriority="high"
+               decoding="async"
+               style="object-position:center top;" />
+      </div>
+      </div>
+    </section>
+
+    <!-- ── The challenge ───────────────────────────────────────── -->
+    <section style="background:var(--warm);">
+      <div class="wrap px-6 md:px-10 py-20 md:py-28">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-12 md:gap-20">
+          <div class="reveal">
+            <p class="eyebrow mb-5">The challenge</p>
+            <p class="display" style="font-size:clamp(4rem,9vw,7rem);line-height:0.9;">23<span style="font-size:0.4em;color:var(--ink-muted);">/100</span></p>
+            <p class="text-sm font-light mt-4" style="color:var(--ink-muted);max-width:22ch;">
+              What the previous Framer site scored on its own conversion audit.
+            </p>
+          </div>
+          <div class="reveal flex flex-col gap-6">
+            <!-- This section had no heading at all, so the document outline
+                 skipped straight from the h1 to "Five decisions". -->
+            <h2 class="display mb-2" style="font-size:clamp(1.75rem,3.2vw,2.5rem);max-width:20ch;">
+              A qualified practitioner, selling like everyone else.
+            </h2>
+            <p class="body-copy">
+              The clinic had the harder half already: a qualified practitioner, real results, and patients who came back. What it had was a site that read like every other aesthetics site in the country, treatments priced and listed with nothing anywhere explaining why this clinic rather than the one two towns over.
+            </p>
+            <p class="body-copy">
+              That is not a design problem a nicer template solves. Price is easy to compare and easy to compete on. Judgement is not, and a listings page cannot show it, only the practitioner behind it can.
+            </p>
+            <p class="body-copy">
+              The rebuild was clean-slate. Nothing was carried forward.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── The insight ─────────────────────────────────────────── -->
+    <section class="oncolour" style="background:var(--navy);">
+      <div class="wrap px-6 md:px-10 py-20 md:py-28 reveal">
+        <!-- Gold as a rule, not as text: at 10px the accent only reaches 4.23:1
+             on navy, and gold is not a text colour in this brand. -->
+        <hr class="rule-gold mb-6">
+        <p class="eyebrow mb-8" style="color:var(--white);opacity:0.85;">The insight</p>
+        <!-- The checklist requires the strategic insight to fit in one sentence.
+             It was three. Tightening it also stops the display type running to
+             six lines down one half of an otherwise empty navy band. -->
+        <h2 class="display" style="font-size:clamp(1.875rem,4vw,3.25rem);color:var(--white);max-width:30ch;">
+          The rules about what a clinic may claim force you to sell the practitioner instead of the promise, and hers was the thing the old site had buried.
+        </h2>
+      </div>
+    </section>
+
+    <!-- ── What was built ──────────────────────────────────────── -->
+    <section class="wrap px-6 md:px-10 py-20 md:py-28">
+      <div class="mb-12 reveal">
+        <p class="eyebrow mb-5">What was built</p>
+        <h2 class="display" style="font-size:clamp(2rem,4vw,3rem);max-width:18ch;">
+          Five decisions that set everything else.
+        </h2>
+      </div>
+      <div class="reveal">
+        {built.map((item, i) => (
+          <div class="built-row">
+            <span class="built-num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="display mb-3" style="font-size:1.5rem;">{item.t}</h3>
+              <p class="body-copy" style="font-size:1rem;max-width:60ch;">{item.d}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── What shipped ────────────────────────────────────────
+         Added 6 Aug 2026, corrected the same day. The page argued about a
+         website for its whole length without ever showing one, and the first
+         pass then showed the wrong one: the dropped per-treatment prototypes
+         in web/ rather than the two-page Astro build that Nafisa signed off
+         and that goes live. Everything below is the go-live build. -->
+    <section style="background:var(--warm);">
+      <div class="wrap px-6 md:px-10 py-20 md:py-28">
+        <div class="mb-12 reveal">
+          <p class="eyebrow mb-5">What shipped</p>
+          <h2 class="display" style="font-size:clamp(2rem,4vw,3rem);max-width:20ch;">
+            Every treatment gets a section, not a line.
+          </h2>
+          <p class="body-copy measure mt-6">
+            The whole range lives on one scroll. Each treatment holds a full section with its own anchor, so the navigation, the homepage and any ad can land on the exact one, and each section carries enough to answer what actually decides a booking: how long it takes, how many sessions, how much downtime, how long it lasts.
+          </p>
+        </div>
+
+        <figure class="reveal mb-12">
+          <div class="shot">
+            <Image src={pmHome} alt="The PureMed Aesthetics home page: navy header, serif headline reading Natural Skin Tightening and Rejuvenation, and a photograph of Nafisa Mughal in consultation"
+                   widths={[720, 1120, 2240]}
+                   sizes="(min-width: 1120px) 1120px, 100vw"
+                   format="webp" quality={78} loading="lazy" decoding="async" />
+          </div>
+          <figcaption class="shot-cap">Home</figcaption>
+        </figure>
+
+        <figure class="reveal mb-16">
+          <div class="shot">
+            <Image src={pmTreatments} alt="The top of the PureMed treatments page: a navy hero reading Our Treatments, with counts for specialist treatments, five-star reviews and years of experience"
+                   widths={[720, 1120, 2240]}
+                   sizes="(min-width: 1120px) 1120px, 100vw"
+                   format="webp" quality={78} loading="lazy" decoding="async" />
+          </div>
+          <figcaption class="shot-cap">Treatments, top of page</figcaption>
+        </figure>
+
+        <p class="body-copy measure mb-8 reveal">
+          Below it, ten more sections follow the same pattern, alternating side to side down the page. Laser Lift leads, the clinic's own priority, and carries the same structure every other treatment repeats: its own anchor and booking button, its timings, how it works, and who it suits, answered in place rather than left for a call.
+        </p>
+
+        <figure class="reveal mb-16">
+          <div class="shot">
+            <Image src={txLaserLift} alt="The Laser Lift section of the PureMed treatments page, showing its timings, how it works, who it suits and its own booking button"
+                   widths={[720, 1120, 2240]}
+                   sizes="(min-width: 1120px) 1120px, 100vw"
+                   format="webp" quality={78} loading="lazy" decoding="async" />
+          </div>
+          <figcaption class="shot-cap">Laser Lift, one of eleven treatment sections</figcaption>
+        </figure>
+
+        <div class="mt-16 pt-12 reveal" style="border-top:1px solid rgba(35,71,106,0.12);">
+          <p class="body-copy measure mb-8">
+            Most of the clinic’s traffic arrives on a phone, mid-scroll, having tapped an ad or a search result. The phone layout is the one that had to work first.
+          </p>
+          <div class="flex flex-wrap gap-6 md:gap-10">
+            <figure>
+              <div class="phone">
+                <Image src={pmHomeMobile} alt="The PureMed home page on a phone"
+                       widths={[260, 520]} sizes="260px"
+                       format="webp" quality={74} loading="lazy" decoding="async" />
+              </div>
+              <figcaption class="shot-cap">Home, mobile</figcaption>
+            </figure>
+            <figure>
+              <div class="phone">
+                <Image src={pmTreatmentsMobile} alt="The PureMed treatments page on a phone"
+                       widths={[260, 520]} sizes="260px"
+                       format="webp" quality={74} loading="lazy" decoding="async" />
+              </div>
+              <figcaption class="shot-cap">Treatments, mobile</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── The tooling ─────────────────────────────────────────
+         Added 6 Aug 2026. The page previously made two claims it never
+         showed: that claims are checked before sign-off, and that the
+         clinic can change the site herself. Both are machinery, and
+         machinery has to be seen working to be believed. This is also the
+         only section that uses the full 1120px measure, which breaks up a
+         page that was otherwise one narrow column of prose. -->
+    <section class="wrap px-6 md:px-10 py-20 md:py-28">
+      <div class="mb-14 reveal">
+        <p class="eyebrow mb-5">The tooling</p>
+        <h2 class="display" style="font-size:clamp(2rem,4vw,3rem);max-width:22ch;">
+          The parts that keep running after the design is finished.
+        </h2>
+        <p class="body-copy measure mt-6">
+          A clinic site is not done when it looks right. It is done when a price can be corrected, a claim can be re-checked, and a month of posts can reach the practitioner without a developer standing in the middle. All three recordings below are the real tools, running on PureMed’s own engagement.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-16 md:gap-20">
+        {clips.map((clip, i) => (
+          <figure class="clip reveal">
+            <div class="clip-frame">
+              <video class="clip-video"
+                     src={clip.src}
+                     poster={clip.poster}
+                     preload="none"
+                     muted
+                     loop
+                     playsinline
+                     width="1280"
+                     height="800"
+                     aria-label={clip.t}></video>
+              <button type="button" class="clip-play" aria-label={`Play recording: ${clip.t}`}>
+                <span>
+                  <svg width="11" height="13" viewBox="0 0 11 13" aria-hidden="true">
+                    <path d="M11 6.5 0 13V0z" fill="#23476A"/>
+                  </svg>
+                  Play · {clip.len}
+                </span>
+              </button>
+            </div>
+            <figcaption>
+              <div class="clip-meta">
+                <span class="clip-num">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3 class="display mb-3" style="font-size:1.5rem;max-width:26ch;">{clip.t}</h3>
+                  <p class="body-copy" style="font-size:1rem;max-width:66ch;">{clip.d}</p>
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <p class="text-xs font-light mt-14 pt-8" style="color:var(--ink-muted);border-top:1px solid rgba(35,71,106,0.12);max-width:72ch;line-height:1.7;">
+        All three clips were captured on 6 August 2026 from the live scripts and the live review tool. The terminal output is verbatim. The pages, the copy decisions and the posts are PureMed’s own. No decision was changed to make the recording.
+      </p>
+    </section>
+
+    <!-- ── The design system ───────────────────────────────────── -->
+    <section style="background:var(--warm);">
+      <div class="wrap px-6 md:px-10 py-20 md:py-28">
+        <div class="mb-12 reveal">
+          <p class="eyebrow mb-5">The design system</p>
+          <h2 class="display" style="font-size:clamp(2rem,4vw,3rem);max-width:20ch;">
+            Bright, medically assured, and never dark.
+          </h2>
+          <p class="body-copy measure mt-6">
+            The palette was locked from the clinic's own brand documents, with one correction: the original primary blue was too dark and made the site feel like a hospital. Navy replaced it. Champagne gold stays an accent, never a background, never body text.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 reveal">
+          {palette.map(c => (
+            <div>
+              <div class="swatch mb-3" style={`background:${c.h};`}></div>
+              <p class="text-xs font-normal">{c.n}</p>
+              <p class="text-xs font-light mt-1" style="color:var(--ink-muted);font-variant-numeric:tabular-nums;">{c.h}</p>
+              <p class="text-xs font-light mt-2" style="color:var(--ink-muted);line-height:1.5;">{c.use}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-16 pt-10 reveal" style="border-top:1px solid rgba(35,71,106,0.12);">
+          <p class="meta-key mb-6">Type specimen</p>
+          <p class="display mb-2" style="font-size:clamp(2.5rem,6vw,4rem);">Laser Lift</p>
+          <p class="body-copy measure">
+            Cormorant Garamond carries the editorial moments. The body sets in a clean sans-serif, so the clinical detail stays plain and the claims stay easy to read at length.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Where it stands ─────────────────────────────────────── -->
+    <!-- Reduced bottom padding: this section now hands straight to the CTA
+         rather than being separated from it by a grey reflection block, so
+         the two read as one closing movement instead of two sections. -->
+    <section class="wrap px-6 md:px-10 pt-20 md:pt-28 pb-8 md:pb-10">
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-12 md:gap-20">
+        <div class="reveal">
+          <p class="eyebrow mb-5">Where it stands</p>
+          <h2 class="display" style="font-size:clamp(1.75rem,3.2vw,2.5rem);max-width:14ch;">
+            Approved, and ready to launch.
+          </h2>
+        </div>
+        <div class="reveal flex flex-col gap-6">
+          <p class="body-copy">
+            The build is complete and signed off. It goes live as soon as the clinic is ready on its side.
+          </p>
+          <p class="body-copy">
+            That is how most projects finish. The design lands, and the last stretch belongs to bookings, access, and the systems the business already runs. Planning for that from the first week is what makes a launch date hold.
+          </p>
+          <p class="body-copy">
+            It is where every project here starts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ─────────────────────────────────────────────────── -->
+    <section class="wrap px-6 md:px-10 py-20 md:py-28">
+      <div class="reveal">
+        <h2 class="display mb-8" style="font-size:clamp(1.875rem,4vw,3rem);max-width:20ch;">
+          Building something that has to survive scrutiny?
+        </h2>
+        <a href="/#contact" class="cta">Start a project</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="wrap px-6 md:px-10 pb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-10" style="border-top:1px solid rgba(35,71,106,0.12);">
+      <a href="/" class="backbar">
+        <svg width="14" height="14" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M12 6.5H1M5.5 11.5l-5-5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Main Stage Studio
+      </a>
+      <p class="text-xs font-light" style="color:var(--ink-muted);">
+        PureMed Aesthetics case study. Published by Main Stage Studio.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Scroll progress ───────────────────────────────────────────
+    const progressBar = document.getElementById('scroll-progress');
+    if (progressBar) {
+      window.addEventListener('scroll', () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.height = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      }, { passive: true });
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Tooling clips: click-to-play, then hand over to native controls so the
+    // clip can be scrubbed and paused. Nothing downloads until the first press
+    // (preload="none"), which is the point of the poster.
+    document.querySelectorAll('.clip-frame').forEach(frame => {
+      const video = frame.querySelector('video');
+      const button = frame.querySelector('.clip-play');
+      if (!video || !button) return;
+
+      button.addEventListener('click', () => {
+        frame.classList.add('is-playing');
+        video.controls = true;
+        video.play();
+        video.focus();
+      });
+
+      // Pause whatever is playing once it scrolls out of view, so two clips
+      // are never running at once behind the reader's back.
+      const vis = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting && !video.paused) video.pause();
+        });
+      }, { threshold: 0.25 });
+      vis.observe(frame);
+    });
+  </script>
+
+</body>
+</html>

@@ -304,6 +304,6 @@ Keep it short — this isn't a document, it's a moment.
 
 **Updating prompts:** When you find a better version of a prompt, update it here and note briefly what changed. Don't keep both versions — the current version is the right one until it isn't.
 
-**Prompts Claude Code doesn't need:** Build-phase prompts (prototype construction, Bricks migration) live in `mss-build-guide.html` — that's the Claude Code operational reference.
+**Prompts Claude Code doesn't need:** Build-phase prompts (prototype construction, Astro build) live in `01_mss/strategy/mss-astro-cloudways-setup.md` and `.github/DEPLOY.md` — those are the Claude Code operational reference.
 
 **On bracketed fields:** Always fill them in before sending. A prompt with `[paste brief]` still in it produces generic output.

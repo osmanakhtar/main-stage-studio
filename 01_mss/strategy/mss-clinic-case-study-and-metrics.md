@@ -36,7 +36,7 @@ Opens in PureMed's world, not MSS's process. The felt problem of an owner-operat
 | **Reflection** | One honest paragraph: what worked, what you would do differently. Room to name the ramp (banks compound over the first months) honestly |
 
 ### Design brief (per locked rule)
-PureMed's world in three words; references outside the web; minimum two off-limits conventions. Typography/colour/layout chosen independently. If it starts looking like the MSS site, stop and restart. (PureMed brand already exists in `other-projects/puremed/` working files — pull the identity from there, keep working files in place, copy only presentable material into `01_mss/portfolio/puremed/`.)
+PureMed's world in three words; references outside the web; minimum two off-limits conventions. Typography/colour/layout chosen independently. If it starts looking like the MSS site, stop and restart. (PureMed brand already exists in `02_clients/puremed/` working files — pull the identity from there, keep working files in place, copy only presentable material into `01_mss/portfolio/puremed/`.)
 
 ### Dependencies before publish
 1. **Consent to be named.** The whole value is the name. Reverse the current off-site lock (v3 §9 item 6 already recommends this once live) and get explicit PureMed sign-off to appear as a named case.

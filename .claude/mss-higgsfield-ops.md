@@ -177,7 +177,13 @@ manifest in one run — it is cleaner to have all pages ready before running it.
 
 ---
 
-## WordPress upload
+## WordPress upload (legacy — WordPress/Bricks sites only)
+
+Bricks was retired for new builds 25 June 2026 in favour of Astro static sites on
+Cloudways; the MSS production site itself is on Astro. This step only applies if a
+site is still on WordPress/Bricks — current Astro builds reference the compressed
+asset paths directly from the project (no WordPress media library, no upload step).
+Kept below for that legacy case.
 
 Run once after all pages are reviewed and signed off. This bridges the pipeline
 to the Bricks build.
@@ -214,7 +220,7 @@ HTML to replace local compressed paths with WordPress media URLs.
 
 Already-uploaded assets are skipped automatically — safe to re-run if interrupted.
 
-### Confirm the prototype is ready for Bricks
+### Confirm the prototype is ready for Bricks (legacy WordPress/Bricks sites only)
 
 After the upload script completes:
 - [ ] Open the prototype HTML and confirm src attributes contain WordPress URLs

@@ -2,6 +2,13 @@
 *Prepared by Main Stage Studio*
 *Date: [DATE]*
 
+> **Legacy template — WordPress/Bricks sites only.** Bricks/WordPress was retired
+> 25 June 2026 in favour of Astro static sites on Cloudways. New client engagements
+> don't get WP Admin/Bricks editing access — content edits and sign-off run through
+> Stage (`mss-review.duckdns.org`) instead. This template describes the old
+> WordPress+Bricks handover and is kept for reference only until an Astro/Stage
+> equivalent is written; do not send it to a new client as-is.
+
 ---
 
 ## Your site at a glance

@@ -1,0 +1,1396 @@
+---
+import { Image, getImage } from 'astro:assets';
+import '../../../styles/global.css';
+
+// Ported 7 Aug 2026 from 01_mss/portfolio/sable/case-study.html, which was a
+// standalone page running Tailwind from a CDN script, Google Fonts over the
+// network, and full-size PNGs (5.6MB in one case) straight out of the brand
+// folder. The design language is unchanged. What changed is everything the
+// standalone version could not do: real Tailwind build, self-hosted fonts,
+// Astro's image pipeline, reduced-motion handling, focus states, and a nav
+// that goes somewhere instead of three links pointing at "#".
+import atmospheric      from '../../../assets/sable-atmospheric.png';
+import portraitClosed   from '../../../assets/sable-portrait-eyes-closed-01.png';
+import studioMic        from '../../../assets/sable-studio-mic-01.png';
+import heroArrival      from '../../../assets/sable-hero-arrival-01.png';
+import homepageOne      from '../../../assets/sable-homepage-image-01.png';
+import homepageTwo      from '../../../assets/sable-homepage-image-02.png';
+import albumCover       from '../../../assets/sable-album-cover-01.png';
+import fullBodySeated   from '../../../assets/sable-full-body-seated-01.png';
+import emberColumn      from '../../../assets/sable-ember-column-01.png';
+
+// Both of these are CSS backgrounds rather than content images, so they go
+// through getImage() for a plain URL instead of <Image>. Both sit under
+// heavy opacity (0.07 to 0.22), so they are encoded small and lossy: at 7%
+// opacity nobody is reading detail off the atmospheric texture. The ember
+// column is taller than it is wide and stretches over two sections, so it
+// gets more pixels than the old wash did.
+const atmoBg   = await getImage({ src: atmospheric, format: 'webp', quality: 45, width: 1400 });
+const emberBg  = await getImage({ src: emberColumn, format: 'webp', quality: 60, width: 1100 });
+
+// Sable's identity decisions, left column of section 05. Held as data because
+// the markup for each is identical and the list is the section.
+const decisions = [
+  {
+    t: 'the wordmark.',
+    d: 'Lowercase, always. Wide-tracked serif. The name takes up the space it deserves and nothing more. Playfair Display for its warmth and contrast. Cormorant would have been too delicate. This needed more presence.',
+  },
+  {
+    t: 'london beneath the name, in gold, tracked wide.',
+    d: 'Not decorative geography. Cultural context. For a young Black British artist making soulful music, where she is from carries weight.',
+  },
+  {
+    t: 'the palette.',
+    d: 'Bone leads. Not white, not grey. Warm, intimate, present. It is the first thing you encounter. Dark sections follow as you go deeper into her world. Gold runs throughout as the thread that connects them. The warmth in every colour is deliberate. Nothing in this identity is cold.',
+  },
+  {
+    t: 'the ground system.',
+    d: 'Bone on arrival. Night as you go deeper. The site mirrors the artist: open on the surface, something heavier underneath.',
+  },
+  {
+    t: 'the photography.',
+    d: 'Intimate and cinematic. Practical light sources only. The light finds her, she does not stand in it. Every image built to the narrative, not retrofitted from existing assets.',
+  },
+  {
+    t: 'the copy voice.',
+    d: 'Still. Present. She gives everything in the music and almost nothing outside it. The copy does not explain her. It creates the conditions for listening.',
+  },
+];
+
+const palette = [
+  { n: 'Bone',  h: '#F0E8D8', outline: true },
+  { n: 'Night', h: '#0D0C0B' },
+  { n: 'Coal',  h: '#1C1A18' },
+  { n: 'Ash',   h: '#3D3530' },
+  { n: 'Gold',  h: '#C89442' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sable, a case study | Main Stage Studio</title>
+  <meta name="description" content="Brand identity and digital presence for a self-initiated artist project. Soft and sharp, soul and grit, an identity built to hold a contradiction rather than resolve it.">
+  <meta property="og:title" content="Sable, a case study | Main Stage Studio">
+  <meta property="og:description" content="Some artists know exactly who they are. They just haven't found the form yet. A self-initiated brand identity and web build.">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='16' width='24' height='22' rx='3' fill='%23BF6B47'/%3E%3Crect x='14' y='2' width='24' height='22' rx='3' fill='%231C1712'/%3E%3Crect x='14' y='16' width='12' height='8' rx='1.5' fill='%23F5EFE5'/%3E%3C/svg%3E">
+
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-400-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-300-latin.woff2" crossorigin>
+
+  <script is:inline>document.documentElement.classList.add('js-anim');</script>
+
+  <style>
+    /* ── Sable's own two faces ────────────────────────────────────
+       Self-hosted, and declared here rather than in global.css so the
+       homepage does not download two families it never sets a word in.
+       Both are only ever used inside section 05's specimens, which is
+       the point: the studio narrates in its own type, the client's type
+       appears only where it is the subject. */
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/fonts/playfair-display-400-latin.woff2') format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/fonts/playfair-display-400-latin-ext.woff2') format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url('/fonts/dm-sans-300-latin.woff2') format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url('/fonts/dm-sans-300-latin-ext.woff2') format('woff2');
+      unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    :root {
+      --nav-height:    64px;
+      --pad-x:         clamp(24px, 5vw, 80px);
+      --section-pad-y: clamp(80px, 11vh, 140px);
+
+      /* Content shell. 1400px matches the MSS homepage, so a case study
+         never sits narrower than the site it lives in. Without this the
+         page grew with the viewport forever: on a 2560px display the
+         two portraits in section 04 rendered 1186 x 1581 each, taller
+         than the screen showing them. */
+      --shell:         1400px;
+      /* No media block taller than this. The shell caps width, but these
+         images are sized by height: a 1:1 album cover at the full 1120px
+         frame came out 1120 tall, 117% of the viewport, and the portrait
+         pair hit 90% each. Anything that fills the screen stops reading
+         as an image on a page and starts reading as a slide. */
+      --media-max-h:   66vh;
+      /* Shared width for every media block, so they all break the 65ch text
+         measure by the same amount and start on the same left edge as the
+         copy. One dial: raise it and every image grows together. */
+      --media-w:       900px;
+      /* Left inset that lands on the shell's left edge. The bleed sections
+         use it so their text column lines up with every other section
+         while the image still runs off the right of the viewport.
+         100% resolves against the containing block, not the viewport, so
+         unlike 100vw this stays correct when a scrollbar is present. */
+      --shell-inset:   max(var(--pad-x), calc((100% - var(--shell)) / 2));
+
+      --parchment:  #F5EFE5;
+      --blush:      #E8C9AE;
+      --terracotta: #BF6B47;
+      --ember:      #8C4A2F;
+      --near-black: #1C1712;
+      --gold:       #C89442;
+      /* Body copy on parchment. The original set every paragraph at full
+         near-black, which flattened the page: nothing could recede. */
+      --muted:      #5F5952;
+      --muted-dark: #A9A198;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { background: var(--parchment); scroll-behavior: smooth; }
+
+    body {
+      background: var(--parchment);
+      color: var(--near-black);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scroll progress ─────────────────────────────────────────
+       Gold, vertical, left edge. The homepage runs a horizontal
+       terracotta bar; this one belongs to Sable, so it takes her accent
+       and her axis. */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 2px;
+      height: 0%;
+      background: var(--gold);
+      z-index: 60;
+      will-change: height;
+      transition: height 60ms linear;
+    }
+
+    /* ── Page shell ──────────────────────────────────────────────
+       Everything that is not a deliberate edge-to-edge bleed lines up
+       inside --shell. max-width carries --pad-x on both sides so the
+       content box is exactly --shell wide, which means the shell binds
+       from --shell + 2 * --pad-x (1560px) upward.
+
+       Section backgrounds stay full bleed: the shell sits on the inner
+       wrapper, never on the section, so .atmo-bg, .ember-column and the
+       parchment .dark-overlay still cover the whole width. */
+    .section-inner,
+    .shell {
+      width: 100%;
+      max-width: calc(var(--shell) + var(--pad-x) * 2);
+      margin-inline: auto;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────────
+       The standalone version shipped a three-link nav where every href
+       was "#". One link, and it works. */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: var(--nav-height);
+      background: var(--parchment);
+      border-bottom: 1px solid var(--blush);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad-x);
+    }
+
+    .backbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      transition: color 0.25s ease, gap 0.25s ease;
+    }
+    .backbar:hover { color: var(--near-black); gap: 0.95rem; }
+
+    .nav-meta {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+
+    /* ── Reveals ─────────────────────────────────────────────────
+       Gated behind .js-anim so a no-JS visitor gets the page rather
+       than an empty parchment rectangle. The standalone version had
+       .reveal { opacity: 0 } unconditionally, which meant the entire
+       case study was invisible if the script never ran. */
+    .js-anim .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 750ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 750ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .js-anim .reveal.visible { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 120ms; }
+    .rd2 { transition-delay: 240ms; }
+    .rd3 { transition-delay: 380ms; }
+
+    .js-anim .reveal-img {
+      transform: scale(1.04);
+      transition: transform 1400ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .js-anim .reveal.visible .reveal-img,
+    .js-anim .visible .reveal-img { transform: scale(1); }
+
+    /* ── Section label: slides in from the left ──────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      /* Ember, not terracotta. At 11px with 0.36em tracking this needs
+         4.5:1, and terracotta only reaches 3.39 on parchment. On the
+         dark sections terracotta clears 4.58, so those keep it. */
+      color: var(--ember);
+      margin-bottom: clamp(40px, 6vh, 64px);
+    }
+    .dark-section .section-label,
+    .on-dark .section-label { color: var(--terracotta); }
+
+    .js-anim .section-label {
+      opacity: 0;
+      transform: translateX(-16px);
+      transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .js-anim .section-label.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── Dark sections ───────────────────────────────────────────
+       A parchment overlay sits on top and fades out as the section
+       enters, so the page appears to darken rather than cut. */
+    .dark-section { position: relative; background: var(--near-black); }
+    .dark-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--parchment);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      will-change: opacity;
+    }
+    .js-anim .dark-overlay { opacity: 1; }
+    .js-anim .dark-section.revealed .dark-overlay { opacity: 0; }
+    .dark-section > .section-inner { position: relative; z-index: 3; }
+    /* s03 and s04 are wrapped in one .dark-section, so their inners are a
+       level deeper than the selector above reaches. */
+    #s03-04 .section-inner { position: relative; z-index: 3; }
+
+    /* ── Ember column ────────────────────────────────────────────
+       One element spanning the whole s03/s04 block so it reads as a
+       single image. Feathered on all four edges so it floats rather
+       than filling a box, and ordered before .dark-overlay so the
+       parchment hides it until the block reveals. */
+    .ember-column {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 46%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.22;
+      z-index: 1;
+      pointer-events: none;
+      -webkit-mask-image:
+        linear-gradient(to right, transparent 0%, #000 48%),
+        linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+              mask-image:
+        linear-gradient(to right, transparent 0%, #000 48%),
+        linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      -webkit-mask-composite: source-in;
+              mask-composite: intersect;
+    }
+    @media (max-width: 900px) {
+      .ember-column { width: 72%; opacity: 0.16; }
+    }
+
+    .atmo-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.07;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── Hero ────────────────────────────────────────────────────── */
+    #hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100dvh - var(--nav-height));
+      margin-top: var(--nav-height);
+    }
+    #hero-left {
+      background: var(--parchment);
+      border-right: 1px solid var(--near-black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(48px, 7vh, 96px) var(--pad-x);
+    }
+    #hero-right { position: relative; overflow: hidden; background: var(--near-black); }
+    #hero-right img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      transform-origin: center center;
+      animation: kenBurns 12s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to   { transform: scale(1.04); }
+    }
+
+    .hero-opening {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.2vw, 48px);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    .hero-opening span { display: block; }
+    .hero-gap { height: clamp(36px, 5vh, 60px); }
+    .hero-client-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(64px, 7vw, 110px);
+      letter-spacing: 0.01em;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .hero-descriptor {
+      font-size: 11px;
+      letter-spacing: 0.26em;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+    .hero-descriptor--accent { color: var(--ember); }
+
+    /* Hero text runs on a CSS animation, not a JS class toggle. The
+       standalone version waited for window.load, then a rAF, then a
+       200ms timeout before the headline became readable. */
+    .js-anim .hero-line {
+      opacity: 0;
+      animation: heroRise 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes heroRise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Body type ───────────────────────────────────────────────── */
+    .body-copy {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 65ch;
+      margin-bottom: 28px;
+    }
+    .on-dark .body-copy { color: var(--muted-dark); line-height: 1.8; }
+    .on-dark .body-copy:last-of-type { margin-bottom: 0; }
+
+    .hinge-line {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(22px, 2.4vw, 32px);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--near-black);
+      max-width: 22ch;
+      text-wrap: balance;
+    }
+
+    .challenge-accent { color: var(--terracotta); }
+
+    /* ── The client ──────────────────────────────────────────────── */
+    /* Deliberate right-hand bleed: padding-right stays 0 and the image
+       runs off the edge (#s02-image dissolves into it with a radial mask).
+       The text column is pinned to the shell line and capped at the same
+       55% of --shell it would get inside the shell, so the bleed survives
+       without the column drifting away from the rest of the page. */
+    #s02 {
+      display: grid;
+      grid-template-columns: min(55%, calc(var(--shell) * 0.55)) 1fr;
+      align-items: start;
+      padding: var(--section-pad-y) 0 var(--section-pad-y) var(--shell-inset);
+    }
+    #s02-text { padding-right: clamp(32px, 4vw, 64px); }
+    #s02-image {
+      position: relative;
+      overflow: hidden;
+      -webkit-mask-image: radial-gradient(ellipse 88% 92% at 55% 48%, black 38%, transparent 100%);
+      mask-image: radial-gradient(ellipse 88% 92% at 55% 48%, black 38%, transparent 100%);
+    }
+    /* Bleeds to the right edge, so its width is set by the viewport and
+       the height followed it: 890 x 890 at 1920, 93% of the fold. Capped
+       and cropped rather than scaled down, because the column has to keep
+       reaching the edge. The crop is off-centre to hold the face. */
+    #s02-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: var(--media-max-h);
+      object-fit: cover;
+      object-position: center 35%;
+    }
+
+    /* ── The insight: wipes in from the left rather than fading ──── */
+    .insight-line {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(26px, 3.2vw, 46px);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--parchment);
+      max-width: 24ch;
+      margin: clamp(40px, 6vh, 72px) 0;
+    }
+    .js-anim .insight-line {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+      transition: opacity 200ms ease,
+                  clip-path 900ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: clip-path, opacity;
+    }
+    .js-anim .insight-line.visible { opacity: 1; clip-path: inset(0 0% 0 0); }
+
+    /* Same trick as .clip-frame, doubled: each item is 4/5, so the item
+       width that lands on the cap is cap * 0.8, and the pair needs two of
+       those plus the gap. Keeps both portraits at their true ratio rather
+       than squashing them towards landscape. */
+    .image-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(16px, 2vw, 28px);
+      margin-top: clamp(40px, 6vh, 72px);
+      max-width: min(100%, var(--media-w), calc(var(--media-max-h) * 1.6 + clamp(16px, 2vw, 28px)));
+      margin-inline: 0;
+    }
+    /* 4:5 rather than 3:4. Two 3:4 portraits side by side make a very tall
+       block, and the crop was already fighting it (see object-position
+       below). 4:5 keeps the portrait feel and gives back about 60px. */
+    .image-pair-item { aspect-ratio: 4 / 5; overflow: hidden; }
+    /* Both sources are full-length portraits and a centred 3:4 crop takes the
+       top of the head off each of them. The section is about how she holds
+       herself in front of a camera, so the face has to survive the crop. */
+    .image-pair-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 22%;
+      display: block;
+    }
+
+    /* ── Clip frame ──────────────────────────────────────────────
+       Same click-to-play contract as the homepage and the PureMed
+       study: preload="none", a poster that carries the frame, and
+       native controls handed over on the first press. The hero film
+       is 1.6MB and this section is halfway down a long page. */
+    /* Fixed-ratio box: cap the width so the derived height lands on
+       --media-max-h. Capping height instead would keep the box wide and
+       crop the video through object-fit. 16/9 is the ratio, so the width
+       that produces the cap height is cap * 16 / 9. */
+    .clip-frame {
+      position: relative;
+      background: #0D0C0B;
+      border: 1px solid rgba(245,239,229,0.14);
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      max-width: min(100%, var(--media-w), calc(var(--media-max-h) * 16 / 9));
+      margin-inline: 0;
+    }
+    .clip-frame video {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .clip-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      width: 100%; height: 100%;
+      padding: 1.1rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .clip-play:hover { background: rgba(13,12,11,0.28); }
+    .clip-frame.is-playing .clip-play { display: none; }
+    .clip-play span {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 1.05rem 0.55rem 0.9rem;
+      background: var(--parchment);
+      color: var(--near-black);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .clip-play:hover span { transform: translateY(-2px); }
+
+    .shot-cap {
+      margin-top: 0.85rem;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted-dark);
+    }
+
+    /* ── The decisions ───────────────────────────────────────────── */
+    /* No section background of its own, so the shell can sit on the
+       section rather than needing an inner wrapper. */
+    #s05 {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: clamp(40px, 5vw, 80px);
+      padding: var(--section-pad-y) var(--pad-x);
+      align-items: start;
+      width: 100%;
+      max-width: calc(var(--shell) + var(--pad-x) * 2);
+      margin-inline: auto;
+    }
+    .decisions-intro {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(20px, 2.2vw, 30px);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--near-black);
+      margin-bottom: clamp(40px, 6vh, 64px);
+    }
+    /* Dividers rather than boxes: six decision cards in a column would
+       be the exact card overuse the studio's own brand doc rules out. */
+    .decision-block {
+      padding: clamp(24px, 3.5vh, 36px) 0;
+      border-top: 1px solid rgba(28,23,18,0.10);
+    }
+    .decision-block:last-child { border-bottom: 1px solid rgba(28,23,18,0.10); }
+    .decision-label {
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 10px;
+    }
+    .decision-body {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 55ch;
+    }
+
+    /* ── Identity specimens, right column of section 05 ──────────── */
+    .identity-visuals { display: flex; flex-direction: column; }
+    /* Sticky so the specimens stay beside the decisions that describe
+       them: the left column runs about two viewports on desktop, and
+       the original let the swatches scroll away on decision two. */
+    @media (min-width: 900px) {
+      .identity-visuals { position: sticky; top: calc(var(--nav-height) + 40px); }
+    }
+
+    .sable-wordmark-specimen {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(40px, 5vw, 68px);
+      letter-spacing: 0.09em;
+      line-height: 1;
+      color: var(--near-black);
+    }
+    .js-anim .sable-wordmark-specimen {
+      letter-spacing: 0em;
+      opacity: 0;
+      transition: letter-spacing 900ms cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 600ms ease;
+      will-change: letter-spacing, opacity;
+    }
+    .js-anim .sable-wordmark-specimen.visible { letter-spacing: 0.09em; opacity: 1; }
+
+    .sable-descriptor-specimen {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 0.5em;
+      /* Sable's gold is 2.4:1 on parchment, so it is never text at this
+         size on a light ground. Ember carries the descriptor here and
+         the gold appears as the swatch it actually is. */
+      color: var(--ember);
+      margin-top: 10px;
+    }
+
+    .palette-swatches { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .swatch-row { display: flex; align-items: center; gap: 12px; }
+    .js-anim .swatch-row {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .js-anim .swatch-row.visible { opacity: 1; transform: translateX(0); }
+    .js-anim .swatch-row:nth-child(1) { transition-delay: 0ms; }
+    .js-anim .swatch-row:nth-child(2) { transition-delay: 80ms; }
+    .js-anim .swatch-row:nth-child(3) { transition-delay: 160ms; }
+    .js-anim .swatch-row:nth-child(4) { transition-delay: 240ms; }
+    .js-anim .swatch-row:nth-child(5) { transition-delay: 320ms; }
+    .swatch { width: 32px; height: 32px; flex-shrink: 0; }
+    .swatch-label {
+      font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--near-black);
+    }
+    .swatch-hex {
+      font-size: 10px; letter-spacing: 0.08em;
+      color: var(--muted); margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .type-specimen-row { margin-bottom: 20px; }
+    .type-specimen-label {
+      font-size: 10px; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--ember); margin-bottom: 6px;
+    }
+    .type-specimen-display {
+      font-size: clamp(22px, 2.8vw, 36px); line-height: 1; color: var(--near-black);
+    }
+    .specimen-divider {
+      width: 100%; height: 1px; background: var(--blush);
+      margin: clamp(24px, 3vh, 36px) 0;
+    }
+
+    /* ── The work ────────────────────────────────────────────────── */
+    .album-title-display {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(36px, 5vw, 72px);
+      line-height: 1;
+      letter-spacing: 0.01em;
+      color: var(--parchment);
+      margin: clamp(48px, 7vh, 88px) 0 clamp(36px, 5vh, 60px);
+    }
+    /* Inset inside the shell. These are screenshots of a website: at full
+       shell width they hit the same line as the body copy and read as
+       slabs. Held narrower they read as artefacts sitting on a page.
+       1120px is the width the PureMed study gives the same kind of asset. */
+    .work-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 2vw, 28px);
+      margin-top: clamp(40px, 6vh, 64px);
+    }
+    /* Frames holding the work itself (screenshots, the hero film) sit inset
+       inside the shell. At full shell width they hit the same line as the
+       body copy and read as slabs; held narrower they read as artefacts
+       on a page.
+
+       Centring them at 1120 was the real reason they still read large: the
+       text measure is 65ch, about 752px, so the media was up to 49% wider
+       than the copy it belonged to and sat on a different axis. Four blocks,
+       four left edges. They now share one left edge with the text and one
+       width. --media-w is a deliberate 1.2x break of the measure, which is
+       enough to feel like a plate on a page and not a slide. */
+    .work-showcase,
+    .frame-inset {
+      max-width: min(100%, var(--media-w));
+      margin-inline: 0;
+    }
+    /* Intrinsic-ratio images: height leads and width follows, so a tall or
+       square source shrinks to fit --media-max-h instead of stretching to
+       the full frame and running past the fold. A wide screenshot is
+       unaffected because it hits max-width first. No crop either way. */
+    .showcase-frame { overflow: hidden; }
+    .showcase-frame img,
+    .frame-inset > img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: var(--media-max-h);
+      /* contain, not cover: a 1:1 album cover clamped to the cap renders
+         at cap x cap centred in the frame rather than being cropped to a
+         letterbox. Wide screenshots never reach the cap so they are
+         untouched. width stays 100% so the aspect-ratio from the width and
+         height attributes reserves the box before the lazy image loads;
+         width:auto would collapse it to zero and shift the page on load.
+         object-position pins the contained result to the left, so a square
+         cover that shrinks inside a wider box still starts on the shared
+         left edge rather than floating to the middle of it. */
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    /* ── The reflection ──────────────────────────────────────────── */
+    /* Same deliberate right-hand bleed as #s02. */
+    #s07 {
+      display: grid;
+      grid-template-columns: min(55%, calc(var(--shell) * 0.55)) 1fr;
+      align-items: start;
+      padding: var(--section-pad-y) 0 var(--section-pad-y) var(--shell-inset);
+    }
+    #s07-text { padding-right: clamp(32px, 4vw, 64px); }
+    #s07-image { position: relative; overflow: hidden; min-height: 560px; }
+    #s07-image img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+    }
+
+    /* ── The close ───────────────────────────────────────────────── */
+    .entry-lines {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.8vw, 54px);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--parchment);
+      margin-bottom: clamp(28px, 4vh, 40px);
+      max-width: 20ch;
+      text-wrap: balance;
+    }
+    .entry-lines span { display: block; }
+
+    /* The closing section is a flex column, so the actions need their own row.
+       Without it an inline-block link stretches to the full column width and
+       drags its underline with it. */
+    .enter-row {
+      display: flex;
+      align-items: baseline;
+      gap: clamp(24px, 4vw, 52px);
+      flex-wrap: wrap;
+      align-self: flex-start;
+      margin-top: clamp(28px, 4vh, 44px);
+    }
+
+    .enter-secondary {
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted-dark);
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    .enter-secondary:hover { color: var(--parchment); }
+
+    .enter-cta {
+      position: relative;
+      display: inline-block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      background: none;
+      border: none;
+      padding: 0 0 5px;
+      cursor: pointer;
+    }
+    .enter-cta::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 1px;
+      background: var(--gold);
+      transform-origin: left center;
+    }
+    .js-anim .enter-cta::after {
+      transform: scaleX(0);
+      transition: transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .js-anim .enter-cta.underline-drawn::after { transform: scaleX(1); }
+    .enter-cta:hover { color: var(--parchment); }
+    .enter-cta:hover::after { background: var(--parchment); }
+
+    /* ── Focus and skip ──────────────────────────────────────────── */
+    :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+    .dark-section :focus-visible,
+    .on-dark :focus-visible,
+    footer :focus-visible { outline-color: var(--blush); }
+
+    /* ── Handover ────────────────────────────────────────────────
+       Fades the whole page into Sable's own black before navigating, so
+       the case study and her site read as one continuous move rather than
+       two separate loads. Purely additive: the CTA is a real link and
+       works without any of this. */
+    #transition-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: #0D0C0B;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 600ms ease;
+      will-change: opacity;
+    }
+    #transition-overlay.is-leaving { opacity: 1; }
+
+    .skip-link {
+      position: absolute; left: 1rem; top: -100px; z-index: 70;
+      background: var(--near-black); color: var(--parchment);
+      font-size: 0.8125rem; padding: 0.75rem 1.25rem; text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    footer .footer-note { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── Mobile ──────────────────────────────────────────────────── */
+    @media (max-width: 899px) {
+      #s05 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      #hero { grid-template-columns: 1fr; grid-template-rows: 42vh auto; }
+      #hero-right { order: -1; border-bottom: 1px solid var(--near-black); min-height: 42vh; }
+      #hero-left { border-right: none; order: 1; }
+      #nav { padding: 0 20px; }
+      #s02, #s07 { grid-template-columns: 1fr; padding-right: var(--pad-x); }
+      #s02-image { order: -1; margin-bottom: 32px; max-height: 65vh; }
+      #s02-image img { height: 100%; object-fit: cover; }
+      #s07-image { min-height: 60vw; order: -1; margin-bottom: 32px; }
+      .image-pair { grid-template-columns: 1fr; gap: clamp(16px, 4vw, 24px); }
+      .image-pair-item { aspect-ratio: 4 / 3; }
+    }
+
+    /* ── Reduced motion ──────────────────────────────────────────
+       The standalone version had none of this: a 12s infinite Ken Burns
+       loop on the hero, a clip-path wipe, a letter-spacing expansion,
+       five staggered swatch rows and a full-page overlay fade, all of
+       it unconditional. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+      }
+      #hero-right img { animation: none !important; transform: none !important; }
+      .js-anim .reveal { opacity: 1 !important; transform: none !important; }
+      .js-anim .reveal-img { transform: none !important; }
+      .js-anim .hero-line { opacity: 1 !important; animation: none !important; }
+      .js-anim .section-label { opacity: 1 !important; transform: none !important; }
+      .js-anim .insight-line { opacity: 1 !important; clip-path: none !important; }
+      .js-anim .sable-wordmark-specimen { opacity: 1 !important; letter-spacing: 0.09em !important; }
+      .js-anim .swatch-row { opacity: 1 !important; transform: none !important; }
+      .js-anim .dark-overlay { opacity: 0 !important; }
+      .js-anim .enter-cta::after { transform: scaleX(1) !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <div id="transition-overlay" aria-hidden="true"></div>
+
+  <nav id="nav">
+    <a href="/#work" class="backbar">
+      <svg width="14" height="14" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+        <path d="M12 6.5H1M5.5 11.5l-5-5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Main Stage Studio
+    </a>
+    <span class="nav-meta">Case study</span>
+  </nav>
+
+  <main id="main">
+
+    <!-- ── 01 Hero ──────────────────────────────────────────────── -->
+    <section id="hero">
+      <div id="hero-left">
+        <p class="hero-opening">
+          <span class="hero-line" style="animation-delay:120ms;">Some artists know exactly who they are.</span>
+          <span class="hero-line" style="animation-delay:280ms;">They just haven't found the form yet.</span>
+        </p>
+        <div class="hero-gap"></div>
+        <h1 class="hero-client-name hero-line" style="animation-delay:500ms;">Sable</h1>
+        <p class="hero-descriptor hero-line" style="animation-delay:680ms;">Brand Identity and Digital Presence</p>
+        <p class="hero-descriptor hero-descriptor--accent hero-line" style="animation-delay:820ms;">Self-initiated, 2026</p>
+      </div>
+      <div id="hero-right">
+        <Image src={atmospheric}
+               alt=""
+               role="presentation"
+               width={1200}
+               widths={[600, 900, 1200, 1800]}
+               sizes="(min-width: 768px) 50vw, 100vw"
+               format="webp"
+               quality={72}
+               loading="eager"
+               fetchpriority="high"
+               decoding="async" />
+      </div>
+    </section>
+
+
+    <!-- ── 02 The client ────────────────────────────────────────── -->
+    <section id="s02">
+      <div id="s02-text">
+        <p class="section-label">the client</p>
+        <p class="body-copy reveal">
+          Sable is a young musician from London. She carries African Caribbean heritage into everything she makes. Her dress sense is fierce and considered. Her sound is soulful, layered, impossible to place in a single genre. She is completely, unapologetically herself.
+        </p>
+        <p class="hinge-line reveal rd1">
+          She didn't need to be explained. She needed a world built around her.
+        </p>
+      </div>
+
+      <div id="s02-image" class="reveal rd2">
+        <Image src={portraitClosed}
+               alt="Sable in portrait, eyes closed, lit from one side"
+               class="reveal-img"
+               width={1024}
+               widths={[400, 760, 1024]}
+               sizes="(min-width: 768px) 48vw, 100vw"
+               format="webp"
+               quality={78}
+               loading="lazy"
+               decoding="async" />
+      </div>
+    </section>
+
+
+    <!-- ── 03 and 04 share one ember column on the right ──────────
+         These two are a single .dark-section, not two. The background
+         spans both, so if each section carried its own .dark-overlay
+         the shared image would be uncovered in two independent halves
+         with a seam at the boundary. One block, one overlay, one fade. -->
+    <div id="s03-04" class="dark-section on-dark">
+      <div class="ember-column" style={`background-image:url(${emberBg.src});`} aria-hidden="true"></div>
+      <div class="dark-overlay"></div>
+
+      <!-- ── 03 The challenge ───────────────────────────────────── -->
+      <section id="s03">
+        <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
+          <p class="section-label">the challenge</p>
+          <p class="body-copy reveal">
+            The brief on the surface: build a digital presence for an emerging artist.
+          </p>
+          <p class="body-copy reveal rd1">
+            <span class="challenge-accent">The real brief:</span> find a visual and verbal language as distinctive as she is. Something that could hold the contradiction at the centre of her work. Vulnerable in the music. Guarded in the world. Soulful in sound. Fierce in person.
+          </p>
+          <p class="body-copy reveal rd2">
+            We didn't pick a lane. We built something that lives in the contradiction.
+          </p>
+        </div>
+      </section>
+
+
+      <!-- ── 04 The discovery ───────────────────────────────────── -->
+      <section id="s04">
+        <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
+          <p class="section-label">the discovery</p>
+
+          <p class="body-copy reveal">We started with the images.</p>
+          <p class="body-copy reveal rd1">
+            Not mood boards or references. The actual character. The way she holds herself in front of a camera. Eyes closed in the portrait shots, completely present in herself. Direct and commanding in performance, mic in hand, walking toward a crowd on a wooden floor that becomes a stage.
+          </p>
+          <p class="body-copy reveal rd2">
+            Two completely different registers. The same person in both.
+          </p>
+          <p class="body-copy reveal">
+            That's where the identity came from. Not from a genre. Not from a scene. From the specific tension between who she is when the world is watching and who she is when the music takes over.
+          </p>
+
+          <p class="insight-line" id="insight-line">
+            The creative insight: soft and sharp. Soul and grit.<br>
+            She holds both, and she doesn't resolve the contradiction for you.
+          </p>
+
+          <div class="image-pair reveal">
+            <div class="image-pair-item">
+              <Image src={studioMic}
+                     alt="Sable in the studio, mic in hand"
+                     class="reveal-img"
+                     width={686}
+                     widths={[350, 686, 1372]}
+                     sizes="(min-width: 1560px) 686px, (min-width: 768px) 45vw, 100vw"
+                     format="webp"
+                     quality={76}
+                     loading="lazy"
+                     decoding="async" />
+            </div>
+            <div class="image-pair-item">
+              <Image src={heroArrival}
+                     alt="Sable in warm low light, eyes closed, jewellery catching the only source in the room"
+                     class="reveal-img"
+                     width={686}
+                     widths={[350, 686, 768]}
+                     sizes="(min-width: 1560px) 686px, (min-width: 768px) 45vw, 100vw"
+                     format="webp"
+                     quality={76}
+                     loading="lazy"
+                     decoding="async" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+    <!-- ── 04b The hero ─────────────────────────────────────────
+         This section argues that the hero film is the case for the whole
+         identity, and the standalone version then showed a still of it.
+         The film is here now, click-to-play, with the homepage below it. -->
+    <section id="s04b" class="on-dark" style="background:var(--near-black);">
+     <div class="shell" style="padding: var(--section-pad-y) var(--pad-x);">
+      <p class="section-label">the hero</p>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(32px,5vw,80px); align-items:start; margin-bottom: clamp(48px,7vh,80px);">
+        <div>
+          <p class="body-copy reveal">
+            The hero isn't a banner. It's the case for the whole identity.
+          </p>
+          <p class="body-copy reveal rd1">
+            She appears still first. Composed, present, entirely herself before the performance begins. Then she walks out. The stage finds her. The shot slows as she arrives, then fades to black.
+          </p>
+        </div>
+        <div>
+          <p class="body-copy reveal rd1">
+            Two registers. One unbroken movement. The video doesn't introduce Sable. It shows you exactly what the brief was asking us to hold.
+          </p>
+        </div>
+      </div>
+
+      <figure class="reveal rd1 frame-inset" style="margin:0 0 clamp(32px,5vh,56px);">
+        <div class="clip-frame">
+          <video poster="/assets/sable-hero.webp"
+                 preload="none"
+                 muted loop playsinline
+                 width="1280" height="720"
+                 aria-label="The Sable hero film">
+            <source src="/assets/sable-hero.webm" type="video/webm" />
+            <source src="/assets/sable-hero.mp4" type="video/mp4" />
+          </video>
+          <button type="button" class="clip-play" aria-label="Play the Sable hero film">
+            <span>
+              <svg width="10" height="12" viewBox="0 0 11 13" aria-hidden="true">
+                <path d="M11 6.5 0 13V0z" fill="#1C1712"/>
+              </svg>
+              Play · 15s
+            </span>
+          </button>
+        </div>
+        <figcaption class="shot-cap">The hero film, as it runs on the site</figcaption>
+      </figure>
+
+      <figure class="reveal rd2 frame-inset" style="margin:0; overflow:hidden;">
+        <Image src={homepageOne}
+               alt="The Sable homepage: the wordmark set lowercase over the hero film"
+               class="reveal-img"
+               width={1120}
+               widths={[560, 1120, 1920]}
+               sizes="(min-width: 1280px) 1120px, 100vw"
+               format="webp"
+               quality={78}
+               loading="lazy"
+               decoding="async" />
+        <figcaption class="shot-cap">The arrival, where the film lands</figcaption>
+      </figure>
+     </div>
+    </section>
+
+
+    <!-- ── 05 The decisions ─────────────────────────────────────── -->
+    <section id="s05">
+      <div>
+        <p class="section-label">the decisions</p>
+        <p class="decisions-intro reveal">
+          The identity system was built from the inside out.<br>
+          Every decision traces back to the same place.
+        </p>
+
+        {decisions.map(item => (
+          <div class="decision-block reveal">
+            <p class="decision-label">{item.t}</p>
+            <p class="decision-body">{item.d}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="identity-visuals">
+
+        <div id="wordmark-specimen">
+          <p class="type-specimen-label">wordmark</p>
+          <p class="sable-wordmark-specimen">sable</p>
+          <p class="sable-descriptor-specimen">london</p>
+        </div>
+
+        <div class="specimen-divider"></div>
+
+        <div>
+          <p class="type-specimen-label">colour</p>
+          <div class="palette-swatches">
+            {palette.map(c => (
+              <div class="swatch-row">
+                <div class="swatch" style={`background:${c.h};${c.outline ? 'outline:1px solid #E8C9AE;' : ''}`}></div>
+                <span class="swatch-label">{c.n}</span>
+                <span class="swatch-hex">{c.h}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="specimen-divider"></div>
+
+        <div>
+          <p class="type-specimen-label" style="margin-bottom:18px;">type</p>
+          <div class="type-specimen-row">
+            <p class="type-specimen-label" style="color:var(--ember);">display</p>
+            <p class="type-specimen-display" style="font-family:'Playfair Display',Georgia,serif;font-weight:400;">Playfair Display</p>
+          </div>
+          <div class="type-specimen-row">
+            <p class="type-specimen-label" style="color:var(--ember);">body and ui</p>
+            <p class="type-specimen-display" style="font-family:'DM Sans',system-ui,sans-serif;font-weight:300;">DM Sans</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ── 06 The work ──────────────────────────────────────────── -->
+    <section id="s06" class="dark-section on-dark">
+      <div class="dark-overlay"></div>
+      <div class="atmo-bg" style={`background-image:url(${atmoBg.src});`} aria-hidden="true"></div>
+      <div class="section-inner" style="padding: var(--section-pad-y) var(--pad-x);">
+
+        <p class="section-label">the work</p>
+
+        <p class="body-copy reveal">A single page with three distinct worlds.</p>
+        <p class="body-copy reveal rd1">
+          The arrival, where Sable meets you on her own terms. The music, where the album Between the Words lives alongside a buyable experience. The tour, where upcoming shows connect directly to ticketing.
+        </p>
+        <p class="body-copy reveal rd2">Nothing is decorative. Everything earns its place.</p>
+
+        <p class="album-title-display reveal">Between the Words</p>
+
+        <div class="work-showcase reveal">
+          <figure class="showcase-frame" style="margin:0;">
+            <Image src={albumCover}
+                   alt="Between the Words, the album artwork"
+                   class="reveal-img"
+                   width={800}
+                   widths={[400, 800]}
+                   sizes="(min-width: 1280px) 1120px, 100vw"
+                   format="webp"
+                   quality={78}
+                   loading="lazy"
+                   decoding="async" />
+          </figure>
+          <figure class="showcase-frame" style="margin:0;">
+            <Image src={homepageTwo}
+                   alt="The music section of the Sable site, with the album alongside a buyable experience"
+                   class="reveal-img"
+                   width={1120}
+                   widths={[560, 1120, 1920]}
+                   sizes="(min-width: 1280px) 1120px, 100vw"
+                   format="webp"
+                   quality={78}
+                   loading="lazy"
+                   decoding="async" />
+          </figure>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ── 07 The reflection ────────────────────────────────────── -->
+    <section id="s07">
+      <div id="s07-text">
+        <p class="section-label">the reflection</p>
+        <p class="body-copy reveal">
+          The hardest part of this engagement was resisting the urge to explain her. Every instinct in brand work points toward clarity, toward making things legible. Sable required the opposite: building something that held ambiguity as a feature, not a problem. The tension between soft and sharp, between soul and grit, needed to stay unresolved. The moment we tried to resolve it, we lost her.
+        </p>
+        <p class="body-copy reveal rd1" style="font-size:14px;">
+          If we did this again, we'd generate the photography earlier. The visual world came together quickly once the images existed. Next time, we start there.
+        </p>
+      </div>
+
+      <div id="s07-image" class="reveal rd2">
+        <Image src={fullBodySeated}
+               alt="Sable seated, full figure, in low light"
+               class="reveal-img"
+               width={1210}
+               widths={[400, 760, 1210, 2048]}
+               sizes="(min-width: 768px) 48vw, 100vw"
+               format="webp"
+               quality={78}
+               loading="lazy"
+               decoding="async" />
+      </div>
+    </section>
+
+
+    <!-- ── 08 The entry point ───────────────────────────────────
+         The original beat, restored: the studio stops talking and hands
+         over to her site, which now exists as a real route rather than a
+         file in the portfolio folder. The honest framing sits above the
+         handover rather than replacing it, because "the artist is
+         invented" is the one thing a visitor needs before they walk in. -->
+    <section id="s08" class="dark-section on-dark">
+      <div class="dark-overlay"></div>
+      <div class="atmo-bg" style={`background-image:url(${atmoBg.src});`} aria-hidden="true"></div>
+      <div class="section-inner" style="min-height:100dvh; display:flex; flex-direction:column; justify-content:center; padding: var(--section-pad-y) var(--pad-x);">
+
+        <p class="entry-lines reveal">
+          <span>This is where the studio's story ends</span>
+          <span>and hers begins.</span>
+        </p>
+
+        <p class="body-copy reveal rd1" style="max-width:52ch;">
+          Sable is a self-initiated project and the artist is invented. Everything behind this door is real work: the identity, the copy, the film, the build. It was made to find out how this studio handles a client whose whole value is that they don't fit a category.
+        </p>
+
+        <div class="enter-row reveal rd2">
+          <a href="/work/sable/site" class="enter-cta" id="enter-btn">enter</a>
+          <a href="/#contact" class="enter-secondary">Start a project</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer class="shell" style="padding: 0 var(--pad-x) 40px;">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-10" style="border-top:1px solid rgba(28,23,18,0.12);">
+      <a href="/" class="backbar">
+        <svg width="14" height="14" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M12 6.5H1M5.5 11.5l-5-5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Main Stage Studio
+      </a>
+      <p class="footer-note">Sable case study. Self-initiated. Published by Main Stage Studio.</p>
+    </div>
+  </footer>
+
+
+  <script>
+    // ── Scroll progress ───────────────────────────────────────────
+    const progressBar = document.getElementById('scroll-progress');
+    if (progressBar) {
+      window.addEventListener('scroll', () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.height = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      }, { passive: true });
+    }
+
+    // ── One observer, several reveal contracts ────────────────────
+    // The standalone version ran six separate IntersectionObservers over
+    // six near-identical selectors. Same behaviour, one observer, driven
+    // off whichever class the element already carries.
+    const reveal = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('visible');
+        // Swatch rows stagger off their own :nth-child delays, so the
+        // container reveal has to switch all five on at once.
+        e.target.querySelectorAll?.('.swatch-row').forEach(r => r.classList.add('visible'));
+        reveal.unobserve(e.target);
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(
+      '.reveal, .section-label, .insight-line, .palette-swatches, .sable-wordmark-specimen'
+    ).forEach(el => reveal.observe(el));
+
+    // ── Dark sections: fade the parchment overlay out on entry ────
+    const dark = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          dark.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.dark-section').forEach(el => dark.observe(el));
+
+    // ── Closing CTA: draw the underline once the section settles ──
+    const enterBtn = document.getElementById('enter-btn');
+    if (enterBtn) {
+      const cta = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          setTimeout(() => enterBtn.classList.add('underline-drawn'), 900);
+          cta.unobserve(e.target);
+        });
+      }, { threshold: 0.5 });
+      cta.observe(enterBtn);
+
+      // Fade to Sable's black before handing over. Skipped for reduced
+      // motion, and skipped for modified clicks so open-in-new-tab still
+      // behaves like a normal link.
+      const veil = document.getElementById('transition-overlay');
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      enterBtn.addEventListener('click', e => {
+        if (still || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        veil.classList.add('is-leaving');
+        setTimeout(() => { window.location.href = enterBtn.href; }, 620);
+      });
+    }
+
+    // ── Hero film: click to play, then hand over native controls ──
+    document.querySelectorAll('.clip-frame').forEach(frame => {
+      const video = frame.querySelector('video');
+      const button = frame.querySelector('.clip-play');
+      if (!video || !button) return;
+
+      button.addEventListener('click', () => {
+        frame.classList.add('is-playing');
+        video.controls = true;
+        video.play();
+        video.focus();
+      });
+
+      const vis = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting && !video.paused) video.pause();
+        });
+      }, { threshold: 0.25 });
+      vis.observe(frame);
+    });
+  </script>
+
+</body>
+</html>

@@ -28,7 +28,7 @@ site (`mainstagestudio.co.uk`) is confirmed. Merge-to-main only ever reaches sta
 
 Split staging/prod webroot secrets (rather than the setup doc's single
 `CLOUDWAYS_WEBROOT`) so a merge to `main` can never physically reach production —
-same convention as `other-projects/puremed/.github/DEPLOY.md`.
+same convention as `02_clients/puremed/.github/DEPLOY.md`.
 
 ## Path filtering
 

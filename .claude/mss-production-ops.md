@@ -1,9 +1,12 @@
 # MSS — Production Operations Reference
 
-> **Legacy scope (added 3 July 2026):** applies only to WordPress + Bricks sites
-> still live — currently the MSS production site, until its Astro cutover.
-> New builds are Astro static on Cloudways and none of this applies to them.
-> See `01_mss/strategy/mss-astro-cloudways-setup.md`.
+> **Legacy scope (added 3 July 2026, superseded 5 August 2026):** applied only to
+> WordPress + Bricks sites still live. The MSS production site completed its
+> Astro cutover (Cloudways/GitHub Actions pipeline live 22 July 2026) and no
+> longer runs on WordPress/Bricks, so nothing in this document applies to
+> current production work. Kept for reference only, in case a legacy
+> WordPress/Bricks site ever needs a live fix. New builds are Astro static on
+> Cloudways — see `01_mss/strategy/mss-astro-cloudways-setup.md`.
 
 *What's safe to do directly against a live WordPress/Bricks site, and what isn't.*
 *Written after a real incident: direct database edits created content that existed

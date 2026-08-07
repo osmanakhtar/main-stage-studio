@@ -51,7 +51,7 @@ Near-black top-right (leads). Terracotta bottom-left (recedes). Parchment cutout
 - **Production:** Astro static sites (Bricks Builder retired 25 June 2026 — legacy docs in `_archive/bricks-era/`)
 - **Client review:** Stage on the Pi (`mss-review.duckdns.org`)
 - **Assets:** Higgsfield for video/3D, Claude for SVG and components
-- **Hosting:** Cloudways (MSS production site remains WordPress + Bricks until Astro cutover)
+- **Hosting:** Cloudways (MSS production site now runs on Astro)
 - **DAM:** Deprioritised — WebP compression + Cloudways direct serving is sufficient
 
 ---
