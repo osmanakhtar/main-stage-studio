@@ -7,6 +7,12 @@ import '../styles/global.css';
 // 3.6MB and 2.2MB PNGs being displayed at ~450px wide.
 import puremedThumb from '../assets/puremed-hero-consultation.webp';
 
+// Intake, the Systems case study. A real capture of the prototype's documents
+// step with the rule trace beside it, rather than a styled mock: the whole
+// argument of the piece is that the rules are visible next to the thing they
+// produced, so a decorative thumbnail would undercut it.
+import intakeThumb from '../assets/intake-rule-trace.png';
+
 // Work section, second row. Sable is the brand-and-web side of the positioning
 // and links to its own case study; Ayesha is upcoming and deliberately does not
 // link anywhere, so it gets a plain card rather than the spotlight treatment.
@@ -361,6 +367,36 @@ const homeClips = [
     }
     .clip-play:hover span { transform: translateY(-2px); }
 
+    /* ── What we do: service accordion ──────────────────────── */
+    .wwd-accordion > details + details { border-top: 1px solid rgba(28,23,18,0.14); }
+    .wwd-accordion summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      list-style: none;
+      cursor: pointer;
+      padding: 1rem 0;
+    }
+    .wwd-accordion summary::-webkit-details-marker { display: none; }
+    .wwd-accordion-icon {
+      position: relative;
+      flex: none;
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+    .wwd-accordion-icon::before,
+    .wwd-accordion-icon::after {
+      content: '';
+      position: absolute;
+      background: var(--ember);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .wwd-accordion-icon::before { top: 50%; left: 0; width: 100%; height: 1px; transform: translateY(-50%); }
+    .wwd-accordion-icon::after { left: 50%; top: 0; width: 1px; height: 100%; transform: translateX(-50%); }
+    details[open] .wwd-accordion-icon::after { transform: translateX(-50%) scaleY(0); }
+    .wwd-accordion details > p { padding: 0 0 1.1rem; margin: 0; max-width: 46ch; }
+
     /* ── Scroll reveal ───────────────────────────────────────── */
     /* Also gated: without JS the whole page body used to render at opacity 0. */
     .js-anim .reveal {
@@ -598,8 +634,8 @@ const homeClips = [
          still showing and every label was wrapping onto two lines inside its own
          flex item. The hamburger now takes over before anything is squeezed. -->
     <div class="hidden lg:flex items-center gap-8 whitespace-nowrap">
-      <a href="#credential"   class="nav-link font-sans">Track record</a>
       <a href="#what-we-do"   class="nav-link font-sans">What we do</a>
+      <a href="#credential"   class="nav-link font-sans">Track record</a>
       <a href="#how-it-works" class="nav-link font-sans">How it works</a>
       <a href="#work"         class="nav-link font-sans">Work</a>
       <a href="#contact" id="nav-cta" class="btn-fill ml-2">
@@ -622,8 +658,8 @@ const homeClips = [
   <div id="mobile-menu" class="fixed inset-0 z-40 bg-parchment flex flex-col justify-center px-8"
        style="transform:translateX(100%);transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);" aria-hidden="true" inert>
     <nav class="flex flex-col gap-8">
-      <a href="#credential"   class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">Track record</a>
       <a href="#what-we-do"   class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">What we do</a>
+      <a href="#credential"   class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">Track record</a>
       <a href="#how-it-works" class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">How it works</a>
       <a href="#work"         class="font-display font-normal text-near-black no-underline mobile-link" style="font-size:clamp(2.25rem,8vw,4rem);">Work</a>
       <a href="#contact" class="btn-fill self-start mt-6 mobile-link">
@@ -805,6 +841,138 @@ const homeClips = [
   </section>
 
 
+  <!-- ═══════════════════════════════════════ WHAT WE DO -->
+  <!-- Follows The Gap directly: that section argues running is the job, so
+       this one doesn't re-argue it, it just answers "so what does that
+       include" and breaks it into the services. Track record moves below
+       this, since "here's what we do" is the more natural next beat after
+       "here's the problem" than a credentials section. -->
+  <section id="what-we-do" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="border-top:1px solid rgba(28,23,18,0.14);">
+    <div class="max-w-[1400px] mx-auto">
+
+      <!-- Heading and standfirst side by side, not stacked. Capped at 14ch the
+           heading set in three lines down the left edge with the standfirst
+           under it at 52ch, which left the entire right half of a 1248px
+           container empty and reading as an accident. The column split is
+           1.35fr/1fr rather than the 1fr/1.4fr used elsewhere because the
+           heading runs at 72px here and needs about 610px to break after
+           "and"; items-end sits the standfirst on the heading's last line, so
+           the two blocks share a baseline instead of both floating. -->
+      <div class="grid grid-cols-1 md:grid-cols-[1.35fr_1fr] gap-6 md:gap-24 md:items-end mb-16 reveal">
+        <div>
+          <p class="slabel mb-4">What we do</p>
+          <!-- Shape 3 of 6: one flowing block, accent carrying the second line.
+               Rewritten to name the two service lines directly (Presence /
+               Systems) rather than "how you show up", which read as advice
+               on self-presentation instead of a description of the work. -->
+          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.1;letter-spacing:-0.015em;">
+            Presence, and<br>
+            <span class="text-terracotta">the systems behind it.</span>
+          </h2>
+        </div>
+        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
+          One is what people see: the brand, the content, the site. The other is what makes it hold up: the systems running underneath. This studio does both, and doesn't pretend they're the same job.
+        </p>
+      </div>
+
+      <!-- Four cards, one consistent box treatment, so the section reads as a
+           set rather than three mismatched headings plus an afterthought.
+           Ongoing and Systems are the two things you can actually engage us
+           for, so both get the filled card. Launch and Social engine are
+           routes into Ongoing, not peers of it, so both get the lighter
+           bordered card at a shared, smaller heading size. -->
+      <div class="flex flex-col gap-6 mb-6">
+
+        <!-- Ongoing: the core offer, reframed around what it does for the
+             client (build and run the platform) rather than the billing
+             term. Detail that used to sit in two paragraphs here now lives
+             in the accordion on the right, so the left column states the
+             claim once instead of restating the header above it. -->
+        <div class="p-8 md:p-10 reveal" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-8 md:gap-14">
+            <div>
+              <p class="slabel mb-3">Presence · Ongoing</p>
+              <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Built to keep running.</h3>
+              <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:44ch;">
+                We don't hand over and disappear. We build the platform your business runs on, then we run it, day after day.
+              </p>
+            </div>
+
+            <div class="wwd-accordion">
+              <details open>
+                <summary>
+                  <span class="font-display font-normal text-near-black" style="font-size:1.125rem;">Brand, kept consistent</span>
+                  <span class="wwd-accordion-icon" aria-hidden="true"></span>
+                </summary>
+                <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;">
+                  Identity discipline applied to everything that goes out, not just what launched.
+                </p>
+              </details>
+              <details>
+                <summary>
+                  <span class="font-display font-normal text-near-black" style="font-size:1.125rem;">Content engine</span>
+                  <span class="wwd-accordion-icon" aria-hidden="true"></span>
+                </summary>
+                <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;">
+                  A planned calendar, designed posts, edited clips, captions in your voice, every piece checked against your rules before you ever see it, and approved by you before it goes anywhere.
+                </p>
+              </details>
+              <details>
+                <summary>
+                  <span class="font-display font-normal text-near-black" style="font-size:1.125rem;">System orchestration</span>
+                  <span class="wwd-accordion-icon" aria-hidden="true"></span>
+                </summary>
+                <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;">
+                  Your website and platform kept live and current: wording changed, pricing updated, a service added. Ask for it, approve it, and it's live, no ticket queue.
+                </p>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Launch: the way in -->
+          <div class="p-8 md:p-10 border reveal rd1" style="border-color:rgba(28,23,18,0.14);">
+            <p class="slabel mb-3">Presence · Launch</p>
+            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Built once, built right.</h3>
+            <div class="flex flex-col gap-4">
+              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+                The brief you bring is rarely the brief that gets built. Finding the real one comes first, then positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
+              </p>
+              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+                You review every stage in one place, and nothing moves forward without your sign-off.
+              </p>
+            </div>
+          </div>
+
+          <!-- Social engine: the same Ongoing engine, time-boxed, named for
+               what it concretely is rather than the abstract "campaign" -->
+          <div class="p-8 md:p-10 border reveal rd2" style="border-color:rgba(28,23,18,0.14);">
+            <p class="slabel mb-3">Presence · Social engine</p>
+            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Grow your presence, on a timeline.</h3>
+            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+              The same engine that runs Ongoing, just time-boxed: built around a launch, a new service, or a renewal season. It's often where an Ongoing engagement starts.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Systems -->
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12 p-8 md:p-10 mb-16 reveal rd4" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
+        <div>
+          <p class="slabel mb-3">Systems</p>
+          <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Not packaged.<br>Scoped to fit.</h3>
+        </div>
+        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
+          The onboarding flow, the intake process, the decision logic that has to be right every single time, not just look right. Most of this work stays behind a client's login, so we built one you can open: <a href="/work/intake/prototype/" class="underline underline-offset-2 transition-colors hover:text-terracotta text-near-black">Intake</a> is a working client journey for three regulated practices, where every question it asks can be traced to a numbered rule. Take it apart. Then the conversation starts from something real, rather than a price list.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
   <!-- ═══════════════════════════════════════ RUNNING SYSTEMS (credential) -->
   <section id="credential" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="background:#EAE0D0;">
     <div class="max-w-[1400px] mx-auto">
@@ -835,96 +1003,6 @@ const homeClips = [
   </section>
 
 
-  <!-- ═══════════════════════════════════════ WHAT WE DO -->
-  <section id="what-we-do" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
-    <div class="max-w-[1400px] mx-auto">
-
-      <!-- Heading and standfirst side by side, not stacked. Capped at 14ch the
-           heading set in three lines down the left edge with the standfirst
-           under it at 52ch, which left the entire right half of a 1248px
-           container empty and reading as an accident. The column split is
-           1.35fr/1fr rather than the 1fr/1.4fr used elsewhere because the
-           heading runs at 72px here and needs about 610px to break after
-           "and"; items-end sits the standfirst on the heading's last line, so
-           the two blocks share a baseline instead of both floating. -->
-      <div class="grid grid-cols-1 md:grid-cols-[1.35fr_1fr] gap-6 md:gap-24 md:items-end mb-16 reveal">
-        <div>
-          <p class="slabel mb-4">What we do</p>
-          <!-- Shape 3 of 6: one flowing block, accent carrying the second line. -->
-          <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.1;letter-spacing:-0.015em;">
-            How you show up, and<br>
-            <span class="text-terracotta">what holds it up.</span>
-          </h2>
-        </div>
-        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
-          Most engagements are about how you show up. Some are about what's actually running underneath. This studio does both, and doesn't pretend they're the same job.
-        </p>
-      </div>
-
-      <!-- Four cards, one consistent box treatment, so the section reads as a
-           set rather than three mismatched headings plus an afterthought.
-           Retainer and Systems are the two things you can actually engage us
-           for, so both get the filled card. Launch and Campaign are routes
-           into a Retainer, not peers of it, so both get the lighter bordered
-           card at a shared, smaller heading size. -->
-      <div class="flex flex-col gap-6 mb-6">
-
-        <!-- The Retainer: the core offer, in plain English -->
-        <div class="p-8 md:p-10 reveal" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
-          <p class="slabel mb-3">Presence · Retainer</p>
-          <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">The monthly retainer</h3>
-          <div class="flex flex-col gap-5">
-            <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
-              This is the heartbeat: the technology and content that keep your business running, week after week. A planned calendar, designed posts, edited clips, captions in your voice, every piece checked against your specific rules before you ever see it, and every piece approved by you before it goes anywhere.
-            </p>
-            <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
-              Your website stays alive the same way: need the wording changed, a price updated, a service added? Ask for it, approve it, and it's live, no ticket queue, no small-change invoice.
-            </p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          <!-- Launch: the way in -->
-          <div class="p-8 md:p-10 border reveal rd1" style="border-color:rgba(28,23,18,0.14);">
-            <p class="slabel mb-3">Presence · Launch</p>
-            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Launch</h3>
-            <div class="flex flex-col gap-4">
-              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-                The brief you bring is rarely the brief that gets built. Finding the real one comes first, then positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
-              </p>
-              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-                You review every stage in one place, and nothing moves forward without your sign-off.
-              </p>
-            </div>
-          </div>
-
-          <!-- Campaign: a time-boxed variant of the Retainer -->
-          <div class="p-8 md:p-10 border reveal rd2" style="border-color:rgba(28,23,18,0.14);">
-            <p class="slabel mb-3">Presence · Campaign</p>
-            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Campaign</h3>
-            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              Building toward a launch, a new service, or a renewal season? A time-boxed campaign gets built around it, and it's often where a Retainer engagement actually starts.
-            </p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Systems -->
-      <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12 p-8 md:p-10 mb-16 reveal rd4" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
-        <div>
-          <p class="slabel mb-3">Systems</p>
-          <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Not packaged.<br>Scoped to fit.</h3>
-        </div>
-        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
-          Some of what a regulated business needs isn't public. It's the onboarding flow, the intake process, the decision logic that has to be right every single time, not just look right. That work is scoped and quoted on its own terms, not packaged, because bespoke and fixed-price don't mix honestly. If that's what you need, the first step is a conversation, not a price list.
-        </p>
-      </div>
-    </div>
-  </section>
-
-
   <!-- ═══════════════════════════════════════ HOW IT WORKS -->
   <section id="how-it-works" class="bg-near-black py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden" data-nav-dark="true">
 
@@ -945,7 +1023,7 @@ const homeClips = [
 
         <div class="reveal rd1">
           <p class="font-sans font-light muted-text-dark mb-8" style="font-size:1rem;line-height:1.8;max-width:44ch;">
-            Behind the studio is a production system built for the studio's own use, because the Retainer side of this work is only affordable if the mechanical parts are automated and the judgment parts never are.
+            Behind the studio is a production system built for the studio's own use, because the ongoing side of this work is only affordable if the mechanical parts are automated and the judgment parts never are.
           </p>
           <!-- Same offset-forms motif as the Gap section, recoloured for this
                dark section: near-black recedes into the background, terracotta
@@ -1046,15 +1124,25 @@ const homeClips = [
 
 
   <!-- ═══════════════════════════════════════ WORK -->
-  <!-- Two case studies with real pages behind them, plus one engagement that
+  <!-- Three pieces with real pages behind them, plus one engagement that
        is booked rather than built. The rule that came out of the last pass
        still holds: the cursor-spotlight hover is only allowed on a card that
        actually goes somewhere. Ayesha has no page yet, so it has no spotlight,
        no thumbnail zoom, and no "read the case study" affordance.
 
-       Two case studies rather than one is also the point now that the offer
-       reads as presence and systems: PureMed is the regulated web build,
-       Sable is the identity-and-web build that starts from nothing. -->
+       Two features rather than one, because the offer reads as presence and
+       systems and each line now has a flagship. PureMed is the regulated web
+       build; Intake is the Systems piece, and it is the only thing here that
+       proves that half of the offer rather than asserting it. Sable is the
+       identity-and-web build that starts from nothing, and it drops to the
+       second row rather than being demoted: the row is where the work that
+       does not carry a service line goes.
+
+       Intake's CTA is "Open the prototype", not "Read the case study". The
+       case study page does not exist yet and a card that promises one would
+       be writing a cheque the site cannot cash. When /work/intake/ ships,
+       this card points there and the CTA goes back in line with the others. -->
+
   <section id="work" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
     <div class="max-w-[1400px] mx-auto">
 
@@ -1062,10 +1150,10 @@ const homeClips = [
         <p class="slabel mb-4">Work</p>
         <!-- Shape 5 of 6: one short line, accent on the last two words. -->
         <h2 class="font-display font-normal text-near-black mb-8" style="font-size:clamp(2.25rem,4.2vw,4.5rem);line-height:1.1;letter-spacing:-0.015em;max-width:22ch;text-wrap:balance;">
-          Built and <span class="text-terracotta">signed off.</span>
+          Built, and <span class="text-terracotta">shown working.</span>
         </h2>
         <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
-          Two engagements written up properly, rather than a grid of thumbnails. One a regulated clinic rebuilt to survive scrutiny, one an identity built from nothing for an artist who doesn't fit a category. A third is under way and gets the same treatment once there is a site to show.
+          Written up properly, rather than a grid of thumbnails. Two client engagements: a regulated clinic rebuilt to survive scrutiny, and an identity built from nothing for an artist who doesn't fit a category. One system built to be taken apart. A fourth is under way and gets the same treatment once there is a site to show.
         </p>
       </div>
 
@@ -1122,9 +1210,63 @@ const homeClips = [
         </div>
       </a>
 
+      <!-- Featured: Intake. Same feature treatment as PureMed, one per service
+           line. Target is the prototype itself until the case study page is
+           built, so the CTA says so plainly. -->
+      <a href="/work/intake/prototype/" class="spotlight-card block no-underline reveal rd1 mb-6" id="work-intake">
+        <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
+
+          <div class="work-thumb overflow-hidden" style="aspect-ratio:16/10;background:#0E0D0B;">
+            <Image src={intakeThumb}
+                 alt="The Intake prototype at its documents step: a solicitor's client care and costs information with its clauses, and the numbered rule trace beside it"
+                 class="work-thumb-inner object-cover w-full h-full"
+                 width={840}
+                 widths={featureWidths}
+                 sizes={featureSizes}
+                 format="webp"
+                 quality={78}
+                 loading="lazy"
+                 decoding="async"
+                 style="object-position:center top;" />
+          </div>
+
+          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
+            <div>
+              <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+                <span class="slabel">Case Study · Systems</span>
+                <span class="muted-text" style="opacity:0.5;">·</span>
+                <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
+              </div>
+              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Intake</h3>
+              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
+                Three regulated practices, one engine. A client journey where every question the system asks can be traced to a numbered rule, and the rule is stored on the record next to the answer. Built to be taken apart, because that is the only honest way to show this kind of work.
+              </p>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-baseline gap-4">
+                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
+                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Regulated Professional Services</span>
+                </div>
+                <div class="flex items-baseline gap-4">
+                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
+                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Journey Architecture · Rules Design · Prototype</span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
+              <span class="btn-ghost" aria-hidden="true">
+                Open the prototype
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </a>
+
       <!-- Second row: one linked case study, one booked engagement. Same
-           box treatment and the same two-row meta table as the feature
-           above, so the three read as one set at two sizes. -->
+           box treatment and the same two-row meta table as the features
+           above, so the four read as one set at two sizes. -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Sable -->

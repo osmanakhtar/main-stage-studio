@@ -1,7 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import '../../styles/global.css';
-import consultation from '../../assets/puremed-hero-consultation.webp';
+// Clinic interior, not a portrait: the standalone consultation photo of Nafisa
+// was doing the same job as the two site screenshots below, which already show
+// her in the home page hero. Sourced from the client's own treatments page
+// asset library (puremed-patient-consultation-hf-v1.webp), where the subject is
+// a generic patient, not Nafisa, and the practitioner appears only as a gloved
+// hand at the frame edge.
+import clinicInterior from '../../assets/puremed-clinic-interior.webp';
 
 // Screenshots of the go-live site, captured 6 Aug 2026 from the Astro build at
 // 02_clients/puremed/site/dist via tools/clips/shoot-site.js. That build is the
@@ -479,8 +485,8 @@ const clips = [
       <!-- Not .shot: that class forces img height:auto for plain screenshots,
            which would fight this image's forced 16:9 object-cover crop. -->
       <div class="overflow-hidden" style="aspect-ratio:16/9;background:var(--warm);border:1px solid rgba(35,71,106,0.10);">
-        <Image src={consultation}
-               alt="Nafisa Mughal in consultation with a client at PureMed Aesthetics"
+        <Image src={clinicInterior}
+               alt="Inside the PureMed Aesthetics treatment room: branded navy and gold interior, product shelving, and a client in the treatment chair"
                class="w-full h-full object-cover"
                width={1120}
                widths={[560, 1120, 1680]}
