@@ -1,11 +1,11 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import '../styles/global.css';
 
 // Imported from src/assets (not public/) so Astro can re-encode to WebP, emit a
 // responsive srcset, and stamp intrinsic dimensions. Source files were 5.4MB,
 // 3.6MB and 2.2MB PNGs being displayed at ~450px wide.
-import puremedThumb from '../assets/puremed-hero-consultation.webp';
+import puremedThumb from '../assets/puremed-logo.webp';
 
 // Intake, the Systems case study. A real capture of the prototype's documents
 // step with the rule trace beside it, rather than a styled mock: the whole
@@ -19,7 +19,7 @@ import intakeThumb from '../assets/intake-rule-trace.png';
 import sableThumb from '../assets/sable-atmospheric.png';
 import ayeshaThumb from '../assets/art-by-ayesha-johar-cs-01.png';
 
-// Gap section anchor + What We Do card texture. Higgsfield-generated (Seedream 4.5,
+// Gap section anchor. Higgsfield-generated (Seedream 4.5,
 // 6 Aug 2026), same offset near-black/terracotta motif as the logo mark, extending
 // the existing visual language rather than adding a new one. Kept to two placements,
 // not one per section/card, per the brand doc's "no generic card overuse" principle.
@@ -30,41 +30,15 @@ import ayeshaThumb from '../assets/art-by-ayesha-johar-cs-01.png';
 // slabs read as a thin line across an empty ground, then cut to 6:1 at
 // 3000x500. Raw generation and brief: 01_mss/assets/generated/scenes/.
 import gapAnchorSrc from '../assets/gap-anchor-wide.png';
-import wwdTextureSrc from '../assets/wwd-texture.png';
-import hiwAnchorSrc from '../assets/hiw-anchor.png';
-// getImage (not <Image>) because this one is applied as a CSS background-image on
-// the card divs, not rendered as its own <img> element.
-const wwdTexture = await getImage({ src: wwdTextureSrc, format: 'webp', quality: 55, width: 1600 });
 
 // The featured card is 3fr of a 3fr/2fr split inside a 1400px container (840px),
 // full width below md. The three secondary cards are (1400 - 48) / 3 = 450px.
-const featureSizes   = '(min-width: 768px) 840px, 100vw';
-const featureWidths  = [420, 720, 840, 1260, 1680];
+const featureSizes   = '(min-width: 768px) 560px, 100vw';
+const featureWidths  = [420, 560, 840, 1120];
 // Second row is two cards across the same 1400px container, minus the 24px
 // gutter: (1400 - 24) / 2 = 688px.
 const thumbSizes     = '(min-width: 768px) 688px, 100vw';
 const thumbWidths    = [420, 688, 1032, 1376];
-
-// Tooling clips. Same files the PureMed case study uses, captured from the live
-// tools by 01_mss/website/tools/clips/. They live in public/assets because
-// Astro's image pipeline does not process video and a poster needs a plain URL.
-const homeClips = [
-  {
-    src:      '/assets/stage-live-edit.webm',
-    fallback: '/assets/stage-live-edit.mp4',
-    poster:   '/assets/stage-live-edit.webp',
-    len:      '33s',
-    t:        'The edit, from the client’s side',
-    d:        'A clinic owner signed into her own site, not a separate tool, the page itself, and rewrote a line, swapped a photo, and submitted the change. No ticket, no invoice, no waiting on a developer. It still doesn’t go live until it clears the same gate a new build would.',
-  },
-  {
-    src:    '/assets/puremed-pipeline.mp4',
-    poster: '/assets/puremed-pipeline.webp',
-    len:    '26s',
-    t:      'The production side, checking itself',
-    d:      'Governance is built into the rules engine, not bolted on after. Every post is checked against what a regulated business is permitted to say before a human ever reads it, so nothing in breach of policy or legislation reaches a client for approval. Anything questionable is held. Only then is the month rendered for sign-off.',
-  },
-];
 ---
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
@@ -367,36 +341,6 @@ const homeClips = [
     }
     .clip-play:hover span { transform: translateY(-2px); }
 
-    /* ── What we do: service accordion ──────────────────────── */
-    .wwd-accordion > details + details { border-top: 1px solid rgba(28,23,18,0.14); }
-    .wwd-accordion summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      list-style: none;
-      cursor: pointer;
-      padding: 1rem 0;
-    }
-    .wwd-accordion summary::-webkit-details-marker { display: none; }
-    .wwd-accordion-icon {
-      position: relative;
-      flex: none;
-      width: 0.8rem;
-      height: 0.8rem;
-    }
-    .wwd-accordion-icon::before,
-    .wwd-accordion-icon::after {
-      content: '';
-      position: absolute;
-      background: var(--ember);
-      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-    }
-    .wwd-accordion-icon::before { top: 50%; left: 0; width: 100%; height: 1px; transform: translateY(-50%); }
-    .wwd-accordion-icon::after { left: 50%; top: 0; width: 1px; height: 100%; transform: translateX(-50%); }
-    details[open] .wwd-accordion-icon::after { transform: translateX(-50%) scaleY(0); }
-    .wwd-accordion details > p { padding: 0 0 1.1rem; margin: 0; max-width: 46ch; }
-
     /* ── Scroll reveal ───────────────────────────────────────── */
     /* Also gated: without JS the whole page body used to render at opacity 0. */
     .js-anim .reveal {
@@ -419,11 +363,21 @@ const homeClips = [
     }
     .js-anim .reveal.in-view .work-thumb-inner { opacity: 1; }
 
+    /* ── Work card chrome ────────────────────────────────────── */
+    /* One border for every card in the Work section. Before 10 Aug 2026 the
+       linked cards carried 0.08, the unlinked one 0.10 and the PureMed
+       feature no outer border at all, so four cards in one set had three
+       different containers. Linked cards add .spotlight-card on top for the
+       cursor glow; the border comes from here in both cases. */
+    .work-card {
+      border: 1px solid rgba(28,23,18,0.12);
+      transition: border-color 0.3s ease;
+    }
+
     /* ── Spotlight border card ───────────────────────────────── */
     .spotlight-card {
       position: relative;
       isolation: isolate;
-      border: 1px solid rgba(28,23,18,0.08);
       transition: border-color 0.3s ease;
     }
     .spotlight-card::before {
@@ -445,6 +399,29 @@ const homeClips = [
 
     /* ── Work thumbnail ──────────────────────────────────────── */
     .work-thumb { overflow: hidden; }
+
+    /* No letterboxing anywhere in this section, per Osman 10 Aug 2026: the
+       image fills its container and the container is sized so that filling it
+       does not mean cropping to a square. Featured cards run a 1fr/1fr split,
+       so the thumbnail panel is ~688px wide against a card whose height the
+       copy sets at roughly 330-380px: about 2:1, wide enough that a landscape
+       still covers it with almost nothing trimmed. Below md the columns stack
+       and the panel takes a fixed 16:10. */
+    .work-thumb-fill { position: relative; aspect-ratio: 16 / 10; }
+    @media (min-width: 768px) {
+      .work-thumb-fill { aspect-ratio: auto; height: 100%; min-height: 340px; }
+    }
+    /* Taken out of flow on purpose. Sable's still is square, and with the
+       image in normal flow it set the grid row height, which rendered that
+       whole card as an exact square. Absolutely positioned, the row is sized
+       by the copy alone and the image covers whatever that comes to. */
+    .work-thumb-fill > * {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .work-thumb-inner {
       width: 100%; height: 100%;
       transition: transform 0.75s cubic-bezier(0.16,1,0.3,1);
@@ -716,18 +693,24 @@ const homeClips = [
       <!-- Body -->
       <div>
         <div class="line-clip mb-8">
+          <!-- Rewritten 10 Aug 2026, per Osman: the three paragraphs were all
+               presence (site, content, words) and never reached the Systems
+               half of the offer or the conversion argument the rest of the
+               page is built on. Presence is now one paragraph, the gap between
+               interest and a paying client is the second, and the third says
+               the studio builds both. -->
           <p class="line-clip__inner font-sans font-light muted-text" style="animation-delay:0.72s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
-            Most businesses know exactly what a strong presence looks like. A website that reflects the quality of the work. Content that stays alive past the first month. Words that actually sound like you, and that hold up to scrutiny as well as they read.
+            Most businesses know exactly what a strong presence looks like. A website that reflects the quality of the work, content that stays alive past the first month, words that hold up to scrutiny as well as they read.
           </p>
         </div>
         <div class="line-clip mb-8">
           <p class="line-clip__inner font-sans font-light muted-text" style="animation-delay:0.84s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
-            What they don't have is the team to keep all of that running, and hiring one costs more than the problem does.
+            Far fewer have the thing underneath it: a booking and onboarding system that turns interest into a paying client on the spot, instead of losing them to a form that asks the wrong questions and a callback three days later.
           </p>
         </div>
         <div class="line-clip mb-8">
           <p class="line-clip__inner font-sans font-light muted-text" style="animation-delay:0.96s;font-size:1.0625rem;line-height:1.72;max-width:52ch;">
-            Main Stage Studio builds your presence, then runs it. Brand, website, content: made in one system, reviewed by you in one place, kept moving week after week.
+            Main Stage Studio builds both, then runs them. Brand, website and content in one system, wired into the flow that actually gets people booked, reviewed by you in one place and kept moving week after week.
           </p>
         </div>
         <div class="line-clip mt-2">
@@ -844,9 +827,13 @@ const homeClips = [
   <!-- ═══════════════════════════════════════ WHAT WE DO -->
   <!-- Follows The Gap directly: that section argues running is the job, so
        this one doesn't re-argue it, it just answers "so what does that
-       include" and breaks it into the services. Track record moves below
-       this, since "here's what we do" is the more natural next beat after
-       "here's the problem" than a credentials section. -->
+       include". Merged with the old separate How It Works section 9 Aug
+       2026: that section led with content/social mechanics, which isn't
+       the hook. The hook is conversion, the Booking Engine proves it, so
+       the video goes first and Systems leads the card stack instead of
+       trailing it. Track record moves below this, since "here's what we
+       do" is the more natural next beat after "here's the problem" than a
+       credentials section. -->
   <section id="what-we-do" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24" style="border-top:1px solid rgba(28,23,18,0.14);">
     <div class="max-w-[1400px] mx-auto">
 
@@ -862,83 +849,82 @@ const homeClips = [
         <div>
           <p class="slabel mb-4">What we do</p>
           <!-- Shape 3 of 6: one flowing block, accent carrying the second line.
-               Rewritten to name the two service lines directly (Presence /
-               Systems) rather than "how you show up", which read as advice
-               on self-presentation instead of a description of the work. -->
+               Rewritten 9 Aug 2026 to lead with the conversion outcome
+               (looking -> booked) rather than the Presence/Systems service
+               names, which described the work rather than what it's for. -->
           <h2 class="font-display font-normal text-near-black" style="font-size:clamp(2.25rem,5vw,4.5rem);line-height:1.1;letter-spacing:-0.015em;">
-            Presence, and<br>
-            <span class="text-terracotta">the systems behind it.</span>
+            The site gets them looking.<br>
+            <span class="text-terracotta">The system gets them booked.</span>
           </h2>
         </div>
         <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
-          One is what people see: the brand, the content, the site. The other is what makes it hold up: the systems running underneath. This studio does both, and doesn't pretend they're the same job.
+          Most firms don't lose business to bad design. They lose it in the gap between someone finding you and someone paying you: a form that asks the wrong questions, a callback that takes three days, a step that should have been instant. We build what closes that gap, on your site and in your booking flow, connected to the system you already run on. Then we keep it running.
         </p>
       </div>
 
-      <!-- Four cards, one consistent box treatment, so the section reads as a
-           set rather than three mismatched headings plus an afterthought.
-           Ongoing and Systems are the two things you can actually engage us
-           for, so both get the filled card. Launch and Social engine are
-           routes into Ongoing, not peers of it, so both get the lighter
-           bordered card at a shared, smaller heading size. -->
+      <!-- Lead proof: the Booking Engine run, in place of the old dual clip
+           section further down (removed 9 Aug 2026). This is what "the
+           system gets them booked" looks like, so it goes directly under
+           the claim rather than waiting until a "How it works" section
+           three scrolls later. Deep-links straight to the working
+           prototype: the case study page is parked, per Osman 9 Aug 2026. -->
+      <div class="mb-16 reveal rd1">
+        <div class="clip-frame" style="aspect-ratio:16/9;">
+          <video poster="/assets/intake-onboarding.webp"
+                 preload="none"
+                 muted loop playsinline
+                 width="1920" height="1080"
+                 aria-label="A full booking run at a chartered accountancy practice: service selection, booking, risk screening, signing and payment">
+            <source src="/assets/intake-onboarding.mp4" type="video/mp4" />
+          </video>
+          <button type="button" class="clip-play" aria-label="Play recording: a full booking run, service to signed and paid">
+            <span>
+              <svg width="10" height="12" viewBox="0 0 11 13" aria-hidden="true">
+                <path d="M11 6.5 0 13V0z" fill="#1C1712"/>
+              </svg>
+              Play · booked in one sitting
+            </span>
+          </button>
+        </div>
+        <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mt-5">
+          <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;max-width:60ch;">
+            A real run against the working prototype: service picked, slot booked, risk screening passed, engagement letter signed, deposit taken, all in one sitting. Not staged.
+          </p>
+          <a href="/work/booking-engine/prototype/" class="font-sans font-light underline underline-offset-2 transition-colors hover:text-terracotta text-near-black shrink-0" style="font-size:0.875rem;">
+            Open the prototype yourself &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Systems now leads the stack: it's the direct proof of the claim
+           above, not a fourth card after three about presence. -->
       <div class="flex flex-col gap-6 mb-6">
 
-        <!-- Ongoing: the core offer, reframed around what it does for the
-             client (build and run the platform) rather than the billing
-             term. Detail that used to sit in two paragraphs here now lives
-             in the accordion on the right, so the left column states the
-             claim once instead of restating the header above it. -->
-        <div class="p-8 md:p-10 reveal" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
-          <div class="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] gap-8 md:gap-14">
-            <div>
-              <p class="slabel mb-3">Presence · Ongoing</p>
-              <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Built to keep running.</h3>
-              <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:44ch;">
-                We don't hand over and disappear. We build the platform your business runs on, then we run it, day after day.
-              </p>
-            </div>
-
-            <div class="wwd-accordion">
-              <details open>
-                <summary>
-                  <span class="font-display font-normal text-near-black" style="font-size:1.125rem;">Brand, kept consistent</span>
-                  <span class="wwd-accordion-icon" aria-hidden="true"></span>
-                </summary>
-                <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;">
-                  Identity discipline applied to everything that goes out, not just what launched.
-                </p>
-              </details>
-              <details>
-                <summary>
-                  <span class="font-display font-normal text-near-black" style="font-size:1.125rem;">Content engine</span>
-                  <span class="wwd-accordion-icon" aria-hidden="true"></span>
-                </summary>
-                <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;">
-                  A planned calendar, designed posts, edited clips, captions in your voice, every piece checked against your rules before you ever see it, and approved by you before it goes anywhere.
-                </p>
-              </details>
-              <details>
-                <summary>
-                  <span class="font-display font-normal text-near-black" style="font-size:1.125rem;">System orchestration</span>
-                  <span class="wwd-accordion-icon" aria-hidden="true"></span>
-                </summary>
-                <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.7;">
-                  Your website and platform kept live and current: wording changed, pricing updated, a service added. Ask for it, approve it, and it's live, no ticket queue.
-                </p>
-              </details>
-            </div>
+        <!-- Flat fill, not the textured card it carried until 10 Aug 2026: the
+             photographic texture under a 0.82 wash competed with the copy sitting
+             on it for no argumentative gain. #EAE0D0 is the same colour the wash
+             was resolving to, so the card reads exactly as intended, minus the noise. -->
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12 p-8 md:p-10 reveal rd2" style="background:#EAE0D0;">
+          <div>
+            <!-- "Convert" named what we want from the visitor. This names what
+                 the visitor gets. -->
+            <p class="slabel mb-3">Systems · Booked</p>
+            <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Not packaged.<br>Scoped to fit.</h3>
           </div>
+          <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
+            The booking calendar, the onboarding flow, the decision logic that has to be right every single time, not just look right. That's the Booking Engine above: a working client journey for three regulated practices, where every question it asks can be traced to a numbered rule. Most of this work usually stays behind a client's login. We built one you can open and take apart yourself.
+          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           <!-- Launch: the way in -->
-          <div class="p-8 md:p-10 border reveal rd1" style="border-color:rgba(28,23,18,0.14);">
+          <div class="p-8 md:p-10 border reveal rd3" style="border-color:rgba(28,23,18,0.14);">
             <p class="slabel mb-3">Presence · Launch</p>
             <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Built once, built right.</h3>
             <div class="flex flex-col gap-4">
               <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-                The brief you bring is rarely the brief that gets built. Finding the real one comes first, then positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site. Nothing to update, nothing to break, nothing you'll be invoiced for maintaining.
+                The brief you bring is rarely the brief that gets built. Finding the real one comes first, then positioning, a voice that's recognisably yours, a visual identity, and a website built as a fast, static site: the entry point into the booking flow above, not a brochure next to it.
               </p>
               <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
                 You review every stage in one place, and nothing moves forward without your sign-off.
@@ -946,28 +932,26 @@ const homeClips = [
             </div>
           </div>
 
-          <!-- Social engine: the same Ongoing engine, time-boxed, named for
-               what it concretely is rather than the abstract "campaign" -->
-          <div class="p-8 md:p-10 border reveal rd2" style="border-color:rgba(28,23,18,0.14);">
-            <p class="slabel mb-3">Presence · Social engine</p>
-            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Grow your presence, on a timeline.</h3>
-            <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
-              The same engine that runs Ongoing, just time-boxed: built around a launch, a new service, or a renewal season. It's often where an Ongoing engagement starts.
-            </p>
+          <!-- Ongoing: the retention half. Folds in what used to be a
+               separate "Social engine" card, since it's a timing variant of
+               this one, not a peer of it. -->
+          <div class="p-8 md:p-10 border reveal rd4" style="border-color:rgba(28,23,18,0.14);">
+            <p class="slabel mb-3">Presence · Ongoing</p>
+            <h3 class="font-display font-normal text-near-black mb-5" style="font-size:clamp(1.5rem,2.2vw,1.75rem);line-height:1.1;">Built to keep running.</h3>
+            <!-- Was a three-item sub-list with its own headings, roughly twice
+                 the text of the Launch card beside it, so the pair sat unevenly.
+                 Same three ideas, two paragraphs, matched to Launch's length. -->
+            <div class="flex flex-col gap-4">
+              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+                Wording changed, pricing updated, a service added, your CRM record kept in step: ask for it, approve it, and it's live, with no ticket queue. A content calendar runs alongside it if you want one, every piece checked against your rules before it reaches you.
+              </p>
+              <p class="font-sans font-light muted-text" style="font-size:0.9375rem;line-height:1.75;">
+                The same engine can be time-boxed instead, built around a launch, a new service, or a renewal season.
+              </p>
+            </div>
           </div>
 
         </div>
-      </div>
-
-      <!-- Systems -->
-      <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12 p-8 md:p-10 mb-16 reveal rd4" style={`background-image:linear-gradient(rgba(234,224,208,0.82),rgba(234,224,208,0.82)),url(${wwdTexture.src});background-size:cover;background-position:center;`}>
-        <div>
-          <p class="slabel mb-3">Systems</p>
-          <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Not packaged.<br>Scoped to fit.</h3>
-        </div>
-        <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
-          The onboarding flow, the intake process, the decision logic that has to be right every single time, not just look right. Most of this work stays behind a client's login, so we built one you can open: <a href="/work/intake/prototype/" class="underline underline-offset-2 transition-colors hover:text-terracotta text-near-black">Intake</a> is a working client journey for three regulated practices, where every question it asks can be traced to a numbered rule. Take it apart. Then the conversation starts from something real, rather than a price list.
-        </p>
       </div>
     </div>
   </section>
@@ -1004,144 +988,51 @@ const homeClips = [
 
 
   <!-- ═══════════════════════════════════════ HOW IT WORKS -->
-  <section id="how-it-works" class="bg-near-black py-24 md:py-36 px-6 md:px-12 lg:px-24 relative overflow-hidden" data-nav-dark="true">
+  <!-- Trimmed 9 Aug 2026 from a full mega-section (accordion-style narrative,
+       an anchor image, a second dual-video proof block) to a compact trust
+       band. The proof now lives with the claim in What We Do above, so this
+       only needs to answer the one question left: what happens after you
+       say yes. Kept as its own dark section (not folded fully into What We
+       Do) so the nav anchor and the near-black/parchment rhythm between
+       sections both still hold. -->
+  <section id="how-it-works" class="bg-near-black py-16 md:py-20 px-6 md:px-12 lg:px-24 relative overflow-hidden" data-nav-dark="true">
 
     <!-- Left progress line -->
     <div id="system-line" aria-hidden="true"></div>
 
     <div class="max-w-[1400px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_1.3fr] gap-8 md:gap-24 md:items-center">
 
-      <div class="mb-16 reveal">
-        <p class="slabel mb-4">How it works</p>
-        <!-- Shape 4 of 6: two words and a full stop. The shortest heading on the page. -->
-        <h2 class="font-display font-normal text-parchment" style="font-size:clamp(2.5rem,6vw,5rem);line-height:1.05;letter-spacing:-0.02em;max-width:9ch;text-wrap:balance;">
-          One place. One gate.
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-[1fr_1.3fr] gap-14 md:gap-24">
-
-        <div class="reveal rd1">
-          <p class="font-sans font-light muted-text-dark mb-8" style="font-size:1rem;line-height:1.8;max-width:44ch;">
-            Behind the studio is a production system built for the studio's own use, because the ongoing side of this work is only affordable if the mechanical parts are automated and the judgment parts never are.
-          </p>
-          <!-- Same offset-forms motif as the Gap section, recoloured for this
-               dark section: near-black recedes into the background, terracotta
-               and a parchment glow carry the shape. Not a substitute for the
-               real tool footage below, just a quiet anchor above it.
-
-               Fills the column rather than sitting at 220px inside it. Same
-               reasoning as the Gap band: at 220px in a 500px column its right
-               edge lined up with nothing on the page, which is what made it
-               read as an accident rather than a choice. It stays portrait
-               because this composition is vertical, and at full column width
-               the left column now ends roughly where the right one does
-               instead of leaving a column-height void beside it. -->
-          <div id="hiw-anchor" class="overflow-hidden" style="aspect-ratio:3/4;">
-            <Image src={hiwAnchorSrc}
-                 alt=""
-                 role="presentation"
-                 id="hiw-anchor-img"
-                 class="w-full h-full object-cover"
-                 width={520}
-                 widths={[320, 520, 780, 1040]}
-                 sizes="(min-width: 768px) 40vw, 100vw"
-                 format="webp"
-                 quality={72}
-                 loading="lazy"
-                 decoding="async"
-                 style="will-change:transform;" />
-          </div>
+        <div class="reveal">
+          <p class="slabel mb-4">How it works</p>
+          <h2 class="font-display font-normal text-parchment" style="font-size:clamp(2rem,4.5vw,3.25rem);line-height:1.08;letter-spacing:-0.02em;max-width:9ch;">
+            One link. One sign-off.
+          </h2>
         </div>
 
-        <div class="flex flex-col gap-8 reveal rd2">
-          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:52ch;">
-            What you see of it is simple. Every piece of work (pages, posts, clips, copy changes) lands in one private review space, on one link, behind your login. You approve it, ask for a change, or flag it for a conversation. From your desk or your phone.
+        <div class="flex flex-col gap-5 reveal rd1">
+          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:56ch;">
+            Every piece of work, a page, a booking flow, a config change, lands in one private review space behind your login. You approve it, or you don't, and nothing ships until you do. The tools do the mechanical work; what to build, what it should say, and whether it's good enough stays a decision a person makes here, not a model.
           </p>
-          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:52ch;">
-            Sign-off isn't a courtesy. It's the gate the system enforces. Nothing ships without it. Everything that ships is exactly what you approved.
-          </p>
-          <p class="font-sans font-light muted-text-dark" style="font-size:1rem;line-height:1.8;max-width:52ch;">
-            It's the same system that runs weekly content for a live combat sports promotion, one person, one system, event pace, every week, without missing a date. If it holds there, it holds for something smaller.
-          </p>
-
-          <div class="honesty-box pl-6 py-5 mt-2">
-            <p class="slabel mb-3" style="color:var(--blush);">On AI</p>
-            <p class="font-sans font-light muted-text-dark" style="font-size:0.9375rem;line-height:1.8;max-width:52ch;">
-              The tools have changed what's possible. A studio of one can now plan, produce, and publish at a pace that used to take a team. But the judgment about what to make, what it should say, and whether it's good enough hasn't changed hands, and here, it never will. A person picks the moment. A person signs the words. The system just makes sure the rest keeps up.
-            </p>
-          </div>
-
-          <!-- The one line worth keeping from the old "The promise" section,
-               which said the same thing as this one at lower volume. -->
-          <p class="font-display font-normal text-parchment mt-2" style="font-size:clamp(1.5rem,2.6vw,2.125rem);line-height:1.15;letter-spacing:-0.01em;max-width:22ch;text-wrap:balance;">
+          <p class="font-display font-normal text-parchment" style="font-size:clamp(1.25rem,2.2vw,1.75rem);line-height:1.2;letter-spacing:-0.01em;max-width:26ch;">
             The system does the labour. <span class="text-terracotta">You keep the moment.</span>
           </p>
         </div>
 
-      </div>
-
-      <!-- The gate and the pipeline, running. This section made both claims
-           for a long time with nothing to show for either. -->
-      <div class="mt-20 md:mt-28 pt-14 reveal" style="border-top:1px solid rgba(245,239,229,0.14);">
-        <p class="slabel mb-10">Both of those, running</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-          {homeClips.map(clip => (
-            <figure class="m-0">
-              <div class="clip-frame">
-                <video poster={clip.poster}
-                       preload="none"
-                       muted loop playsinline
-                       width="1280" height="800"
-                       aria-label={clip.t}>
-                  <source src={clip.src} type={clip.src.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
-                  {clip.fallback && <source src={clip.fallback} type="video/mp4" />}
-                </video>
-                <button type="button" class="clip-play" aria-label={`Play recording: ${clip.t}`}>
-                  <span>
-                    <svg width="10" height="12" viewBox="0 0 11 13" aria-hidden="true">
-                      <path d="M11 6.5 0 13V0z" fill="#1C1712"/>
-                    </svg>
-                    Play · {clip.len}
-                  </span>
-                </button>
-              </div>
-              <figcaption class="mt-5">
-                <p class="font-display font-normal text-parchment mb-2" style="font-size:1.25rem;line-height:1.25;max-width:26ch;">{clip.t}</p>
-                <p class="font-sans font-light muted-text-dark" style="font-size:0.9375rem;line-height:1.75;max-width:46ch;">{clip.d}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-
-        <p class="font-sans font-light mt-10" style="font-size:0.8125rem;line-height:1.7;color:rgba(245,239,229,0.5);max-width:70ch;">
-          Both captured from the live tools on a real client engagement, not staged for this page.
-        </p>
       </div>
     </div>
   </section>
 
 
   <!-- ═══════════════════════════════════════ WORK -->
-  <!-- Three pieces with real pages behind them, plus one engagement that
-       is booked rather than built. The rule that came out of the last pass
-       still holds: the cursor-spotlight hover is only allowed on a card that
-       actually goes somewhere. Ayesha has no page yet, so it has no spotlight,
-       no thumbnail zoom, and no "read the case study" affordance.
-
-       Two features rather than one, because the offer reads as presence and
-       systems and each line now has a flagship. PureMed is the regulated web
-       build; Intake is the Systems piece, and it is the only thing here that
-       proves that half of the offer rather than asserting it. Sable is the
-       identity-and-web build that starts from nothing, and it drops to the
-       second row rather than being demoted: the row is where the work that
-       does not carry a service line goes.
-
-       Intake's CTA is "Open the prototype", not "Read the case study". The
-       case study page does not exist yet and a card that promises one would
-       be writing a cheque the site cannot cash. When /work/intake/ ships,
-       this card points there and the CTA goes back in line with the others. -->
+  <!-- Reordered 10 Aug 2026, per Osman. Proof of work leads: the Self-Serve
+       Onboarding prototype and the Sable case study are the two pieces a
+       stranger can actually inspect, so they get the full-width feature
+       treatment. The live engagements (PureMed, Ayesha) follow under their
+       own heading as a smaller two-up: they are what is running right now,
+       not something there is yet anything to read. All four cards share one
+       border and one thumbnail treatment so the set reads as one system at
+       two sizes. -->
 
   <section id="work" class="bg-parchment py-24 md:py-36 px-6 md:px-12 lg:px-24">
     <div class="max-w-[1400px] mx-auto">
@@ -1153,74 +1044,24 @@ const homeClips = [
           Built, and <span class="text-terracotta">shown working.</span>
         </h2>
         <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
-          Written up properly, rather than a grid of thumbnails. Two client engagements: a regulated clinic rebuilt to survive scrutiny, and an identity built from nothing for an artist who doesn't fit a category. One system built to be taken apart. A fourth is under way and gets the same treatment once there is a site to show.
+          Two pieces you can judge for yourself: a client onboarding system you can open and run right now, and a brand and website built end to end. Under them, the engagements running at the moment.
         </p>
       </div>
 
-      <!-- Featured: PureMed Aesthetics. The whole card is the link, so the
-           spotlight hover now points at something real. -->
-      <a href="/work/puremed/" class="spotlight-card block no-underline reveal rd1 mb-6" id="work-puremed">
-        <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
+      <!-- Featured: Self-Serve Onboarding (the Booking Engine prototype).
+           Points straight at the working prototype rather than the case
+           study page, per Osman 9 Aug 2026: this is the piece that proves
+           the offer, so the card should drop you into it. Titled and
+           copy-led from the client's side, not the internal "Intake" name,
+           per Osman 9 Aug 2026. -->
+      <a href="/work/booking-engine/prototype/" class="work-card spotlight-card block no-underline reveal rd1 mb-6" id="work-intake">
+        <div class="grid grid-cols-1 md:grid-cols-2">
 
-          <div class="work-thumb overflow-hidden" style="aspect-ratio:16/10;background:#0E0D0B;">
-            <Image src={puremedThumb}
-                 alt="Nafisa Mughal consulting with a client, PureMed Aesthetics"
-                 class="work-thumb-inner object-cover w-full h-full"
-                 width={840}
-                 widths={featureWidths}
-                 sizes={featureSizes}
-                 format="webp"
-                 quality={78}
-                 loading="lazy"
-                 decoding="async"
-                 style="object-position:center top;" />
-          </div>
-
-          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
-            <div>
-              <div class="flex items-baseline gap-3 mb-5 flex-wrap">
-                <span class="slabel">Case Study · Regulated</span>
-                <span class="muted-text" style="opacity:0.5;">·</span>
-                <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Built, awaiting go-live</span>
-              </div>
-              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">PureMed Aesthetics</h3>
-              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
-                A medically-led aesthetics clinic, rebuilt from a site that scored 23 out of 100 on its own CRO audit. Eleven treatments, every claim checked against what the sector is allowed to say before any of it was signed off.
-              </p>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-baseline gap-4">
-                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
-                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Medical Aesthetics</span>
-                </div>
-                <div class="flex items-baseline gap-4">
-                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
-                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Copy · Web Presence</span>
-                </div>
-              </div>
-            </div>
-            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
-              <span class="btn-ghost" aria-hidden="true">
-                Read the case study
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </div>
-      </a>
-
-      <!-- Featured: Intake. Same feature treatment as PureMed, one per service
-           line. Target is the prototype itself until the case study page is
-           built, so the CTA says so plainly. -->
-      <a href="/work/intake/prototype/" class="spotlight-card block no-underline reveal rd1 mb-6" id="work-intake">
-        <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr]">
-
-          <div class="work-thumb overflow-hidden" style="aspect-ratio:16/10;background:#0E0D0B;">
+          <div class="work-thumb work-thumb-fill overflow-hidden" style="background:#0E0D0B;">
             <Image src={intakeThumb}
-                 alt="The Intake prototype at its documents step: a solicitor's client care and costs information with its clauses, and the numbered rule trace beside it"
+                 alt="The self-serve onboarding prototype at its documents step: an accountancy practice's terms of business with its clauses, and a note beside it explaining that each clause is acknowledged separately"
                  class="work-thumb-inner object-cover w-full h-full"
-                 width={840}
+                 width={560}
                  widths={featureWidths}
                  sizes={featureSizes}
                  format="webp"
@@ -1230,16 +1071,16 @@ const homeClips = [
                  style="object-position:center top;" />
           </div>
 
-          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.08);">
+          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
             <div>
               <div class="flex items-baseline gap-3 mb-5 flex-wrap">
-                <span class="slabel">Case Study · Systems</span>
+                <span class="slabel">Prototype · Systems</span>
                 <span class="muted-text" style="opacity:0.5;">·</span>
                 <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
               </div>
-              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Intake</h3>
-              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:38ch;">
-                Three regulated practices, one engine. A client journey where every question the system asks can be traced to a numbered rule, and the rule is stored on the record next to the answer. Built to be taken apart, because that is the only honest way to show this kind of work.
+              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Self-Serve Onboarding</h3>
+              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
+                A client becomes a client without a single phone call: they book the service, upload what a regulated practice needs, sign the engagement letter and pay the deposit, all in one sitting. Every step runs the same governance checks a person would apply by hand.
               </p>
               <div class="flex flex-col gap-2">
                 <div class="flex items-baseline gap-4">
@@ -1252,7 +1093,7 @@ const homeClips = [
                 </div>
               </div>
             </div>
-            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
+            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.09);">
               <span class="btn-ghost" aria-hidden="true">
                 Open the prototype
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -1264,47 +1105,48 @@ const homeClips = [
         </div>
       </a>
 
-      <!-- Second row: one linked case study, one booked engagement. Same
-           box treatment and the same two-row meta table as the features
-           above, so the four read as one set at two sizes. -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Featured: Sable. Promoted 10 Aug 2026 from the smaller second row:
+           it is the only finished, written-up piece on the site, so it sits
+           with the prototype as proof rather than under the live work. -->
+      <a href="/work/sable/" class="work-card spotlight-card block no-underline reveal rd2 mb-16 md:mb-20" id="work-sable">
+        <div class="grid grid-cols-1 md:grid-cols-2">
 
-        <!-- Sable -->
-        <a href="/work/sable/" class="spotlight-card block no-underline reveal rd2" id="work-sable">
-          <div class="work-thumb overflow-hidden" style="aspect-ratio:4/3;background:#0E0D0B;">
+          <div class="work-thumb work-thumb-fill overflow-hidden" style="background:#0E0D0B;">
             <Image src={sableThumb}
                  alt="A single line of gold light across charcoal, the Sable brand's atmospheric mark"
                  class="work-thumb-inner object-cover w-full h-full"
-                 width={688}
-                 widths={thumbWidths}
-                 sizes={thumbSizes}
+                 width={560}
+                 widths={featureWidths}
+                 sizes={featureSizes}
                  format="webp"
-                 quality={76}
+                 quality={78}
                  loading="lazy"
                  decoding="async" />
           </div>
 
-          <div class="p-8 md:p-10 border-t" style="border-color:rgba(28,23,18,0.08);">
-            <div class="flex items-baseline gap-3 mb-5 flex-wrap">
-              <span class="slabel">Case Study · Artist</span>
-              <span class="muted-text" style="opacity:0.5;">·</span>
-              <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
-            </div>
-            <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Sable</h3>
-            <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:40ch;">
-              A character with a world attached, and no way for anyone to enter it. Sable needed an identity that could hold the atmosphere of the work, and a stage built for it rather than for the studio.
-            </p>
-            <div class="flex flex-col gap-2">
-              <div class="flex items-baseline gap-4">
-                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
-                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Music · Independent Artist</span>
+          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
+            <div>
+              <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+                <span class="slabel">Case Study · Artist</span>
+                <span class="muted-text" style="opacity:0.5;">·</span>
+                <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
               </div>
-              <div class="flex items-baseline gap-4">
-                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
-                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Brand Identity · Web Build</span>
+              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Sable</h3>
+              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
+                A character with a world attached, and no way for anyone to enter it. Sable needed an identity that could hold the atmosphere of the work, and a stage built for it rather than for the studio. Positioning, brand and site, written up start to finish.
+              </p>
+              <div class="flex flex-col gap-2">
+                <div class="flex items-baseline gap-4">
+                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
+                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Music · Independent Artist</span>
+                </div>
+                <div class="flex items-baseline gap-4">
+                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
+                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Brand Identity · Web Build</span>
+                </div>
               </div>
             </div>
-            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.07);">
+            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.09);">
               <span class="btn-ghost" aria-hidden="true">
                 Read the case study
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -1313,13 +1155,76 @@ const homeClips = [
               </span>
             </div>
           </div>
-        </a>
+        </div>
+      </a>
+
+      <!-- ── Current engagements ──────────────────────────────────
+           Separated from the two above because they are a different kind of
+           evidence: work in flight rather than work you can read. Smaller
+           two-up, same border and thumbnail treatment. -->
+      <div class="mb-10 reveal">
+        <p class="slabel mb-4">Current engagements</p>
+        <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;letter-spacing:-0.01em;max-width:24ch;">
+          Running <span class="text-terracotta">right now.</span>
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- PureMed Aesthetics. No case study yet, so this is an article
+             rather than a link: the engagement is the growth rebuild under
+             way right now (booking, payments, CRM), not a finished piece to
+             read. Thumbnail sits on PureMed's own primary blue (#23476A,
+             puremed-brand-identity.md) rather than the near-black used for
+             the studio's own pieces, so the logo reads as the client's mark
+             and not as another MSS tile. -->
+        <article class="work-card flex flex-col h-full reveal rd1" id="work-puremed">
+          <div class="work-thumb overflow-hidden flex items-center justify-center" style="aspect-ratio:16/10;background:#23476A;">
+            <Image src={puremedThumb}
+                 alt="The PureMed Aesthetics logo mark"
+                 class="object-contain"
+                 width={280}
+                 widths={thumbWidths}
+                 sizes={thumbSizes}
+                 format="webp"
+                 quality={90}
+                 loading="lazy"
+                 decoding="async"
+                 style="width:52%;height:auto;" />
+          </div>
+
+          <div class="flex-1 flex flex-col p-8 md:p-10 border-t" style="border-color:rgba(28,23,18,0.12);">
+            <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+              <span class="slabel">Growth Rebuild · Regulated</span>
+              <span class="muted-text" style="opacity:0.5;">·</span>
+              <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">In progress</span>
+            </div>
+            <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">PureMed Aesthetics</h3>
+            <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
+              A medically-led aesthetics clinic, under a growth rebuild: booking, payments and CRM brought into one system rather than three that don't talk to each other. This is a regulated business, so every claim is checked against what the sector is allowed to say before any of it goes live.
+            </p>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-baseline gap-4">
+                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
+                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Medical Aesthetics · Regulated</span>
+              </div>
+              <div class="flex items-baseline gap-4">
+                <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
+                <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Growth Strategy · Booking · Payments · CRM</span>
+              </div>
+            </div>
+            <div class="pt-6 mt-8 border-t flex items-center gap-2" style="border-color:rgba(28,23,18,0.09);margin-top:auto;">
+              <span class="w-[5px] h-[5px] rounded-full bg-terracotta pulse-dot shrink-0"></span>
+              <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Growth rebuild under way</span>
+            </div>
+          </div>
+        </article>
 
         <!-- Art by Ayesha Johar. Booked, not built: no link, so no spotlight
              and no thumbnail zoom. The status line replaces the "read the
              case study" row rather than sitting next to a dead one. -->
-        <article class="block border reveal rd3" id="work-ayesha" style="border-color:rgba(28,23,18,0.10);">
-          <div class="overflow-hidden" style="aspect-ratio:4/3;background:#1C1712;">
+        <article class="work-card flex flex-col h-full reveal rd2" id="work-ayesha">
+          <div class="work-thumb overflow-hidden" style="aspect-ratio:16/10;background:#1C1712;">
             <Image src={ayeshaThumb}
                  alt="A detail from Ayesha Johar's painted work"
                  class="object-cover w-full h-full"
@@ -1332,14 +1237,14 @@ const homeClips = [
                  decoding="async" />
           </div>
 
-          <div class="p-8 md:p-10 border-t" style="border-color:rgba(28,23,18,0.08);">
+          <div class="flex-1 flex flex-col p-8 md:p-10 border-t" style="border-color:rgba(28,23,18,0.12);">
             <div class="flex items-baseline gap-3 mb-5 flex-wrap">
               <span class="slabel">Artist Portfolio</span>
               <span class="muted-text" style="opacity:0.5;">·</span>
               <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">In progress</span>
             </div>
             <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Art by Ayesha Johar</h3>
-            <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;max-width:40ch;">
+            <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
               Beauty and resistance treated as one thing rather than two. A web presence for the painter Ayesha Johar, built from the inside out: positioning and brand strategy are delivered, the site follows once the work is photographed.
             </p>
             <div class="flex flex-col gap-2">
@@ -1352,7 +1257,7 @@ const homeClips = [
                 <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Positioning · Brand Identity · Web Build</span>
               </div>
             </div>
-            <div class="pt-6 mt-8 border-t flex items-center gap-2" style="border-color:rgba(28,23,18,0.07);">
+            <div class="pt-6 mt-8 border-t flex items-center gap-2" style="border-color:rgba(28,23,18,0.09);margin-top:auto;">
               <span class="w-[5px] h-[5px] rounded-full bg-terracotta pulse-dot shrink-0"></span>
               <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Web build to follow, late 2026</span>
             </div>
@@ -1386,16 +1291,9 @@ const homeClips = [
 
         <form id="contact-form" action="https://formspree.io/f/mnjyqooa" method="POST" class="flex flex-col gap-9 reveal rd1" novalidate>
 
-          <div class="flex flex-col gap-[5px]">
-            <label for="need" class="flabel">What are you looking for?</label>
-            <select id="need" name="need" class="finput" required>
-              <option value="" disabled selected>Choose one</option>
-              <option value="Presence">Presence (brand, site, content)</option>
-              <option value="Systems">Systems (an operational build)</option>
-              <option value="Not sure yet">Not sure yet</option>
-            </select>
-          </div>
-
+          <!-- The "What are you looking for?" select was removed 10 Aug 2026,
+               per Osman. It made a visitor categorise themselves before saying
+               anything, and the free-text field below already carries it. -->
           <div class="flex flex-col gap-[5px]">
             <label for="name" class="flabel">Name</label>
             <input type="text" id="name" name="name" class="finput" placeholder="Your name" autocomplete="name" required aria-describedby="err-name">
@@ -1629,7 +1527,7 @@ const homeClips = [
     // hover state, the section's only motion, in keeping with "punctuation,
     // not decoration". Clamped range keeps it inside the image's own overflow
     // wrapper so nothing clips or reveals the parchment behind it.
-    [['gap-anchor', 'gap-anchor-img'], ['hiw-anchor', 'hiw-anchor-img']].forEach(([wrapId, imgId]) => {
+    [['gap-anchor', 'gap-anchor-img']].forEach(([wrapId, imgId]) => {
       const wrap = document.getElementById(wrapId);
       const img  = document.getElementById(imgId);
       if (!wrap || !img) return;
@@ -1681,7 +1579,6 @@ const homeClips = [
     const submitLbl = submitBtn.querySelector('.btn-fill__label');
 
     const validators = [
-      { id:'need',    err:null,          ok: v => v.trim().length > 0 },
       { id:'name',    err:'err-name',    ok: v => v.trim().length > 0 },
       { id:'email',   err:'err-email',   ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
       { id:'project', err:'err-project', ok: v => v.trim().length > 0 },

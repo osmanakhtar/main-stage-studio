@@ -33,25 +33,99 @@ body{
 }
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 
-.shell-head{
-  border-bottom:1px solid rgba(245,239,229,.13);
-  padding:18px 32px; display:flex; gap:20px; align-items:center;
-  flex-wrap:wrap; position:sticky; top:0; z-index:60;
-  background:rgba(28,23,18,.95); backdrop-filter:blur(10px);
+/* ============================================================
+   DOCK (was a full sticky header + banner). Collapsed to a single
+   pill so the tenant site is the first thing rendered, not a tool
+   shell. Auto-opens briefly on load so the demo disclaimer and the
+   tenant switcher are seen at least once, then gets out of the way.
+   ============================================================ */
+/* ============================================================
+   COACH MARKS. Three tips that appear in turn on first load and
+   take themselves away, because the first thing a visitor sees is
+   a convincing practice website and nothing on it says which parts
+   are the demo. They point at the three things you cannot guess:
+   where the journey starts, that the rule trace exists, and that
+   there is more than one practice behind the switcher.
+
+   Deliberately not a modal tour. No overlay, no "next" button, no
+   step counter, nothing to dismiss: they are hints, and the page
+   stays fully usable underneath them. Any interaction cancels the
+   rest of the sequence, on the principle that someone who has
+   started clicking does not need to be told where to click.
+   ============================================================ */
+.coach{
+  position:fixed; z-index:95; max-width:302px;
+  background:#14110E; color:#F5EFE5;
+  border:1px solid rgba(191,107,71,.38); border-left:3px solid #BF6B47;
+  padding:15px 17px 16px;
+  box-shadow:0 18px 44px rgba(28,23,18,.34);
+  font-size:13.5px; line-height:1.58; font-weight:300;
+  opacity:0; transform:translateY(8px); pointer-events:none;
+  transition:opacity .34s ease, transform .44s cubic-bezier(.22,1,.36,1);
 }
-.brand{display:flex;gap:13px;align-items:center;flex-shrink:0}
+.coach.on{opacity:1; transform:translateY(0)}
+.coach b{
+  display:block; margin-bottom:6px; font-size:10px; font-weight:600;
+  letter-spacing:.2em; text-transform:uppercase; color:#E39B76;
+}
+/* The pointer. Rotated square rather than a border triangle so the
+   1px edge and the fill both carry round with it. */
+.coach::after{
+  content:''; position:absolute; width:11px; height:11px;
+  background:#14110E; border:1px solid rgba(191,107,71,.38);
+  border-width:0 1px 1px 0; transform:rotate(45deg);
+}
+.coach[data-side="bottom"]::after{top:-6.5px; left:var(--ax, 22px); border-width:1px 0 0 1px}
+.coach[data-side="top"]::after{bottom:-6.5px; left:var(--ax, 22px)}
+.coach[data-side="left"]::after{right:-6.5px; top:var(--ay, 22px); border-width:1px 1px 0 0}
+@media (prefers-reduced-motion: reduce){
+  .coach{transition-duration:.01ms; transform:none}
+  .coach.on{transform:none}
+}
+@media (max-width:640px){ .coach{max-width:min(302px, calc(100vw - 32px))} }
+
+.mss-dock{position:fixed; right:20px; bottom:20px; z-index:80; max-width:min(380px, calc(100vw - 40px));}
+.mss-dock-pill{
+  display:flex; gap:10px; align-items:center; cursor:pointer;
+  background:rgba(28,23,18,.95); backdrop-filter:blur(10px);
+  border:1px solid rgba(245,239,229,.18); border-radius:999px;
+  padding:9px 16px 9px 9px; box-shadow:0 10px 30px rgba(0,0,0,.35);
+  transition:border-color .18s;
+}
+.mss-dock-pill:hover{border-color:rgba(245,239,229,.4)}
+.mss-dock-pill svg{display:block;flex-shrink:0}
+.mss-dock-pill b{
+  font-family:'Cormorant Garamond',serif;font-weight:500;font-size:15px;
+  color:var(--parchment);letter-spacing:.01em;white-space:nowrap
+}
+.mss-dock-pill .car{
+  color:rgba(245,239,229,.5); transition:transform .25s;
+  margin-left:2px;
+}
+.mss-dock.open .mss-dock-pill .car{transform:rotate(180deg)}
+.mss-dock-panel{
+  overflow:hidden; max-height:0; opacity:0; transition:max-height .3s ease,opacity .2s ease,margin .3s ease;
+  background:rgba(28,23,18,.97); backdrop-filter:blur(10px);
+  border:1px solid rgba(245,239,229,.18); border-radius:14px;
+  margin-top:0;
+}
+.mss-dock.open .mss-dock-panel{max-height:70vh; opacity:1; margin-top:10px; overflow-y:auto}
+.mss-dock-panel-inner{padding:18px 20px 20px}
+.dock-claim{font-size:12.5px; color:rgba(245,239,229,.68); line-height:1.55; margin-bottom:16px}
+.dock-claim b{color:var(--parchment); font-weight:600}
+.dock-disclaimer{
+  font-size:11px; line-height:1.55; color:rgba(245,239,229,.5);
+  border-top:1px solid rgba(245,239,229,.13); padding-top:12px; margin-top:14px;
+}
+.dock-disclaimer b{color:var(--blush); font-weight:600; letter-spacing:.02em}
+.brand{display:flex;gap:11px;align-items:center;flex-shrink:0}
 .brand svg{display:block}
 .brand-txt strong{
   font-family:'Cormorant Garamond',serif;font-weight:500;font-size:19px;
   letter-spacing:.01em;display:block;line-height:1.2
 }
 .brand-txt span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blush);opacity:.75}
-.head-claim{
-  flex:1; min-width:240px; font-size:12.5px; color:rgba(245,239,229,.62);
-  border-left:1px solid rgba(245,239,229,.15); padding-left:20px; line-height:1.5
-}
-.head-claim b{color:var(--parchment);font-weight:600}
-.head-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.head-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-top:14px}
 
 /* tenant switcher, the multi-tenant proof */
 .tsw{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
@@ -74,61 +148,54 @@ body{
 }
 .btn-ghost:hover{background:rgba(245,239,229,.09);border-color:rgba(245,239,229,.5)}
 
-.demo-banner{
-  background:var(--ember);color:#fff;font-size:12px;font-weight:600;
-  padding:9px 32px;letter-spacing:.02em;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap
-}
-.demo-banner span{font-weight:400;opacity:.88}
+/* Tenant site now fills the real viewport (no grid column reserved for the
+   inspector, no fake-browser chrome bar around it), so it reads as a site
+   on first paint rather than a tool. The inspector becomes a slide-over,
+   see .ins-toggle / .inspector below. */
+.wrap{display:block}
+.stage{padding:0;min-width:0}
 
-.wrap{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:0;align-items:start}
-.stage{padding:30px 32px 80px;min-width:0}
+.ins-toggle{
+  position:fixed; top:50%; right:0; transform:translateY(-50%); z-index:75;
+  writing-mode:vertical-rl; text-orientation:mixed;
+  background:rgba(28,23,18,.92); backdrop-filter:blur(10px);
+  color:var(--parchment); border:1px solid rgba(245,239,229,.18); border-right:none;
+  border-radius:8px 0 0 8px; padding:16px 9px; font:inherit; font-size:11.5px;
+  font-weight:600; letter-spacing:.08em; text-transform:uppercase; cursor:pointer;
+  display:flex; align-items:center; gap:8px; transition:background .18s,padding-right .2s;
+}
+.ins-toggle:hover{background:rgba(28,23,18,1)}
+.ins-toggle .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--terracotta);
+  writing-mode:horizontal-tb; flex-shrink:0;
+}
+body.inspector-open .ins-toggle{right:400px}
+@media(max-width:1180px){ body.inspector-open .ins-toggle{right:0; opacity:0; pointer-events:none} }
+
 .inspector{
-  position:sticky;top:69px;height:calc(100vh - 69px);
+  position:fixed; top:0; right:-420px; height:100vh; width:400px; max-width:88vw;
   border-left:1px solid rgba(245,239,229,.13);
-  display:flex;flex-direction:column;min-width:0;background:rgba(0,0,0,.16)
+  display:flex;flex-direction:column;min-width:0;background:#1C1712;
+  z-index:76; transition:right .28s cubic-bezier(.16,1,.3,1);
+  box-shadow:-24px 0 48px rgba(0,0,0,.3);
 }
-@media(max-width:1180px){
-  .wrap{grid-template-columns:1fr}
-  .inspector{position:static;height:auto;border-left:none;border-top:1px solid rgba(245,239,229,.13)}
-}
+body.inspector-open .inspector{right:0}
+@media(max-width:1180px){ .inspector{width:100vw; max-width:100vw; right:-100vw} }
 
-/* Narrow screens. With three tenants the switcher no longer fits one row at 320px,
-   so it wraps and the head claim drops its rule rather than overflowing. */
-@media(max-width:640px){
-  .shell-head{padding:14px 16px;gap:14px}
-  .head-claim{border-left:none;padding-left:0;min-width:100%}
-  .tsw{width:100%}
-  .tsw-row{flex-wrap:wrap}
-  .tsw-btn{flex:1 1 auto;padding:7px 10px}
-  .head-actions{width:100%}
-}
-
-.stage-note{
-  font-size:12.5px;color:rgba(245,239,229,.5);margin-bottom:15px;
-  display:flex;gap:8px;align-items:baseline;flex-wrap:wrap
-}
-.stage-note .pin{
-  font-size:11px;color:var(--blush);border:1px solid rgba(232,201,174,.3);
-  border-radius:2px;padding:2px 7px;white-space:nowrap
-}
-
-.chrome{
-  background:#2A2420;border:1px solid rgba(245,239,229,.14);
-  border-radius:8px 8px 0 0;padding:10px 14px;display:flex;gap:12px;align-items:center
-}
-.dots{display:flex;gap:6px}
-.dots i{width:10px;height:10px;border-radius:50%;background:rgba(245,239,229,.22);display:block}
-.urlbar{
-  flex:1;background:rgba(0,0,0,.3);border-radius:4px;padding:5px 12px;
-  font-size:11.5px;color:rgba(245,239,229,.62);
-  font-family:'JetBrains Mono',monospace;overflow:hidden;white-space:nowrap;text-overflow:ellipsis
-}
-.urlbar b{color:var(--parchment);font-weight:500}
 .viewport{
-  background:var(--t-white);border:1px solid rgba(245,239,229,.14);border-top:none;
-  border-radius:0 0 8px 8px;overflow:hidden;color:var(--t-ink);
+  background:var(--t-white);color:var(--t-ink);
   font-family:var(--t-body)
 }
+
+/* URL/tenant meta moved from the old fake-browser chrome bar into the dock
+   panel; kept as real elements (JS still writes into them) rather than
+   stripped, just no longer staged as a browser frame around the site. */
+.dock-meta{
+  font-size:11px;color:rgba(245,239,229,.5);
+  font-family:'JetBrains Mono',monospace;line-height:1.6;
+  margin-bottom:14px;word-break:break-word;
+}
+.dock-meta b{color:var(--parchment);font-weight:500;font-family:inherit}
 
 /* ============================================================
    TENANT SITE MOCK
@@ -654,53 +721,57 @@ select.num{width:auto;text-align:left}
 </head>
 <body>
 
-<div class="demo-banner">
-  DEMONSTRATION PROTOTYPE
-  <span id="demo-line">All three practices shown here are fictional, created by Main Stage Studio. None is a real business. No payment is taken, no data is stored or sent, and nothing here connects to a live system.</span>
-</div>
-
-<header class="shell-head">
-  <div class="brand">
-    <!-- Studio mark, dark-background variant, per mss-brand-identity.md §Logo.
-         Terracotta square recedes bottom-left, near-black square leads top-right
-         at #3D3128 so it stays visible on the near-black header, and the
-         parchment cutout is the stage at the intersection. -->
-    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<!-- ============================================================
+     DOCK. Replaces the old sticky shell-head + demo banner. The tenant
+     site is the first thing rendered; this collapses to a small pill so
+     the studio/tenant chrome doesn't compete with it. Auto-opens briefly
+     on load (see script at the end of body) so the disclaimer and tenant
+     switcher are seen once, then docks out of the way.
+     ============================================================ -->
+<div class="mss-dock" id="mss-dock">
+  <div class="mss-dock-pill" id="dock-pill" role="button" tabindex="0" aria-expanded="false" aria-controls="dock-panel">
+    <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect x="2" y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
       <rect x="14" y="2" width="24" height="22" rx="2.5" fill="#3D3128"/>
       <rect x="14" y="16" width="12" height="8" rx="1.5" fill="#F5EFE5"/>
     </svg>
-    <span class="brand-txt">
-      <strong>Booking Engine</strong>
-      <span>Main Stage Studio &middot; Systems</span>
-    </span>
+    <b>Booking Engine</b>
+    <svg class="car" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+      <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </div>
-  <p class="head-claim">
-    A client journey for a regulated practice, where <b>every step the client is asked to complete traces to a numbered rule</b>. Three practices, in three different regulated sectors, running on one engine. They differ by configuration, not by code.
-  </p>
-  <div class="tsw">
-    <span class="tsw-lbl">Tenant</span>
-    <span class="tsw-row" id="tenant-switch"></span>
+  <div class="mss-dock-panel" id="dock-panel">
+    <div class="mss-dock-panel-inner">
+      <p class="dock-claim">
+        A client journey for a regulated practice, where <b>every step the client is asked to complete traces to a numbered rule</b>. Three practices, in three different regulated sectors, running on one engine. They differ by configuration, not by code.
+      </p>
+      <div class="dock-meta">
+        <b id="urlbar"></b><br>
+        <span id="tenant-note"></span>
+      </div>
+      <div class="tsw">
+        <span class="tsw-lbl">Tenant</span>
+        <span class="tsw-row" id="tenant-switch"></span>
+      </div>
+      <div class="head-actions">
+        <button class="btn-ghost" id="btn-reset">Start again</button>
+      </div>
+      <p class="dock-disclaimer">
+        <b>Demonstration prototype.</b> <span id="demo-line">All three practices shown here are fictional, created by Main Stage Studio. None is a real business. No payment is taken, no data is stored or sent, and nothing here connects to a live system.</span>
+      </p>
+    </div>
   </div>
-  <div class="head-actions">
-    <button class="btn-ghost" id="btn-reset">Start again</button>
-  </div>
-</header>
+</div>
+
+<button class="ins-toggle" id="ins-toggle" aria-expanded="false" aria-controls="inspector-panel">
+  <span class="dot" aria-hidden="true"></span>
+  Rule trace
+</button>
 
 <div class="wrap">
 
   <!-- ============ STAGE ============ -->
   <main class="stage">
-    <p class="stage-note">
-      <span class="pin">Clock pinned to Monday 10 August 2026, 09:00</span>
-      <span id="tenant-note"></span>
-    </p>
-
-    <div class="chrome">
-      <div class="dots"><i></i><i></i><i></i></div>
-      <div class="urlbar" id="urlbar"></div>
-    </div>
-
     <div class="viewport">
       <div class="pm-topbar" id="topbar"></div>
       <nav class="pm-nav">
@@ -744,7 +815,7 @@ select.num{width:auto;text-align:left}
       </div>
     </div>
 
-    <div class="shell-foot" style="border-top:none;padding:26px 0 0">
+    <div class="shell-foot" style="border-top:none;padding:26px 24px 0">
       <div class="foot-grid">
         <div>
           <b>Three tenants, one engine</b><br>
@@ -763,7 +834,7 @@ select.num{width:auto;text-align:left}
   </main>
 
   <!-- ============ INSPECTOR ============ -->
-  <aside class="inspector">
+  <aside class="inspector" id="inspector-panel">
     <div class="ins-tabs" role="tablist">
       <button class="ins-tab on" data-pane="trace" role="tab">Rule trace</button>
       <button class="ins-tab" data-pane="admin" role="tab">Admin</button>
@@ -877,9 +948,21 @@ select.num{width:auto;text-align:left}
 "use strict";
 
 /* ============================================================
-   PINNED CLOCK
+   CLOCK
+   Was hardcoded to a fixed date (10 Aug 2026), which silently drifted into
+   the past as real time moved past it, showing stale calendar/availability
+   data. Computed live instead, snapped to 09:00 on the next weekday so the
+   scheduling logic always has a sensible business-hours anchor regardless
+   of when or what day someone opens this.
    ============================================================ */
-const NOW = new Date(2026, 7, 10, 9, 0, 0); // Mon 10 Aug 2026, 09:00 local
+function nextWeekday9am(from){
+  const d = new Date(from);
+  d.setHours(9, 0, 0, 0);
+  if(from.getHours() >= 9) d.setDate(d.getDate() + 1);
+  while(d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1);
+  return d;
+}
+const NOW = nextWeekday9am(new Date());
 
 /* ============================================================
    TENANT RECORDS
@@ -2669,14 +2752,13 @@ function scrollWidget(){
   if(S.open) scrollUnderHead($('mount'));
 }
 
-/* scrollIntoView puts the target under the sticky shell header, which hides the
-   step rail. Offset by the header height instead. */
+/* No sticky header anymore (dock is fixed/floating, out of flow), so this is
+   just a small top margin now rather than a measured header-height offset. */
 function scrollUnderHead(el){
   // Deferred a task, so the new step has been laid out and the page height is
   // final before the target is measured. Measuring too early overshoots.
   setTimeout(() => {
-    const head = document.querySelector('.shell-head');
-    const pad = (head ? head.getBoundingClientRect().height : 0) + 12;
+    const pad = 16;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const top = Math.max(0, Math.min(max, window.scrollY + el.getBoundingClientRect().top - pad));
     window.scrollTo({top:top, behavior:'smooth'});
@@ -2778,10 +2860,158 @@ function bindShell(){
   CFG_CONTROLS.forEach(bind);
 }
 
+/* ============================================================
+   DOCK + INSPECTOR TOGGLE
+   Dock auto-opens briefly on load (disclaimer + tenant switcher get seen
+   once), then docks itself back down. Both stay click/keyboard toggleable
+   after that. Independent of the tenant-render pipeline above.
+   ============================================================ */
+function bindDock(){
+  const dock = $('mss-dock'), pill = $('dock-pill');
+  const setOpen = (open) => {
+    dock.classList.toggle('open', open);
+    pill.setAttribute('aria-expanded', String(open));
+  };
+  pill.addEventListener('click', () => setOpen(!dock.classList.contains('open')));
+  pill.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); setOpen(!dock.classList.contains('open')); }
+  });
+  setOpen(true);
+  const autoClose = setTimeout(() => setOpen(false), 4500);
+  dock.addEventListener('mouseenter', () => clearTimeout(autoClose));
+  pill.addEventListener('click', () => clearTimeout(autoClose));
+}
+
+function bindInspectorToggle(){
+  const btn = $('ins-toggle');
+  const setOpen = (open) => {
+    document.body.classList.toggle('inspector-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+  };
+  btn.addEventListener('click', () => setOpen(!document.body.classList.contains('inspector-open')));
+}
+
+/* ============================================================
+   COACH MARKS
+   ============================================================
+   Sequenced hints on first load. See the CSS block for why this is
+   not a modal tour.
+
+   Two query flags, both of which exist so the clip on the MSS home
+   page can be recorded against this exact file rather than a
+   special build of it:
+
+     ?tenant=thackray|marbury|vera   open straight onto a practice
+     ?coach=0                        suppress the hints entirely
+
+   `?tenant=` is worth having on its own: it is what lets a link
+   land a prospect on the practice that looks like theirs, instead
+   of on a conveyancer and a switcher they have to find.
+   ============================================================ */
+const COACH = [
+  { sel:'#cta-hero', side:'bottom', at:1400, hold:5200,
+    head:'Start here',
+    body:'The journey opens inside the practice’s own page. No redirect to a booking site, no separate login.' },
+  { sel:'#ins-toggle', side:'left', at:900, hold:5200,
+    head:'The rule trace',
+    body:'Every question you are asked appears here first, with the numbered rule that produced it. Open it whenever you want to see why something was asked.' },
+  { sel:'#dock-pill', side:'top', at:900, hold:5600,
+    head:'Three practices, one engine',
+    body:'A solicitor, an accountant and a clinic. Switch between them here, or start again, at any point.' },
+];
+
+function bindCoach(){
+  if(new URLSearchParams(location.search).get('coach') === '0') return;
+
+  const el = document.createElement('div');
+  el.className = 'coach';
+  el.setAttribute('aria-hidden', 'true');   // decorative: the UI is usable without it
+  document.body.appendChild(el);
+
+  let timer = null, done = false;
+
+  const place = (sel, side) => {
+    const a = document.querySelector(sel);
+    if(!a) return false;
+    const r = a.getBoundingClientRect();
+    if(r.width === 0 || r.height === 0) return false;
+
+    el.dataset.side = side;
+    el.style.visibility = 'hidden';
+    el.style.left = el.style.top = '0px';
+    const w = el.offsetWidth, h = el.offsetHeight, gap = 14, edge = 16;
+
+    let x, y;
+    if(side === 'bottom'){ x = r.left; y = r.bottom + gap; }
+    else if(side === 'top'){ x = r.right - w; y = r.top - h - gap; }
+    else { x = r.left - w - gap; y = r.top + r.height / 2 - h / 2; }
+
+    x = Math.max(edge, Math.min(x, innerWidth  - w - edge));
+    y = Math.max(edge, Math.min(y, innerHeight - h - edge));
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+
+    // Point the arrow at the anchor's centre, not the card's. Clamping a
+    // card back inside the viewport would otherwise leave the pointer
+    // aimed at empty page.
+    if(side === 'left'){
+      el.style.setProperty('--ay',
+        Math.max(12, Math.min(r.top + r.height / 2 - y - 5.5, h - 23)) + 'px');
+    } else {
+      el.style.setProperty('--ax',
+        Math.max(14, Math.min(r.left + r.width / 2 - x - 5.5, w - 25)) + 'px');
+    }
+    el.style.visibility = '';
+    return true;
+  };
+
+  const step = (i) => {
+    if(done || i >= COACH.length) return;
+    const c = COACH[i];
+    timer = setTimeout(() => {
+      if(done) return;
+      el.innerHTML = '<b>' + esc(c.head) + '</b>' + esc(c.body);
+      if(!place(c.sel, c.side)) return step(i + 1);
+      el.classList.add('on');
+      timer = setTimeout(() => {
+        el.classList.remove('on');
+        timer = setTimeout(() => step(i + 1), 420);
+      }, c.hold);
+    }, c.at);
+  };
+
+  const stop = () => {
+    if(done) return;
+    done = true;
+    clearTimeout(timer);
+    el.classList.remove('on');
+    setTimeout(() => el.remove(), 500);
+  };
+
+  // Anything that counts as having started. Scroll is deliberately not in
+  // this list: reading the practice page is not the same as being finished
+  // with the hints, and the tips reposition on resize rather than vanish.
+  ['pointerdown','keydown','touchstart'].forEach(ev =>
+    addEventListener(ev, stop, { once:true, passive:true }));
+  addEventListener('resize', () => { if(!done && el.classList.contains('on')) el.classList.remove('on'); });
+
+  step(0);
+}
+
 /* boot */
 S = freshState();
+
+/* Open straight onto a named practice when asked. Falls through to the
+   default (Thackray Vane) on anything unrecognised rather than erroring,
+   because this is a link people will hand-edit. */
+const wanted = new URLSearchParams(location.search).get('tenant');
+if(wanted && TENANTS[wanted]) T = TENANTS[wanted];
+
 paintTenant();
 bindShell();
+bindDock();
+bindInspectorToggle();
+bindCoach();
 renderTrace();
 renderRecord();
 </script>

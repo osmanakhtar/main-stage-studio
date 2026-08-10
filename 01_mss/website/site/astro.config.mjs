@@ -2,6 +2,12 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  // Intake case study renamed to /work/booking-engine/ 9 Aug 2026. Old path
+  // may already be indexed or shared, so redirect rather than 404.
+  redirects: {
+    '/work/intake': '/work/booking-engine',
+    '/work/intake/prototype': '/work/booking-engine/prototype',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

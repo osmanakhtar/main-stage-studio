@@ -17,6 +17,7 @@ client's content, captured rather than mocked up.
 | `stage-auth.js` | Opens a headed browser so a human can sign in to Stage. Saves the session, records nothing |
 | `stage-record.js` | Records the Stage review tool using that session. Strictly read-only |
 | `shoot-site.js` | Screenshots the shipped client pages, desktop and mobile |
+| `record-onboarding.js` | Records the Booking Engine clip on the MSS home page, and the still that posters the Work card |
 
 Playwright comes from `~/workspace/scripts/node_modules` rather than a local install,
 because that is where it already lives.
@@ -99,6 +100,82 @@ images are easy to miss in a thumbnail grid and fatal in a portfolio piece.
 column fills the frame. Without it the clip is a narrow strip floating in two thirds
 of empty page background.
 
+## Capturing the Booking Engine clip
+
+This is the one clip on the home page, and the only one with an overlay. Both
+outputs come from the same script driving the published prototype over HTTP:
+
+```
+cd ~/workspace/main-stage-studio/01_mss/website/site && npx astro build
+npx serve dist -l 4321                    # or: npx astro dev
+
+cd ../tools/clips
+node record-onboarding.js --shot          # thumbnail -> shots/intake-rule-trace.png
+node record-onboarding.js                 # clip      -> raw-onboarding/*.webm
+```
+
+Re-run it after **any** edit to
+`site/public/work/booking-engine/prototype/index.html`, which is the file that
+ships (the copy in `booking-engine/prototype/` is a version snapshot taken from
+it, not the source). The whole reason the clip
+is scripted rather than screen-captured by hand is that the prototype moves, and
+a case-study video showing a UI the visitor will not find when they click through
+is worse than no video.
+
+Three things it adds over a plain capture:
+
+- **A cursor.** Every click is a cursor move, a pause, a ripple, then the real
+  click, so the UI is visibly being operated rather than changing on its own.
+- **A narrative panel.** The widget is 720px centred, so with the rule trace
+  docked there is ~575px of empty page down the left of every step. That is
+  where the commentary goes, in the same place every time. The prose is
+  authored (see the `N` map): the trace rows are written for a compliance
+  reader, and this clip is someone's first thirty seconds with the idea.
+  **What is not authored is the claim that a rule fired.** Every beat names a
+  rule, looks it up in the live trace, and `note()` throws if that rule is
+  absent, so the commentary cannot describe a check the engine did not run.
+  The panel footer prints the engine's own condition string verbatim.
+- **Pace.** `PACE` scales every beat, and each panel's hold is derived from its
+  own word count rather than a fixed number, so a long line is not on screen
+  for the same time as a short one. 0.7 was tried and read as rushed; the
+  shipped cut is 0.92, about 78s. Drop `PACE` only to preview a cut quickly,
+  never to ship one.
+
+**The rule trace stays docked for the whole clip.** It is the compliance
+artefact and it belongs in the prototype, but on an introduction it is a wall
+of small type competing with the journey, and the left panel is making the same
+point in a form a stranger can read.
+
+**The clip opens on the accountancy practice, with no tenant toggle.** It loads
+`?tenant=marbury&coach=0`. The switch from the conveyancer used to be the first
+thing on screen, and it is a point about the engine rather than about this
+journey. `?coach=0` suppresses the prototype's own first-run tips, which exist
+for someone driving it by hand and would fight the narrative panel. Both flags
+live in the prototype itself, so this still records the shipped file rather than
+a special build of it.
+
+The journey is Marbury Hale, Year End Accounts: the one service that exercises
+screening, three signed documents and a deposit in a single run. Captured and
+delivered at 1920x1080. An earlier cut recorded at 1080 and wrote down to 720,
+which put a resample on top of VP8's own loss and left the widget copy soft;
+recording 1:1 removes one of those two steps. 1080 is also the height the
+documents step needs in order to fit without scrolling.
+
+The still is the same journey on the documents step, with the same panel beside
+it, cropped to panel-plus-widget at ~1.45:1 (roughly the shape the Work card
+renders, so `object-cover` has almost nothing to trim). A thumbnail showing a
+different journey to the one that plays is advertising the wrong product.
+
+If it throws `never reached payment`, the message carries the step and the
+document tabs it stalled on. The usual cause is a document whose clause count
+changed: `sign()` ticks every `[data-clause]` it finds, so a new clause is
+handled, but a new *required* document that is not signed leaves the Continue
+button disabled.
+
+The still is cropped to the widget plus the inspector rather than captured at a
+narrower viewport, because below ~1300px the widget reflows and the same drive
+cannot be trusted to reach the documents step.
+
 ## Encoding
 
 Playwright writes VP8 webm. Convert to mp4 so it plays everywhere, and pad anything
@@ -118,6 +195,33 @@ ffmpeg -ss <in> -t <dur> -i raw.webm -an \
   -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 27 -preset slow \
   -movflags +faststart out.mp4
 ```
+
+The Booking Engine clip is dense with small UI type, so it ships at native
+1920x1080 and CRF 20, with no scaling pass at all:
+
+```
+# -ss 3 drops the lead-in: the load settle and the click that puts the studio
+# dock away. Useful to have on the capture (it proves the dock is the
+# prototype's own behaviour, not something the recorder faked) and dead air on
+# the clip. Trim at encode time from the raw capture, never by re-encoding the
+# shipped mp4, so it costs no quality.
+ffmpeg -ss 3 -i raw-onboarding/*.webm -an \
+  -vf "fps=25" \
+  -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 20 -preset slow \
+  -movflags +faststart site/public/assets/intake-onboarding.mp4
+
+# Poster is frame 0 of the file that ships, so the still and the clip's first
+# frame are the same image by construction rather than by a matching timestamp
+# that drifts the next time the cut is retimed.
+ffmpeg -i site/public/assets/intake-onboarding.mp4 -frames:v 1 poster.png
+cwebp -q 82 poster.png -o site/public/assets/intake-onboarding.webp
+```
+
+That is 4.8MB for the 74.5s that ship (77.5s captured, 3s trimmed). Measured alternatives: CRF 23 at 1080p is 4.1MB, and
+1600x900 at CRF 21 is 3.7MB. Neither saving is worth softening the thing the
+clip exists to show, and the clip is `preload="none"` click-to-play, so nobody
+pays for it unless they ask to watch it. The poster is the clip's own first frame, so the static
+screen cannot show a moment the video does not open on.
 
 `+faststart` is not optional. The homepage hero video shipped without it and the
 moov atom landed after 2.68MB of payload, so the browser had to pull the whole file
