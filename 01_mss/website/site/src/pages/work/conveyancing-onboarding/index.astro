@@ -62,8 +62,15 @@ const built = [
       --claret: #6B2434;
       --claret-hover: #82303F;
       --gold:   #9A8556;
+      /* Accessibility split (17 Aug 2026). --gold stays the decorative accent
+         (hairline rules, large display italics, which clear 3:1). Small text
+         needs 4.5:1 and uses --gold-text. */
+      --gold-text: #695B3B;
+      /* On the dark ink section the accent must go the other way, so the
+         original gold is reused there. */
+      --gold-on-dark: #9A8556;
       --ink:    #241417;
-      --ink-muted: #71696B;
+      --ink-muted: #625B5C;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -96,8 +103,9 @@ const built = [
       font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--gold-text);
     }
+    .oncolour .eyebrow { color: var(--gold-on-dark); }
 
     .body-copy {
       font-weight: 300;

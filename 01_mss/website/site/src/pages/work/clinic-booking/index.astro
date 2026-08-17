@@ -58,9 +58,18 @@ const built = [
       --bone: #F5F2EC;
       --navy: #1E2B4D;
       --navy-soft: #E7EAF1;
-      --gold: #C6A667;
+      /* Accessibility (17 Aug 2026). The old gold #C6A667 was 2.08 on bone,
+         failing even the 3:1 large-text threshold, so the accent itself had to
+         move, not just its text variant. --gold now clears 3:1 for the large
+         display italic and the built numerals and keeps working as the CTA
+         hover ground (dark ink on it is 4.77). Small text uses --gold-text. */
+      --gold: #A4813D;
+      --gold-text: #7F6430;
+      /* On the navy section the accent must go the other way, so the original
+         champagne gold is reused there (6.00 on navy). */
+      --gold-on-dark: #C6A667;
       --ink:  #141A2B;
-      --ink-muted: #6E7382;
+      --ink-muted: #646876;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -89,7 +98,8 @@ const built = [
     }
     .display em { font-style: italic; color: var(--gold); }
 
-    .eyebrow { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+    .eyebrow { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-text); }
+    .oncolour .eyebrow { color: var(--gold-on-dark); }
     .body-copy { font-weight: 300; font-size: 1.0625rem; line-height: 1.8; color: var(--ink-muted); }
     .rule { width: 56px; height: 1px; background: var(--gold); border: none; opacity: .9; }
     .meta-key { font-size: 0.5625rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); }
