@@ -7,11 +7,15 @@ import '../styles/global.css';
 // 3.6MB and 2.2MB PNGs being displayed at ~450px wide.
 import puremedThumb from '../assets/puremed-logo.webp';
 
-// Intake, the Systems case study. A real capture of the prototype's documents
-// step with the rule trace beside it, rather than a styled mock: the whole
-// argument of the piece is that the rules are visible next to the thing they
-// produced, so a decorative thumbnail would undercut it.
-import intakeThumb from '../assets/intake-rule-trace.png';
+// Client onboarding, three separate case studies as of 17 Aug 2026 (Osman's
+// call): each practice type gets its own card and its own page rather than
+// one "three tenants, one engine" spotlight. Multi-tenancy is real and still
+// true, it just isn't the headline a prospect in any one vertical needs to
+// see first. Each thumbnail is a live capture of that tenant's own site
+// inside the running prototype, not a styled mock.
+import thackrayThumb from '../assets/intake-thackray-hero.jpg';
+import marburyThumb from '../assets/intake-marbury-hero.jpg';
+import veraThumb from '../assets/intake-vera-hero.jpg';
 
 // Work section, second row. Sable is the brand-and-web side of the positioning
 // and links to its own case study; Ayesha is upcoming and deliberately does not
@@ -891,7 +895,7 @@ const thumbWidths    = [420, 688, 1032, 1376];
             A real run against the working prototype: service picked, slot booked, risk screening passed, engagement letter signed, deposit taken, all in one sitting. Not staged.
           </p>
           <div class="flex items-baseline gap-5 shrink-0">
-            <a href="/work/booking-engine/prototype/" class="font-sans font-light underline underline-offset-2 transition-colors hover:text-terracotta text-near-black" style="font-size:0.875rem;">
+            <a href="/work/booking-engine/prototype/?tenant=marbury" class="font-sans font-light underline underline-offset-2 transition-colors hover:text-terracotta text-near-black" style="font-size:0.875rem;">
               Open the prototype yourself &rarr;
             </a>
           </div>
@@ -914,7 +918,7 @@ const thumbWidths    = [420, 688, 1032, 1376];
             <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.1;letter-spacing:-0.01em;">Not packaged.<br>Scoped to fit.</h3>
           </div>
           <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.75;max-width:60ch;">
-            The booking calendar, the onboarding flow, the decision logic that has to be right every single time, not just look right. That's the Booking Engine above: a working client journey for three regulated practices, where every question it asks can be traced to a numbered rule. Most of this work usually stays behind a client's login. We built one you can open and take apart yourself.
+            The booking calendar, the onboarding flow, the decision logic that has to be right every single time, not just look right. That's the client journey above: every question it asks can be traced to a numbered rule, built for the practice it's running in rather than dropped in from a generic template. Most of this work usually stays behind a client's login. We built ones you can open and take apart yourself.
           </p>
         </div>
 
@@ -1046,71 +1050,162 @@ const thumbWidths    = [420, 688, 1032, 1376];
           Built, and <span class="text-terracotta">shown working.</span>
         </h2>
         <p class="font-sans font-light muted-text" style="font-size:1rem;line-height:1.7;max-width:52ch;">
-          Two pieces you can judge for yourself: a client onboarding system you can open and run right now, and a brand and website built end to end. Under them, the engagements running at the moment.
+          Three client onboarding systems you can open and run right now, one built for each practice type, and a brand and website built end to end. Under them, the engagements running at the moment.
         </p>
       </div>
 
-      <!-- Featured: Self-Serve Onboarding (the Booking Engine prototype).
-           Points straight at the working prototype rather than the case
-           study page, per Osman 9 Aug 2026: this is the piece that proves
-           the offer, so the card should drop you into it. Titled and
-           copy-led from the client's side, not the internal "Intake" name,
-           per Osman 9 Aug 2026. -->
-      <div class="work-card spotlight-card block reveal rd1 mb-6" id="work-intake">
-        <div class="grid grid-cols-1 md:grid-cols-2">
+      <!-- Client onboarding, three separate cards as of 17 Aug 2026: each
+           practice type is its own system, its own page, its own prototype
+           deep link, styled with that tenant's own palette on its case
+           study page. The shared engine underneath is real, it just isn't
+           what any one card leads with. -->
+      <div class="mb-10 reveal">
+        <p class="slabel mb-4">Client onboarding, three practices</p>
+        <h3 class="font-display font-normal text-near-black" style="font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.1;letter-spacing:-0.01em;max-width:30ch;">
+          Built for the practice, <span class="text-terracotta">not a template with a logo swapped in.</span>
+        </h3>
+      </div>
 
-          <a href="/work/booking-engine/prototype/" class="work-thumb work-thumb-fill overflow-hidden block" style="background:#0E0D0B;" aria-label="Open the Self-Serve Onboarding prototype">
-            <Image src={intakeThumb}
-                 alt="The self-serve onboarding prototype at its documents step: an accountancy practice's terms of business with its clauses, and a note beside it explaining that each clause is acknowledged separately"
-                 class="work-thumb-inner object-cover w-full h-full"
-                 width={560}
-                 widths={featureWidths}
-                 sizes={featureSizes}
-                 format="webp"
-                 quality={78}
-                 loading="lazy"
-                 decoding="async"
-                 style="object-position:center top;" />
-          </a>
+      <div class="flex flex-col gap-6 mb-16 md:mb-20">
 
-          <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
-            <div>
-              <div class="flex items-baseline gap-3 mb-5 flex-wrap">
-                <span class="slabel">Prototype · Systems</span>
-                <span class="muted-text" style="opacity:0.5;">·</span>
-                <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
-              </div>
-              <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(2rem,4vw,3.25rem);line-height:1.05;letter-spacing:-0.01em;">Self-Serve Onboarding</h3>
-              <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
-                A client becomes a client without a single phone call: they book the service, upload what a regulated practice needs, sign the engagement letter and pay the deposit, all in one sitting. Every step runs the same governance checks a person would apply by hand. It drops into the site you already run, no rebuild required.
-              </p>
-              <div class="flex flex-col gap-2">
-                <div class="flex items-baseline gap-4">
-                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Sector</span>
-                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Regulated Professional Services</span>
+        <!-- Conveyancing -->
+        <div class="work-card spotlight-card block reveal rd1" id="work-conveyancing">
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <a href="/work/conveyancing-onboarding/" class="work-thumb work-thumb-fill overflow-hidden block" style="background:#241417;" aria-label="Read the conveyancing onboarding case study">
+              <Image src={thackrayThumb}
+                   alt="Thackray Vane, solicitors: the practice's own site, its five-stage conveyance rail, and the itemised fee list beneath it"
+                   class="work-thumb-inner object-cover w-full h-full"
+                   width={560}
+                   widths={featureWidths}
+                   sizes={featureSizes}
+                   format="webp"
+                   quality={78}
+                   loading="lazy"
+                   decoding="async"
+                   style="object-position:center top;" />
+            </a>
+            <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
+              <div>
+                <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+                  <span class="slabel">Prototype · Conveyancing</span>
+                  <span class="muted-text" style="opacity:0.5;">·</span>
+                  <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
                 </div>
-                <div class="flex items-baseline gap-4">
-                  <span class="font-sans muted-text uppercase shrink-0" style="font-size:0.5rem;letter-spacing:0.18em;">Scope</span>
-                  <span class="font-sans font-light muted-text" style="font-size:0.8125rem;">Journey Architecture · Rules Design · Prototype</span>
-                </div>
+                <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3.5vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Conveyancing client onboarding</h3>
+                <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
+                  A fixed fee and every disbursement itemised before a client commits to anything, and a conflict check that can stop the journey outright. Identity, source of funds and risk assessment, done in the same sitting as the quote.
+                </p>
               </div>
-            </div>
-            <div class="pt-6 mt-8 border-t flex items-center gap-6 flex-wrap" style="border-color:rgba(28,23,18,0.09);">
-              <a href="/work/booking-engine/prototype/" class="btn-ghost">
-                Open the prototype
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-              <a href="/work/booking-engine/" class="btn-ghost">
-                Read the case study
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
+              <div class="pt-6 mt-8 border-t flex items-center gap-6 flex-wrap" style="border-color:rgba(28,23,18,0.09);">
+                <a href="/work/booking-engine/prototype/?tenant=thackray" class="btn-ghost">
+                  Open the prototype
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+                <a href="/work/conveyancing-onboarding/" class="btn-ghost">
+                  Read the case study
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Accountancy -->
+        <div class="work-card spotlight-card block reveal rd2" id="work-accountancy">
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <a href="/work/accountancy-intake/" class="work-thumb work-thumb-fill overflow-hidden block" style="background:#16211E;" aria-label="Read the accountancy client intake case study">
+              <Image src={marburyThumb}
+                   alt="The Marbury Hale site: chartered accountants, a key-dates panel for the tax year, and the onboarding entry point"
+                   class="work-thumb-inner object-cover w-full h-full"
+                   width={560}
+                   widths={featureWidths}
+                   sizes={featureSizes}
+                   format="webp"
+                   quality={78}
+                   loading="lazy"
+                   decoding="async"
+                   style="object-position:center top;" />
+            </a>
+            <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
+              <div>
+                <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+                  <span class="slabel">Prototype · Accountancy</span>
+                  <span class="muted-text" style="opacity:0.5;">·</span>
+                  <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
+                </div>
+                <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3.5vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Accountancy client intake</h3>
+                <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
+                  Booked, risk-screened, signed and paid in one sitting, with the regulated-advice boundary enforced automatically so it can't quietly go missing from a proposal. Recorded end to end against the live prototype.
+                </p>
+              </div>
+              <div class="pt-6 mt-8 border-t flex items-center gap-6 flex-wrap" style="border-color:rgba(28,23,18,0.09);">
+                <a href="/work/booking-engine/prototype/?tenant=marbury" class="btn-ghost">
+                  Open the prototype
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+                <a href="/work/accountancy-intake/" class="btn-ghost">
+                  Read the case study
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aesthetics clinic -->
+        <div class="work-card spotlight-card block reveal rd3" id="work-clinic">
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <a href="/work/clinic-booking/" class="work-thumb work-thumb-fill overflow-hidden block" style="background:#141A2B;" aria-label="Read the clinic booking and consent case study">
+              <Image src={veraThumb}
+                   alt="Vera Aesthetics: the clinic's own site, opening on the consultation-first treatment list"
+                   class="work-thumb-inner object-cover w-full h-full"
+                   width={560}
+                   widths={featureWidths}
+                   sizes={featureSizes}
+                   format="webp"
+                   quality={78}
+                   loading="lazy"
+                   decoding="async"
+                   style="object-position:center top;" />
+            </a>
+            <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
+              <div>
+                <div class="flex items-baseline gap-3 mb-5 flex-wrap">
+                  <span class="slabel">Prototype · Aesthetics clinic</span>
+                  <span class="muted-text" style="opacity:0.5;">·</span>
+                  <span class="font-sans muted-text uppercase" style="font-size:0.5rem;letter-spacing:0.2em;">Self-initiated</span>
+                </div>
+                <h3 class="font-display font-normal text-near-black mb-4" style="font-size:clamp(1.75rem,3.5vw,2.75rem);line-height:1.05;letter-spacing:-0.01em;">Clinic booking &amp; consent</h3>
+                <p class="font-sans font-light muted-text mb-8" style="font-size:0.9375rem;line-height:1.7;">
+                  Evidential signature capture, structurally separate marketing consent, and a rule that reroutes a client with no consultation on record before a treatment can be booked directly.
+                </p>
+              </div>
+              <div class="pt-6 mt-8 border-t flex items-center gap-6 flex-wrap" style="border-color:rgba(28,23,18,0.09);">
+                <a href="/work/booking-engine/prototype/?tenant=vera" class="btn-ghost">
+                  Open the prototype
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+                <a href="/work/clinic-booking/" class="btn-ghost">
+                  Read the case study
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Featured: Sable. Promoted 10 Aug 2026 from the smaller second row:

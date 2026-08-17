@@ -40,18 +40,15 @@ body{
    tenant switcher are seen at least once, then gets out of the way.
    ============================================================ */
 /* ============================================================
-   COACH MARKS. Three tips that appear in turn on first load and
-   take themselves away, because the first thing a visitor sees is
-   a convincing practice website and nothing on it says which parts
-   are the demo. They point at the three things you cannot guess:
-   where the journey starts, that the rule trace exists, and that
-   there is more than one practice behind the switcher.
+   COACH MARK. One tip that appears on first load and takes itself
+   away, pointing at the one thing you cannot guess just by looking
+   at a convincing practice website: that the rules engine exists.
 
    Deliberately not a modal tour. No overlay, no "next" button, no
-   step counter, nothing to dismiss: they are hints, and the page
-   stays fully usable underneath them. Any interaction cancels the
-   rest of the sequence, on the principle that someone who has
-   started clicking does not need to be told where to click.
+   step counter, nothing to dismiss: it is a hint, and the page
+   stays fully usable underneath it. Any interaction cancels it, on
+   the principle that someone who has started clicking does not
+   need to be told where to click.
    ============================================================ */
 .coach{
   position:fixed; z-index:95; max-width:302px;
@@ -126,19 +123,6 @@ body{
 }
 .brand-txt span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blush);opacity:.75}
 .head-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-top:14px}
-
-/* tenant switcher, the multi-tenant proof */
-.tsw{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
-.tsw-lbl{font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,239,229,.4);font-weight:700}
-.tsw-row{display:flex;border:1px solid rgba(245,239,229,.22);border-radius:3px;overflow:hidden}
-.tsw-btn{
-  font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;padding:7px 13px;
-  background:transparent;color:rgba(245,239,229,.62);border:none;
-  border-right:1px solid rgba(245,239,229,.16);transition:.16s;white-space:nowrap
-}
-.tsw-btn:last-child{border-right:none}
-.tsw-btn:hover{background:rgba(245,239,229,.08);color:var(--parchment)}
-.tsw-btn.on{background:var(--terracotta);color:#fff}
 
 .btn-ghost{
   font:inherit;font-size:12px;font-weight:600;cursor:pointer;
@@ -742,22 +726,16 @@ select.num{width:auto;text-align:left}
   </div>
   <div class="mss-dock-panel" id="dock-panel">
     <div class="mss-dock-panel-inner">
-      <p class="dock-claim">
-        A client journey for a regulated practice, where <b>every step the client is asked to complete traces to a numbered rule</b>. Three practices, in three different regulated sectors, running on one engine. They differ by configuration, not by code.
-      </p>
+      <p class="dock-claim" id="dock-claim"></p>
       <div class="dock-meta">
         <b id="urlbar"></b><br>
         <span id="tenant-note"></span>
-      </div>
-      <div class="tsw">
-        <span class="tsw-lbl">Tenant</span>
-        <span class="tsw-row" id="tenant-switch"></span>
       </div>
       <div class="head-actions">
         <button class="btn-ghost" id="btn-reset">Start again</button>
       </div>
       <p class="dock-disclaimer">
-        <b>Demonstration prototype.</b> <span id="demo-line">All three practices shown here are fictional, created by Main Stage Studio. None is a real business. No payment is taken, no data is stored or sent, and nothing here connects to a live system.</span>
+        <b>Demonstration prototype.</b> <span id="demo-line">This practice is fictional, created by Main Stage Studio. It is not a real business. No payment is taken, no data is stored or sent, and nothing here connects to a live system.</span>
       </p>
     </div>
   </div>
@@ -765,7 +743,7 @@ select.num{width:auto;text-align:left}
 
 <button class="ins-toggle" id="ins-toggle" aria-expanded="false" aria-controls="inspector-panel">
   <span class="dot" aria-hidden="true"></span>
-  Rule trace
+  Rules Engine
 </button>
 
 <div class="wrap">
@@ -818,8 +796,8 @@ select.num{width:auto;text-align:left}
     <div class="shell-foot" style="border-top:none;padding:26px 24px 0">
       <div class="foot-grid">
         <div>
-          <b>Three tenants, one engine</b><br>
-          A firm of solicitors doing residential property, a chartered accountancy practice, and a nurse-prescriber-led aesthetics clinic. Different regulator, different vocabulary, different documents, different rules. The scheduling engine, the rules engine, the signature capture and the evidence layer are the same code in all three.
+          <b id="foot-built-h">Built for this practice</b><br>
+          <span id="foot-built-body"></span>
         </div>
         <div>
           <b>What is placeholder</b><br>
@@ -836,19 +814,20 @@ select.num{width:auto;text-align:left}
   <!-- ============ INSPECTOR ============ -->
   <aside class="inspector" id="inspector-panel">
     <div class="ins-tabs" role="tablist">
-      <button class="ins-tab on" data-pane="trace" role="tab">Rule trace</button>
+      <button class="ins-tab on" data-pane="trace" role="tab">Rules Engine</button>
       <button class="ins-tab" data-pane="admin" role="tab">Admin</button>
       <button class="ins-tab" data-pane="record" role="tab">The record</button>
     </div>
 
     <div class="ins-pane on" id="pane-trace">
       <p class="ins-p">Every requirement the client is shown appears here first, with the rule that produced it. Nothing is asked for that cannot be explained by a numbered row. This is the compliance artefact, not a debug view.</p>
+      <p class="ins-p">Each rule is configuration, not code: the practice sets what applies to which service in its own admin panel, and the journey recalculates immediately. Nothing here is hardcoded to this business, and nothing changes without the practice choosing it.</p>
       <div class="trace" id="trace"></div>
       <p class="empty" id="trace-empty">No rules have fired yet. Start a journey on the left.</p>
     </div>
 
     <div class="ins-pane" id="pane-admin">
-      <p class="ins-p">Everything optional in the journey is a setting, not code. Change one and the client journey changes immediately. This is the practice's own control panel, and it is the same panel for all three tenants.</p>
+      <p class="ins-p">Everything optional in the journey is a setting, not code. Change one and the client journey changes immediately. This is the practice's own control panel.</p>
 
       <div class="ins-h">Journey steps</div>
       <div class="ctl">
@@ -931,7 +910,7 @@ select.num{width:auto;text-align:left}
   <div class="foot-grid">
     <div>
       <b>Main Stage Studio, Systems</b><br>
-      Booking Engine prototype v1.3, 8 August 2026. Three tenants: Thackray Vane, Marbury Hale and Vera Aesthetics, all fictional. Architecture and build plan: <span class="mono" style="font-size:11px">booking-engine-plan.md</span>
+      <span id="foot-credits-body"></span> Architecture and build plan: <span class="mono" style="font-size:11px">booking-engine-plan.md</span>
     </div>
     <div>
       <b>Regulatory note</b><br>
@@ -977,6 +956,7 @@ const TENANTS = {
 thackray: {
   id:'thackray', label:'Thackray Vane', sector:'Solicitors, residential property',
   layout:'chain',
+  claim:'A client onboarding system built for conveyancing: every step the client is asked to complete, and every fee shown, traces to a numbered rule the firm cannot quietly switch off.',
   /* A conveyance is a sequence with a chain attached, so the site is a sequence.
      The disbursement panel is RULE-002 built into the layout rather than asserted
      in copy: the page cannot show a headline fee even if someone wanted it to. */
@@ -1167,6 +1147,7 @@ thackray: {
 vera: {
   id:'vera', label:'Vera Aesthetics', sector:'Aesthetics clinic',
   layout:'gallery',
+  claim:'A booking and consent system built for a regulated clinic: evidential signature capture, and a rule that reroutes a client with no consultation on record before a treatment can be booked directly.',
   /* The clinic is the tenant allowed to breathe: photographic, low density, an
      asymmetric editorial grid rather than equal tiles. */
   name:'Vera Aesthetics', domain:'veraaesthetics.demo', path:'/treatments',
@@ -1355,6 +1336,7 @@ vera: {
 marbury: {
   id:'marbury', label:'Marbury Hale', sector:'Chartered accountants',
   layout:'ledger',
+  claim:'A client intake system built for accountancy: the regulated-advice boundary is enforced automatically, so no engagement goes out without the scope statement the practice is required to carry.',
   /* An accountancy client's year is a set of dates and a set of figures, so that
      is the page. No photography and no card containers anywhere, deliberately:
      the tenant proves a skin does not need an image bank or a box. */
@@ -1608,60 +1590,60 @@ function resolve(svc){
 
   // RULE-001, every journey acknowledges the practice's own terms
   out.docs.push(R.policyDoc);
-  out.fired.push({id:'RULE-001', kind:'', t:T.docs[R.policyDoc].title + ' acknowledgement required on every service.', in:'service = any'});
+  out.fired.push({id:'RULE-001', kind:'', t:T.docs[R.policyDoc].title + ' acknowledgement required on every service.', in:'Applies to the whole catalogue, no exceptions.'});
 
   // RULE-002, the constraint the system enforces so nobody has to remember it
   if(R.naming && has(R.naming.flag)){
-    if(CFG.pomNaming) out.fired.push({id:'RULE-002', kind:'', t:R.naming.on, in:'flags contains ' + R.naming.flag + ', rule = on'});
-    else out.fired.push({id:'RULE-002', kind:'block', t:R.naming.off, in:'flags contains ' + R.naming.flag + ', rule = off'});
+    if(CFG.pomNaming) out.fired.push({id:'RULE-002', kind:'', t:R.naming.on, in:'This service is the kind the rule applies to, and the rule is switched on.'});
+    else out.fired.push({id:'RULE-002', kind:'block', t:R.naming.off, in:'This service is the kind the rule applies to, but the rule has been switched off in practice settings.'});
   }
 
   // RULE-004, the prerequisite gate
   if(R.gate && has(R.gate.flag) && CFG.priorConsult){
     if(!CFG.hasHistory){
       out.reroute = R.gate.target;
-      out.fired.push({id:'RULE-004', kind:'flag', t:R.gate.fired, in:'flags contains ' + R.gate.flag + ', on_record = false'});
+      out.fired.push({id:'RULE-004', kind:'flag', t:R.gate.fired, in:'This service needs the prerequisite, and nothing is on record for this client yet.'});
     } else {
-      out.fired.push({id:'RULE-004', kind:'pass', t:R.gate.passed, in:'flags contains ' + R.gate.flag + ', on_record = true'});
+      out.fired.push({id:'RULE-004', kind:'pass', t:R.gate.passed, in:'This service needs the prerequisite, and it is already on record for this client.'});
     }
   }
 
   // RULE-006, eligibility minimum. Vera has one, Marbury Hale does not.
   if(R.age && R.age.flags.some(has)){
     out.ageMin = CFG.minAge;
-    out.fired.push({id:'RULE-006', kind:'', t:'Minimum age ' + CFG.minAge + ' applies. Date of birth is checked.', in:'flags contains ' + R.age.flags.join(' or ')});
+    out.fired.push({id:'RULE-006', kind:'', t:'Minimum age ' + CFG.minAge + ' applies. Date of birth is checked.', in:'This service carries an age restriction.'});
   }
 
   // RULE-010, screening
   if(CFG.screen && R.screenFlags.some(has)){
     out.screening = true;
-    out.fired.push({id:'RULE-010', kind:'', t:R.screenReq, in:'flags contains ' + R.screenFlags.join(' or ') + ', screening_enabled = true'});
+    out.fired.push({id:'RULE-010', kind:'', t:R.screenReq, in:'This service requires screening, and screening is switched on in practice settings.'});
   }
 
   // RULE-020 / 021 / 022, documents
   if(CFG.docs){
     if(R.priorDoc && R.priorDoc.flags.some(has)){
       out.docs.push(R.priorDoc.id);
-      out.fired.push({id:'RULE-021', kind:'', t:R.priorDoc.text, in:'flags contains ' + R.priorDoc.flags.join(' or ')});
+      out.fired.push({id:'RULE-021', kind:'', t:R.priorDoc.text, in:'Required for this service before anything else can proceed.'});
     }
     if(svc.doc){
       out.docs.push(svc.doc);
-      out.fired.push({id:'RULE-020', kind:'', t:'Document ' + svc.doc + ' required for this service.', in:'service = ' + svc.id});
+      out.fired.push({id:'RULE-020', kind:'', t:'Document ' + svc.doc + ' required for this service.', in:'Specific to ' + unesc(svc.name) + '.'});
     }
     if(R.optionalDoc && R.optionalDoc.flags.some(has)){
       out.docs.push(R.optionalDoc.id);
-      out.fired.push({id:'RULE-022', kind:'', t:R.optionalDoc.text, in:'flags contains ' + R.optionalDoc.flags.join(' or ')});
+      out.fired.push({id:'RULE-022', kind:'', t:R.optionalDoc.text, in:'Offered for this service. Optional, and cannot block the journey.'});
     }
   } else {
-    out.fired.push({id:'RULE-020', kind:'', t:'Document step disabled in practice settings. Nothing is signed.', in:'documents_enabled = false'});
+    out.fired.push({id:'RULE-020', kind:'', t:'Document step disabled in practice settings. Nothing is signed.', in:'Switched off for every service while this setting holds.'});
   }
 
   // RULE-030 / 031, money
   const word = T.money.word;
   if(svc.price === 0){
-    out.fired.push({id:'RULE-031', kind:'', t:'Zero-price service. No payment step.', in:'price = 0.00'});
+    out.fired.push({id:'RULE-031', kind:'', t:'Zero-price service. No payment step.', in:'The service itself is free.'});
   } else if(!CFG.pay){
-    out.fired.push({id:'RULE-030', kind:'', t:'Payment at booking disabled in practice settings.', in:'payment_enabled = false'});
+    out.fired.push({id:'RULE-030', kind:'', t:'Payment at booking disabled in practice settings.', in:'Switched off for every service while this setting holds.'});
   } else {
     let amt = 0, label = '';
     if(CFG.depMode === 'percent'){ amt = round2(svc.price * CFG.depVal / 100); label = CFG.depVal + '% ' + word; }
@@ -1669,14 +1651,14 @@ function resolve(svc){
     else if(CFG.depMode === 'full'){ amt = svc.price; label = 'full payment'; }
     if(CFG.depMode !== 'none' && amt > 0){
       out.deposit = {mode:CFG.depMode, amount:amt, label:label};
-      out.fired.push({id:'RULE-030', kind:'', t:'Taking ' + label + ' of ' + gbp(amt) + ' at booking.', in:'price = ' + gbp(svc.price) + ', mode = ' + CFG.depMode + ', value = ' + CFG.depVal});
+      out.fired.push({id:'RULE-030', kind:'', t:'Taking ' + label + ' of ' + gbp(amt) + ' at booking.', in:'Full price ' + gbp(svc.price) + ', deposit rule set to "' + label + '" in practice settings.'});
     } else {
-      out.fired.push({id:'RULE-030', kind:'', t:'Nothing taken at booking.', in:'mode = none'});
+      out.fired.push({id:'RULE-030', kind:'', t:'Nothing taken at booking.', in:'Deposit rule set to "none" in practice settings.'});
     }
   }
 
   // RULE-040, the practice's own notice terms
-  out.fired.push({id:'RULE-040', kind:'', t:R.notice, in:'policy = ' + R.policyDoc + ' ' + T.docs[R.policyDoc].v});
+  out.fired.push({id:'RULE-040', kind:'', t:R.notice, in:'Set out in the practice’s own ' + T.docs[R.policyDoc].title + ' (' + T.docs[R.policyDoc].v + ').'});
 
   return out;
 }
@@ -2341,7 +2323,7 @@ function downloadDocPdf(id){
   setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 2000);
   traceEvent('EXPORT', 'Signed copy of ' + id + ' ' + d.v + ' issued as ' + name +
     '. Rendered from the stored document version and the signature event, and it carries the same hash.',
-    'document = ' + id + ', hash = ' + sd.hash.slice(0, 16) + '...');
+    'Verifiable checksum (SHA-256): ' + sd.hash.slice(0, 16) + '… — re-hash the download and it matches exactly.');
 }
 
 /* ============================================================
@@ -2369,7 +2351,7 @@ async function commit(){
     rules:[...new Set(S.trace.filter(t => t.id.indexOf('RULE') === 0).map(t => t.id))]
   };
 
-  traceEvent('COMMIT', 'Record ' + S.ref + ' committed atomically: slot locked, documents sealed, payment captured, calendar event written, pack sent to ' + T.inbox + '.', 'transaction = single');
+  traceEvent('COMMIT', 'Record ' + S.ref + ' committed atomically: slot locked, documents sealed, payment captured, calendar event written, pack sent to ' + T.inbox + '.', 'Every part of this succeeds together, or none of it does — there is no half-booked state.');
   renderRecord();
   showPane('record');
 }
@@ -2442,7 +2424,7 @@ function selectService(id, viaCard){
   S.svcId = id; S.cat = svc.cat; S.slot = null; S.screen = {}; S.blocked = null;
   S.signed = {}; S.clauses = {}; S.paid = false; S.docIdx = 0; S.rerouted = null;
 
-  traceEvent('INPUT', 'Client selected: ' + unesc(svc.name) + (viaCard ? ', from the services page' : ''), 'service_id = ' + svc.id);
+  traceEvent('INPUT', 'Client selected: ' + unesc(svc.name) + (viaCard ? ', from the services page' : ''), 'Catalogue reference: ' + svc.id + '. This one choice now drives every requirement below.');
 
   const r = resolve(svc);
   if(r.reroute){
@@ -2469,13 +2451,13 @@ function bindBody(){
     S.screen[q.id] = val;
     if(val && q.yes === 'block'){
       S.blocked = q;
-      trace({id:q.rule, kind:'block', t:'BLOCK. ' + q.msg + ' Online journey stopped, client directed to contact the practice.', in:q.id + ' = yes'});
+      trace({id:q.rule, kind:'block', t:'BLOCK. ' + q.msg + ' Online journey stopped, client directed to contact the practice.', in:'Asked: “' + q.q + '” — answered yes.'});
     } else if(val && q.yes === 'flag'){
       if(S.blocked && S.blocked.id === q.id) S.blocked = null;
-      trace({id:q.rule, kind:'flag', t:'FLAG. ' + q.msg, in:q.id + ' = yes'});
+      trace({id:q.rule, kind:'flag', t:'FLAG. ' + q.msg, in:'Asked: “' + q.q + '” — answered yes.'});
     } else {
       if(S.blocked && S.blocked.id === q.id) S.blocked = null;
-      trace({id:q.rule, kind:'pass', t:'PASS. Nothing declared.', in:q.id + ' = no'});
+      trace({id:q.rule, kind:'pass', t:'PASS. Nothing declared.', in:'Asked: “' + q.q + '” — answered no.'});
     }
     render();
   });
@@ -2487,7 +2469,7 @@ function bindBody(){
     const [t,m] = b.dataset.slot.split('|');
     S.slot = {key:b.dataset.slot, date:new Date(Number(t)), min:Number(m)};
     const svc = svcById(S.svcId);
-    traceEvent('HOLD', 'Slot leased for 10 minutes: ' + fmtDate(S.slot.date) + ' ' + hhmm(S.slot.min) + ' to ' + hhmm(S.slot.min + svc.mins) + ', plus ' + CFG.buffer + ' min buffer. Nobody else can take it while the lease holds.', 'resource = ' + T.id + '-1, lease_ttl = 600s');
+    traceEvent('HOLD', 'Slot leased for 10 minutes: ' + fmtDate(S.slot.date) + ' ' + hhmm(S.slot.min) + ' to ' + hhmm(S.slot.min + svc.mins) + ', plus ' + CFG.buffer + ' min buffer. Nobody else can take it while the lease holds.', 'Held against ' + T.resource + '’s diary. Releases automatically if the booking isn’t finished in time.');
     render();
   });
 
@@ -2498,7 +2480,7 @@ function bindBody(){
     const r = resolve(svcById(S.svcId)), cur = doc(r.docs[S.docIdx]);
     S.clauses[cur.id] = S.clauses[cur.id] || {};
     S.clauses[cur.id][cb.dataset.clause] = cb.checked;
-    if(cb.checked) traceEvent('CLAUSE', 'Clause ' + (Number(cb.dataset.clause)+1) + ' of ' + cur.id + ' ' + cur.v + ' acknowledged individually, with its own timestamp.', 'document = ' + cur.id + ', clause = ' + cb.dataset.clause);
+    if(cb.checked) traceEvent('CLAUSE', 'Clause ' + (Number(cb.dataset.clause)+1) + ' of ' + cur.id + ' ' + cur.v + ' acknowledged individually, with its own timestamp.', 'Not one blanket “I agree” — each clause of ' + cur.title + ' is ticked, and proven, on its own.');
     render();
   });
 
@@ -2518,7 +2500,7 @@ function bindBody(){
     const time = new Date().toLocaleString('en-GB');
     const hash = await sha256(cur.id+'|'+cur.v+'|'+name+'|'+time+'|'+method+'|'+cur.body.join(' ')+'|'+cur.clauses.join(' '));
     S.signed[cur.id] = {name:name, time:time, method:method, hash:hash, img:sigImage()};
-    traceEvent('SIGN', cur.id + ' ' + cur.v + ' signed by ' + name + ', method ' + method + '. PDF rendered server-side and hashed. Version, timestamp, method, IP and per-clause events stored with it.', 'sha256 = ' + hash.slice(0,24) + '...');
+    traceEvent('SIGN', cur.id + ' ' + cur.v + ' signed by ' + name + ', method ' + method + '. PDF rendered server-side and hashed. Version, timestamp, method, IP and per-clause events stored with it.', 'Verifiable checksum (SHA-256): ' + hash.slice(0,24) + '… — proves this exact document, unaltered, was what was signed.');
     const nextUnsigned = r.docs.findIndex(d => !S.signed[d] && !doc(d).optional);
     if(nextUnsigned > -1) S.docIdx = nextUnsigned;
     render();
@@ -2528,7 +2510,7 @@ function bindBody(){
   if(auth) auth.onclick = () => {
     const r = resolve(svcById(S.svcId));
     S.paid = true;
-    traceEvent('PAYMENT', 'Payment intent authorised for ' + gbp(r.deposit.amount) + ', manual capture. Simulated. If the commit that follows fails, this authorisation is voided and nothing exists.', 'idempotency_key = ' + (S.slot ? S.slot.key : 'n/a'));
+    traceEvent('PAYMENT', 'Payment intent authorised for ' + gbp(r.deposit.amount) + ', manual capture. Simulated. If the commit that follows fails, this authorisation is voided and nothing exists.', 'Protected against being charged twice for the same slot, even on a double-click or a refresh.');
     render();
   };
 }
@@ -2548,9 +2530,9 @@ function validateDetails(r){
       if(m < 0 || (m === 0 && NOW.getDate() < dob.getDate())) age--;
       if(age < r.ageMin){
         e.dob = 'This treatment has a minimum age of ' + r.ageMin + '.';
-        trace({id:'RULE-006', kind:'block', t:'BLOCK. Date of birth gives age ' + age + ', below the minimum of ' + r.ageMin + '.', in:'dob = ' + c.dob});
+        trace({id:'RULE-006', kind:'block', t:'BLOCK. Date of birth gives age ' + age + ', below the minimum of ' + r.ageMin + '.', in:'Date of birth entered: ' + fmtDate(dob) + '.'});
       } else {
-        trace({id:'RULE-006', kind:'pass', t:'PASS. Age ' + age + ' meets the minimum of ' + r.ageMin + '.', in:'dob = ' + c.dob});
+        trace({id:'RULE-006', kind:'pass', t:'PASS. Age ' + age + ' meets the minimum of ' + r.ageMin + '.', in:'Date of birth entered: ' + fmtDate(dob) + '.'});
       }
     }
   }
@@ -2698,6 +2680,10 @@ function paintTenant(){
   $('navlinks').innerHTML = T.nav.map(s => '<span>'+esc(s)+'</span>').join('');
   $('w-title-head').textContent = T.widgetTitle;
   $('tenant-note').textContent = T.note;
+  $('dock-claim').textContent = T.claim;
+  $('foot-built-h').textContent = 'Built for ' + T.sector.toLowerCase() + ', not adapted from something else';
+  $('foot-built-body').textContent = T.claim + ' The same underlying engine, scheduling, rules, signature capture and evidence layer, also runs other regulated practices, each with its own rules, its own documents and its own look.';
+  $('foot-credits-body').textContent = 'Booking Engine prototype, ' + T.name + ' build. ' + T.name + ' is fictional, created by Main Stage Studio.';
 
   renderSite();
 
@@ -2717,30 +2703,6 @@ function paintTenant(){
   $('row-age').style.display = A.showAge ? '' : 'none';
   $('lbl-depmode').textContent = A.depositWord;
 
-  $('tenant-switch').innerHTML = TENANT_ORDER.map(id => TENANTS[id]).map(t =>
-    '<button class="tsw-btn'+(t.id===T.id?' on':'')+'" data-tenant="'+t.id+'">'+esc(t.label)+'</button>'
-  ).join('');
-  document.querySelectorAll('[data-tenant]').forEach(b => b.onclick = () => switchTenant(b.dataset.tenant));
-}
-
-function switchTenant(id){
-  if(id === T.id) return;
-  T = TENANTS[id];
-  S = freshState();
-  /* Practice settings belong to the practice, so they go back to their
-     defaults with the tenant. Carrying them across is how a reviewer ends up
-     looking at a journey with the documents step switched off and reading it
-     as this practice requiring nothing. */
-  const reset = resetCfg();
-  traceEvent('TENANT', 'Switched to ' + T.name + ', ' + T.sector.toLowerCase() + '. Same engine, same rules engine, same rule numbers. Everything that changed came from the tenant record.', 'tenant = ' + T.id);
-  if(reset.length) traceEvent('CONFIG', 'Practice settings returned to their defaults for this practice. Settings belong to the practice, so they do not follow you from the last one.', 'reset = ' + reset.join(', '));
-  paintTenant();
-  renderTrace();
-  renderRecord();
-  closeWidget();
-  hideDoneBand();
-  showPane('trace');
-  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 /* ============================================================
@@ -2770,7 +2732,7 @@ function openWidget(svcId){
   hideDoneBand();
   $('mount').hidden = false;
   $('site-view').style.display = 'none';
-  traceEvent('START', 'Journey started from ' + T.domain + (svcId ? ', with service context carried from the page' : ''), 'tenant = ' + T.id + ', channel = embedded widget');
+  traceEvent('START', 'Journey started from ' + T.domain + (svcId ? ', with service context carried from the page' : ''), 'Runs embedded in the practice’s own page — no redirect to a separate booking site.');
   if(svcId) selectService(svcId, true);
   S.step = 'service';
   render();
@@ -2784,8 +2746,8 @@ function closeWidget(){
 
 /* End of the journey. The widget closes, but the client is returned to the
    practice site with a standing confirmation rather than to a blank page.
-   The committed record and the rule trace survive, so the evidence panes
-   still show what happened. */
+   The committed record and the rules engine trace survive, so the evidence
+   panes still show what happened. */
 function finishJourney(){
   const c = S.committed, keptTrace = S.trace;
   S = freshState();
@@ -2822,7 +2784,7 @@ function bindShell(){
     if(S.step === 'screen'){
       const flag = T.screening.find(q => S.screen[q.id] === true && q.yes === 'flag');
       if(flag && S.svcId !== T.rules.gate.target){
-        traceEvent('REROUTE', T.rules.rerouteEvent, 'flag = ' + flag.id);
+        traceEvent('REROUTE', T.rules.rerouteEvent, 'Triggered by the answer to: “' + flag.q + '”');
         S.svcId = T.rules.gate.target; S.slot = null; S.signed = {}; S.clauses = {}; S.paid = false;
         resolve(svcById(T.rules.gate.target)).fired.forEach(f => trace(f));
       }
@@ -2846,7 +2808,7 @@ function bindShell(){
     const el = $(id);
     el.onchange = () => {
       CFG[key] = kind === 'bool' ? el.checked : (kind === 'num' ? Number(el.value) : el.value);
-      traceEvent('CONFIG', 'Practice setting changed: ' + labelFn() + ' is now ' + (kind === 'bool' ? (el.checked ? 'on' : 'off') : el.value) + '. The journey recalculates immediately.', key + ' = ' + CFG[key]);
+      traceEvent('CONFIG', 'Practice setting changed: ' + labelFn() + ' is now ' + (kind === 'bool' ? (el.checked ? 'on' : 'off') : el.value) + '. The journey recalculates immediately.', 'Applies to every booking from this point forward, not just this one.');
       if(S.svcId){
         S.signed = {}; S.clauses = {}; S.paid = false; S.docIdx = 0;
         if(key === 'priorConsult' || key === 'hasHistory') S.slot = null;
@@ -2862,9 +2824,9 @@ function bindShell(){
 
 /* ============================================================
    DOCK + INSPECTOR TOGGLE
-   Dock auto-opens briefly on load (disclaimer + tenant switcher get seen
-   once), then docks itself back down. Both stay click/keyboard toggleable
-   after that. Independent of the tenant-render pipeline above.
+   Dock auto-opens briefly on load (the demonstration-prototype disclaimer
+   gets seen once), then docks itself back down. Both stay click/keyboard
+   toggleable after that. Independent of the tenant-render pipeline above.
    ============================================================ */
 function bindDock(){
   const dock = $('mss-dock'), pill = $('dock-pill');
@@ -2909,15 +2871,9 @@ function bindInspectorToggle(){
    of on a conveyancer and a switcher they have to find.
    ============================================================ */
 const COACH = [
-  { sel:'#cta-hero', side:'bottom', at:1400, hold:5200,
-    head:'Start here',
-    body:'The journey opens inside the practice’s own page. No redirect to a booking site, no separate login.' },
   { sel:'#ins-toggle', side:'left', at:900, hold:5200,
-    head:'The rule trace',
-    body:'Every question you are asked appears here first, with the numbered rule that produced it. Open it whenever you want to see why something was asked.' },
-  { sel:'#dock-pill', side:'top', at:900, hold:5600,
-    head:'Three practices, one engine',
-    body:'A solicitor, an accountant and a clinic. Switch between them here, or start again, at any point.' },
+    head:'The rules engine',
+    body:'Every question you are asked appears here first, with the numbered rule that produced it, and each rule is a setting the practice controls. Open it whenever you want to see why something was asked.' },
 ];
 
 function bindCoach(){
