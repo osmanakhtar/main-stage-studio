@@ -203,10 +203,15 @@ const built = [
     }
     .clip-play:hover span { transform: translateY(-2px); }
 
+    /* Directional fill hover, matching .btn-fill on the rest of the site:
+       the terracotta panel sweeps in from the left on hover rather than a
+       flat background swap. */
     .cta {
+      position: relative;
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
+      overflow: hidden;
       background: var(--near-black);
       color: var(--parchment);
       font-size: 0.75rem;
@@ -215,10 +220,19 @@ const built = [
       text-transform: uppercase;
       text-decoration: none;
       padding: 1rem 2.25rem;
-      transition: background 0.25s ease;
+      will-change: transform;
     }
-    .cta:hover { background: var(--ember); }
-    .cta:active { transform: translateY(1px); }
+    .cta__bg {
+      position: absolute;
+      inset: 0;
+      background: var(--terracotta);
+      transform: translateX(-101%);
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+    }
+    .cta:hover .cta__bg { transform: translate(0,0); }
+    .cta__label { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 0.6rem; }
+    .cta:active { transform: translateY(1px) scale(0.98); }
 
     .cta-ghost {
       display: inline-flex;
@@ -549,10 +563,16 @@ const built = [
     <!-- ── CTA ─────────────────────────────────────────────────── -->
     <section class="wrap px-6 md:px-10 py-20 md:py-28">
       <div class="reveal">
-        <h2 class="display mb-8" style="font-size:clamp(1.875rem,4vw,3rem);max-width:22ch;">
+        <h2 class="display mb-6" style="font-size:clamp(1.875rem,4vw,3rem);max-width:22ch;">
           Losing prospects somewhere between interested and signed?
         </h2>
-        <a href="/#contact" class="cta">Start a project</a>
+        <p class="body-copy measure mb-10">
+          That's the gap Booking Engine closes, dropped into the site you already have. Tell us about your practice, and we'll show you what it looks like running on your own booking flow.
+        </p>
+        <a href="/#contact" class="cta">
+          <span class="cta__bg"></span>
+          <span class="cta__label">Start a project</span>
+        </a>
       </div>
     </section>
 

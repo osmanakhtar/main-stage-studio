@@ -1059,10 +1059,10 @@ const thumbWidths    = [420, 688, 1032, 1376];
            the offer, so the card should drop you into it. Titled and
            copy-led from the client's side, not the internal "Intake" name,
            per Osman 9 Aug 2026. -->
-      <a href="/work/booking-engine/prototype/" class="work-card spotlight-card block no-underline reveal rd1 mb-6" id="work-intake">
+      <div class="work-card spotlight-card block reveal rd1 mb-6" id="work-intake">
         <div class="grid grid-cols-1 md:grid-cols-2">
 
-          <div class="work-thumb work-thumb-fill overflow-hidden" style="background:#0E0D0B;">
+          <a href="/work/booking-engine/prototype/" class="work-thumb work-thumb-fill overflow-hidden block" style="background:#0E0D0B;" aria-label="Open the Self-Serve Onboarding prototype">
             <Image src={intakeThumb}
                  alt="The self-serve onboarding prototype at its documents step: an accountancy practice's terms of business with its clauses, and a note beside it explaining that each clause is acknowledged separately"
                  class="work-thumb-inner object-cover w-full h-full"
@@ -1074,7 +1074,7 @@ const thumbWidths    = [420, 688, 1032, 1376];
                  loading="lazy"
                  decoding="async"
                  style="object-position:center top;" />
-          </div>
+          </a>
 
           <div class="flex flex-col justify-between p-8 md:p-10 border-t md:border-t-0 md:border-l" style="border-color:rgba(28,23,18,0.12);">
             <div>
@@ -1098,17 +1098,23 @@ const thumbWidths    = [420, 688, 1032, 1376];
                 </div>
               </div>
             </div>
-            <div class="pt-6 mt-8 border-t flex items-center justify-between" style="border-color:rgba(28,23,18,0.09);">
-              <span class="btn-ghost" aria-hidden="true">
+            <div class="pt-6 mt-8 border-t flex items-center gap-6 flex-wrap" style="border-color:rgba(28,23,18,0.09);">
+              <a href="/work/booking-engine/prototype/" class="btn-ghost">
                 Open the prototype
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                   <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-              </span>
+              </a>
+              <a href="/work/booking-engine/" class="btn-ghost">
+                Read the case study
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <path d="M1 6.5h11M7.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>
-      </a>
+      </div>
 
       <!-- Featured: Sable. Promoted 10 Aug 2026 from the smaller second row:
            it is the only finished, written-up piece on the site, so it sits
