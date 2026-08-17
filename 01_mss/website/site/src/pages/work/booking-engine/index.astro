@@ -11,11 +11,9 @@ import '../../../styles/global.css';
 
 // Captured 9 Aug 2026 from the live prototype at /work/booking-engine/prototype/,
 // switched to the Marbury Hale (accountancy) tenant. The dashboard shot is
-// the practice's own site with its key-dates panel; the rule-trace shot is
-// the compliance ledger mid-journey, showing the AML and engagement rules
-// that fired before a booking slot was even offered.
+// the practice's own site with its key-dates panel. The rule trace panel is
+// a demo/debug tool, not a customer-facing feature, so it's not shown here.
 import marburyHero from '../../../assets/intake-marbury-hero.jpg';
-import ruleTraceDetail from '../../../assets/intake-rule-trace-detail.png';
 
 const built = [
   {
@@ -411,7 +409,7 @@ const built = [
             <p class="eyebrow mb-5">The challenge</p>
             <p class="display" style="font-size:clamp(3.5rem,8vw,6rem);line-height:0.9;">5</p>
             <p class="text-sm font-light mt-4" style="color:var(--ink-muted);max-width:24ch;">
-              The handoffs a regulated practice usually asks a new client to sit through before any work begins.
+              Handoffs before a new enquiry becomes a signed client.
             </p>
           </div>
           <div class="reveal flex flex-col gap-6">
@@ -419,7 +417,7 @@ const built = [
               A regulated practice doesn't lose a client to bad design.
             </h2>
             <p class="body-copy">
-              It loses them between the enquiry and the engagement: a call to book, an email with the letter of engagement attached, a chase for the signature, a separate call to take the deposit. Every one of those is a place for someone with three other quotes open in other tabs to simply not get back to it.
+              It loses them between the enquiry and the engagement: a call to book, an email with the letter of engagement, a chase for the signature, a separate call for the deposit. Every extra step is a chance for someone with three other quotes open to not get back to it.
             </p>
             <p class="body-copy">
               None of that is a design problem. A nicer enquiry form does not remove a single handoff. Removing the handoffs is a systems problem, which is what this had to be built as.
@@ -470,29 +468,19 @@ const built = [
             The practice's own site, and the ledger running behind it.
           </h2>
           <p class="body-copy measure mt-6">
-            Marbury Hale's site carries its own key dates and fee schedule, no photography, dense and ruled, the way a firm of accountants actually reads. Beside the client's journey sits the practice's own view: the exact rule that required each question, before a booking slot was even offered.
+            Marbury Hale's site carries its own key dates and fee schedule: dense and ruled, the way a firm of accountants actually reads.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div class="grid grid-cols-1 gap-6 md:gap-8">
           <figure class="reveal">
             <div class="shot">
               <Image src={marburyHero} alt="The Marbury Hale site: chartered accountants, a key-dates panel for the 2026/27 tax year, and the onboarding entry point"
                      widths={[560, 900, 1800]}
-                     sizes="(min-width: 768px) 540px, 100vw"
+                     sizes="100vw"
                      format="webp" quality={78} loading="lazy" decoding="async" />
             </div>
             <figcaption class="shot-cap">Marbury Hale, the tenant site</figcaption>
-          </figure>
-
-          <figure class="reveal">
-            <div class="shot">
-              <Image src={ruleTraceDetail} alt="The rule trace panel mid-journey: numbered AML, due-diligence and engagement rules, each with the value that fired it"
-                     widths={[560, 900, 1800]}
-                     sizes="(min-width: 768px) 540px, 100vw"
-                     format="webp" quality={78} loading="lazy" decoding="async" />
-            </div>
-            <figcaption class="shot-cap">The rule trace, mid-journey</figcaption>
           </figure>
         </div>
 
@@ -552,7 +540,7 @@ const built = [
             All three tenants are live and open to try, built to be taken apart rather than only looked at. Nothing here is mocked up: the rules fire for real, the slot holds for real, the signature hashes for real.
           </p>
           <p class="body-copy">
-            Wiring it to a real calendar, a real payment provider and a real client record is integration work, not redesign. The engine and the rules are already doing the real work.
+            Wiring it to a real calendar, a real payment provider and a real client record is integration work, not redesign. It drops into the site you already have: you keep what's working, and the engine handles what isn't.
           </p>
         </div>
       </div>
