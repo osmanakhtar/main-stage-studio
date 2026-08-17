@@ -7,8 +7,11 @@ Two workflows, two gates, same convention as the PureMed pipeline:
 | `mss-site-staging.yml` | Push/merge to `main` touching `01_mss/website/site/**` | PR review + merge | Cloudways staging webroot |
 | `mss-site-deploy.yml` | Manual dispatch, type `deploy` to confirm | Explicit human confirmation | Cloudways production webroot |
 
-Production stays manual until the DNS cutover from the existing WordPress + Bricks
-site (`mainstagestudio.co.uk`) is confirmed. Merge-to-main only ever reaches staging.
+DNS cutover from the existing WordPress + Bricks site to the Astro static app
+completed 7 August 2026: `mainstagestudio.co.uk` and its `www` alias now point at
+`mss-static`, and WordPress is fully retired from the domain (reachable only at
+its temporary Cloudways URL). Production deploy stays a manual, explicitly
+confirmed step regardless: merge-to-main only ever reaches staging.
 
 ## One-time setup
 
@@ -24,7 +27,7 @@ site (`mainstagestudio.co.uk`) is confirmed. Merge-to-main only ever reaches sta
    - `CLOUDWAYS_HOST` — server IP for `mss-do-lon-01`
    - `CLOUDWAYS_USER` — `master_[id]`, the master SSH username for the new app
    - `CLOUDWAYS_WEBROOT_STAGING` — staging app webroot path
-   - `CLOUDWAYS_WEBROOT_PROD` — production app webroot path (set at cutover)
+   - `CLOUDWAYS_WEBROOT_PROD` — production app webroot path (set at cutover, 7 August 2026)
 
 Split staging/prod webroot secrets (rather than the setup doc's single
 `CLOUDWAYS_WEBROOT`) so a merge to `main` can never physically reach production —

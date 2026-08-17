@@ -12,7 +12,7 @@
 
 A new Cloudways application on the existing `mss-do-lon-01` server, configured to serve static HTML from its webroot. A dedicated SSH keypair lets GitHub Actions rsync built `dist/` output to this app on every deploy. No additional server cost — applications on Cloudways Flexible are free; the server is already paid for.
 
-The WordPress application (`mainstagestudio`) stays untouched until DNS cutover is confirmed.
+The WordPress application (`mainstagestudio`) stayed untouched until DNS cutover. Cutover completed 7 August 2026: `mainstagestudio.co.uk` and its `www` alias now point at `mss-static`, and WordPress is fully retired from the domain, reachable only at its temporary Cloudways URL.
 
 ---
 
@@ -153,7 +153,7 @@ ssh -i ~/.ssh/github_actions_mss master_[id]@[server-ip] "rm [webroot-path]/inde
 4. Check propagation at `dnschecker.org`
 5. Once propagated, install SSL: Application → **SSL Certificate** → add `staging.mainstagestudio.co.uk` → Let's Encrypt
 
-The staging subdomain is where GitHub Actions deploys `staging/*` branches. Production (`mainstagestudio.co.uk`) stays on the WordPress app until the cutover.
+The staging subdomain is where GitHub Actions deploys `staging/*` branches. Production (`mainstagestudio.co.uk`) stayed on the WordPress app until the cutover, completed 7 August 2026.
 
 ---
 
@@ -193,7 +193,7 @@ Follows the same conventions as `mss-new-site-deployment-guide.md`:
 
 ## Notes
 
-**On the WordPress app:** Do not modify or touch `mainstagestudio` (the existing WordPress application) during this setup. It stays live at `mainstagestudio.co.uk`. DNS cutover to the new static app is a separate, final step handled in the go-live checklist — not during setup.
+**On the WordPress app:** During this setup, `mainstagestudio` (the existing WordPress application) was left untouched and stayed live at `mainstagestudio.co.uk`. DNS cutover to the new static app was a separate, final step handled in the go-live checklist, completed 7 August 2026: WordPress is now fully retired from the domain and reachable only at its temporary Cloudways URL.
 
 **On the PHP app type:** The Cloudways PHP app runs Nginx + PHP-FPM. PHP-FPM is unused for a pure static site but is available if a `contact.php` endpoint is needed (MSS contact form migration). No configuration change is required for this — Nginx routes `.php` files through PHP-FPM automatically, and static `.html` files are served directly.
 
