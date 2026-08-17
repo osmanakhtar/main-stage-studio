@@ -128,7 +128,8 @@ body{
   font:inherit;font-size:12px;font-weight:600;cursor:pointer;
   background:transparent;color:var(--parchment);
   border:1px solid rgba(245,239,229,.28);border-radius:3px;padding:8px 14px;
-  transition:background .18s,border-color .18s
+  transition:background .18s,border-color .18s;
+  text-decoration:none;display:inline-block
 }
 .btn-ghost:hover{background:rgba(245,239,229,.09);border-color:rgba(245,239,229,.5)}
 
@@ -732,6 +733,7 @@ select.num{width:auto;text-align:left}
         <span id="tenant-note"></span>
       </div>
       <div class="head-actions">
+        <a class="btn-ghost" href="/">&larr; Main Stage Studio</a>
         <button class="btn-ghost" id="btn-reset">Start again</button>
       </div>
       <p class="dock-disclaimer">
@@ -2824,9 +2826,10 @@ function bindShell(){
 
 /* ============================================================
    DOCK + INSPECTOR TOGGLE
-   Dock auto-opens briefly on load (the demonstration-prototype disclaimer
-   gets seen once), then docks itself back down. Both stay click/keyboard
-   toggleable after that. Independent of the tenant-render pipeline above.
+   Dock starts minimised on load and on every refresh: a visitor arriving
+   on a practice-specific link should see that practice's own site first,
+   not a tool panel already open over it. Click/keyboard toggleable at any
+   point. Independent of the tenant-render pipeline above.
    ============================================================ */
 function bindDock(){
   const dock = $('mss-dock'), pill = $('dock-pill');
@@ -2838,10 +2841,7 @@ function bindDock(){
   pill.addEventListener('keydown', (e) => {
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); setOpen(!dock.classList.contains('open')); }
   });
-  setOpen(true);
-  const autoClose = setTimeout(() => setOpen(false), 4500);
-  dock.addEventListener('mouseenter', () => clearTimeout(autoClose));
-  pill.addEventListener('click', () => clearTimeout(autoClose));
+  setOpen(false);
 }
 
 function bindInspectorToggle(){
