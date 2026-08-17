@@ -1,3 +1,11 @@
+---
+project: main-stage-studio
+status: live
+next: "Act on the 16 Aug capability audit: two engines are conflated on one manifest schema"
+blocked_on: ""
+owner: osman
+---
+
 # Stage — Full Build Plan
 *MSS Client Review Tool. First deployment: PureMed Aesthetics.*
 *Date: 24 June 2026*

@@ -1,3 +1,12 @@
+---
+project: main-stage-studio
+status: draft
+next: "Founder sign-off, then update the decisions log"
+blocked_on: "Founder sign-off. Nothing here is canon until then"
+owner: osman
+updated: 2026-07-24
+---
+
 # MSS Clinic Content Engine — End-to-End POC Plan
 
 *Created: 24 July 2026*
