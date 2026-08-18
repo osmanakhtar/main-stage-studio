@@ -553,9 +553,21 @@ html, body {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 32px;
+  margin-bottom: 4px;
   display: block;
 }
+
+/* Full path of the file being viewed, shown under the filename label */
+#content-filepath {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted, #8A8378);
+  margin-bottom: 32px;
+  display: none;
+  user-select: all;
+}
+#content-filepath.visible { display: block; }
 
 /* ─── Markdown rendering styles ─── */
 #content h1 {
@@ -1184,6 +1196,7 @@ html, body {
     <!-- Rendered content (hidden until a file is loaded) -->
     <div id="content" role="main">
       <span id="content-filename"></span>
+      <span id="content-filepath"></span>
       <div id="md-output"></div>
     </div>
 
@@ -1240,6 +1253,7 @@ const emptyState       = document.getElementById('empty-state');
 const contentEl        = document.getElementById('content');
 const mdOutput         = document.getElementById('md-output');
 const filenameLabel    = document.getElementById('content-filename');
+const filepathLabel    = document.getElementById('content-filepath');
 const dropOverlay      = document.getElementById('drop-overlay');
 const fileInput        = document.getElementById('file-input');
 const btnSingle        = document.getElementById('btn-single-file');
@@ -1677,6 +1691,21 @@ function decorateLinks(root) {
 }
 
 /* ─── Render a markdown, CSV, or JSON string into the content pane ─── */
+// Shows the full path of the file currently being viewed, under the filename
+// label. Folder mode has a real path (root folder name + relative path);
+// single-file upload/drop only ever gets a bare filename from the browser,
+// so the path row is hidden rather than showing something misleading.
+function setFilePath(fullPath) {
+  if (fullPath) {
+    filepathLabel.textContent = fullPath;
+    filepathLabel.title = fullPath;
+    filepathLabel.classList.add('visible');
+  } else {
+    filepathLabel.textContent = '';
+    filepathLabel.classList.remove('visible');
+  }
+}
+
 function renderDoc(text, filename, type) {
   let cleanHtml;
   if (type === 'csv') {
@@ -1735,6 +1764,8 @@ async function loadFile(file) {
   renderDoc(text, file.name, fileTypeOf(file.name));
   // Show the filename as a breadcrumb above the content (no path available)
   setMainBreadcrumb(file.name);
+  // Single-file upload/drop never exposes the parent path, so hide the path row
+  setFilePath(null);
 }
 
 /* ─── Single-file upload (button + hidden input) ─── */
@@ -2151,6 +2182,7 @@ async function selectEntry(idx) {
 
   const text = await file.text();
   renderDoc(text, entry.name, entry.type);
+  setFilePath(entry.path ? `${rootFolderName}/${entry.path}/${entry.name}` : `${rootFolderName}/${entry.name}`);
 }
 
 /* ─── Folder open buttons ─── */
