@@ -1,7 +1,7 @@
 # MSS Social Content Plan — LinkedIn + Instagram
 
-*Created: 6 August 2026*
-*Status: PROPOSAL — first pass, not yet run. Sign off before scheduling anything live.*
+*Created: 6 August 2026. Updated: 18 August 2026.*
+*Status: page pipeline (content-engine, 4 of 5 pillars) live for v1, manual posting; personal-profile stream and Instagram still not run. See §8.*
 *Companion docs: `mss-tone-of-voice.md`, `mss-decisions-log.md` (LinkedIn company page entry), `mss-clinic-content-model.md` (pillar/cadence pattern this borrows from).*
 
 **Purpose:** MSS has no social presence beyond a claimed, empty LinkedIn page. The homepage is close to locked. This is the next build: a content engine for the studio itself, using the same review-gated pipeline already proven on FSC and PureMed, pointed at MSS.
@@ -98,9 +98,9 @@ MSS itself is not a regulated business, so the compliance load here is much ligh
 
 - [ ] Higgsfield credit top-up — needed before pillar 5 (brand/visual) or any Instagram cadence is possible at all
 - [ ] Confirm 8+8/month cadence is sustainable alongside client delivery, or scale down for month one
-- [ ] LinkedIn company page vs. Osman's personal profile as the primary posting surface (the "thinking public" content reads as personal opinion, likely belongs on a personal profile with the company page as a slower-moving mirror, worth deciding explicitly)
+- [x] LinkedIn company page vs. Osman's personal profile as the primary posting surface: **resolved 18 Aug 2026.** Personal profile leads (founder POV, teardowns, philosophy; where a regulated-business prospect actually checks credibility). Company page is a slower-moving mirror, carrying only Process transparency, Case study/proof, and Studio philosophy in studio voice, plus Brand/visual once unblocked. A content pipeline for the page is built at `content-engine/` (SOP-MSS-003); the personal-profile stream stays manual for now.
 - [ ] First month's teardown/POV topics — needs a running list so the writing block isn't starting from a blank page each week
 
 ---
 
-**Resume prompt:** MSS social content plan drafted 6 Aug 2026 at `01_mss/marketing/mss-social-content-plan.md`. Next: Osman picks LinkedIn posting surface (personal vs company page) and decides on Higgsfield credit top-up; then draft month-one teardown/POV topic list and Higgsfield asset briefs.
+**Resume prompt:** MSS social content plan drafted 6 Aug 2026 at `01_mss/marketing/mss-social-content-plan.md`; posting-surface decision resolved 18 Aug 2026 (personal leads, page mirrors, see §8), and the page pipeline is built at `content-engine/` (SOP-MSS-003). Next: Higgsfield credit top-up decision (unblocks Brand/visual and Instagram entirely), month-one teardown/POV topic list for the personal-profile stream, and running the content-engine loop for a full month before judging cadence.
