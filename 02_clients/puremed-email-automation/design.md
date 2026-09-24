@@ -62,12 +62,16 @@ The extra cost is nothing: Cloudways and the mailbox are already paid for. It ad
    contacts · tags · enrolments · sends                ▲
         ▲                                              │
         │   every 10 min                               │
- Cloudways cron → worker.php ─── due sends ──render──► send
+ Cloudways cron → worker.php                           │
+        │   1. check care@ for new booking emails (IMAP, read-only)
+        │      → matched lead: stop sequence, reason "booked"
+        │   2. due sends ──render─────────────────────►send
         │   (lock, batch ≤ 20, retry with backoff, quiet hours)
         │
  /api/unsubscribe.php?t=…   → stop all, one-click (RFC 8058)
- /api/booked.php?t=…        → stop sequence (signed link or booking webhook)
- Daily digest to clinic     → new sign-ups, each with a "mark booked" link
+ /api/booked.php?t=…        → manual stop (signed link, fallback only)
+ Daily digest to clinic     → new sign-ups, auto-stopped bookings,
+                              unmatched bookings to confirm by hand
 ```
 
 ### Where the code lives
@@ -90,6 +94,10 @@ enrolments   id, contact_id, sequence, enrolled_at,
 
 sends        id, enrolment_id, step, due_at, sent_at,
              status (pending|sent|failed|skipped), attempts, last_error, message_id
+
+booking_emails uidvalidity, uid (unique pair), received_at, parsed_email, parsed_name,
+             service, appointment_at, is_cancellation, parse_method (regex|ai|failed),
+             matched_contact_id, outcome (stopped|possible_match|no_match|unparsed)
 ```
 
 ### Sequence definition (config, not code)
@@ -121,13 +129,30 @@ return [
 
 ### Knowing she has booked
 
-This is the one real dependency, and I need an answer on it (section 8). In order of preference:
+Every booking already sends a notification email to `care@puremed.uk`. That inbox is the booking signal, so there's no booking-system integration to build.
 
-1. **The booking tool has a webhook** (Cliniko, Fresha, Calendly and others do). It posts to `/api/booked.php`, matched on email. The sequence stops automatically.
-2. **No webhook:** every email's booking link carries her token (`?c=…`). Clicking it doesn't stop anything, since a click isn't a booking. But the daily digest to the clinic lists "clicked book" contacts, each with a one-tap signed **Mark booked** link.
-3. **Minimum:** a "Mark booked" link in the new-sign-up notification.
+**How it works**
 
-Without one of these, a woman who has already booked keeps getting "why haven't you booked" emails. That's the fastest way to make a good sequence feel like spam.
+1. **Filter in the mailbox (one-off setup).** A mail rule on `care@` puts booking notifications into their own folder or label, e.g. `Bookings/Auto`, matched on the booking system's sender address and subject. Everything else in `care@` is untouched.
+2. **The worker reads only that folder.** At the start of every cron run, before any sends, `worker.php` connects over IMAP, opens `Bookings/Auto` only, and fetches messages it hasn't processed yet. It uses `BODY.PEEK`, so nothing is marked as read and staff see the inbox exactly as before. It tracks processed messages by their IMAP UID and folder UIDVALIDITY in a small `booking_emails` table.
+3. **Parse.** It pulls out the patient's email, name, the service booked and the appointment time. Booking systems send a fixed template, so a template parser (regex against known fields) is the primary route: it's deterministic, testable and free.
+4. **Match and stop.**
+   - The email matches a lead exactly (case-insensitive) → stop the enrolment with reason `booked`. This covers any booking, not only the £25 assessment: a woman who booked a treatment directly shouldn't be asked to book an assessment either.
+   - No email match but the name matches an active lead → **don't auto-stop.** It goes into the daily digest as "Possible match: booked as jane.doe@work.com, lead is jane@gmail.com. [Mark booked]". A wrong auto-stop silently loses a lead, so a person confirms this one.
+   - No match at all → ignore it. That's an existing patient or a booking from another source.
+5. **Cancellations** are logged and shown in the digest, but the sequence is **not** restarted. Someone who booked and cancelled needs a personal follow-up from the clinic, not Email 4.
+
+**Timing.** Checking bookings at the start of each run, before sending, means the worst case is a booking made in the 10 minutes before a send. In that window one more email can go out. That's acceptable. Quiet hours make it rarer, because most sends happen at 09:00.
+
+**Where AI fits here.** If `care@` gets notifications in more than one format (two booking tools, or staff forwarding bookings by hand), the regex parser will miss some. Anything the parser can't read goes to a small Claude model. It returns structured fields (`email`, `name`, `service`, `appointment_at`, `is_cancellation`) or "not a booking". Its output feeds the same matching rules above, so AI never stops a sequence on a fuzzy match. It costs pennies a month at clinic volumes. Build the regex parser first and add this only if unparsed notifications actually show up in the digest.
+
+**Access to `care@`: flagging this honestly.** IMAP needs a credential for that mailbox, and `care@` will hold patient correspondence. Keep the exposure small:
+- Google Workspace: an app password, stored in `private/config.php` outside the webroot. Microsoft 365: IMAP basic auth is off in most tenants, so this needs an app registration with OAuth instead (more setup, same result).
+- The code opens one folder, read-only (`EXAMINE`, not `SELECT`), and never deletes, moves or flags anything.
+- It stores only the parsed fields, never the email body.
+- If the clinic isn't comfortable giving the server `care@` access, the alternative is a mail rule that forwards booking notifications to a separate mailbox the worker owns. That is cleaner on access, but it may cost one mailbox licence.
+
+**Manual fallback stays.** The signed **Mark booked** link in the digest still exists for phone and walk-in bookings, which never generate an email.
 
 ---
 
@@ -184,7 +209,7 @@ The copy is drafted separately, against PureMed's tone of voice, using the `copy
 
 ## 8. Open questions before build
 
-1. **What takes the £25 booking?** (Which tool, and does it have a webhook?) This decides how "stop on booked" works. It's the most important answer.
+1. **A sample booking notification email** from `care@` (patient details redacted is fine), plus a cancellation if one exists. The parser is written against these. Also: does every booking notification come from one system and one sender address?
 2. **Which mailbox provider does PureMed use:** Google Workspace or Microsoft 365? That decides the SMTP setup and whether there's a Microsoft auth issue.
 3. **What does the current form post to?** If it already feeds a CRM or form service, we swap its action to `/api/optin.php` and retire the old path. I couldn't load puremed.uk from this environment to check.
 4. **Is the guide PDF final,** and where should it live?
@@ -194,14 +219,14 @@ The copy is drafted separately, against PureMed's tone of voice, using the `copy
 
 ## 9. Build plan
 
-About 2 days to a tested v1, then a week of watching real sends.
+About 2.5 days to a tested v1 (the extra half day is the booking-inbox check), then a week of watching real sends.
 
-1. **DNS and mailbox:** SPF, DKIM and DMARC, plus the sending mailbox and app password. Send a test to mail-tester.com and Gmail, aiming for a score of 9/10 or better.
+1. **DNS and mailboxes:** SPF, DKIM and DMARC, plus the sending mailbox and app password. On `care@`: enable IMAP, create the `Bookings/Auto` rule, and issue the read credential. Send a test to mail-tester.com and Gmail, aiming for a score of 9/10 or better.
 2. **Schema and config:** create the MySQL tables, `private/config.php`, and the sequence file.
 3. **`optin.php`:** validation, honeypot, per-IP rate limit, consent capture, tag, enrolment, immediate Email 1, redirect.
-4. **`worker.php` plus Cloudways cron** every 10 minutes: locking, quiet hours, retries, bounce handling.
-5. **Unsubscribe (one-click), booked (signed link and/or webhook), daily digest.**
+4. **`worker.php` plus Cloudways cron** every 10 minutes: booking check (IMAP, parser, matching), then sends with locking, quiet hours, retries and bounce handling.
+5. **Unsubscribe (one-click), manual Mark booked link, daily digest** (sign-ups, auto-stopped bookings, possible matches to confirm).
 6. **Templates:** the six emails, drafted, clinician-approved, then built in HTML and plain text.
-7. **Test with time compression:** a `TEST_DAY_SECONDS=60` config flag turns "1 day" into 1 minute. The whole nine-day sequence then runs in about 10 minutes against a seeded test address. Check the order, the stop-on-booked and the stop-on-unsubscribe.
+7. **Test with time compression:** a `TEST_DAY_SECONDS=60` config flag turns "1 day" into 1 minute. The whole nine-day sequence then runs in about 10 minutes against a seeded test address. Check the order, the stop-on-unsubscribe, and the stop-on-booked: drop a copy of the sample booking email into `Bookings/Auto` mid-sequence and confirm the next send is skipped.
 8. **Form change on the Astro page:** post to `/api/optin.php`, add the consent and 18+ lines, and add a thank-you page. Ship through the normal PR, staging, production path.
 9. **First week:** read the `sends` table daily to check for failures and delays, and check that the digest arrives.
