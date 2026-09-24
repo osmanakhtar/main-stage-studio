@@ -37,6 +37,7 @@ The extra cost is nothing: Cloudways and the mailbox are already paid for. It ad
 | The Pi (next to Stage) | No. It runs on a home connection with a residential IP, and its uptime is whatever the house's is. A live clinic's lead pipeline should not depend on it. |
 | Self-hosted n8n | Works, but it adds a Node runtime, a database and upgrades to look after, all for one six-step linear sequence. Worth it only if PureMed ends up with many flows. |
 | Cloudflare Workers + D1 | Free, but DNS would have to move to Cloudflare, and Workers have no simple free way to send mail now. More moving parts than the Cloudways route. |
+| Google Apps Script (inside PureMed's Workspace) | The closest runner-up. It's free, runs inside Workspace so it can read `care@` with no stored credential, and a Sheet could act as the database. Not chosen for three reasons. The code would live outside the repo and the PR-to-deploy pipeline. It runs as one person's Google account, so if that account changes, the automation silently stops. And a Sheet makes a fragile database once staff start editing it. |
 | Brevo / MailerLite free tiers | These are the honest fallback if deliverability from the clinic mailbox turns out poor. Free up to roughly 300 emails a day or 1,000 contacts. They are third-party, though, and the free tiers add their own branding. Keep them in reserve. |
 
 **The tag model is kept on purpose.** "Tag added" is how CRMs think, and it's the right abstraction. The form adds a tag, and a sequence is bound to a tag. The next lead magnet is then a new tag plus a new sequence config file, with no new code.
@@ -58,12 +59,12 @@ The extra cost is nothing: Cloudways and the mailbox are already paid for. It ad
    6. 303 redirect → /guide-thank-you                          │
         │                                                      │
         ▼                                                      ▼
-   MySQL (Cloudways app DB)                     SMTP (PureMed mailbox)
+   MySQL (Cloudways app DB)                     Workspace SMTP relay  
    contacts · tags · enrolments · sends                ▲
         ▲                                              │
         │   every 10 min                               │
  Cloudways cron → worker.php                           │
-        │   1. check care@ for new booking emails (IMAP, read-only)
+        │   1. check care@ for new booking emails (Gmail API, read-only)
         │      → matched lead: stop sequence, reason "booked"
         │   2. due sends ──render─────────────────────►send
         │   (lock, batch ≤ 20, retry with backoff, quiet hours)
@@ -77,7 +78,7 @@ The extra cost is nothing: Cloudways and the mailbox are already paid for. It ad
 ### Where the code lives
 
 - PHP endpoints go in the Astro project's `public/api/`. They then deploy with the site on every run of the existing GitHub Actions workflow. **This is a known trap:** the deploy uses rsync, and if it runs with `--delete`, any PHP dropped onto the server by hand would be wiped on the next deploy. Keeping the PHP in the repo avoids that.
-- Secrets (SMTP password, DB credentials, token signing key) go in `private/config.php`, **outside the webroot**, created once over SFTP and never committed. This follows the same rule the old `mss-contact.php` followed.
+- Secrets (DB credentials, Gmail API refresh token, token signing key) go in `private/config.php`, **outside the webroot**, created once over SFTP and never committed. This follows the same rule the old `mss-contact.php` followed.
 - Templates and sequence definitions sit in the repo next to the PHP. They are plain files, reviewed through PRs like any other copy change.
 
 ### Data model
@@ -134,7 +135,7 @@ Every booking already sends a notification email to `care@puremed.uk`. That inbo
 **How it works**
 
 1. **Filter in the mailbox (one-off setup).** A mail rule on `care@` puts booking notifications into their own folder or label, e.g. `Bookings/Auto`, matched on the booking system's sender address and subject. Everything else in `care@` is untouched.
-2. **The worker reads only that folder.** At the start of every cron run, before any sends, `worker.php` connects over IMAP, opens `Bookings/Auto` only, and fetches messages it hasn't processed yet. It uses `BODY.PEEK`, so nothing is marked as read and staff see the inbox exactly as before. It tracks processed messages by their IMAP UID and folder UIDVALIDITY in a small `booking_emails` table.
+2. **The worker reads only that folder.** At the start of every cron run, before any sends, `worker.php` calls the Gmail API with the query `label:bookings-auto newer_than:3d` and fetches messages it hasn't processed yet. The access is read-only (see below), so nothing is marked as read and staff see the inbox exactly as before. It tracks processed messages by their Gmail message ID in a small `booking_emails` table.
 3. **Parse.** It pulls out the patient's email, name, the service booked and the appointment time. Booking systems send a fixed template, so a template parser (regex against known fields) is the primary route: it's deterministic, testable and free.
 4. **Match and stop.**
    - The email matches a lead exactly (case-insensitive) → stop the enrolment with reason `booked`. This covers any booking, not only the £25 assessment: a woman who booked a treatment directly shouldn't be asked to book an assessment either.
@@ -146,11 +147,15 @@ Every booking already sends a notification email to `care@puremed.uk`. That inbo
 
 **Where AI fits here.** If `care@` gets notifications in more than one format (two booking tools, or staff forwarding bookings by hand), the regex parser will miss some. Anything the parser can't read goes to a small Claude model. It returns structured fields (`email`, `name`, `service`, `appointment_at`, `is_cancellation`) or "not a booking". Its output feeds the same matching rules above, so AI never stops a sequence on a fuzzy match. It costs pennies a month at clinic volumes. Build the regex parser first and add this only if unparsed notifications actually show up in the digest.
 
-**Access to `care@`: flagging this honestly.** IMAP needs a credential for that mailbox, and `care@` will hold patient correspondence. Keep the exposure small:
-- Google Workspace: an app password, stored in `private/config.php` outside the webroot. Microsoft 365: IMAP basic auth is off in most tenants, so this needs an app registration with OAuth instead (more setup, same result).
-- The code opens one folder, read-only (`EXAMINE`, not `SELECT`), and never deletes, moves or flags anything.
+**Access to `care@`: Gmail API, read-only, that one mailbox only.** `care@` holds patient correspondence, so the server gets the narrowest access Google offers. It does **not** get an app password, which would allow full read, send and delete on the mailbox.
+- Create a Google Cloud project (free) with an OAuth client set to **Internal**. Internal apps need no Google verification, and only PureMed's own accounts can use them.
+- Request exactly one scope: `gmail.readonly`. The server can then read mail but cannot send, delete, label or change settings.
+- Sign in as `care@` once and consent. The resulting refresh token goes into `private/config.php`, and it works for `care@` only. Don't use a service account with domain-wide delegation: that would grant read access to every mailbox in the domain.
+- The worker only ever queries `label:bookings-auto`. Gmail can't restrict a token to one label, so this is a limit the code enforces, not a Google-enforced one. That's the honest remaining exposure: if the server were compromised, the token could read `care@`. It can be revoked instantly from the Workspace admin console (Security, API controls) or `care@`'s Google account page.
 - It stores only the parsed fields, never the email body.
-- If the clinic isn't comfortable giving the server `care@` access, the alternative is a mail rule that forwards booking notifications to a separate mailbox the worker owns. That is cleaner on access, but it may cost one mailbox licence.
+- No PHP libraries are needed: token refresh and two REST calls (`messages.list`, `messages.get`) over curl.
+
+**Depends on what `care@` actually is.** If it's a real user mailbox, the above works as written. If it's an alias of someone's mailbox, the filter and the consent are set up on that person's mailbox instead. That works, but it means the token can read their whole inbox, which is a worse trade. If it's a Google Group, there's no mailbox to read. In that case, add a filter on the group's delivery into a member's mailbox, or add a mail route. This is the one thing to confirm before setup.
 
 **Manual fallback stays.** The signed **Mark booked** link in the digest still exists for phone and walk-in bookings, which never generate an email.
 
@@ -158,10 +163,12 @@ Every booking already sends a notification email to `care@puremed.uk`. That inbo
 
 ## 4. Sending and deliverability
 
-- **Send through PureMed's own mailbox over SMTP**, using PHPMailer (free, the standard choice). Send from a named person, e.g. "Dr X at PureMed". A named sender gets far better engagement than `noreply@`, and replies go to a real inbox.
-  - Google Workspace: use an app password on a dedicated mailbox. The daily limit is about 2,000, far above this volume.
-  - Microsoft 365: check first that SMTP AUTH is still allowed on the tenant, because Microsoft has been retiring basic-auth SMTP. If it's blocked, sending needs OAuth, or this is where the Brevo fallback comes in.
-- **DNS on puremed.uk:** SPF including the mail provider, DKIM signing on, and DMARC at `p=none` at first, tightening to `quarantine` once reports come back clean. Without all three, Gmail will junk these.
+- **Send through Google Workspace's SMTP relay** (`smtp-relay.gmail.com:587`, TLS), using PHPMailer (free, the standard choice). The relay is part of PureMed's Workspace subscription, so it costs nothing.
+  - In the Admin console (Apps, Google Workspace, Gmail, Routing, SMTP relay service): allow **only the Cloudways server's IP address**, require TLS, and allow only addresses in PureMed's domains. Nothing then needs a stored password to send, and nobody else can relay through it.
+  - Limit is 10,000 recipients a day, far beyond this volume.
+  - **Watch-out:** if the Cloudways server is ever migrated or rebuilt, its IP changes and the relay refuses every send. An alert sent through the relay would fail too, so after 3 relay failures in a row the worker sends the alert through the server's own local mail (`mail()`) to the admin address instead. It may land in spam, but it arrives. The worker also exposes `/api/health.php` (last successful send, pending count, failures), which any uptime check can watch.
+- **From:** a named person, e.g. "Dr X at PureMed" `<dr.x@puremed.uk>`. **Reply-To:** `care@puremed.uk`, so replies land where the team already works. A named sender gets far better engagement than `noreply@`.
+- **DNS on puremed.uk:** SPF including `include:_spf.google.com` (probably already there), DKIM switched on in the Admin console (Apps, Google Workspace, Gmail, Authenticate email; it is off by default and often forgotten), and DMARC at `p=none` at first, tightening to `quarantine` once reports come back clean. Without all three, Gmail will junk these.
 - **Headers on every email from 2 to 6:** `List-Unsubscribe` (both mailto and https) plus `List-Unsubscribe-Post: List-Unsubscribe=One-Click`, and a visible unsubscribe link in the footer.
 - **Guide as a link, not an attachment.** Host the PDF at an unlisted URL on the site. Attachments hurt inbox placement, and a link also shows whether she opened it.
 - **Light HTML:** one column, mostly text, one button, a real plain-text part. These should read like a letter from the clinic, not a newsletter.
@@ -175,7 +182,7 @@ Every booking already sends a notification email to `care@puremed.uk`. That inbo
 
 - **Drafting the six emails:** Claude drafts against PureMed's tone of voice file and the guide's content. A clinician then reviews every claim before anything ships. The approved text is frozen into the templates. This is where AI saves real time.
 - **Why not generate or personalise at send time:** this is regulated aesthetic-medicine content. Every word a prospective patient receives has to be something a clinician approved. Copy generated at runtime can't be approved in advance, and it creates advertising-compliance risk for almost no conversion gain in a six-email flow.
-- **Optional phase 2: reply triage.** The worker polls the sending mailbox over IMAP. A small Claude model classifies each reply to a sequence email as a question, booking intent, not interested, or an out-of-office. It pauses her sequence on anything but an out-of-office and alerts the clinic. That costs pennies a month and stops the next email landing while a reply sits unanswered. Build it only once there's volume to justify it.
+- **Optional phase 2: reply triage.** Replies already land in `care@` (it is the Reply-To), so the worker reuses the same read-only Gmail token with a second query for replies to sequence emails. A small Claude model classifies each reply to a sequence email as a question, booking intent, not interested, or an out-of-office. It pauses her sequence on anything but an out-of-office and alerts the clinic. That costs pennies a month and stops the next email landing while a reply sits unanswered. Build it only once there's volume to justify it.
 
 **Optional segmentation without AI:** one optional form question, "What bothers you most?" (under-eyes / dull skin / looking hollow / not sure). Email 2 then leads with the matching section. It's cheap and needs no runtime AI. Treat the answer carefully: it's close to health information, so collect it only if Email 2 actually uses it.
 
@@ -210,7 +217,7 @@ The copy is drafted separately, against PureMed's tone of voice, using the `copy
 ## 8. Open questions before build
 
 1. **A sample booking notification email** from `care@` (patient details redacted is fine), plus a cancellation if one exists. The parser is written against these. Also: does every booking notification come from one system and one sender address?
-2. **Which mailbox provider does PureMed use:** Google Workspace or Microsoft 365? That decides the SMTP setup and whether there's a Microsoft auth issue.
+2. **Is `care@` a user mailbox, an alias, or a Google Group?** This decides how the booking check reads it (section 3). Also, who has Workspace admin access? The relay, DKIM and the internal OAuth app all need an admin.
 3. **What does the current form post to?** If it already feeds a CRM or form service, we swap its action to `/api/optin.php` and retire the old path. I couldn't load puremed.uk from this environment to check.
 4. **Is the guide PDF final,** and where should it live?
 5. **Who is the named sender?**
@@ -221,10 +228,10 @@ The copy is drafted separately, against PureMed's tone of voice, using the `copy
 
 About 2.5 days to a tested v1 (the extra half day is the booking-inbox check), then a week of watching real sends.
 
-1. **DNS and mailboxes:** SPF, DKIM and DMARC, plus the sending mailbox and app password. On `care@`: enable IMAP, create the `Bookings/Auto` rule, and issue the read credential. Send a test to mail-tester.com and Gmail, aiming for a score of 9/10 or better.
+1. **Workspace and DNS (admin, about an hour):** turn on DKIM, and add or check SPF and DMARC. Configure the SMTP relay for the Cloudways IP. On `care@`, create the Gmail filter that applies the `Bookings/Auto` label (don't skip the inbox). Create the internal OAuth app and consent as `care@` with `gmail.readonly`. Send a test to mail-tester.com and Gmail, aiming for a score of 9/10 or better.
 2. **Schema and config:** create the MySQL tables, `private/config.php`, and the sequence file.
 3. **`optin.php`:** validation, honeypot, per-IP rate limit, consent capture, tag, enrolment, immediate Email 1, redirect.
-4. **`worker.php` plus Cloudways cron** every 10 minutes: booking check (IMAP, parser, matching), then sends with locking, quiet hours, retries and bounce handling.
+4. **`worker.php` plus Cloudways cron** every 10 minutes: booking check (Gmail API, parser, matching), then sends with locking, quiet hours, retries and bounce handling.
 5. **Unsubscribe (one-click), manual Mark booked link, daily digest** (sign-ups, auto-stopped bookings, possible matches to confirm).
 6. **Templates:** the six emails, drafted, clinician-approved, then built in HTML and plain text.
 7. **Test with time compression:** a `TEST_DAY_SECONDS=60` config flag turns "1 day" into 1 minute. The whole nine-day sequence then runs in about 10 minutes against a seeded test address. Check the order, the stop-on-unsubscribe, and the stop-on-booked: drop a copy of the sample booking email into `Bookings/Auto` mid-sequence and confirm the next send is skipped.
