@@ -42,7 +42,7 @@ Order matters: thesis, two proofs, boundary, then offer. Selling before the boun
 
 1. **Post 6 (and the Systems paragraph in post 5) are gated** on the scope-of-responsibility contract clause. v5 §8 risk 5 and the decisions log say Systems is not actively sold until that clause exists. If it isn't in place by 3 Nov, swap post 6 for a third process-transparency post and cut the Systems line from post 5.
 2. **Post 2 needs one fact from you:** what the ten prototypes were actually testing. The draft states only what the record shows (ten explored, two-page site shipped, 11 anchored sections, signed off in Stage) and leaves a marked gap rather than inventing the reasoning. The client stays unnamed.
-3. **Reach.** The page has zero followers, and the 18 Aug decision says the personal profile leads. Six good posts to an empty page will do little on their own. Recommend a personal-profile companion to posts 1 and 4 (first person, your own reasoning), resharing the page post. Not drafted here: personal POV stays manual per the content-engine scope.
+3. **Reach.** The page has zero followers, and the 18 Aug decision says the personal profile leads. Six good posts to an empty page will do little on their own. Recommend a personal-profile companion to posts 1 and 4 (first person, your own reasoning), resharing the page post. Drafted in `2026-10-disposable-tools-personal.md` (manual, outside the content-engine loop).
 4. **Visuals.** Brand/visual is blocked on Higgsfield credits, but posts 2 and 3 don't need it: a screen recording of the onboarding clip (post 3) and a contact sheet of prototype thumbnails (post 2, anonymised) are real footage and stronger proof than generated motion.
 
 ## Measures (review after week 6)
