@@ -1,0 +1,666 @@
+<title>Main Stage Aesthetics Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F5EFE5; --surface:#FBF7F0; --sunk:#EDE4D6; --line:#DCCFBC; --line-strong:#C5B49C;
+  --ink:#1C1712; --ink-2:#4A4036; --ink-3:#6B5E50;
+  --accent:#BF6B47; --accent-ink:#8C4A2F; --accent-soft:#F1DCCB;
+  --tenant:#23476A; --tenant-soft:#DCE5EE;
+  --ok:#3F6B45; --ok-soft:#DCE8DA; --warn:#7F5714; --warn-soft:#F2E3C4; --bad:#9A3A2C; --bad-soft:#F2D6CF; --info:#48607A; --info-soft:#DDE4EC;
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#15110D; --surface:#1E1914; --sunk:#27201A; --line:#3A3027; --line-strong:#524437;
+    --ink:#F0E7DA; --ink-2:#CDBFAD; --ink-3:#998A78;
+    --accent:#DA8A64; --accent-ink:#EBA684; --accent-soft:#3A2419;
+    --tenant:#8FB2D6; --tenant-soft:#1D2A38;
+    --ok:#8FC298; --ok-soft:#1C2B1E; --warn:#E0B465; --warn-soft:#33281A; --bad:#E48B7B; --bad-soft:#3A1E19; --info:#9DB5CE; --info-soft:#1D2733;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#15110D; --surface:#1E1914; --sunk:#27201A; --line:#3A3027; --line-strong:#524437;
+  --ink:#F0E7DA; --ink-2:#CDBFAD; --ink-3:#998A78;
+  --accent:#DA8A64; --accent-ink:#EBA684; --accent-soft:#3A2419;
+  --tenant:#8FB2D6; --tenant-soft:#1D2A38;
+  --ok:#8FC298; --ok-soft:#1C2B1E; --warn:#E0B465; --warn-soft:#33281A; --bad:#E48B7B; --bad-soft:#3A1E19; --info:#9DB5CE; --info-soft:#1D2733;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;padding-inline:clamp(16px,4vw,48px)}
+.wrap{max-width:1140px;margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.6rem,6vw,4.4rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.9rem,3.6vw,2.6rem)}
+h3{font-size:1.45rem}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:.76rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.muted{color:var(--ink-3)}
+code,.mono{font-family:var(--mono);font-size:.86em}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+header.top{padding-block:56px 32px;display:grid;gap:18px;border-bottom:1px solid var(--line)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.85rem;color:var(--ink-3)}
+.meta b{color:var(--ink-2);font-weight:600}
+.lede{font-size:1.12rem;color:var(--ink-2);max-width:62ch}
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid var(--accent);color:var(--accent-ink);border-radius:999px;font-size:.78rem;font-weight:600}
+
+nav.sections{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto}
+nav.sections ul{display:flex;gap:4px;list-style:none;margin:0;padding:10px 0;white-space:nowrap}
+nav.sections a{display:block;padding:6px 12px;border-radius:6px;text-decoration:none;color:var(--ink-2);font-size:.86rem;font-weight:500}
+nav.sections a:hover{background:var(--sunk);color:var(--ink)}
+
+section{padding-block:64px;border-bottom:1px solid var(--line);display:grid;gap:28px}
+.sec-head{display:grid;gap:10px}
+
+/* decisions */
+.decisions{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+.decision{border-top:3px solid var(--accent);padding-top:16px;display:grid;gap:10px;align-content:start}
+.decision .k{font-family:var(--mono);font-size:.8rem;color:var(--accent-ink)}
+.decision h3{font-size:1.35rem}
+.decision p{font-size:.93rem;color:var(--ink-2)}
+.rec{font-size:.9rem;background:var(--accent-soft);padding:10px 12px;border-radius:6px;color:var(--ink)}
+.rec b{color:var(--accent-ink)}
+
+/* estate */
+.estate{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center}
+.stores{display:grid;gap:8px}
+.store{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.store b{font-weight:600;font-size:.92rem}
+.store span{font-size:.8rem;color:var(--ink-3)}
+.store .tech{font-family:var(--mono);font-size:.75rem;color:var(--ink-2);text-align:right}
+.arrow{font-family:var(--display);font-size:2.4rem;color:var(--accent)}
+.spine-card{border:2px solid var(--ink);border-radius:8px;padding:18px;background:var(--surface);display:grid;gap:10px}
+.spine-card ul{margin:0;padding-left:18px;font-size:.92rem;color:var(--ink-2)}
+@media (max-width:760px){.estate{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+/* architecture */
+.arch{display:grid;gap:6px}
+.layer{display:grid;grid-template-columns:130px 1fr;gap:16px;align-items:stretch}
+.layer .lname{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding-top:14px}
+.layer .lbody{display:flex;flex-wrap:wrap;gap:6px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.chip{display:inline-flex;align-items:center;padding:5px 10px;border-radius:5px;background:var(--sunk);font-size:.84rem;font-weight:500;border:1px solid transparent}
+.chip.spine{background:var(--ink);color:var(--bg)}
+.chip.pack{border:1px dashed var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.chip.tenant{background:var(--tenant-soft);color:var(--tenant)}
+.layer.spine .lbody{border-color:var(--ink);border-width:2px}
+.planes{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%}
+.plane{padding:10px 12px;border-radius:6px;background:var(--sunk);font-size:.86rem}
+.plane b{display:block;font-size:.9rem}
+@media (max-width:640px){.layer{grid-template-columns:1fr}.layer .lname{padding-top:0}.planes{grid-template-columns:1fr}}
+.modtable{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);background:var(--bg);position:sticky;top:0}
+td.id{font-family:var(--mono);font-size:.8rem;white-space:nowrap;color:var(--accent-ink)}
+
+/* determinism */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.rule{background:var(--surface);padding:18px;display:grid;gap:6px;align-content:start}
+.rule .n{font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1}
+.rule b{font-size:.98rem}
+.rule p{font-size:.88rem;color:var(--ink-2)}
+.quote{font-family:var(--display);font-size:1.5rem;line-height:1.3;border-left:3px solid var(--accent);padding-left:18px;max-width:52ch}
+
+/* console mocks */
+.qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.qa div{padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-size:.88rem;display:grid;gap:4px}
+.qa .q{font-weight:600}
+.qa .a{color:var(--ink-3)}
+.screens{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
+@media (max-width:900px){.screens{grid-template-columns:1fr}}
+.example-tag{font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);background:var(--warn-soft);padding:2px 8px;border-radius:4px;justify-self:start}
+.frame{border:1px solid var(--line-strong);border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 1px 0 var(--line),0 12px 30px -18px rgba(28,23,18,.35)}
+.phone{max-width:320px;border-radius:28px;border-width:6px;border-color:var(--ink)}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg);font-size:.8rem}
+.bar .tn{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--tenant)}
+.bar .dot{width:9px;height:9px;border-radius:2px;background:var(--tenant)}
+.bar .sp{flex:1}
+.screen{padding:14px;display:grid;gap:12px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{padding:10px;border:1px solid var(--line);border-radius:8px;display:grid;gap:2px}
+.kpi .v{font-family:var(--display);font-size:1.7rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:.72rem;color:var(--ink-3)}
+.kpi .d{font-size:.7rem;color:var(--ok)}
+.inbox-item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:.82rem}
+.inbox-item .t{font-weight:600}
+.inbox-item .s{color:var(--ink-3);font-size:.75rem}
+.badge{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.b-approve{background:var(--info-soft);color:var(--info)}
+.b-task{background:var(--warn-soft);color:var(--warn)}
+.b-fail{background:var(--bad-soft);color:var(--bad)}
+.b-ok{background:var(--ok-soft);color:var(--ok)}
+.b-match{background:var(--accent-soft);color:var(--accent-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:6px 11px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font:600 .76rem var(--body);cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.subnav{display:flex;gap:2px;padding:0 14px;border-bottom:1px solid var(--line);overflow-x:auto;font-size:.78rem}
+.subnav span{padding:9px 10px;color:var(--ink-3);white-space:nowrap}
+.subnav span.on{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--accent)}
+.person-head{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;font-weight:700}
+.person-head h4{margin:0;font-family:var(--display);font-size:1.5rem;font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.facts div{background:var(--surface);padding:9px 11px;display:grid;gap:1px}
+.facts .l{font-size:.68rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.facts .v{font-size:.86rem;font-weight:600;font-variant-numeric:tabular-nums}
+.person-grid{display:grid;grid-template-columns:1fr 220px;gap:16px}
+@media (max-width:760px){.person-grid{grid-template-columns:1fr}.person-head{grid-template-columns:auto 1fr}.person-head .acts{grid-column:1/-1}}
+.timeline{display:grid;gap:0;font-size:.82rem}
+.ev{display:grid;grid-template-columns:78px 14px 1fr;gap:8px;padding:7px 0}
+.ev .when{color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:.74rem;padding-top:1px}
+.ev .pip{width:9px;height:9px;border-radius:50%;margin-top:6px;background:var(--line-strong)}
+.ev.m-book .pip{background:var(--ok)} .ev.m-msg .pip{background:var(--info)} .ev.m-cap .pip{background:var(--accent)} .ev.m-wf .pip{background:var(--warn)}
+.ev .what b{font-weight:600}
+.why{display:block;font-size:.78rem;color:var(--ink-3);margin-top:2px}
+.why code{color:var(--accent-ink);font-size:.95em}
+.side{display:grid;gap:10px;align-content:start}
+.side .box{border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:6px;font-size:.8rem}
+.side .box h5{margin:0;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.consent{display:flex;justify-content:space-between;gap:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.steps{display:grid;gap:0;font-size:.8rem}
+.step{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.step .no{font-family:var(--mono);font-size:.74rem;color:var(--ink-3)}
+.step .cnt{font-variant-numeric:tabular-nums;font-weight:600}
+.bar-track{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden;margin-top:4px}
+.bar-fill{height:100%;background:var(--accent)}
+.aud{display:grid;gap:6px;font-size:.82rem}
+.aud .row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.aud .row.total{font-weight:700;border-top:2px solid var(--ink)}
+.aud .minus{color:var(--bad)}
+.field{display:grid;gap:3px;font-size:.8rem}
+.field .l{font-size:.68rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.field .v{padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+
+/* layers table */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.tier{padding:18px;border-radius:8px;display:grid;gap:8px;align-content:start;border:1px solid var(--line);background:var(--surface)}
+.tier .count{font-family:var(--display);font-size:2.6rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+.tier.core{border:2px solid var(--ink)}
+.tier.pack{border:1px dashed var(--accent);background:var(--accent-soft)}
+.tier.tenant{background:var(--tenant-soft)}
+.tier p{font-size:.88rem;color:var(--ink-2)}
+
+/* phases */
+.phases{display:grid;gap:0}
+.phase{display:grid;grid-template-columns:64px 1fr 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--line)}
+.phase .pn{font-family:var(--display);font-size:2.2rem;line-height:1;color:var(--accent)}
+.phase h3{font-size:1.2rem;margin-bottom:4px}
+.phase p{font-size:.88rem;color:var(--ink-2)}
+.phase .proves{font-size:.86rem;color:var(--ink-3)}
+.phase .proves b{color:var(--ink-2)}
+@media (max-width:700px){.phase{grid-template-columns:44px 1fr}.phase .proves{grid-column:2}}
+.callout{padding:14px 16px;border-left:3px solid var(--warn);background:var(--warn-soft);border-radius:0 6px 6px 0;font-size:.9rem;max-width:80ch}
+
+/* register */
+.reg-summary{display:flex;flex-wrap:wrap;gap:22px;font-size:.86rem}
+.reg-summary div{display:grid}
+.reg-summary .v{font-family:var(--display);font-size:2rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.reg-summary .l{color:var(--ink-3);font-size:.76rem}
+.filters{display:grid;gap:10px}
+.frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.frow .fl{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);min-width:74px}
+.fbtn{padding:4px 10px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;color:var(--ink-2);font:500 .8rem var(--body);cursor:pointer}
+.fbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.search,select{padding:7px 10px;border-radius:6px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font:400 .88rem var(--body);min-width:0}
+.search{flex:1 1 220px}
+.reg-wrap{overflow-x:auto;max-height:78vh;overflow-y:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.reg-wrap table{min-width:980px}
+.reg-wrap th{background:var(--surface)}
+td.req{min-width:340px}
+td.why2{min-width:220px;color:var(--ink-2);font-size:.82rem}
+td.trace{font-size:.76rem;color:var(--ink-3);min-width:160px}
+.s-Built{background:var(--ok-soft);color:var(--ok)}
+.s-Partial{background:var(--info-soft);color:var(--info)}
+.s-Designed{background:var(--warn-soft);color:var(--warn)}
+.s-New{background:var(--sunk);color:var(--ink-2)}
+.p-Must{color:var(--ink);font-weight:700}
+.p-Should{color:var(--ink-2)}
+.p-Could{color:var(--ink-3)}
+.sc{font-size:.76rem;white-space:nowrap}
+.sc.pack{color:var(--accent-ink);font-weight:600}
+.sc.tenant{color:var(--tenant);font-weight:600}
+.catrow td{background:var(--sunk);font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.empty{padding:24px;text-align:left;color:var(--ink-3)}
+
+/* open decisions */
+.od{display:grid;gap:0}
+.od div{display:grid;grid-template-columns:48px 1fr 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:.9rem}
+.od .k{font-family:var(--mono);color:var(--accent-ink)}
+.od .r{color:var(--ink-2)}
+@media (max-width:700px){.od div{grid-template-columns:40px 1fr}.od .r{grid-column:2}}
+footer{padding-block:40px 64px;font-size:.84rem;color:var(--ink-3);display:grid;gap:8px}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:56px}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">Main Stage Studio · Platform design</span>
+  <h1>Main Stage Aesthetics Studio</h1>
+  <p class="lede">One platform under the PureMed estate: website and CMS, opt-in email, social engine, booking and the client's view of all of it. It is built on a shared person record and event log, so it behaves the same way for every tenant and can carry over to the next niche.</p>
+  <div class="meta">
+    <span class="status-pill">Proposal · 7 of 9 decisions locked</span>
+    <span><b>v0.3</b> · 26 September 2026</span>
+    <span><b>192</b> requirements across <b>21</b> categories</span>
+    <span>Canon: <code>01_mss/product/aesthetics-studio/platform-design.md</code></span>
+  </div>
+</header>
+
+<nav class="sections" aria-label="Sections"><ul>
+  <li><a href="#decide">Decide first</a></li>
+  <li><a href="#estate">Today</a></li>
+  <li><a href="#arch">Architecture</a></li>
+  <li><a href="#email">Email</a></li>
+  <li><a href="#determinism">Determinism</a></li>
+  <li><a href="#console">Client console</a></li>
+  <li><a href="#transfer">Transferability</a></li>
+  <li><a href="#phasing">Phasing</a></li>
+  <li><a href="#register">Register</a></li>
+  <li><a href="#open">Open decisions</a></li>
+</ul></nav>
+
+<section id="decide">
+  <div class="sec-head">
+    <span class="eyebrow">Before this goes further</span>
+    <h2>Three decisions that change what gets built</h2>
+  </div>
+  <div class="decisions">
+    <div class="decision">
+      <span class="k">D1 · Decided 26 Sep</span>
+      <h3>This reverses locked v5 positioning</h3>
+      <p>On 4 August MSS locked regulated professional services as the vertical, dropped clinics for lack of track record, and deferred a self-serve tier. An aesthetics-first platform sold as the core offer goes against all three. PureMed is now real sector proof, so there's a case for it, but it needs deciding.</p>
+      <p class="rec"><b>Decided:</b> framed as the Systems line made repeatable, with aesthetics as the first edition because the proof is there. Logged in the decisions log.</p>
+    </div>
+    <div class="decision">
+      <span class="k">D2 · Decided 26 Sep</span>
+      <h3>"Aesthetics" in the platform name limits it</h3>
+      <p>A salon or physio shouldn't buy a product with another industry in its name. The name you chose is right for what clinics buy.</p>
+      <p class="rec"><b>Decided:</b> the platform is <b>Main Stage Studio</b>. Editions carry the niche: <b>Main Stage Aesthetics Studio</b> first, then others.</p>
+    </div>
+    <div class="decision">
+      <span class="k">D3 · Decided 26 Sep</span>
+      <h3>Faces comes in house</h3>
+      <p>One ecosystem for customer records and bookings. The platform replaces Faces Consent: records, consent forms and diary move across, and Faces is retired. There's no integration, no booking-email parsing, and no dual running past cutover.</p>
+      <p class="rec"><b>What it changes:</b> the customer record and consent engine are needed at cutover, and the DPIA now blocks Phase 2. Notes, photos and prescribing can follow, because Faces doesn't hold them today.</p>
+    </div>
+  </div>
+</section>
+
+<section id="estate">
+  <div class="sec-head">
+    <span class="eyebrow">What exists today</span>
+    <h2>Four stores for one person</h2>
+    <p class="muted">Every part below exists or is designed. They don't share a person record, so the opt-in design has to read booking notification emails to find out whether a lead booked.</p>
+  </div>
+  <div class="estate">
+    <div class="stores">
+      <div class="store"><div><b>Consultation leads</b><br><span>consultation-api · built, not deployed</span></div><div class="tech">SQLite</div></div>
+      <div class="store"><div><b>Opt-in subscribers</b><br><span>email-sequence-design · designed</span></div><div class="tech">PHP + MySQL</div></div>
+      <div class="store"><div><b>Booking clients</b><br><span>booking-engine · phases 1-6 built</span></div><div class="tech">Postgres</div></div>
+      <div class="store"><div><b>Patients and diary</b><br><span>Faces Consent · live, 475 records · to be replaced</span></div><div class="tech">Vendor</div></div>
+      <div class="store"><div><b>Site edits</b><br><span>Stage on the Pi · live</span></div><div class="tech">JSON on Pi</div></div>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="spine-card">
+      <span class="eyebrow">The spine</span>
+      <h3>One person, one history</h3>
+      <ul>
+        <li>One <b>Person</b> per human per tenant, shared by every module</li>
+        <li>One <b>consent ledger</b>, checked at send time</li>
+        <li>One append-only <b>event log</b>: the timeline and the audit trail</li>
+        <li>One <b>rules engine</b> and one <b>workflow engine</b></li>
+      </ul>
+      <p class="muted" style="font-size:.86rem">Modules keep their own engines. They share this.</p>
+    </div>
+  </div>
+</section>
+
+<section id="arch">
+  <div class="sec-head">
+    <span class="eyebrow">Architecture</span>
+    <h2>Five layers, shared below the surface</h2>
+    <p class="muted">Anything below the surface layer is the same for every tenant and every niche. Only config changes.</p>
+  </div>
+  <div class="arch">
+    <div class="layer"><div class="lname">Surfaces</div><div class="lbody">
+      <span class="chip">Public site</span><span class="chip">Booking widget</span><span class="chip">Forms and quizzes</span><span class="chip">Client console</span><span class="chip">Operator console (MSS)</span>
+    </div></div>
+    <div class="layer"><div class="lname">Modules</div><div class="lbody">
+      <span class="chip">Site and CMS</span><span class="chip">Capture</span><span class="chip">Messaging</span><span class="chip">Workflows</span><span class="chip">Campaigns</span><span class="chip">Social</span><span class="chip">Booking</span><span class="chip">Payments</span><span class="chip">Reporting</span><span class="chip pack">Clinical (aesthetics pack)</span>
+    </div></div>
+    <div class="layer spine"><div class="lname">Spine</div><div class="lbody">
+      <span class="chip spine">Person</span><span class="chip spine">Consent ledger</span><span class="chip spine">Event log</span><span class="chip spine">Rules engine</span><span class="chip spine">Workflow engine</span><span class="chip spine">Scheduler</span><span class="chip spine">Audit</span><span class="chip spine">Config versions</span>
+    </div></div>
+    <div class="layer"><div class="lname">Planes</div><div class="lbody"><div class="planes">
+      <div class="plane"><b>Content plane</b>Pages, blog, templates, posts. Git per tenant, static build, propose → approve → publish.</div>
+      <div class="plane"><b>Operational plane</b>People, events, bookings, sends. PostgreSQL, row-level security per tenant, UK region.</div>
+    </div></div></div>
+    <div class="layer"><div class="lname">Config</div><div class="lbody">
+      <span class="chip">Core defaults</span><span aria-hidden="true" class="muted">←</span><span class="chip pack">Aesthetics pack</span><span aria-hidden="true" class="muted">←</span><span class="chip tenant">PureMed tenant</span>
+    </div></div>
+  </div>
+
+  <div class="modtable">
+    <table>
+      <thead><tr><th>Module</th><th>Built on</th><th>What changes</th></tr></thead>
+      <tbody>
+        <tr><td><b>Site and CMS</b></td><td><code>site/</code> Astro + Stage live edit</td><td>Blog becomes content, not code. CTAs come from the catalogue and fail the build when unmapped. Editing surface moves off the Pi.</td></tr>
+        <tr><td><b>Capture</b></td><td>replaces <code>consultation-api</code> and the PHP opt-in</td><td>One endpoint, forms as config, writes Person, consent and tag events.</td></tr>
+        <tr><td><b>Messaging</b></td><td>the email design's sending model</td><td>All email through <code>care@puremed.uk</code>. Keep SPF/DKIM/DMARC, quiet hours, one-click unsubscribe, no pixel. Drop PHP. WhatsApp second.</td></tr>
+        <tr><td><b>Workflows</b></td><td>the email design's tags, enrolments and sends, generalised</td><td>Closed step set, stop checks before every step, versions pinned per enrolment, template library per pack.</td></tr>
+        <tr><td><b>Campaigns</b></td><td>Studio Campaign Builder</td><td>One object linking audience, emails, posts, landing page and result.</td></tr>
+        <tr><td><b>Social</b></td><td><code>content/</code> pipeline</td><td>Same state machine. UTM on every link. Meta publishing once prerequisites land.</td></tr>
+        <tr><td><b>Booking + Payments</b></td><td><code>booking-engine/service/</code></td><td>Replaces Faces as the only booking system and diary. Emits events to the spine. Its <code>client</code> becomes a key to <code>person</code>.</td></tr>
+        <tr><td><b>Clinical</b> (pack)</td><td><code>clinical-platform/</code> S4, S7 to S11</td><td>Keys to Person. Customer record and consent forms are needed at Faces cutover; notes, photos and prescribing follow. Health data never leaves the module.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="email">
+  <div class="sec-head">
+    <span class="eyebrow">Email integration · decided 26 Sep</span>
+    <h2>Everything through care@puremed.uk</h2>
+    <p class="muted">Each tenant connects one business mailbox as its only email integration point. For PureMed that is care@, which is already the only user and the admin on its Workspace. There's no third-party email service and no invented sending addresses.</p>
+  </div>
+  <div class="modtable">
+    <table>
+      <thead><tr><th>What</th><th>How it runs through care@</th><th>Row</th></tr></thead>
+      <tbody>
+        <tr><td><b>Outbound mail</b></td><td>Nurture, campaigns, confirmations, reminders and aftercare are sent as care@puremed.uk. The display name can name the clinician ("Nafisa at PureMed").</td><td class="id">MSG-005</td></tr>
+        <tr><td><b>Replies</b></td><td>Land in care@ as normal. The platform matches them to its own threads, adds them to the timeline and pauses marketing workflows.</td><td class="id">MSG-010</td></tr>
+        <tr><td><b>Bounces</b></td><td>Delivery failures arrive in care@ and suppress the address everywhere.</td><td class="id">MSG-008</td></tr>
+        <tr><td><b>Staff notifications</b></td><td>New leads, bookings, replies and failures go to care@ by default, with optional phone push.</td><td class="id">CAP-006</td></tr>
+        <tr><td><b>Calendar</b></td><td>The booking engine syncs to care@'s calendar and is its only writer after cutover. The ChatGPT inbox automation is switched off.</td><td class="id">BKG-012</td></tr>
+        <tr><td><b>Access</b></td><td>One OAuth consent as care@ with send, read and calendar scopes. No app password and no domain-wide delegation. The code reads only its own threads and delivery failures, every read is logged, and the token can be revoked from the admin console.</td><td class="id">SEC-009</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="callout"><b>Check before Phase 0.</b> Every send now comes from one Workspace user, which has a daily sending cap. Confirm the figure for Business Starter and whether the SMTP relay is available on it. The worker meters sends against the cap (MSG-013). Also confirm that the calendar Nafisa actually watches is care@'s and not a personal account's.</p>
+</section>
+
+<section id="determinism">
+  <div class="sec-head">
+    <span class="eyebrow">The governing principle</span>
+    <h2>Deterministic, across every module</h2>
+  </div>
+  <p class="quote">Same configuration version, same inputs: same journey, price, documents, messages, schedule and published content, every time, with a record of why.</p>
+  <div class="rules">
+    <div class="rule"><span class="n">1</span><b>Rules are data</b><p>Every requirement, segment, price and send condition is a row with an ID, evaluated by a pure function.</p></div>
+    <div class="rule"><span class="n">2</span><b>Every change is an event</b><p>One append-only log with actor, cause and config version. Replay rebuilds state.</p></div>
+    <div class="rule"><span class="n">3</span><b>Snapshot, don't reference</b><p>Records keep the price, template version and rule IDs in force when committed.</p></div>
+    <div class="rule"><span class="n">4</span><b>Time is explicit</b><p>Due times come from stored inputs and tenant timezone, never from when a cron wakes.</p></div>
+    <div class="rule"><span class="n">5</span><b>Side effects are idempotent</b><p>Every send, publish and charge has a key. Overlapping workers can't double-send.</p></div>
+    <div class="rule"><span class="n">6</span><b>No LLM in a decision</b><p>AI drafts, a person approves, lint checks. AI never decides who gets what or when.</p></div>
+  </div>
+  <p class="muted">The existing gates (<code>make trace</code>, <code>make datamap</code>, <code>make figures</code>, <code>make preflight</code>) become platform release gates. The booking service failed the determinism and data-protection reviews on 18 August. Those findings (no event log, no booking snapshot, an identifier used as a credential, no DPIA) are fixed in the spine, not patched per module.</p>
+</section>
+
+<section id="console">
+  <div class="sec-head">
+    <span class="eyebrow">Client console</span>
+    <h2>What the clinic sees</h2>
+    <p class="muted">The console lets the client see and control a service MSS runs. It opens on what needs them, not on a dashboard.</p>
+  </div>
+  <div class="qa">
+    <div><span class="q">When did this client last book?</span><span class="a">People list column and Person header, derived from events.</span></div>
+    <div><span class="q">What was the last action, and why?</span><span class="a">Activity feed and timeline, each row with its workflow and rule.</span></div>
+    <div><span class="q">How do I create a campaign?</span><span class="a">Campaigns → New: goal, audience, channels, content, schedule.</span></div>
+    <div><span class="q">How do I start a workflow?</span><span class="a">Workflows → Library → set parameters → simulate → turn on.</span></div>
+    <div><span class="q">What is the automation doing now?</span><span class="a">Run view: who is on which step, next action and when.</span></div>
+    <div><span class="q">Is any of it working?</span><span class="a">Today figures. Tap any number to see the records behind it.</span></div>
+  </div>
+
+  <span class="example-tag">Example data · fictional people</span>
+  <div class="screens">
+    <div class="frame phone" aria-label="Phone: Today and Inbox">
+      <div class="bar"><span class="tn"><span class="dot"></span>PureMed</span><span class="sp"></span><span class="muted">Today</span></div>
+      <div class="screen">
+        <div class="kpis">
+          <div class="kpi"><span class="v">14</span><span class="l">New leads, 7 days</span><span class="d">9 from the tired-eyes guide</span></div>
+          <div class="kpi"><span class="v">11</span><span class="l">Bookings, 7 days</span><span class="d">4 from leads</span></div>
+          <div class="kpi"><span class="v">68%</span><span class="l">Diary fill, next 14 days</span></div>
+          <div class="kpi"><span class="v">3</span><span class="l">Need you</span></div>
+        </div>
+        <div>
+          <span class="eyebrow">Needs you</span>
+          <div class="inbox-item"><span class="badge b-approve">Approve</span><div><div class="t">3 posts for next week</div><div class="s">Passed compliance lint</div></div><button class="btn" type="button">Review</button></div>
+          <div class="inbox-item"><span class="badge b-task">Call</span><div><div class="t">Leah D. replied to email 3</div><div class="s">Workflow paused for her</div></div><button class="btn ghost" type="button">Open</button></div>
+          <div class="inbox-item"><span class="badge b-match">Match</span><div><div class="t">Possible duplicate: S. Rahman</div><div class="s">Booked by phone, 2 records match</div></div><button class="btn ghost" type="button">Resolve</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frame" aria-label="Person page">
+      <div class="bar"><span class="tn"><span class="dot"></span>PureMed</span><span class="muted">People / Amira Khan</span><span class="sp"></span><span class="muted">Owner</span></div>
+      <div class="subnav"><span>Today</span><span>Inbox</span><span class="on">People</span><span>Diary</span><span>Campaigns</span><span>Workflows</span><span>Content</span><span>Reports</span></div>
+      <div class="screen">
+        <div class="person-head">
+          <div class="avatar">AK</div>
+          <div><h4>Amira Khan</h4><span class="muted" style="font-size:.8rem">amira.k@example.com · First seen 27 Aug 2026</span></div>
+          <div class="acts" style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button">Book</button><button class="btn ghost" type="button">Enrol in workflow</button><button class="btn ghost" type="button">Message</button></div>
+        </div>
+        <div class="facts">
+          <div><span class="l">Stage</span><span class="v">Client</span></div>
+          <div><span class="l">Last booked</span><span class="v">12 Sep 2026</span></div>
+          <div><span class="l">Next booking</span><span class="v">None</span></div>
+          <div><span class="l">Recall due</span><span class="v">12 Jan 2027</span></div>
+          <div><span class="l">Source</span><span class="v">Guide opt-in</span></div>
+          <div><span class="l">Bookings</span><span class="v">2 · £325</span></div>
+        </div>
+        <div class="person-grid">
+          <div class="timeline">
+            <div class="ev m-msg"><span class="when">Today 09:00</span><span class="pip"></span><span class="what"><b>Aftercare check-in sent</b> (WhatsApp, delivered)<span class="why">Why: <code>WF-AFTERCARE v2</code> step 3, 14 days after attended</span></span></div>
+            <div class="ev m-book"><span class="when">12 Sep</span><span class="pip"></span><span class="what"><b>Attended</b> Skin Boosters with Nafisa<span class="why">Marked by Reception</span></span></div>
+            <div class="ev m-wf"><span class="when">2 Sep</span><span class="pip"></span><span class="what"><b>Left workflow</b> Tired-eyes nurture at step 4<span class="why">Why: stop rule <code>booked</code>, booking created</span></span></div>
+            <div class="ev m-book"><span class="when">2 Sep</span><span class="pip"></span><span class="what"><b>Booked</b> Fresh-Face Assessment, £25 deposit paid<span class="why">Came from email 4 link · <code>cmp-autumn-refresh</code></span></span></div>
+            <div class="ev m-msg"><span class="when">30 Aug</span><span class="pip"></span><span class="what"><b>Clicked</b> email 3, "Why more filler isn't always the answer"</span></div>
+            <div class="ev m-cap"><span class="when">27 Aug</span><span class="pip"></span><span class="what"><b>Downloaded the guide</b> from /guide-opt-in<span class="why">Tag <code>why-do-i-look-tired</code> added · marketing email consent v3</span></span></div>
+          </div>
+          <div class="side">
+            <div class="box"><h5>Consents</h5>
+              <div class="consent"><span>Marketing email</span><span class="badge b-ok">Yes · v3</span></div>
+              <div class="consent"><span>WhatsApp</span><span class="badge b-ok">Yes</span></div>
+              <div class="consent"><span>Marketing photos</span><span class="badge b-fail">No</span></div>
+            </div>
+            <div class="box"><h5>Workflows</h5><span>Aftercare · step 3 of 4</span><span class="muted">Next: review request, 3 Oct 10:00</span></div>
+            <div class="box"><h5>Tags</h5><span>why-do-i-look-tired · skin-boosters</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="frame" aria-label="Workflow run view">
+      <div class="bar"><span class="tn"><span class="dot"></span>PureMed</span><span class="muted">Workflows / Tired-eyes nurture</span><span class="sp"></span><span class="badge b-ok">On · v1</span></div>
+      <div class="screen">
+        <div class="muted" style="font-size:.8rem">Trigger: tag <code>why-do-i-look-tired</code> added. Stops if booked, unsubscribed, bounced or replied. Quiet hours 20:00 to 09:00.</div>
+        <div class="steps">
+          <div class="step"><span class="no">1</span><div>Guide delivery · immediately<div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div><span class="cnt">41</span></div>
+          <div class="step"><span class="no">2</span><div>Why you may look tired · day 1<div class="bar-track"><div class="bar-fill" style="width:93%"></div></div></div><span class="cnt">38</span></div>
+          <div class="step"><span class="no">3</span><div>Not more filler · day 3<div class="bar-track"><div class="bar-fill" style="width:78%"></div></div></div><span class="cnt">32</span></div>
+          <div class="step"><span class="no">4</span><div>The £25 assessment · day 5<div class="bar-track"><div class="bar-fill" style="width:63%"></div></div></div><span class="cnt">26</span></div>
+          <div class="step"><span class="no">5</span><div>Reassurance · day 7<div class="bar-track"><div class="bar-fill" style="width:44%"></div></div></div><span class="cnt">18</span></div>
+          <div class="step"><span class="no">6</span><div>Final reminder · day 9<div class="bar-track"><div class="bar-fill" style="width:34%"></div></div></div><span class="cnt">14</span></div>
+        </div>
+        <div class="muted" style="font-size:.78rem">People reached per step. Stopped: 7 booked, 3 unsubscribed, 1 replied. Next send: 5 people at 09:00 tomorrow.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn ghost" type="button">Enrol someone</button><button class="btn ghost" type="button">Pause</button><button class="btn ghost" type="button">Version history</button></div>
+      </div>
+    </div>
+
+    <div class="frame" aria-label="Campaign builder audience step">
+      <div class="bar"><span class="tn"><span class="dot"></span>PureMed</span><span class="muted">Campaigns / New / Audience</span><span class="sp"></span><span class="muted">Step 2 of 5</span></div>
+      <div class="screen">
+        <div class="field"><span class="l">Goal</span><span class="v">Fill November Wednesday slots · measure: bookings by 30 Nov</span></div>
+        <div class="field"><span class="l">Segment</span><span class="v">Attended any treatment · last attended over 4 months ago · marketing email = yes</span></div>
+        <div class="aud">
+          <div class="row"><span>Matches the segment</span><span>248</span></div>
+          <div class="row"><span>In another marketing workflow</span><span class="minus">−19</span></div>
+          <div class="row"><span>Messaged in the last 7 days</span><span class="minus">−11</span></div>
+          <div class="row"><span>Open complication on record</span><span class="minus">−2</span></div>
+          <div class="row"><span>Bounced address</span><span class="minus">−4</span></div>
+          <div class="row total"><span>Will receive</span><span>212</span></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn ghost" type="button">See the 212</button><button class="btn" type="button">Next: content</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame" aria-label="Activity feed">
+    <div class="bar"><span class="tn"><span class="dot"></span>PureMed</span><span class="muted">Activity</span><span class="sp"></span><span class="muted">What the system did</span></div>
+    <div class="screen timeline">
+      <div class="ev m-msg"><span class="when">09:00</span><span class="pip"></span><span class="what"><b>5 emails sent</b> (Tired-eyes nurture, step 3)<span class="why">Why: due day 3, held overnight by quiet hours</span></span></div>
+      <div class="ev m-wf"><span class="when">08:12</span><span class="pip"></span><span class="what"><b>Paused</b> Tired-eyes nurture for Leah D.<span class="why">Why: stop rule <code>replied</code>. Task created for Reception.</span></span></div>
+      <div class="ev m-book"><span class="when">07:40</span><span class="pip"></span><span class="what"><b>Stopped</b> nurture for Priya S., booked Laser Lift<span class="why">Why: stop rule <code>booked</code> · source recorded as email 4</span></span></div>
+      <div class="ev m-cap"><span class="when">Yesterday</span><span class="pip"></span><span class="what"><b>Recall due</b> for 6 people, added to Recall workflow<span class="why">Why: rule <code>RECALL-TOXIN-16W</code>, 16 weeks since last attended</span></span></div>
+    </div>
+  </div>
+  <p class="muted">Roles narrow the console. Marketing sees Campaigns, Workflows and Content with no clinical fields. Reception sees Diary and a reduced Person view. Clinical tabs appear only for practitioners.</p>
+</section>
+
+<section id="transfer">
+  <div class="sec-head">
+    <span class="eyebrow">Transferability</span>
+    <h2>Core, pack, tenant</h2>
+    <p class="muted">Counts are register rows by scope. Most of the platform isn't specific to aesthetics.</p>
+  </div>
+  <div class="tiers">
+    <div class="tier core"><span class="count" id="n-core">160</span><h3>Core</h3><p>Spine, generic modules, console, gates. Every tenant in every niche.</p></div>
+    <div class="tier pack"><span class="count" id="n-pack">23</span><h3>Aesthetics pack</h3><p>Catalogue fields, recall rules, prescriber rules, advertising lint, workflow templates, DPIA, the clinical module. Data plus optional modules, never a core edit.</p></div>
+    <div class="tier tenant"><span class="count" id="n-tenant">3</span><h3>PureMed tenant</h3><p>Faces migration and exit, forward diary cutover, care@ as the mailbox, Whitehouse CQC routing. Plus brand, catalogue and staff as config.</p></div>
+  </div>
+  <p class="callout"><b>Earn the word before using it.</b> Call it "transferable" only once one tenant in another niche (salon, physio, accountant) is running with zero core code change (COM-005). Vera proved the content side on 24 July. The operational side hasn't been tested yet.</p>
+</section>
+
+<section id="phasing">
+  <div class="sec-head">
+    <span class="eyebrow">Phasing</span>
+    <h2>Each phase ships something PureMed uses</h2>
+  </div>
+  <div class="phases">
+    <div class="phase"><span class="pn">0</span><div><h3>Spine and the first workflow</h3><p>Person, consent, events, tags, workflow engine, capture endpoint, email sending. The tired-eyes opt-in runs on it instead of PHP.</p></div><p class="proves"><b>Proves</b> the spine carries a real workload.</p></div>
+    <div class="phase"><span class="pn">1</span><div><h3>Console v1</h3><p>Inbox, People, Person timeline, Activity, workflow run view, pause-all switch.</p></div><p class="proves"><b>Proves</b> the client can see and control automation.</p></div>
+    <div class="phase"><span class="pn">2</span><div><h3>Faces in house</h3><p>Customer record and consent engine, with the Faces form library unchanged. Faces export verified, migrated and reconciled. Forward diary moved, the platform becomes the only calendar writer, and Faces is retired. Deposits on every booking. Recall and no-show workflows.</p></div><p class="proves"><b>Proves</b> one ecosystem for customer records and bookings.</p></div>
+    <div class="phase"><span class="pn">3</span><div><h3>Campaigns and reporting</h3><p>Campaign object, audience preview, stated attribution, Today figures, monthly report from the same queries.</p></div><p class="proves"><b>Proves</b> "drive bookings" is measurable.</p></div>
+    <div class="phase"><span class="pn">4</span><div><h3>Social publishing and blog</h3><p>Meta publishing, UTM, post metrics, blog as content, editing surface off the Pi.</p></div><p class="proves"><b>Proves</b> the content loop closes.</p></div>
+    <div class="phase"><span class="pn">5</span><div><h3>Rest of the clinical pack</h3><p>Treatment notes and batch tracking, prescribing record, clinical photography, treatment plans (S8 to S11).</p></div><p class="proves"><b>Proves</b> the aesthetics edition is complete.</p></div>
+    <div class="phase"><span class="pn">6</span><div><h3>Second niche</h3><p>A non-aesthetics pack and tenant with zero core change.</p></div><p class="proves"><b>Proves</b> transferability.</p></div>
+  </div>
+  <p class="callout"><b>The DPIA now blocks Phase 2.</b> Bringing Faces in house puts health data and signed consent into the platform at cutover. The DPIA and a verified Faces export both have to be done before Phase 2 starts.</p>
+  <p class="callout">Phase 0 trade-off: putting the opt-in on the spine is slower than the PHP route, but it leaves no lead store to migrate later. If the guide has to go live within days, ship PHP as a disposable stop-gap with an export and label it that way in its README.</p>
+</section>
+
+<section id="register">
+  <div class="sec-head">
+    <span class="eyebrow">Requirements register</span>
+    <h2>192 requirements by category</h2>
+    <p class="muted">Generated from <code>requirements-register.py</code>. Clinical depth stays in the clinical-platform register (v0.8), and the CLN rows point to it.</p>
+  </div>
+  <div class="reg-summary" id="reg-summary"></div>
+  <div class="filters">
+    <div class="frow"><span class="fl">Search</span><input class="search" id="q" type="search" placeholder="Search requirement, ID or trace" aria-label="Search requirements"><select id="cat" aria-label="Category"></select></div>
+    <div class="frow" data-f="status"><span class="fl">Status</span></div>
+    <div class="frow" data-f="scope"><span class="fl">Scope</span></div>
+    <div class="frow" data-f="pri"><span class="fl">Priority</span></div>
+  </div>
+  <div class="reg-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Requirement</th><th>Why</th><th>Priority</th><th>Scope</th><th>Surface</th><th>Status</th><th>Trace</th></tr></thead>
+      <tbody id="reg-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="open">
+  <div class="sec-head">
+    <span class="eyebrow">Decisions</span>
+    <h2>Seven locked, two open</h2>
+  </div>
+  <div class="od">
+    <div><span class="k">D1</span><span>Reverse v5 on the clinic vertical and self-serve tier?</span><span class="r"><b>Decided 26 Sep:</b> yes, framed as the Systems line made repeatable. Logged.</span></div>
+    <div><span class="k">D2</span><span>Name</span><span class="r"><b>Decided 26 Sep:</b> platform Main Stage Studio; edition Main Stage Aesthetics Studio.</span></div>
+    <div><span class="k">D3</span><span>Product core</span><span class="r"><b>Decided 26 Sep:</b> customer records and bookings in house, Faces replaced.</span></div>
+    <div><span class="k">D4</span><span>Host for the Node and Postgres service</span><span class="r"><b>Reopened 26 Sep:</b> the Velocity checks failed on point-in-time recovery (backups are whole-app snapshots). Proposed: Node on Velocity, database on DigitalOcean Managed PostgreSQL in London (7-day point-in-time recovery).</span></div>
+    <div><span class="k">D5</span><span>Opt-in on the spine, or a PHP stop-gap first?</span><span class="r"><b>Decided 26 Sep:</b> on the spine. PHP stop-gap only if it becomes urgent.</span></div>
+    <div><span class="k">D6</span><span>Workflow authoring in v1</span><span class="r"><b>Decided 26 Sep:</b> template library only. Add a builder once three tenants ask for one.</span></div>
+    <div><span class="k">D7</span><span>Managed or self-serve at launch</span><span class="r"><b>Decided 26 Sep:</b> managed only. The console shows the client a service MSS runs.</span></div>
+    <div><span class="k">D8</span><span>Email integration point</span><span class="r"><b>Decided 26 Sep:</b> care@puremed.uk, direct, for every email integration.</span></div>
+    <div><span class="k">D9</span><span>Faces cutover date and contract notice</span><span class="r">Set once the export is verified complete and the DPIA is done. Faces' contract and notice terms are still unknown.</span></div>
+  </div>
+</section>
+
+<footer>
+  <span>Main Stage Studio · platform design v0.3 · proposal, D4 reopened and D9 open, the rest decided 26 September 2026</span>
+  <span>Stale docs found while writing: the PureMed growth engagement plan still says <code>site/</code> won't go live (reversed 15 Sep), and the Unified Content Studio canon file named in memory isn't at its recorded path.</span>
+</footer>
+</div>
+
+<script src="register.js"></script>
+<script>
+(function(){
+  var R = window.REGISTER; if(!R) return;
+  var rows = R.rows, cats = R.categories;
+  var state = {q:"", cat:"", status:new Set(), scope:new Set(), pri:new Set()};
+  var catOf = function(id){ return id.slice(0, id.lastIndexOf("-")); };
+  var count = function(k,v){ return rows.filter(function(r){return r[k]===v;}).length; };
+
+  var sum = document.getElementById("reg-summary");
+  [["Built","Built"],["Partial","Partial"],["Designed","Designed"],["New","New"]].forEach(function(p){
+    var d=document.createElement("div"); d.innerHTML='<span class="v">'+count("status",p[0])+'</span><span class="l">'+p[1]+'</span>'; sum.appendChild(d);
+  });
+  var m=document.createElement("div"); m.innerHTML='<span class="v">'+count("pri","Must")+'</span><span class="l">Must</span>'; sum.appendChild(m);
+  document.getElementById("n-core").textContent = count("scope","Core");
+  document.getElementById("n-pack").textContent = count("scope","Pack:Aesthetics");
+  document.getElementById("n-tenant").textContent = count("scope","Tenant:PureMed");
+
+  var sel = document.getElementById("cat");
+  sel.innerHTML = '<option value="">All categories</option>' + Object.keys(cats).map(function(k){
+    return '<option value="'+k+'">'+cats[k]+' ('+rows.filter(function(r){return catOf(r.id)===k;}).length+')</option>';
+  }).join("");
+
+  var opts = {status:["Built","Partial","Designed","New"], scope:["Core","Pack:Aesthetics","Tenant:PureMed"], pri:["Must","Should","Could"]};
+  Object.keys(opts).forEach(function(f){
+    var row = document.querySelector('.frow[data-f="'+f+'"]');
+    opts[f].forEach(function(v){
+      var b=document.createElement("button"); b.type="button"; b.className="fbtn"; b.textContent=v+" · "+count(f,v); b.setAttribute("aria-pressed","false");
+      b.addEventListener("click",function(){ if(state[f].has(v)){state[f].delete(v);b.setAttribute("aria-pressed","false");}else{state[f].add(v);b.setAttribute("aria-pressed","true");} render(); });
+      row.appendChild(b);
+    });
+  });
+  document.getElementById("q").addEventListener("input",function(e){state.q=e.target.value.toLowerCase();render();});
+  sel.addEventListener("change",function(e){state.cat=e.target.value;render();});
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function scopeCls(s){return s==="Core"?"sc":(s.indexOf("Pack")===0?"sc pack":"sc tenant");}
+  var body = document.getElementById("reg-body");
+  function render(){
+    var out=[], last="";
+    var list = rows.filter(function(r){
+      if(state.cat && catOf(r.id)!==state.cat) return false;
+      if(state.status.size && !state.status.has(r.status)) return false;
+      if(state.scope.size && !state.scope.has(r.scope)) return false;
+      if(state.pri.size && !state.pri.has(r.pri)) return false;
+      if(state.q){ var hay=(r.id+" "+r.req+" "+r.why+" "+r.trace).toLowerCase(); if(hay.indexOf(state.q)<0) return false; }
+      return true;
+    });
+    list.forEach(function(r){
+      var c=catOf(r.id);
+      if(c!==last){ out.push('<tr class="catrow"><td colspan="8">'+esc(cats[c])+'</td></tr>'); last=c; }
+      out.push('<tr><td class="id">'+r.id+'</td><td class="req">'+esc(r.req)+'</td><td class="why2">'+esc(r.why)+'</td><td class="p-'+r.pri+'">'+r.pri+'</td><td class="'+scopeCls(r.scope)+'">'+esc(r.scope)+'</td><td class="sc">'+esc(r.surface)+'</td><td><span class="badge s-'+r.status+'">'+r.status+'</span></td><td class="trace">'+esc(r.trace)+'</td></tr>');
+    });
+    body.innerHTML = out.length ? out.join("") : '<tr><td colspan="8" class="empty">No requirements match. Clear a filter to see more.</td></tr>';
+  }
+  render();
+})();
+</script>
