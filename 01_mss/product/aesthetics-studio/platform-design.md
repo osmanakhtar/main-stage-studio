@@ -1,6 +1,6 @@
 # Main Stage Aesthetics Studio: Platform Design
 
-*Canon doc for the productised platform. v0.6, 29 September 2026 (v0.1 to v0.3 on 26 Sep, v0.4 and v0.5 on 27 Sep).
+*Canon doc for the productised platform. v0.7, 29 September 2026 (v0.1 to v0.3 on 26 Sep, v0.4 and v0.5 on 27 Sep, v0.6 earlier on 29 Sep).
 **Phase 0 built, plus the consultation and a first console screen (see the v0.5 note). Eight of nine decisions locked; D9 (Faces cutover date) open.** Owner: Osman. Working directory:
 `~/workspace/main-stage-studio/01_mss/product/aesthetics-studio/`.*
 
@@ -15,6 +15,33 @@
 Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
+
+## v0.7 change note, 29 September 2026: console v2 (campaigns, drafts, pause)
+
+Osman's pre-access UX test of the console found: no way to unapprove, no sign that an edit needed
+re-approving (a changed email still said "Approved"), unsaved edits lost silently, no campaign context
+or live state, placeholder copy approvable, approval dates a day early (a `date` column read through a
+local-time `Date`). Decided (Osman, same day, all three as recommended):
+
+- **Pausing replaces unapproving.** Each campaign is On or Paused, using the existing `workflow.state`
+  kill switch (the worker already only claims steps of `on` workflows). Paused: the engine skips new
+  enrolments and resends (`workflow.enrolment_skipped`, rule `<key>/paused`); people already in it wait
+  and continue on resume, overdue steps going out at once. Owner only; `workflow.paused` /
+  `workflow.resumed` events; who and when on `workflow.state_changed_by/at` (migration 005). In live
+  mode, resume refuses while any patient email in the campaign is unapproved, and the live-mode publish
+  check now skips paused campaigns, so a paused campaign's placeholders can't block going live.
+- **Save draft and Approve are separate.** New `template_draft` table (one per email, RLS, migration
+  005): nobody receives a draft. Approve = the old save (new immutable approved `template_version`,
+  re-pin, DET-005 unchanged) plus deleting the draft. Discard deletes it. Every email shows one of
+  Approved, Changes not approved, Not approved. Approval refuses `[DRAFT` / `PLACEHOLDER` text.
+  Clinic alerts send regardless of approval, so they never count as needing it.
+- **Campaign overview.** Emails page replaced by Campaigns (cards) and a campaign page that states, from
+  config: entry point (forms whose tags trigger it; new optional form `name` and `page_url`), who gets
+  it (consent ticked vs notice), timing and quiet hours, stop rules, re-entry, people in it and emails
+  sent in 30 days. New optional workflow `description`. Test mode is a banner on every page.
+
+Tests 64 to 69 (drafts, discard, placeholder guard, pause holds and skips, live-mode resume refusal).
+Not yet deployed: needs migration 005 on DigitalOcean (the release job runs it) and a publish.
 
 ## v0.6 change note, 29 September 2026: host is DigitalOcean, not Velocity
 
