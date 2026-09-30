@@ -180,8 +180,9 @@ Not yet deployed: needs migration 005 on DigitalOcean (the release job runs it) 
 4. Before go-live: remove the staging origin from `allowed_origins`; guide PDF into
    `site/public/guide/`; Nafisa approves emails and consent in the console; DPIA; site preflight
    warnings (10 em dashes on index, 8 to 9 MB PNGs, WCAG contrast on home and treatments);
-   then the puremed.uk cutover from dermis.ai (enable `puremed-prod` in targets.json, add
-   `CLOUDWAYS_WEBROOT_PROD` secret, redirects for old URLs, A records at 123-reg).
+   then the puremed.uk cutover from dermis.ai. **Done 30 Sep 2026** (SOP-PUREMED-004), by promoting
+   `puremed-staging` rather than a separate `puremed-prod`: puremed.uk and www serve the Astro site,
+   old URLs forward via redirect stubs, platform `allowed_origins` already covered both names.
 5. Housekeeping: DigitalOcean 2FA (Osman); check Cloudways Billing for a Velocity charge
    (Full Access was switched on 29 Sep, no Velocity app created).
 
