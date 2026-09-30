@@ -144,6 +144,26 @@ Logged in as admin and clicked through everything built today, plus scripted ver
 
 **Submission history + rollback — DONE 16 Aug 2026.** No new data model needed — every submission already snapshots `copy`/`images`/`repeatables`/`sections` in full (`output/submissions/NNN.json`), it just had no restore action. Added `POST /api/admin/submissions/:engagement/:n/restore`: backs up the current live-edit state to `output/pre-restore-backup-<timestamp>.json` (not a formal submission, just a rescue copy, so a restore is itself always undoable), then overwrites `client-edits.json` with the chosen snapshot. No client-side plumbing needed — `applyOverlay()` already re-renders from `client-edits.json` on every page load, so a restore takes effect the moment anyone reloads the page. "Restore this version" button added inside each submission's expanded digest in the Submissions tab, with a confirm dialog. Deployed clean, routes verified.
 
+## 30 Sep 2026: one image library per client, fed by Dropbox
+
+**Built and live.** Osman's call: per-page image pools plus curation/nominating was overcomplicating asset handling. Now:
+
+- **One library per client.** Every page (engagement) under a client picks from `clients/<slug>/assets/` on the Pi. The live-edit picker, review gallery and admin tab all list that one folder (`lib/client-library.js libraryFor`). No curation step. Admin tab renamed "Asset Library" (upload, Dropbox badge, last sync time); the copy-from-another-engagement route and modal are gone. Every upload path lands in the library. The picker has a filename search. Deletes are refused for Dropbox images and for anything placed on any page.
+- **Dropbox sync.** The Mac's Dropbox app is now signed in to the PureMed account (`~/Library/CloudStorage/Dropbox`). `workspace/scripts/stage-asset-sync.js` runs every 10 minutes (launchd), rsyncs the folder to the Pi, and the Pi's `scripts/library-sync.js` converts to WebP with the upload settings, prefixes folder names into filenames, skips `do-not-use` paths and mirrors deletions. SOP-OPS-010.
+- **Fold.** Only images placed on pages and the client's own uploads were copied from the old per-page folders (Osman's call). About 1,090 old images stay in those folders, out of the picker. Library at go-live: 264 images (213 Dropbox, 39 client uploads, 12 placed).
+- **Publish fix.** `workspace/scripts/mss-loop2.js` now fetches a picked image from the library when it is not in the page's own folder (before, a library pick failed at publish).
+- **Pi.** The SD card returned I/O errors mid-session and Stage was down until a power cycle; cause not found. Osman decided Stage stays on the Pi for now (declined: DigitalOcean droplet about $7/mo, Cloudways at no cost with unsupported Node, inside the DigitalOcean app plus Spaces). Nightly backup to the Mac added (`workspace/scripts/stage-pi-backup.sh`, 02:30, 14 hard-linked snapshots, SOP-OPS-011).
+
+Patch record, file copies and rollback: `workspace/scripts/stage-patches/2026-09-30-single-asset-library/README.md`.
+
+**Next actions**
+1. First real publish of a page where Nafisa picked a library image: confirms the `mss-loop2.js` fallback end to end (not yet exercised).
+2. Rehearse a restore from `~/Backups/stage-pi/nightly/` onto a spare card (SOP-OPS-011 restore steps are unrehearsed).
+3. The backups are a single copy on the Mac (Time Machine not configured): Osman to decide on a second copy.
+4. Optional: picker thumbnails (it loads full-size WebPs, lazy).
+
+**Blocked:** nothing.
+
 ## Resume prompt
 
 "Continue the Stage simplification from `main-stage-studio/03_resources/stage-capability-audit-and-proposal.md` — start with Phase 1 housekeeping (remove dead `posts` capability, archive the two stale content-review engagements, add a Submissions admin tab)."
