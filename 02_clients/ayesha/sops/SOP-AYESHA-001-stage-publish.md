@@ -16,7 +16,7 @@ After any change to `web/ayesha-johar-v2.html` or `web/assets/art/` that Ayesha 
 
 - SSH key access to `pi@192.168.1.106` from the Mac (same as every Stage job).
 - `node` on the Mac, and `~/workspace/scripts/stage-autotag.js` present.
-- Ayesha's client login is `ayesha`, scoped to `ayesha-johar-site` only, in `~/stage/config/users.json` on the Pi. Her password was handed over out of band; it is not stored in the repo.
+- Ayesha's client login is `ayesha`, scoped to `ayesha-johar-site` only, in `~/stage/config/users.json` on the Pi. Her password was handed over out of band; it is not stored in the repo. To reset it or change what she can open, use Stage admin > Users (SOP-OPS-012).
 
 ## Routine operation
 
