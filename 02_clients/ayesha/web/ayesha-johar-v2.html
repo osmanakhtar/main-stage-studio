@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Art by Ayesha Johar</title>
+  <meta name="description" content="Beauty is a form of resistance. Acrylic paintings by Ayesha Johar, London and Mauritius.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Prototype v2 · brand direction v2 (Sept 2026) */
+
+    /* ── TOKENS ─────────────────────────────────────────────────── */
+    :root {
+      --teal-deep:  #0F3D35;
+      --teal:       #1A6B5C;
+      --ocean:      #2A6E8A;
+      --saffron:    #B8620E;
+      --gold:       #C98B1A;
+      --ember:      #7A2810;
+      --ink:        #1A1410;
+      --canvas:     #EDE5D8;
+      --parchment:  #F4EDE0;
+      --muted:      #6E6154;   /* darkened from #8A7D6E for AA contrast */
+      --saffron-text: #8F4A08; /* small saffron text on light */
+      --saffron-lt: #E08A3A;   /* saffron text on dark */
+      --teal-lt:    #6FB8A6;   /* teal text on dark */
+      --gold-text:  #80550C;   /* gold text on light */
+      --rule:       rgba(26,20,16,0.12);
+      --on-dark:    rgba(244,237,224,0.72);
+      --on-dark-lo: rgba(244,237,224,0.45);
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --font-arabic:  'Amiri', 'Noto Naskh Arabic', serif;
+
+      --gutter: 48px;
+      --ease:   cubic-bezier(0.16,1,0.3,1);
+    }
+    @media (max-width: 760px) { :root { --gutter: 20px; } }
+
+    /* ── RESET ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--canvas);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    :focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+    .label {
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .wrap { max-width: 1300px; margin: 0 auto; padding: 0 var(--gutter); }
+
+    /* ── REVEAL ─────────────────────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.08s; } .d2 { transition-delay: 0.18s; }
+    .d3 { transition-delay: 0.30s; } .d4 { transition-delay: 0.44s; }
+
+    .clip { overflow: hidden; display: block; }
+    .clip-inner { display: block; transform: translateY(108%); transition: transform 1.4s var(--ease); }
+    .clip-inner.up { transform: none; }
+    .cd1 .clip-inner { transition-delay: 0.1s; }
+    .cd2 .clip-inner { transition-delay: 0.28s; }
+    .cd3 .clip-inner { transition-delay: 0.46s; }
+    .cd4 .clip-inner { transition-delay: 0.68s; }
+
+    /* ── NAV ────────────────────────────────────────────────────── */
+    #progress { position: fixed; top: 0; left: 0; height: 1px; width: 100%; background: var(--gold); transform-origin: left; transform: scaleX(0); z-index: 100; }
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 6px var(--gutter);
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background 0.5s ease, padding 0.5s ease;
+    }
+    #nav.scrolled { background: rgba(15,61,53,0.96); padding-top: 0; padding-bottom: 0; backdrop-filter: blur(8px); }
+    .nav-logo { font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--on-dark-lo); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { display: inline-block; min-width: 44px; text-align: center; padding: 16px 0; font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-lo); text-decoration: none; transition: color 0.3s ease; }
+    .nav-links a:hover { color: var(--parchment); }
+    @media (max-width: 520px) {
+      .nav-logo { display: none; }
+      #nav { justify-content: flex-end; }
+      .nav-links { gap: 22px; }
+    }
+
+    /* ── I · ARRIVAL ────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100vh; min-height: 100dvh;
+      background: var(--teal-deep);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 120px var(--gutter) 48px;
+      overflow: hidden;
+    }
+    /* Water painting drifts slowly under the overlay. A Higgsfield video can replace it. */
+    .hero-painting {
+      position: absolute; inset: -6%;
+      background: url('assets/art/water.webp') center / cover no-repeat;
+      opacity: 0.55;
+      animation: drift 38s ease-in-out infinite alternate;
+    }
+    @keyframes drift { from { transform: scale(1.04) translate3d(-1.5%, -1%, 0); } to { transform: scale(1.12) translate3d(1.5%, 1.5%, 0); } }
+    #hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(160deg, rgba(15,61,53,0.80) 0%, rgba(15,61,53,0.62) 50%, rgba(15,61,53,0.90) 100%);
+    }
+    .geo { position: absolute; border-radius: 50%; border: 0.5px solid rgba(201,139,26,0.16); pointer-events: none; z-index: 2; }
+    .geo-1 { width: 600px; height: 600px; top: -200px; right: -200px; }
+    .geo-2 { width: 380px; height: 380px; top: -100px; right: -100px; border-color: rgba(201,139,26,0.10); }
+    .geo-3 { width: 200px; height: 200px; top: -20px;  right: -20px;  border-color: rgba(201,139,26,0.07); }
+
+    #hero-content { position: relative; z-index: 3; max-width: 1200px; }
+    .hero-eyebrow { font-size: 0.625rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--on-dark-lo); margin-bottom: 16px; }
+    .hero-art-by { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--on-dark-lo); margin-bottom: 6px; display: block; }
+    .hero-name-a, .hero-name-b {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 10vw, 130px);
+      line-height: 0.92; letter-spacing: -0.01em; display: block;
+    }
+    .hero-name-a { color: var(--parchment); }
+    .hero-name-b { font-style: italic; color: var(--gold); margin-bottom: 28px; padding-bottom: 0.08em; }
+    .hero-rule { width: 40px; height: 1px; background: rgba(201,139,26,0.6); margin-bottom: 20px; transform-origin: left; transform: scaleX(0); opacity: 0; transition: opacity 0.6s ease 1.1s, transform 0.8s var(--ease) 1.1s; }
+    .hero-line {
+      font-family: var(--font-display); font-style: italic; font-weight: 300;
+      font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+      color: var(--parchment); line-height: 1.3;
+      opacity: 0; transition: opacity 1s ease 1.5s;
+    }
+    .ready .hero-rule { opacity: 1; transform: none; }
+    .ready .hero-line { opacity: 1; }
+
+    .hero-footer {
+      position: relative; z-index: 3;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      border-top: 0.5px solid rgba(244,237,224,0.14);
+      padding-top: 20px; margin-top: 56px; max-width: 1200px;
+    }
+    .hero-meta { font-size: 0.75rem; color: var(--on-dark-lo); letter-spacing: 0.08em; }
+    .hero-enter {
+      font-size: 0.625rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--on-dark); text-decoration: none; white-space: nowrap;
+      padding: 16px 0;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-enter::after { content: ''; width: 24px; height: 1px; background: var(--gold); transition: width 0.4s var(--ease); }
+    .hero-enter:hover::after { width: 44px; }
+
+    /* ── LOOK CLOSER ────────────────────────────────────────────── */
+    #closer { padding: 112px 0 96px; }
+    .closer-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: center; }
+    .closer-copy .label { color: var(--saffron-text); margin-bottom: 20px; }
+    .closer-title {
+      font-family: var(--font-display); font-weight: 300;
+      font-size: clamp(34px, 3.8vw, 52px); line-height: 1.06; margin-bottom: 24px;
+    }
+    .closer-title em { color: var(--teal); }
+    .closer-body { font-size: 1rem; font-weight: 300; color: #5E5347; line-height: 1.8; max-width: 400px; }
+    .closer-hint { margin-top: 28px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+    .closer-hint::before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--gold); }
+
+    .loupe-stage {
+      position: relative; border-radius: 4px; overflow: hidden;
+      cursor: none; touch-action: none;
+      box-shadow: 0 30px 60px -30px rgba(26,20,16,0.45);
+    }
+    .loupe-stage img { width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+    .loupe {
+      position: absolute; top: 0; left: 0;
+      width: 200px; height: 200px; margin: -100px 0 0 -100px;
+      border-radius: 50%;
+      border: 1px solid rgba(244,237,224,0.85);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 0 0 6px rgba(26,20,16,0.12);
+      background-repeat: no-repeat;
+      pointer-events: none;
+      opacity: 0; transition: opacity 0.3s ease;
+      will-change: transform;
+    }
+    .loupe-stage.active .loupe { opacity: 1; }
+    @media (max-width: 900px) {
+      .closer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .loupe { width: 150px; height: 150px; margin: -75px 0 0 -75px; }
+    }
+
+    /* ── II · THE WORK ──────────────────────────────────────────── */
+    #work { padding: 32px 0 64px; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 40px; }
+    .section-title { font-family: var(--font-display); font-weight: 300; font-size: clamp(36px, 4vw, 52px); line-height: 1; }
+    .section-title em { color: var(--saffron); }
+    .section-aside { font-size: 0.875rem; font-weight: 300; color: var(--muted); max-width: 300px; line-height: 1.7; text-align: right; }
+
+    /* Index of the five bodies */
+    .series-index {
+      display: grid; gap: 8px;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-areas: "sacred witness witness" "sacred world nature" "love love love";
+      grid-template-rows: 220px 220px 150px;
+    }
+    .series-card {
+      position: relative; overflow: hidden; border-radius: 6px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 22px; text-decoration: none; color: var(--parchment);
+      background-color: var(--tint);
+      isolation: isolate;
+    }
+    .series-card .bg { position: absolute; inset: 0; z-index: -2; background-color: var(--tint); background-size: cover; background-position: center; transition: transform 1.2s var(--ease); }
+    .series-card::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--tint); opacity: 0.62; transition: opacity 0.6s ease; }
+    .series-card:hover .bg { transform: scale(1.06); }
+    .series-card:hover::before { opacity: 0.38; }
+    .series-card.sacred  { --tint: var(--teal);  grid-area: sacred; }
+    .series-card.witness { --tint: var(--ember); grid-area: witness; }
+    .series-card.world   { --tint: var(--ink);   grid-area: world; }
+    .series-card.nature  { --tint: var(--ocean); grid-area: nature; }
+    .series-card.love    { --tint: var(--gold);  grid-area: love; color: var(--ink); }
+    .card-label { font-size: 0.5625rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--on-dark); margin-bottom: 6px; }
+    .card-title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 1.5rem; line-height: 1; }
+    .card-count { position: absolute; top: 20px; right: 22px; font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-dark); }
+
+    .sacred-geo { position: absolute; top: 50%; left: 50%; width: 240px; height: 240px; margin: -150px 0 0 -120px; border-radius: 50%; border: 0.5px solid rgba(244,237,224,0.28); z-index: -1; }
+    .sacred-geo::before, .sacred-geo::after { content: ''; position: absolute; border-radius: 50%; border: 0.5px solid rgba(244,237,224,0.2); }
+    .sacred-geo::before { inset: 30px; }
+    .sacred-geo::after { inset: 70px; transform: rotate(45deg); border-radius: 12%; }
+
+    .series-card.love .card-label, .series-card.love .card-count { color: rgba(26,20,16,0.6); }
+    .series-card.love::before { opacity: 0.92; }
+    .series-card.love:hover::before { opacity: 0.8; }
+
+    /* Body galleries */
+    .body { padding: 88px 0 24px; scroll-margin-top: 40px; }
+    .body-head { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; padding-bottom: 28px; margin-bottom: 32px; border-bottom: 0.5px solid var(--rule); }
+    .body-head .label { margin-bottom: 14px; display: flex; align-items: center; gap: 10px; color: var(--muted); }
+    .body-head .label::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+    .body-title { font-family: var(--font-display); font-style: italic; font-weight: 300; font-size: clamp(40px, 5vw, 68px); line-height: 0.95; color: var(--c); }
+    .body-desc { font-size: 0.9375rem; font-weight: 300; color: #5E5347; line-height: 1.75; max-width: 440px; }
+
+    .gallery { columns: 3; column-gap: 20px; }
+    .gallery.two { columns: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .gallery.two .piece { margin-bottom: 0; }
+    .gallery.two .to-come { height: calc(100% - 38px); align-content: center; }
+    .piece { break-inside: avoid; margin-bottom: 32px; }
+    .piece button { display: block; width: 100%; text-align: left; position: relative; overflow: hidden; border-radius: 3px; background: var(--c, var(--ink)); }
+    .piece img { width: 100%; height: auto; transition: transform 1.2s var(--ease), opacity 0.4s ease; }
+    .piece button:hover img { transform: scale(1.035); }
+    .piece button::after {
+      content: 'Look closer'; position: absolute; left: 14px; bottom: 14px;
+      font-size: 0.5625rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--parchment); background: rgba(26,20,16,0.55); backdrop-filter: blur(6px);
+      padding: 6px 10px; border-radius: 100px;
+      opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.4s var(--ease);
+    }
+    .piece button:hover::after, .piece button:focus-visible::after { opacity: 1; transform: none; }
+    .piece figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; }
+    .piece-title { font-family: var(--font-display); font-style: italic; font-size: 1.0625rem; }
+    .piece-status { font-size: 0.5625rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); padding-top: 5px; white-space: nowrap; }
+
+    /* Bodies still waiting for photography */
+    .to-come {
+      border: 0.5px dashed color-mix(in srgb, var(--c) 55%, transparent);
+      border-radius: 6px; padding: 56px 32px;
+      display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center;
+      background: color-mix(in srgb, var(--c) 6%, var(--canvas));
+    }
+    .to-come-mark { width: 88px; height: 88px; border-radius: 50%; border: 0.5px solid var(--c); position: relative; }
+    .to-come-mark::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 0.5px solid var(--c); opacity: 0.6; }
+    .to-come-mark::after { content: ''; position: absolute; inset: 30px; border: 0.5px solid var(--c); transform: rotate(45deg); opacity: 0.5; }
+    .to-come p { font-size: 0.9375rem; font-weight: 300; color: #5E5347; line-height: 1.7; max-width: 520px; }
+    .to-come .label { color: var(--c); margin-bottom: 8px; }
+
+    @media (max-width: 900px) {
+      .section-header { flex-direction: column; align-items: flex-start; }
+      .section-aside { text-align: left; }
+      .series-index { grid-template-areas: "sacred sacred" "witness witness" "world nature" "love love"; grid-template-columns: 1fr 1fr; grid-template-rows: 260px 180px 180px 120px; }
+      .body-head { grid-template-columns: 1fr; gap: 16px; }
+      .gallery { columns: 2; }
+    }
+    @media (max-width: 520px) {
+      .gallery { columns: 1; }
+      .gallery.two { grid-template-columns: 1fr; }
+      .gallery.two .to-come { height: auto; }
+      .series-index { grid-template-rows: 220px 160px 160px 110px; }
+      .series-card.world .card-label, .series-card.nature .card-label { display: none; }
+      .to-come { grid-template-columns: 1fr; padding: 36px 24px; gap: 20px; }
+    }
+
+    /* ── III · WHO I AM ─────────────────────────────────────────── */
+    #about { background: var(--ink); color: var(--parchment); padding: 112px 0; margin-top: 64px; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: start; }
+    .about-left .label { color: var(--teal-lt); margin-bottom: 24px; }
+    .about-title { font-family: var(--font-display); font-weight: 300; font-size: clamp(34px, 3.4vw, 50px); line-height: 1.06; margin-bottom: 36px; }
+    .about-title em { color: var(--gold); }
+    .about-body { font-size: 1.0625rem; font-weight: 300; color: var(--on-dark); line-height: 1.8; margin-bottom: 20px; max-width: 520px; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+    .tag { font-size: 0.625rem; letter-spacing: 0.16em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; border: 0.5px solid rgba(244,237,224,0.22); color: var(--on-dark-lo); }
+
+    .beauty {
+      margin-top: 72px; padding-top: 40px;
+      border-top: 0.5px solid rgba(244,237,224,0.12);
+    }
+    .beauty .label { color: var(--saffron-lt); margin-bottom: 20px; }
+    .beauty blockquote { font-family: var(--font-display); font-weight: 300; font-size: 1.3125rem; line-height: 1.55; color: var(--parchment); max-width: 540px; }
+    .beauty blockquote strong { font-weight: 400; font-style: italic; color: var(--gold); }
+
+    .about-right .label { color: var(--saffron-lt); margin-bottom: 24px; }
+    .name-large { font-family: var(--font-display); font-weight: 300; font-size: clamp(48px, 6vw, 84px); line-height: 0.94; }
+    .name-large .art-by { display: block; font-family: var(--font-body); font-size: 0.8125rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--on-dark-lo); margin-bottom: 10px; }
+    .name-large em { color: var(--gold); }
+    .johar-arabic { font-family: var(--font-arabic); font-size: 3.25rem; line-height: 1.3; color: var(--gold); opacity: 0.85; margin: 36px 0 4px; direction: rtl; text-align: left; }
+    .johar-words { border-left: 1px solid rgba(201,139,26,0.45); padding-left: 24px; margin-top: 24px; }
+    .johar-words p { font-size: 0.9375rem; font-weight: 300; color: var(--on-dark); line-height: 1.8; margin-bottom: 16px; }
+    .johar-words p:first-child { font-family: var(--font-display); font-size: 1.3125rem; color: var(--parchment); line-height: 1.45; }
+    .johar-sign { font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--on-dark-lo); margin-top: 8px; }
+
+    @media (max-width: 900px) {
+      #about { padding: 88px 0; }
+      .about-grid { grid-template-columns: 1fr; gap: 72px; }
+    }
+
+    /* ── IV · THE DOOR ──────────────────────────────────────────── */
+    #collect { padding: 112px 0; }
+    .collect-header { margin-bottom: 48px; max-width: 640px; }
+    .collect-header .label { color: var(--saffron-text); margin-bottom: 16px; }
+    .collect-title { font-family: var(--font-display); font-weight: 300; font-size: clamp(32px, 3.4vw, 48px); line-height: 1.05; margin-bottom: 20px; }
+    .collect-title em { color: var(--saffron); }
+    .collect-intro { font-size: 1rem; font-weight: 300; color: #5E5347; line-height: 1.75; }
+    .collect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .collect-card { background: var(--parchment); border: 0.5px solid var(--rule); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s var(--ease), border-color 0.3s ease; }
+    .collect-card:hover { transform: translateY(-3px); border-color: rgba(26,20,16,0.24); }
+    .collect-img { aspect-ratio: 16 / 10; background-size: cover; background-position: center; }
+    .collect-body { padding: 26px 24px 28px; display: flex; flex-direction: column; flex: 1; }
+    .collect-card-title { font-family: var(--font-display); font-weight: 400; font-size: 1.3125rem; margin-bottom: 10px; }
+    .collect-card-text { font-size: 0.875rem; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 24px; flex: 1; }
+    .btn-ghost { padding: 16px 0; font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: gap 0.3s var(--ease), color 0.3s ease; }
+    .btn-ghost::after { content: ''; width: 20px; height: 1px; background: var(--saffron); transition: width 0.4s var(--ease); }
+    .btn-ghost:hover { color: var(--saffron); gap: 16px; }
+    .btn-ghost:hover::after { width: 36px; }
+    @media (max-width: 900px) { .collect-grid { grid-template-columns: 1fr; } #collect { padding: 88px 0; } }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    footer { background: var(--teal-deep); padding: 48px 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .footer-name { font-family: var(--font-display); font-style: italic; font-size: 1.125rem; color: var(--on-dark); }
+    .footer-arabic { font-family: var(--font-arabic); color: var(--gold); font-size: 1.5rem; margin-left: 10px; }
+    .footer-copy { font-size: 0.6875rem; color: var(--on-dark-lo); }
+
+    /* ── LIGHTBOX ───────────────────────────────────────────────── */
+    .lb { position: fixed; inset: 0; z-index: 200; background: rgba(16,12,9,0.97); display: grid; grid-template-rows: auto 1fr auto; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; }
+    .lb.open { opacity: 1; visibility: visible; transition: opacity 0.4s ease; }
+    .lb-top, .lb-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px var(--gutter); color: var(--on-dark); }
+    .lb-count { font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--on-dark-lo); }
+    .lb-btn { font-size: 0.625rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--on-dark); padding: 10px 14px; border: 0.5px solid rgba(244,237,224,0.2); border-radius: 100px; transition: border-color 0.3s ease, color 0.3s ease; }
+    .lb-btn:hover { border-color: var(--gold); color: var(--parchment); }
+    .lb-btn[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+    .lb-view { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0 var(--gutter); touch-action: none; }
+    .lb-view img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.5s var(--ease); cursor: zoom-in; user-select: none; -webkit-user-drag: none; }
+    .lb-view.zoomed img { transform: scale(2.6); cursor: zoom-out; transition: transform 0.5s var(--ease), transform-origin 0.08s linear; }
+    .lb-caption .t { font-family: var(--font-display); font-style: italic; font-size: 1.25rem; color: var(--parchment); }
+    .lb-caption .m { font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--on-dark-lo); margin-top: 4px; }
+    .lb-nav { display: flex; gap: 8px; }
+    @media (max-width: 520px) { .lb-hint { display: none; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+      .reveal, .clip-inner, .hero-line, .hero-rule { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress" aria-hidden="true"></div>
+
+  <nav id="nav" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo" data-stage-id="art-by-ayesha-johar">Art by Ayesha Johar</a>
+    <ul class="nav-links">
+      <li><a href="#work" data-stage-id="work">Work</a></li>
+      <li><a href="#about" data-stage-id="about">About</a></li>
+      <li><a href="#collect" data-stage-id="collect">Collect</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── MOVEMENT I · ARRIVAL ──────────────────────────────────── -->
+  <section id="hero" aria-label="Arrival" data-stage-section="arrival">
+    <div class="hero-painting" aria-hidden="true"></div>
+    <!-- Optional: <video id="hero-video" autoplay muted loop playsinline src="VIDEO.mp4"></video> -->
+    <div id="hero-overlay" aria-hidden="true"></div>
+    <div class="geo geo-1" aria-hidden="true"></div>
+    <div class="geo geo-2" aria-hidden="true"></div>
+    <div class="geo geo-3" aria-hidden="true"></div>
+
+    <div id="hero-content">
+      <p class="hero-eyebrow cd1"><span class="clip"><span class="clip-inner" data-stage-id="acrylic-london-mauritius">Acrylic · London · Mauritius</span></span></p>
+      <h1 aria-label="Art by Ayesha Johar">
+        <span class="hero-art-by cd2"><span class="clip"><span class="clip-inner" data-stage-id="art-by">Art by</span></span></span>
+        <span class="hero-name-a cd3"><span class="clip"><span class="clip-inner" data-stage-id="ayesha">Ayesha</span></span></span>
+        <span class="hero-name-b cd4"><span class="clip"><span class="clip-inner" data-stage-id="johar">Johar</span></span></span>
+      </h1>
+      <div class="hero-rule" aria-hidden="true"></div>
+      <p class="hero-line" data-stage-id="beauty-is-a-form-of">Beauty is a form of resistance.</p>
+    </div>
+
+    <div class="hero-footer">
+      <span class="hero-meta" data-stage-id="thirty-years-of-painting-five">Thirty years of painting. Five bodies of work.</span>
+      <a href="#closer" class="hero-enter" data-stage-id="enter-the-work">Enter the work</a>
+    </div>
+  </section>
+
+  <!-- ── LOOK CLOSER · the bridge into the work ─────────────────── -->
+  <section id="closer" aria-labelledby="closer-title" data-stage-section="look-closer">
+    <div class="wrap closer-grid">
+      <div class="closer-copy reveal">
+        <p class="label" data-stage-id="look-closer">Look closer</p>
+        <h2 class="closer-title" id="closer-title" data-stage-id="hidden-colours-and-shapes">Hidden colours and shapes <em>exist everywhere.</em></h2>
+        <p class="closer-body" data-stage-id="every-painting-is-layered-on">Every painting is layered on purpose. Look again, and there is always something new to see.</p>
+        <p class="closer-hint label" data-stage-id="move-across-the-painting">Move across the painting</p>
+      </div>
+      <div class="loupe-stage reveal d2" id="loupe-stage" data-src="assets/art/dancing-trees.webp">
+        <img src="assets/art/dancing-trees.webp" alt="Dancing Trees: flowing, flame-like tree forms in coral, orange, teal and deep brown." width="2000" height="1506" data-stage-img="img-dancing-trees">
+        <div class="loupe" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MOVEMENT II · THE WORK ────────────────────────────────── -->
+  <section id="work" aria-labelledby="work-title" data-stage-section="work">
+    <div class="wrap">
+      <div class="section-header reveal">
+        <div>
+          <p class="label" style="color:var(--saffron-text);margin-bottom:12px;" data-stage-id="the-work">The Work</p>
+          <h2 class="section-title" id="work-title" data-stage-id="five-bodies">Five bodies<br><em>of meaning</em></h2>
+        </div>
+        <p class="section-aside" data-stage-id="not-organised-by-medium-or">Not organised by medium or date, but by what each body of work holds.</p>
+      </div>
+
+      <div class="series-index">
+        <a href="#sacred" class="series-card sacred reveal d1">
+          <div class="bg" aria-hidden="true"></div>
+          <div class="sacred-geo" aria-hidden="true"></div>
+          <span class="card-count" data-stage-id="coming-soon">Coming soon</span>
+          <p class="card-label" data-stage-id="mandala-ganesha-geometry">Mandala · Ganesha · Geometry</p>
+          <h3 class="card-title" data-stage-id="the-sacred">The Sacred</h3>
+        </a>
+        <a href="#witness" class="series-card witness reveal d2">
+          <div class="bg" style="background-image:url('assets/art/earth-sm.webp');background-position:center 30%;" aria-hidden="true"></div>
+          <span class="card-count" data-stage-id="1-work">1 work</span>
+          <p class="card-label" data-stage-id="justice-memory-resistance">Justice · Memory · Resistance</p>
+          <h3 class="card-title" data-stage-id="witness">Witness</h3>
+        </a>
+        <a href="#world" class="series-card world reveal d3">
+          <div class="bg" style="background-image:url('assets/art/tower-sm.webp');" aria-hidden="true"></div>
+          <span class="card-count" data-stage-id="5-works">5 works</span>
+          <p class="card-label" data-stage-id="cities-architecture-travel">Cities · Architecture · Travel</p>
+          <h3 class="card-title" data-stage-id="world">World</h3>
+        </a>
+        <a href="#nature" class="series-card nature reveal d3">
+          <div class="bg" style="background-image:url('assets/art/water-ii-sm.webp');" aria-hidden="true"></div>
+          <span class="card-count" data-stage-id="7-works">7 works</span>
+          <p class="card-label" data-stage-id="ocean-shoreline-sky">Ocean · Shoreline · Sky</p>
+          <h3 class="card-title" data-stage-id="nature">Nature</h3>
+        </a>
+        <a href="#love" class="series-card love reveal d4">
+          <div class="bg" aria-hidden="true"></div>
+          <span class="card-count" data-stage-id="coming-soon-2">Coming soon</span>
+          <p class="card-label" data-stage-id="portrait-intimate-still">Portrait · Intimate · Still</p>
+          <h3 class="card-title" data-stage-id="love">Love</h3>
+        </a>
+      </div>
+
+      <!-- The Sacred -->
+      <article class="body" id="sacred" style="--c:var(--teal);">
+        <header class="body-head reveal">
+          <div>
+            <p class="label" data-stage-id="i-the-sacred">I · The Sacred</p>
+            <h3 class="body-title" data-stage-id="the-sacred-2">The Sacred</h3>
+          </div>
+          <p class="body-desc" data-stage-id="mandalas-ganesha-geometric-symmetry-spiritual">Mandalas, Ganesha, geometric symmetry. Spiritual traditions held with devotion and curiosity. Work that opens rather than closes.</p>
+        </header>
+        <div class="to-come reveal">
+          <div class="to-come-mark" aria-hidden="true"></div>
+          <div>
+            <p class="label" data-stage-id="photography-to-follow">Photography to follow</p>
+            <p data-stage-id="the-mandalas-and-the-ganesha">The mandalas and the Ganesha will sit here, in the largest space on the site: the work a new visitor meets first.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Witness -->
+      <article class="body" id="witness" style="--c:var(--ember);">
+        <header class="body-head reveal">
+          <div>
+            <p class="label" data-stage-id="ii-witness">II · Witness</p>
+            <h3 class="body-title" data-stage-id="witness-2">Witness</h3>
+          </div>
+          <p class="body-desc" data-stage-id="work-that-refuses-to-look">Work that refuses to look away from what humanity does to itself and to the world. The beauty is in the painting, not in what it shows.</p>
+        </header>
+        <div class="gallery two">
+          <figure class="piece reveal"><button type="button" aria-label="Look closer at The Earth"><img src="assets/art/earth-sm.webp" data-full="assets/art/earth.webp" alt="The Earth: a planet in fiery reds, golds and blues streaks through a violet sky." width="800" height="979" loading="lazy" data-stage-img="img-earth-sm"></button><figcaption><span class="piece-title" data-stage-id="the-earth">The Earth</span><span class="piece-status" data-stage-id="sold">Sold</span></figcaption></figure>
+          <figure class="piece reveal d2">
+            <div class="to-come" style="padding:40px 28px;grid-template-columns:1fr;">
+              <div>
+                <p class="label" data-stage-id="photography-to-follow-2">Photography to follow</p>
+                <p data-stage-id="george-floyd">George Floyd.</p>
+              </div>
+            </div>
+          </figure>
+        </div>
+      </article>
+
+      <!-- World -->
+      <article class="body" id="world" style="--c:var(--ink);">
+        <header class="body-head reveal">
+          <div>
+            <p class="label" data-stage-id="iii-world">III · World</p>
+            <h3 class="body-title" data-stage-id="world-2">World</h3>
+          </div>
+          <p class="body-desc" data-stage-id="architecture-travel-the-places-that">Architecture, travel, the places that shaped her. Amsterdam, London, the forts out at sea. The built world as emotional landscape.</p>
+        </header>
+        <div class="gallery">
+          <figure class="piece reveal"><button type="button" aria-label="Look closer at Tower"><img src="assets/art/tower-sm.webp" data-full="assets/art/tower.webp" alt="Tower: a rust and teal building pierced with round windows against a pink sky." width="644" height="800" loading="lazy" data-stage-img="img-tower-sm"></button><figcaption><span class="piece-title" data-stage-id="tower">Tower</span><span class="piece-status" data-stage-id="original-available">Original available</span></figcaption></figure>
+          <figure class="piece reveal d1"><button type="button" aria-label="Look closer at Mansa Forts"><img src="assets/art/forts-sm.webp" data-full="assets/art/forts.webp" alt="Mansa Forts: three rusted sea forts on stilts above turquoise water under a grey sky." width="800" height="792" loading="lazy" data-stage-img="img-forts-sm"></button><figcaption><span class="piece-title" data-stage-id="mansa-forts">Mansa Forts</span><span class="piece-status" data-stage-id="original-available-2">Original available</span></figcaption></figure>
+          <figure class="piece reveal d2"><button type="button" aria-label="Look closer at Amsterdam"><img src="assets/art/amsterdam-sm.webp" data-full="assets/art/amsterdam.webp" alt="Amsterdam: a bare tree in front of a red brick canal house with glowing windows." width="614" height="800" loading="lazy" data-stage-img="img-amsterdam-sm"></button><figcaption><span class="piece-title" data-stage-id="amsterdam">Amsterdam</span><span class="piece-status" data-stage-id="sold-2">Sold</span></figcaption></figure>
+          <figure class="piece reveal"><button type="button" aria-label="Look closer at Skyline"><img src="assets/art/skyline-sm.webp" data-full="assets/art/skyline.webp" alt="Skyline: a city silhouette beneath a sweeping violet and coral dusk sky." width="643" height="800" loading="lazy" data-stage-img="img-skyline-sm"></button><figcaption><span class="piece-title" data-stage-id="skyline">Skyline</span><span class="piece-status" data-stage-id="original-available-3">Original available</span></figcaption></figure>
+          <figure class="piece reveal d1"><button type="button" aria-label="Look closer at Block"><img src="assets/art/block-sm.webp" data-full="assets/art/block.webp" alt="Block: a facade abstracted into a grid of orange, red, blue and yellow panels." width="793" height="800" loading="lazy" data-stage-img="img-block-sm"></button><figcaption><span class="piece-title" data-stage-id="block">Block</span><span class="piece-status" data-stage-id="prints">Prints</span></figcaption></figure>
+        </div>
+      </article>
+
+      <!-- Nature -->
+      <article class="body" id="nature" style="--c:var(--ocean);">
+        <header class="body-head reveal">
+          <div>
+            <p class="label" data-stage-id="iv-nature">IV · Nature</p>
+            <h3 class="body-title" data-stage-id="nature-2">Nature</h3>
+          </div>
+          <p class="body-desc" data-stage-id="ocean-water-shorelines-trees-skies">Ocean water, shorelines, trees, skies. The world before human damage, in Mauritian daylight and London dusk.</p>
+        </header>
+        <div class="gallery">
+          <figure class="piece reveal"><button type="button" aria-label="Look closer at Water I"><img src="assets/art/water-sm.webp" data-full="assets/art/water.webp" alt="Water I: light rippling across clear turquoise water, seen from above." width="800" height="798" loading="lazy" data-stage-img="img-water-sm"></button><figcaption><span class="piece-title" data-stage-id="water-i">Water I</span><span class="piece-status" data-stage-id="original-available-4">Original available</span></figcaption></figure>
+          <figure class="piece reveal d1"><button type="button" aria-label="Look closer at Dancing Trees"><img src="assets/art/dancing-trees-sm.webp" data-full="assets/art/dancing-trees.webp" alt="Dancing Trees: flowing, flame-like tree forms in coral, orange, teal and deep brown." width="800" height="602" loading="lazy" data-stage-img="img-dancing-trees-sm"></button><figcaption><span class="piece-title" data-stage-id="dancing-trees">Dancing Trees</span><span class="piece-status" data-stage-id="prints-2">Prints</span></figcaption></figure>
+          <figure class="piece reveal d2"><button type="button" aria-label="Look closer at Woodland"><img src="assets/art/woodland-sm.webp" data-full="assets/art/woodland.webp" alt="Woodland: tall bare trunks against a soft pink winter sky." width="600" height="800" loading="lazy" data-stage-img="img-woodland-sm"></button><figcaption><span class="piece-title" data-stage-id="woodland">Woodland</span><span class="piece-status" data-stage-id="sold-3">Sold</span></figcaption></figure>
+          <figure class="piece reveal"><button type="button" aria-label="Look closer at Breeze"><img src="assets/art/breeze-sm.webp" data-full="assets/art/breeze.webp" alt="Breeze: a palm tree leaning over a turquoise lagoon with an island on the horizon." width="800" height="394" loading="lazy" data-stage-img="img-breeze-sm"></button><figcaption><span class="piece-title" data-stage-id="breeze">Breeze</span><span class="piece-status" data-stage-id="prints-3">Prints</span></figcaption></figure>
+          <figure class="piece reveal d1"><button type="button" aria-label="Look closer at Stripes"><img src="assets/art/stripes-sm.webp" data-full="assets/art/stripes.webp" alt="Stripes: horizontal bands of cobalt, sky blue, violet, coral and yellow." width="568" height="800" loading="lazy" data-stage-img="img-stripes-sm"></button><figcaption><span class="piece-title" data-stage-id="stripes">Stripes</span><span class="piece-status" data-stage-id="prints-4">Prints</span></figcaption></figure>
+          <figure class="piece reveal d2"><button type="button" aria-label="Look closer at Water II"><img src="assets/art/water-ii-sm.webp" data-full="assets/art/water-ii.webp" alt="Water II: teal water broken into looping lines of reflected light." width="800" height="626" loading="lazy" data-stage-img="img-water-ii-sm"></button><figcaption><span class="piece-title" data-stage-id="water-ii">Water II</span><span class="piece-status" data-stage-id="prints-5">Prints</span></figcaption></figure>
+          <figure class="piece reveal"><button type="button" aria-label="Look closer at Dancing Trees II"><img src="assets/art/dancing-trees-ii-sm.webp" data-full="assets/art/dancing-trees-ii.webp" alt="Dancing Trees II: the flowing tree forms again, in teal, lilac and peach." width="800" height="597" loading="lazy" data-stage-img="img-dancing-trees-ii-sm"></button><figcaption><span class="piece-title" data-stage-id="dancing-trees-ii">Dancing Trees II</span><span class="piece-status" data-stage-id="prints-6">Prints</span></figcaption></figure>
+        </div>
+      </article>
+
+      <!-- Love -->
+      <article class="body" id="love" style="--c:var(--gold-text);">
+        <header class="body-head reveal">
+          <div>
+            <p class="label" data-stage-id="v-love">V · Love</p>
+            <h3 class="body-title" data-stage-id="love-2">Love</h3>
+          </div>
+          <p class="body-desc" data-stage-id="the-intimate-work-given-more">The intimate work. Given more space, and a quieter register, than everything else.</p>
+        </header>
+        <div class="to-come reveal">
+          <div class="to-come-mark" aria-hidden="true"></div>
+          <div>
+            <p class="label" data-stage-id="photography-to-follow-3">Photography to follow</p>
+            <p data-stage-id="the-pencil-drawing-of-her">The pencil drawing of her wife will sit here, on its own, with room around it.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── MOVEMENT III · WHO I AM ───────────────────────────────── -->
+  <section id="about" aria-labelledby="about-title" data-stage-section="about">
+    <div class="wrap about-grid">
+
+      <div class="about-left reveal">
+        <p class="label" data-stage-id="who-i-am">Who I am</p>
+        <h2 class="about-title" id="about-title" data-stage-id="i-put-colours-together-the">I put colours together the way <em>I put myself together.</em></h2>
+        <p class="about-body" data-stage-id="i-am-a-painter-a">I am a painter, a feminist and a justice fighter. I was born in Mauritius and I live in London. I am political, spiritual and curious, and I have spent years decolonising my mind and soul.</p>
+        <p class="about-body" data-stage-id="i-do-not-paint-to">I do not paint to fit in. I go against the grain, unapologetically, and I put colours together the way I put myself together: boldly, and my own way.</p>
+        <p class="about-body" data-stage-id="i-have-been-making-work">I have been making work for over thirty years. Every painting is layered on purpose. Look again, and there is always something new to see.</p>
+        <div class="about-tags">
+          <span class="tag" data-stage-id="acrylic">Acrylic</span>
+          <span class="tag" data-stage-id="london">London</span>
+          <span class="tag" data-stage-id="mauritius">Mauritius</span>
+          <span class="tag" data-stage-id="feminist">Feminist</span>
+          <span class="tag" data-stage-id="justice">Justice</span>
+          <span class="tag" data-stage-id="spirituality">Spirituality</span>
+          <span class="tag" data-stage-id="community">Community</span>
+          <span class="tag" data-stage-id="lgbtq">LGBTQ+</span>
+        </div>
+
+        <div class="beauty">
+          <p class="label" data-stage-id="on-beauty">On beauty</p>
+          <blockquote>
+            <p data-stage-id="for-me-hidden-colours-and">For me, <strong>beauty is a form of resistance.</strong> Hidden colours and shapes exist everywhere, and once I expose them in my paintings, it forces us to see beauty in both the good and the bad. Through that altered way of seeing, I urge the audience to see what we can reveal, and to challenge what is harmful in a different way.</p>
+          </blockquote>
+        </div>
+      </div>
+
+      <div class="about-right reveal d2">
+        <p class="label" data-stage-id="the-name">The name</p>
+        <p class="name-large"><span class="art-by" data-stage-id="art-by-2">Art by</span>Ayesha<br><em>Johar</em></p>
+        <p class="johar-arabic" lang="ar" data-stage-id="p">جوهر</p>
+        <div class="johar-words">
+          <p data-stage-id="johar-means-jewel-courage-and">Johar means jewel, courage and ultimate sacrifice.</p>
+          <p data-stage-id="in-1600s-rajasthan-the-women">In 1600s Rajasthan, the women of a captured empire used to sacrifice themselves in a pit of fire rather than be shackled as sex slaves by the conquerors.</p>
+          <p data-stage-id="being-a-johar-when-my">Being a Johar, when my wife and I chose this name after we married, was a statement that we live by our principles, unapologetically and at all costs. I am political. I have been decolonising my mind and soul, and I am a justice fighter. Johar encompasses those values and passions.</p>
+          <p class="johar-sign" data-stage-id="ayesha-johar">Ayesha Johar</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── MOVEMENT IV · THE DOOR ────────────────────────────────── -->
+  <section id="collect" aria-labelledby="collect-title" data-stage-section="collect">
+    <div class="wrap">
+      <div class="collect-header reveal">
+        <p class="label" data-stage-id="collect-commission-connect">Collect · Commission · Connect</p>
+        <h2 class="collect-title" id="collect-title" data-stage-id="bring-the-work">Bring the work <em>into your world.</em></h2>
+        <p class="collect-intro" data-stage-id="if-a-painting-has-stayed">If a painting has stayed with you, here is how to take it further.</p>
+      </div>
+
+      <div class="collect-grid">
+        <div class="collect-card reveal d1">
+          <div class="collect-img" style="background-image:url('assets/art/forts-sm.webp');" role="img" aria-label="Detail of Mansa Forts"></div>
+          <div class="collect-body">
+            <h3 class="collect-card-title" data-stage-id="original-paintings">Original paintings</h3>
+            <p class="collect-card-text" data-stage-id="acrylic-originals-available-directly-from">Acrylic originals, available directly from Ayesha. Ask about any painting marked available.</p>
+            <a href="#" class="btn-ghost" data-stage-id="browse-originals">Browse originals</a>
+          </div>
+        </div>
+        <div class="collect-card reveal d2">
+          <div class="collect-img" style="background-image:url('assets/art/stripes-sm.webp');background-position:center 40%;" role="img" aria-label="Detail of Stripes"></div>
+          <div class="collect-body">
+            <h3 class="collect-card-title" data-stage-id="prints-7">Prints</h3>
+            <p class="collect-card-text" data-stage-id="prints-of-selected-paintings-so">Prints of selected paintings, so the colour can live on your wall too.</p>
+            <a href="#" class="btn-ghost" data-stage-id="view-prints">View prints</a>
+          </div>
+        </div>
+        <div class="collect-card reveal d3">
+          <div class="collect-img" style="background-image:url('assets/art/water-sm.webp');" role="img" aria-label="Detail of Water I"></div>
+          <div class="collect-body">
+            <h3 class="collect-card-title" data-stage-id="commission">Commission</h3>
+            <p class="collect-card-text" data-stage-id="a-painting-made-for-you">A painting made for you. Begin with a conversation about what you are looking for, and why.</p>
+            <a href="#" class="btn-ghost" data-stage-id="start-a-conversation">Start a conversation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span class="footer-name" data-stage-id="art-by-ayesha-johar-2">Art by Ayesha Johar<span class="footer-arabic" lang="ar">جوهر</span></span>
+      <span class="footer-copy" data-stage-id="2026-ayesha-johar">&copy; 2026 Ayesha Johar</span>
+    </div>
+  </footer>
+
+  <!-- Lightbox: detail view for close looking -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Painting detail" aria-hidden="true">
+    <div class="lb-top">
+      <span class="lb-count" id="lb-count"></span>
+      <button type="button" class="lb-btn" id="lb-close" data-stage-id="close">Close</button>
+    </div>
+    <div class="lb-view" id="lb-view"></div>
+    <div class="lb-bottom">
+      <div class="lb-caption"><p class="t" id="lb-title"></p><p class="m" id="lb-meta"></p></div>
+      <div class="lb-nav">
+        <button type="button" class="lb-btn" id="lb-zoom" aria-pressed="false" data-stage-id="look-closer-2">Look closer</button>
+        <button type="button" class="lb-btn" id="lb-prev" aria-label="Previous painting" data-stage-id="prev">Prev</button>
+        <button type="button" class="lb-btn" id="lb-next" aria-label="Next painting" data-stage-id="next">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Progress bar + nav state
+    const prog = document.getElementById('progress');
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      nav.classList.toggle('scrolled', scrollY > 60);
+    }, { passive: true });
+
+    // Hero name sequence
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.querySelectorAll('.clip-inner').forEach(el => el.classList.add('up'));
+      document.getElementById('hero').classList.add('ready');
+    }));
+
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Look closer: magnifying loupe
+    (() => {
+      const stage = document.getElementById('loupe-stage');
+      const img = stage.querySelector('img');
+      const lens = stage.querySelector('.loupe');
+      const ZOOM = 3;
+      lens.style.backgroundImage = `url('${stage.dataset.src}')`;
+      const move = e => {
+        const r = img.getBoundingClientRect();
+        const x = Math.max(0, Math.min(r.width,  e.clientX - r.left));
+        const y = Math.max(0, Math.min(r.height, e.clientY - r.top));
+        const lw = lens.offsetWidth / 2;
+        lens.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        lens.style.backgroundSize = `${r.width * ZOOM}px ${r.height * ZOOM}px`;
+        lens.style.backgroundPosition = `${-(x * ZOOM - lw)}px ${-(y * ZOOM - lw)}px`;
+      };
+      stage.addEventListener('pointerenter', e => { stage.classList.add('active'); move(e); });
+      stage.addEventListener('pointerdown',  e => { stage.classList.add('active'); move(e); });
+      stage.addEventListener('pointermove', move);
+      stage.addEventListener('pointerleave', () => stage.classList.remove('active'));
+      stage.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') stage.classList.remove('active'); });
+    })();
+
+    // Lightbox with close-looking zoom
+    (() => {
+      const pieces = [...document.querySelectorAll('.piece button')];
+      const lb = document.getElementById('lb'), view = document.getElementById('lb-view'), big = document.createElement('img');
+      big.id = 'lb-img';
+      const title = document.getElementById('lb-title'), meta = document.getElementById('lb-meta'), count = document.getElementById('lb-count');
+      const zoomBtn = document.getElementById('lb-zoom');
+      let i = 0, opener = null;
+
+      const setZoom = on => { view.classList.toggle('zoomed', on); zoomBtn.setAttribute('aria-pressed', on); };
+      const show = n => {
+        i = (n + pieces.length) % pieces.length;
+        const p = pieces[i], thumb = p.querySelector('img'), fig = p.closest('figure');
+        setZoom(false);
+        big.src = thumb.dataset.full; big.alt = thumb.alt;
+        if (!big.isConnected) view.appendChild(big);
+        title.textContent = fig.querySelector('.piece-title').textContent;
+        meta.textContent = fig.closest('.body').querySelector('.body-title').textContent + ' · ' + fig.querySelector('.piece-status').textContent;
+        count.textContent = `${i + 1} / ${pieces.length}`;
+      };
+      const open = n => { opener = pieces[n]; show(n); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; document.getElementById('lb-close').focus(); };
+      const close = () => { lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; setZoom(false); opener && opener.focus(); };
+
+      pieces.forEach((p, n) => p.addEventListener('click', () => open(n)));
+      document.getElementById('lb-close').addEventListener('click', close);
+      document.getElementById('lb-prev').addEventListener('click', () => show(i - 1));
+      document.getElementById('lb-next').addEventListener('click', () => show(i + 1));
+      zoomBtn.addEventListener('click', () => setZoom(!view.classList.contains('zoomed')));
+
+      const origin = e => {
+        const r = big.getBoundingClientRect();
+        const bw = r.width / (view.classList.contains('zoomed') ? 2.6 : 1);
+        const bh = r.height / (view.classList.contains('zoomed') ? 2.6 : 1);
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const x = Math.max(0, Math.min(1, (e.clientX - (cx - bw / 2)) / bw));
+        const y = Math.max(0, Math.min(1, (e.clientY - (cy - bh / 2)) / bh));
+        big.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+      };
+      big.addEventListener('click', e => { origin(e); setZoom(!view.classList.contains('zoomed')); });
+      view.addEventListener('pointermove', e => { if (view.classList.contains('zoomed')) origin(e); });
+
+      addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        if (e.key === 'ArrowRight') show(i + 1);
+        if (e.key === 'ArrowLeft') show(i - 1);
+      });
+    })();
+  </script>
+
+</body>
+</html>
