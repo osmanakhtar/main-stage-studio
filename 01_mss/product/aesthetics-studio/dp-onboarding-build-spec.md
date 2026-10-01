@@ -331,19 +331,52 @@ Built in `studio-platform` commit d034ffc (not pushed). Tests: 109 pass (88 exis
 - **Phase 2 trigger** is not a separate check: new tables surface through the platform-facts
   migration test, and any new form or field through the footprint.
 
-**Still open before calling it done (section 10):** `data-protection-reviewer`,
-`design-reviewer` and `copy-reviewer` not run as agents (the deterministic `make datamap` and
-viewport passes were: datamap unchanged at 5 FAIL, all pre-existing controller decisions;
-viewport only flags the existing header tag contrast, PureMed gold on navy 4.23:1); the
-PureMed walkthrough with Nafisa on her own login; push to deploy. Also: `service/data-protection.json`
-is now committed but still UNRATIFIED; `dp_document` retention is deliberately unset (controller
-decision); the DPA acceptance-currency question when the template changes (built as "stays
-current, flagged").
+**Section 10 reviews, run 1 October 2026 (evening).** All three agents run; fixes are in the
+studio-platform commit after d034ffc (109 tests, typecheck clean).
+
+- `copy-reviewer`: its one "must fix" (`{{clinics}}` unresolved) was a false positive: `clinics`
+  is the possessive variable (`render.ts:30`) and renders "PureMed Aesthetics' record". Fixed:
+  PureMed B7.1 asserted that later approval covers processing since 30 Sep (a legal premise in
+  the question stem); now asks whether anything should be paused until both documents are in
+  place. Left as is: ICO number asked in the DPIA (B7.4) and again on the DPA screen; C7 stem
+  ("must consult the ICO?") is borderline but deliberate, parkable and carries an adviser note.
+- `design-reviewer`: fixed the stepper showing "Adviser pack" green (done) from the first visit
+  (now done only once all decisions are answered, part when anything is parked); fixed the
+  review page and print/download tables wrapping the # column one character per line at every
+  width (`overflow-wrap:anywhere` on `.doc-md` shrank cell min-content; cells now
+  `break-word`). Not changed: review page length with no jump nav, decisions page density
+  (worth doing, not blocking); the empty "I'll answer" pre-select is a non-issue (an empty value
+  is "Not answered" and blocks signing).
+- `data-protection-reviewer`: verdict "not defensible" on the same five pre-existing FAILs.
+  Section 12's "datamap unchanged at 5 FAIL" was true on count only: d034ffc added lawful-basis
+  gaps (19 to 21) and dp_document to retention. Fixed in the contract: dp_draft retention
+  ("until signed") removed because no code enforces a limit on an unsigned draft (retention now
+  16 tables, honestly); `MSS_NOTIFY_EMAIL` declared as a recipient (staff name, email, note);
+  config_version staff description brought up to date (Nafisa's own Gmail owner login). Second
+  processors WARN (MSS notify mailbox has no egress host to match) is the same false-positive
+  class as the runtime-logs WARN; data-map.js has no exception mechanism for it.
+
+**Needs Osman / a qualified decision:** `dp_document` retention vs the DPA template, which
+promises deletion "from the platform" at the end of the service while the table refuses DELETE,
+so tenant offboarding can't complete: (a) fixed period after service end plus a purge migration,
+(b) keep as the accountability record with a clause 9.1 exception, or (c) return to the
+controller then delete. Also for the adviser: whether DPIA signing needs its own purpose and
+basis rather than `console-operations`; whether adviser names typed as free text need a notice.
+
+**Still open:** push to deploy (production; release publishes the pack, and passes the live-mode
+approval check because prod approvals are console versions in the DB); set `MSS_NOTIFY_EMAIL` on
+DigitalOcean (decide the receiving mailbox first, it is now a declared recipient); the PureMed
+walkthrough with Nafisa on her own login. `service/data-protection.json` still UNRATIFIED; the
+DPA acceptance-currency question when the template changes (built as "stays current, flagged").
+
+Local dev note: the local DB copy of PureMed is in live mode, so `config:publish ../tenants/puremed`
+is refused locally (local has no console approvals). For local review publish a copy with
+`sending.mode` "test". The local `.env` has `MAIL_TRANSPORT=gmail` with a stored care@ token: run
+review servers with `MAIL_TRANSPORT=outbox` so nothing reaches a real inbox.
 
 ## Resume prompt
 
 > Read section 12 of `main-stage-studio/01_mss/product/aesthetics-studio/dp-onboarding-build-spec.md`.
-> Then: run the copy-reviewer on `studio-platform/packs/aesthetics/dp/` and the design-reviewer on
-> the console journey, push studio-platform main to deploy (release publishes the pack), set
-> `MSS_NOTIFY_EMAIL` on DigitalOcean, and send Nafisa her sign-in at /console/puremed/login with
-> akhtar.nafisa@gmail.com.
+> Then: push studio-platform main to deploy (release publishes the pack), check the journey on
+> app.puremed.uk, set `MSS_NOTIFY_EMAIL` on DigitalOcean, send Nafisa her sign-in at
+> /console/puremed/login with akhtar.nafisa@gmail.com, and get Osman's call on dp_document retention.
