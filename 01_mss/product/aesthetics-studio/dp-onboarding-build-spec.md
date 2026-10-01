@@ -306,7 +306,7 @@ Built in `studio-platform` commit d034ffc (not pushed). Tests: 109 pass (88 exis
 | Where | What |
 |---|---|
 | Code | `service/src/dp/` (types, content loader, footprint, render, markdown, store, `platform-facts.json`), `service/src/console/dp-routes.ts` + `dp-views.ts`, migration `007_data_protection.sql`, gate hook in `config/publish.ts` `pinAndActivate` |
-| Pack | `packs/aesthetics/dp/`: `dpia-intro.md`, `dpia-questions.json` (31 incl. C7), `risks.json` (12), `ropa.json`, `dpa-template.md` (MSS draft, `solicitor_reviewed: false`) |
+| Pack | `packs/aesthetics/dp/`: `dpia-intro.md`, `dpia-questions.json` (26 incl. C7 since 1 Oct evening, was 31), `risks.json` (12), `ropa.json`, `dpa-template.md` (MSS draft, `solicitor_reviewed: false`) |
 | PureMed | `tenants/puremed/dp/`: `extra-questions.json` (B1.6, B6, B7.1 to B7.2), `extra-risks.json` (D1, D14), `extra-ropa.json`, `facts.json`; `tenant.json` gets Nafisa's owner login (`kind: person`), care@ renamed "PureMed (shared mailbox)" (`kind: shared`), `data_protection.enforcement: soft` |
 | Operator | `GET /admin/:tenant/data-protection` (draft, status, blockers, read-only); `POST /admin/:tenant/data-protection/facts/:section/resolve` |
 
@@ -338,7 +338,7 @@ studio-platform commit after d034ffc (109 tests, typecheck clean).
   is the possessive variable (`render.ts:30`) and renders "PureMed Aesthetics' record". Fixed:
   PureMed B7.1 asserted that later approval covers processing since 30 Sep (a legal premise in
   the question stem); now asks whether anything should be paused until both documents are in
-  place. Left as is: ICO number asked in the DPIA (B7.4) and again on the DPA screen; C7 stem
+  place. ICO number: B7.4 now asks for the number only and pre-fills the DPA screen (below); C7 stem
   ("must consult the ICO?") is borderline but deliberate, parkable and carries an adviser note.
 - `design-reviewer`: fixed the stepper showing "Adviser pack" green (done) from the first visit
   (now done only once all decisions are answered, part when anything is parked); fixed the
@@ -355,6 +355,27 @@ studio-platform commit after d034ffc (109 tests, typecheck clean).
   config_version staff description brought up to date (Nafisa's own Gmail owner login). Second
   processors WARN (MSS notify mailbox has no egress host to match) is the same false-positive
   class as the runtime-logs WARN; data-map.js has no exception mechanism for it.
+
+**Osman's changes, 1 October 2026 (late).** Asked "do we need so many questions?", comments
+mandatory, and an offline export.
+
+- **Questions cut from 38 to 32** (26 pack + 6 PureMed). Removed only those that duplicate a
+  measure on the Risks screen, so the same choice is still made there: B4.1 store only the result
+  (D2/D7), B4.2 answers in the alert vs a link (D3), B4.5 18+ confirmation (D9), B4.6 confirm the
+  email first (D13), PureMed B6.4 keep the 458 un-emailed (D1); plus B3.2 (same next step for every
+  recommendation), a product question rather than a risk to people. Kept: every lawful-basis and
+  retention question (they feed the ROPA), B4.3/B4.4 (necessity with no matching risk), B7.4.
+- **Comments mandatory** on every choice and period answer (free text is its own comment):
+  `needsComment` in `render.ts`, so an answer without a comment isn't complete and blocks signing
+  ("it needs a comment"). Labels read "Comment (required): ...", the decisions lede says every
+  answer needs one, and an answered question without one shows "Add a comment to finish this
+  answer". The rendered DPIA and ROPA say "Comment:" where they said "Why:". Risks: "If not, why
+  not? (required if you answer No)", unchanged rule.
+- **Offline export**: `GET .../dpia/questions/print` and `/download` (.md), linked on the overview
+  DPIA card and under every decisions-page lede. Every question in journey order (conditional ones
+  marked with when they're asked), options, the comment rule, the adviser note, the answer so far;
+  then the risks with their measures and C7; then Part A. Logs `dp.questions_exported`.
+- **B7.4** now asks for the ICO number only; the DPA screen pre-fills from it.
 
 **Needs Osman / a qualified decision:** `dp_document` retention vs the DPA template, which
 promises deletion "from the platform" at the end of the service while the table refuses DELETE,
