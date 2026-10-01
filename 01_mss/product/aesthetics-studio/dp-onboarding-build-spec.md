@@ -375,6 +375,12 @@ mandatory, and an offline export.
   DPIA card and under every decisions-page lede. Every question in journey order (conditional ones
   marked with when they're asked), options, the comment rule, the adviser note, the answer so far;
   then the risks with their measures and C7; then Part A. Logs `dp.questions_exported`.
+  **Word (.docx)** at `.../dpia/questions/word` (the link shows Word and PDF; the .md route stays):
+  same content with a box under each question ("Your answer" | "Comment (required)", and the four
+  risk columns) pre-filled with answers so far and room to type. Typing in Word saves nothing;
+  answers count only once entered in the console (the footer says so). Built with the `docx`
+  package (new dependency) via `src/dp/markdownToDocx`, which takes the same Markdown subset as
+  the HTML renderer, so signed documents could get a Word copy the same way.
 - **B7.4** now asks for the ICO number only; the DPA screen pre-fills from it.
 
 **Needs Osman / a qualified decision:** `dp_document` retention vs the DPA template, which
