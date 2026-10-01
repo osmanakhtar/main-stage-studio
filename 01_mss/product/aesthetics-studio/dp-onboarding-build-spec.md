@@ -383,6 +383,16 @@ mandatory, and an offline export.
   the HTML renderer, so signed documents could get a Word copy the same way.
 - **B7.4** now asks for the ICO number only; the DPA screen pre-fills from it.
 
+**Campaigns and WhatsApp spec, 1 October 2026.** `campaigns-audiences-build-spec.md` (design only,
+nothing built) adds aftercare as service messages, care records (health data), WhatsApp through
+Meta, and WhatsApp marketing consent. Part A is unchanged, because it states the platform as it runs
+today. PureMed gets an optional section, "Planned: campaigns, WhatsApp and aftercare" (B8.1 to
+B8.4, each with an adviser note), so the adviser answers these in the same round. Optional questions
+are marked "Optional: doesn't hold up approval", never block signing (test), and read "Not
+answered (optional)" in the signed DPIA if left blank. The comment rule applies once one is answered
+("Comment (needed if you answer)"). When the build lands, the footprint review trigger still opens a
+new DPIA version, as spec section 9 says.
+
 **Needs Osman / a qualified decision:** `dp_document` retention vs the DPA template, which
 promises deletion "from the platform" at the end of the service while the table refuses DELETE,
 so tenant offboarding can't complete: (a) fixed period after service end plus a purge migration,
@@ -390,8 +400,8 @@ so tenant offboarding can't complete: (a) fixed period after service end plus a 
 controller then delete. Also for the adviser: whether DPIA signing needs its own purpose and
 basis rather than `console-operations`; whether adviser names typed as free text need a notice.
 
-**Still open:** push to deploy (production; release publishes the pack, and passes the live-mode
-approval check because prod approvals are console versions in the DB); set `MSS_NOTIFY_EMAIL` on
+**Pushed 1 October 2026** (studio-platform db06944, d034ffc onward), so the journey is live on
+app.puremed.uk for Nafisa to review. **Still open:** set `MSS_NOTIFY_EMAIL` on
 DigitalOcean (decide the receiving mailbox first, it is now a declared recipient); the PureMed
 walkthrough with Nafisa on her own login. `service/data-protection.json` still UNRATIFIED; the
 DPA acceptance-currency question when the template changes (built as "stays current, flagged").
