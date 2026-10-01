@@ -401,8 +401,9 @@ controller then delete. Also for the adviser: whether DPIA signing needs its own
 basis rather than `console-operations`; whether adviser names typed as free text need a notice.
 
 **Pushed 1 October 2026** (studio-platform db06944, d034ffc onward), so the journey is live on
-app.puremed.uk for Nafisa to review. **Still open:** set `MSS_NOTIFY_EMAIL` on
-DigitalOcean (decide the receiving mailbox first, it is now a declared recipient); the PureMed
+app.puremed.uk for Nafisa to review. `MSS_NOTIFY_EMAIL` = os@mainstagestudio.co.uk (MSS Google
+Workspace), decided 1 Oct, recorded in `.do/app.yaml` and the contract; Osman sets it in the
+DigitalOcean panel. **Still open:** the PureMed
 walkthrough with Nafisa on her own login. `service/data-protection.json` still UNRATIFIED; the
 DPA acceptance-currency question when the template changes (built as "stays current, flagged").
 
