@@ -1,6 +1,6 @@
 # Main Stage Aesthetics Studio: Platform Design
 
-*Canon doc for the productised platform. v0.8, 30 September 2026 (v0.1 to v0.3 on 26 Sep, v0.4 and v0.5 on 27 Sep, v0.6 and v0.7 on 29 Sep).
+*Canon doc for the productised platform. v0.10, 1 October 2026 (v0.9 earlier on 1 Oct, v0.8 on 30 Sep, v0.1 to v0.3 on 26 Sep, v0.4 and v0.5 on 27 Sep, v0.6 and v0.7 on 29 Sep).
 **Phase 0 built, plus the consultation and a first console screen (see the v0.5 note). Eight of nine decisions locked; D9 (Faces cutover date) open.** Owner: Osman. Working directory:
 `~/workspace/main-stage-studio/01_mss/product/aesthetics-studio/`.*
 
@@ -15,6 +15,31 @@
 Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
+
+## v0.10 change note, 1 October 2026: audiences and campaigns, email and WhatsApp
+
+Design spec: `campaigns-audiences-build-spec.md` (v0.1, nothing built). It adds saved **audiences**
+(closed set of rule conditions, preview with counts and reasons for exclusion, versioned),
+one-off **campaigns** sent to an audience (frozen recipient list at launch, consent checked
+again at each send), and **WhatsApp** as a second channel through the Cloud API direct with Meta
+(new `marketing_whatsapp` consent, phone capture, Meta-approved templates, status webhooks,
+STOP handling). Today's "Campaigns" become "Automated series". Decided same day (Osman): every message is service or marketing, both can run as a campaign or series, and aftercare is service, sent without marketing consent behind guards G1 to G5 and started by a new Record treatment action; WhatsApp uses the clinic's existing Business number through coexistence. Ten decisions (C-1 to C-10) are
+open, with the spec built to the recommended default for each. Slices 1 and 2 (audiences, email
+campaigns) need no Meta setup.
+
+## v0.9 change note, 1 October 2026: data protection onboarding build spec
+
+Part B of the v0.8 note is now a build spec: `dp-onboarding-build-spec.md` (eight slices, nothing
+built). Decided by Osman on 1 Oct: **S-1** DPA acceptance and DPIA sign-off need an individual owner
+login, never a shared mailbox (Nafisa Mughal gets her own login at her personal address; care@ is
+marked shared); **S-2** the live-mode gate is **soft for PureMed** (already live: the console flags the
+DPIA as required and outstanding until signed) and **hard for every future tenant**; **S-3** questions
+needing an adviser are parked and exported as an adviser pack, and approval waits for them; **S-4**
+save and resume through a draft, only the signed version is permanent; **S-5** question text, risks
+and the DPA template live in the aesthetics pack, with tenant extras. D10 decided 30 Sep (MSS drafts
+the DPA, solicitor reviews). D11 and D12 stay open; the spec builds to their recommendations. The
+PureMed DPIA draft (`02_clients/puremed/data-protection/puremed-dpia-draft.md`) is the content
+source for the journey, not a document to send.
 
 ## v0.8 change note, 30 September 2026: consultation v2, and a data protection onboarding plan
 
@@ -681,7 +706,7 @@ screens, and an operator SOP per module.
 | D7 | Managed vs self-serve at launch | **Decided 26 Sep:** managed only; the console is the client's window into a service MSS runs |
 | D8 | Email integration point | **Decided 26 Sep:** `care@puremed.uk`, direct, for every email integration |
 | D9 | Faces cutover date and contract notice | Set once the export is verified complete (INT-010) and the DPIA is done. Needs Faces' contract and notice terms, still open |
-| D10 | DPA template: who drafts it | Solicitor-drafted once for all tenants, MSS as processor, health data named; not written by MSS alone |
+| D10 | DPA template: who drafts it | **Decided 30 Sep:** MSS drafts, a solicitor reviews before signature; the reviewed PureMed text becomes the tenant template (PureMed decisions log). Requirements list: `02_clients/puremed/data-protection/puremed-dpa-requirements.md` |
 | D11 | Footprint change after DPIA: warn or block? | Warn in the console for any change; block live publish only when a new special category field or a new recipient appears |
 | D12 | Check the clinic's ICO registration at onboarding? | Yes, a tick box plus registration number on the DPA screen; cheap, and part of the same record |
 
