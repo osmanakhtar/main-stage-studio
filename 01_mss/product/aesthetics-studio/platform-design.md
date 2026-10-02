@@ -18,8 +18,15 @@ for clinical rows. This doc places that work inside a wider platform.
 
 ## v0.10 change note, 1 October 2026: audiences and campaigns, email and WhatsApp
 
-**Built 2 Oct 2026** (all 8 slices, studio-platform, committed locally, not pushed). Build state,
-differences from the spec and open items: section 13 of the spec. SOP-PLAT-003.
+**Built and deployed 2 Oct 2026** (all 8 slices plus a console Guide, studio-platform 49cf53f, live
+on `app.puremed.uk`). A UX review the same day (`campaigns-ux-review-2026-10-02.md`) stopped the
+push until three things were fixed: link tracking is now per tenant and **off for PureMed** (live
+email links unchanged until the DPIA and privacy notice cover recording clicks), marketing audiences
+refuse treatment events, and staff can **Mark as booked**. Build state, differences from the spec
+and open items: section 13 of the spec. SOP-PLAT-003.
+
+**Next action:** before Nafisa sends a first campaign, check the Mailchimp list-upload value
+(`"Import"`) on the DigitalOcean console (SOP-PLAT-003 section 1). Then the review's P1 list.
 
 Design spec: `campaigns-audiences-build-spec.md` (v0.1, nothing built). It adds saved **audiences**
 (closed set of rule conditions, preview with counts and reasons for exclusion, versioned),
