@@ -613,8 +613,9 @@ Built to the recommended default for every open decision. 162 tests pass locally
 
 **Open**
 
-- **Not pushed.** A push to `main` deploys: migration 008 runs, the aftercare series is published
-  paused, and click tracking starts on live emails (B-7).
+- **Deployed 2 Oct 2026** (studio-platform 49cf53f, live on `app.puremed.uk` after about 100 s): migration
+  008 ran, the aftercare series is published paused, and link tracking is off for PureMed (B-7), so
+  live email links are unchanged. Checked from outside only; no console section run on production yet.
 - C-1, C-3 to C-12 stand at their defaults; C-2 and D-1 are decided.
 - `list_upload_sources: ["Import"]` (C-7) is Mailchimp's usual value, not read from PureMed's
   export. Check it first (SOP-PLAT-003 section 1).
@@ -629,7 +630,7 @@ Built to the recommended default for every open decision. 162 tests pass locally
 ## Resume prompt
 
 > Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`,
-> section 13. Everything is built and committed locally in `~/workspace/studio-platform`, not pushed.
-> Before pushing: check the Mailchimp list-upload source value, run the design review and the
-> data-protection reviewer, and tell Nafisa her email links will change (B-7). Then start Meta
-> business verification and the coexistence check (SOP-PLAT-003 section 2).
+> section 13. Deployed 2 Oct. Before Nafisa sends a first campaign: check the Mailchimp list-upload
+> source value on the DO console (SOP-PLAT-003 section 1). Then the P1 items in
+> `campaigns-ux-review-2026-10-02.md`, and start Meta business verification and the coexistence
+> check (SOP-PLAT-003 section 2).
