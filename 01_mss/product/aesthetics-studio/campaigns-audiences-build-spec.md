@@ -606,6 +606,7 @@ Built to the recommended default for every open decision. 159 tests pass locally
 | B-8 | Person page "existing" | A minimal People search and person page added (agreements, care messages, Record treatment, replies, what happened) | Record treatment needed somewhere to live; the console had no People screen |
 | B-9 | Template header text or image | Text only | Image headers need media upload to Meta; not needed for v1 |
 | B-10 | (not in spec) | Hard data protection gate checked at launch for hard tenants | Same rule as live publishing |
+| B-12 | (not in spec) | A **Guide** page in the console menu: a step-by-step user guide for clinic staff covering every screen, adapting to role and WhatsApp setup (studio-platform c8a005d) | Asked for by Osman, 2 Oct |
 | B-11 | (not in spec) | Data protection Part A and the footprint now name care messages, health data in messages, mobile numbers, WhatsApp replies and Meta | The DPIA review trigger fires on deploy for PureMed (soft gate: flagged, not blocked) |
 
 **Open**
