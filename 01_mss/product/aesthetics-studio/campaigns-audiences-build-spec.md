@@ -588,7 +588,7 @@ replying to WhatsApp from the console, and attribution beyond a stated window on
 
 ## 13. Build state, 2 October 2026
 
-Built to the recommended default for every open decision. 159 tests pass locally (50 new across
+Built to the recommended default for every open decision. 162 tests pass locally (2 Oct, after the UX review fixes B-7, B-13, B-14; review: `campaigns-ux-review-2026-10-02.md`) (50 new across
 `audiences`, `campaigns`, `whatsapp-care` and `campaign-console`). Operator SOP:
 `studio-platform/sops/SOP-PLAT-003-campaigns-whatsapp-care.md`.
 
@@ -602,11 +602,13 @@ Built to the recommended default for every open decision. 159 tests pass locally
 | B-4 | `whatsapp.message_received` event | `reply.received` with `channel: whatsapp` | The series' existing "replied" stop rules read it with no change |
 | B-5 | Store WhatsApp reply text | Stored only for a reply within 7 days of a platform message, a reply to one, or a STOP | With coexistence every chat on the clinic's number reaches the webhook; the rest is ignored and nothing about it is kept |
 | B-6 | WhatsApp versions pinned like email | A series step uses the newest version approved by the clinic and Meta at send time; the message row records which | WhatsApp templates are edited in the console, not published with the series |
-| B-7 | Click tracking (slice 7 in the spec's order) | Built, slice 8, for **every** patient email, including the live guide series | MSG-007 for both channels. **Deploying changes the links in PureMed's live emails** to `app.puremed.uk/c/…` redirects |
+| B-7 | Click tracking (slice 7 in the spec's order) | Built, slice 8, behind a per-tenant `campaigns.link_tracking` (`off` / `campaigns` / `all`, default `off`); **off for PureMed** | The 2 Oct UX review: with it on, every link in every live email becomes an `app.puremed.uk/c/…` redirect, and recording clicks isn't in the DPIA or the privacy notice. Turn on once both cover it. WhatsApp button links always use `/c/` |
 | B-8 | Person page "existing" | A minimal People search and person page added (agreements, care messages, Record treatment, replies, what happened) | Record treatment needed somewhere to live; the console had no People screen |
 | B-9 | Template header text or image | Text only | Image headers need media upload to Meta; not needed for v1 |
 | B-10 | (not in spec) | Hard data protection gate checked at launch for hard tenants | Same rule as live publishing |
 | B-12 | (not in spec) | A **Guide** page in the console menu: a step-by-step user guide for clinic staff covering every screen, adapting to role and WhatsApp setup (studio-platform c8a005d) | Asked for by Osman, 2 Oct |
+| B-13 | Bookings marked by staff (`booking.recorded_manually`) | A **Mark as booked** button on the person page, any staff, optional note | It's the default "didn't do something" condition and drives the series' booked stop rules and campaign results, but only the admin API could set it (2 Oct UX review) |
+| B-14 | CON-009: no care record in a marketing audience | Also refused as an event: `care.recorded` and the care-messages events can't be a marketing `event_since`/`no_event_since` condition, and the builder doesn't offer them | The 2 Oct UX review found "had a treatment recorded" offered in marketing audiences |
 | B-11 | (not in spec) | Data protection Part A and the footprint now name care messages, health data in messages, mobile numbers, WhatsApp replies and Meta | The DPIA review trigger fires on deploy for PureMed (soft gate: flagged, not blocked) |
 
 **Open**
