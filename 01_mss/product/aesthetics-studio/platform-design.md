@@ -18,6 +18,9 @@ for clinical rows. This doc places that work inside a wider platform.
 
 ## v0.10 change note, 1 October 2026: audiences and campaigns, email and WhatsApp
 
+**Built 2 Oct 2026** (all 8 slices, studio-platform, committed locally, not pushed). Build state,
+differences from the spec and open items: section 13 of the spec. SOP-PLAT-003.
+
 Design spec: `campaigns-audiences-build-spec.md` (v0.1, nothing built). It adds saved **audiences**
 (closed set of rule conditions, preview with counts and reasons for exclusion, versioned),
 one-off **campaigns** sent to an audience (frozen recipient list at launch, consent checked

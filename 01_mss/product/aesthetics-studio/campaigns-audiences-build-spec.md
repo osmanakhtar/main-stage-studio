@@ -1,6 +1,9 @@
 # Design spec: audiences and campaigns, by email and WhatsApp
 
-*Design spec, v0.1, 1 October 2026. Nothing built. Parent canon: `platform-design.md` (v0.10 note
+*Design spec, v0.2, 2 October 2026 (v0.1 on 1 Oct). **All 8 slices BUILT 2 Oct 2026 in
+studio-platform (commits 58f8abf, cfb24d8 and the SOP/data-map commit after them), committed
+locally, NOT pushed, so not deployed.** Section 13 lists what differs from this spec and what is
+open. Parent canon: `platform-design.md` (v0.10 note
 points here). Implements CMP-001 to CMP-005, PPL-009, MSG-001, MSG-009, MSG-011, INT-003 and CON-001
 for the WhatsApp purpose. Repo: `~/workspace/studio-platform`. **Decided 1 Oct (Osman): every
 message is service or marketing, both can run as a campaign or a series, aftercare is service and
@@ -583,10 +586,47 @@ A visual workflow builder (D6 stands), SMS, posts or landing pages inside the ca
 (CMP-001's wider scope, Phase 4), offer codes (CMP-008), AI drafting of campaign copy (CMP-007),
 replying to WhatsApp from the console, and attribution beyond a stated window on recorded bookings.
 
+## 13. Build state, 2 October 2026
+
+Built to the recommended default for every open decision. 159 tests pass locally (50 new across
+`audiences`, `campaigns`, `whatsapp-care` and `campaign-console`). Operator SOP:
+`studio-platform/sops/SOP-PLAT-003-campaigns-whatsapp-care.md`.
+
+**Where the build differs from this spec**
+
+| # | Spec said | Built | Why |
+|---|---|---|---|
+| B-1 | A six-step wizard | One draft page with six numbered sections and one Save | Fewer screens, same steps; the confirm button still states the consequence |
+| B-2 | Webhook at `/wa/:tenant/webhook` | One URL, `/wa/webhook`, routed by the number's `phone_number_id` | Meta gives one webhook per app, not per clinic |
+| B-3 | An event per recipient included or left out | One `campaign.launched` event with counts; the frozen `campaign_recipient` rows hold each person's rule ids | 500 events per campaign added nothing the rows don't already say |
+| B-4 | `whatsapp.message_received` event | `reply.received` with `channel: whatsapp` | The series' existing "replied" stop rules read it with no change |
+| B-5 | Store WhatsApp reply text | Stored only for a reply within 7 days of a platform message, a reply to one, or a STOP | With coexistence every chat on the clinic's number reaches the webhook; the rest is ignored and nothing about it is kept |
+| B-6 | WhatsApp versions pinned like email | A series step uses the newest version approved by the clinic and Meta at send time; the message row records which | WhatsApp templates are edited in the console, not published with the series |
+| B-7 | Click tracking (slice 7 in the spec's order) | Built, slice 8, for **every** patient email, including the live guide series | MSG-007 for both channels. **Deploying changes the links in PureMed's live emails** to `app.puremed.uk/c/…` redirects |
+| B-8 | Person page "existing" | A minimal People search and person page added (agreements, care messages, Record treatment, replies, what happened) | Record treatment needed somewhere to live; the console had no People screen |
+| B-9 | Template header text or image | Text only | Image headers need media upload to Meta; not needed for v1 |
+| B-10 | (not in spec) | Hard data protection gate checked at launch for hard tenants | Same rule as live publishing |
+| B-11 | (not in spec) | Data protection Part A and the footprint now name care messages, health data in messages, mobile numbers, WhatsApp replies and Meta | The DPIA review trigger fires on deploy for PureMed (soft gate: flagged, not blocked) |
+
+**Open**
+
+- **Not pushed.** A push to `main` deploys: migration 008 runs, the aftercare series is published
+  paused, and click tracking starts on live emails (B-7).
+- C-1, C-3 to C-12 stand at their defaults; C-2 and D-1 are decided.
+- `list_upload_sources: ["Import"]` (C-7) is Mailchimp's usual value, not read from PureMed's
+  export. Check it first (SOP-PLAT-003 section 1).
+- Aftercare copy is placeholder; the series stays paused until Nafisa writes, approves and turns it on.
+- WhatsApp was exercised against a stand-in for Meta's API only. Nothing has been sent to Meta.
+- Not run: the design review at 390/768/1440 (only a desktop look), the data-protection
+  reviewer. `make datamap` has no new kind of failure; the open lawful-basis, retention,
+  processor-terms and DPIA items now include the two new purposes and Meta.
+- The webhook finds a clinic by checking each tenant's config in turn; fine for a handful of
+  tenants, worth an index table later.
+
 ## Resume prompt
 
-> Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`. Get
-> Osman's calls on the open decisions in section 11 (C-2 and the service/marketing boundary are
-> decided), then build slice 1 (audiences) in `~/workspace/studio-platform` as migration 008.
-> Slices 1, 2 and email aftercare (slice 6) need no Meta setup; start Meta business verification
-> and the coexistence check (6.1) in parallel because their lead time is outside our control.
+> Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`,
+> section 13. Everything is built and committed locally in `~/workspace/studio-platform`, not pushed.
+> Before pushing: check the Mailchimp list-upload source value, run the design review and the
+> data-protection reviewer, and tell Nafisa her email links will change (B-7). Then start Meta
+> business verification and the coexistence check (SOP-PLAT-003 section 2).
