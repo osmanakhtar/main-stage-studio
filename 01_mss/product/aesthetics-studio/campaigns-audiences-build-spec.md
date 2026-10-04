@@ -625,12 +625,41 @@ Built to the recommended default for every open decision. 162 tests pass locally
   reviewer. `make datamap` has no new kind of failure; the open lawful-basis, retention,
   processor-terms and DPIA items now include the two new purposes and Meta.
 - The webhook finds a clinic by checking each tenant's config in turn; fine for a handful of
-  tenants, worth an index table later.
+  tenants, worth an index table later. **Done 3 Oct** (see 13b).
+
+## 13b. Build state, 3 and 4 October 2026
+
+All deployed to app.puremed.uk (studio-platform 4e2b54b, fdcac24 live 4 Oct 12:41; a7a2819 charts;
+a1c6a44 review request live 13:01). 200 tests pass.
+
+- **Messages log and series drill-down** (SOP-PLAT-003 section 7). The dashboard counted series
+  sends but only one-off campaigns had a list behind them ("21 emails sent, no visibility"). Now:
+  a Messages page (every message, filter by series, campaign, channel, failed, or one email), a
+  Who's in page per series (progress, what each person got, and filled in a form / booked /
+  replied / opted out in the campaign attribution windows), and a Series table on the dashboard.
+  What PureMed's 21 were has not been looked at signed in.
+- **Dashboard At a glance**: donut of marketing reach, pie of the last 30 days by kind, donut of
+  where new people came from. Validated chart colours; the console's plum and teal kind colours
+  fail colour-blind separation as fills, so the legend carries the kind labels instead.
+- **Tests on their own database** (`studio_platform_test`, recreated per run). The dev database
+  had 3,803 leftover test tenants and their WhatsApp test messages; cleaned (backup in
+  `~/Backups/studio-platform/`). Migration 009: the webhook routes by an indexed
+  `tenant.whatsapp_phone_number_id`; a second tenant can't publish the same number.
+- **Review request after a treatment (CRM-007)**, SOP-PLAT-003 section 3b. No booking-system
+  dependency: recording a treatment is the trigger. It is marketing, so it is the single, locked
+  exception to G2: marketing email consent, one email, email only, day 1 or later, a re-ask window
+  of 30 days or more, never the treatment's name, and a review link is refused in care messages.
+  Staff tick "OK to ask for a review" (off by default, migration 010) and can press "Don't ask for
+  a review" until it goes; there is no complication flag yet. PureMed's series is live but paused
+  (day 14, once per 180 days) with a draft email. Ticks recorded while paused never send later.
+  DPIA Part A has an "Ask for a review" row; a signed DPIA would reopen A3 and A4.
 
 ## Resume prompt
 
 > Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`,
-> section 13. Deployed 2 Oct. Before Nafisa sends a first campaign: check the Mailchimp list-upload
+> sections 13 and 13b. Review request: get PureMed's Google review link from Osman, add it as
+> `links.review_url` in `tenants/puremed/tenant.json`, push; Nafisa approves the email and the DPIA
+> covers the "Ask for a review" row before it is turned on. Earlier: deployed 2 Oct. Before Nafisa sends a first campaign: check the Mailchimp list-upload
 > source value on the DO console (SOP-PLAT-003 section 1). Then the P1 items in
 > `campaigns-ux-review-2026-10-02.md`, and start Meta business verification and the coexistence
 > check (SOP-PLAT-003 section 2).
