@@ -617,8 +617,12 @@ Built to the recommended default for every open decision. 162 tests pass locally
   008 ran, the aftercare series is published paused, and link tracking is off for PureMed (B-7), so
   live email links are unchanged. Checked from outside only; no console section run on production yet.
 - C-1, C-3 to C-12 stand at their defaults; C-2 and D-1 are decided.
-- `list_upload_sources: ["Import"]` (C-7) is Mailchimp's usual value, not read from PureMed's
-  export. Check it first (SOP-PLAT-003 section 1).
+- C-7 checked on production 2 Oct: PureMed's list-upload values are `List Import from File
+  Upload` (430) and `List Import from Copy/Pasted File` (28), not the assumed `"Import"`, which
+  matched nobody. `tenants/puremed/tenant.json` corrected; live once deployed and
+  `config:publish` is run. Audiences saved before then carry the old value.
+  Later the same day PureMed decided the list uploads can be emailed, so PureMed's
+  `list_upload_sources` is now `[]` (no default exclusion; studio-platform, after 35f0d0d).
 - Aftercare copy is placeholder; the series stays paused until Nafisa writes, approves and turns it on.
 - WhatsApp was exercised against a stand-in for Meta's API only. Nothing has been sent to Meta.
 - Not run: the design review at 390/768/1440 (only a desktop look), the data-protection

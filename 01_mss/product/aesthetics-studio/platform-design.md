@@ -1,6 +1,6 @@
 # Main Stage Aesthetics Studio: Platform Design
 
-*Canon doc for the productised platform. v0.10, 1 October 2026 (v0.9 earlier on 1 Oct, v0.8 on 30 Sep, v0.1 to v0.3 on 26 Sep, v0.4 and v0.5 on 27 Sep, v0.6 and v0.7 on 29 Sep).
+*Canon doc for the productised platform. v0.11, 2 October 2026 (v0.10 on 1 Oct, v0.9 earlier on 1 Oct, v0.8 on 30 Sep, v0.1 to v0.3 on 26 Sep, v0.4 and v0.5 on 27 Sep, v0.6 and v0.7 on 29 Sep).
 **Phase 0 built, plus the consultation and a first console screen (see the v0.5 note). Eight of nine decisions locked; D9 (Faces cutover date) open.** Owner: Osman. Working directory:
 `~/workspace/main-stage-studio/01_mss/product/aesthetics-studio/`.*
 
@@ -15,6 +15,29 @@
 Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
+
+## v0.11 change note, 2 October 2026: a local sandbox, and DPIA questions on booking
+
+**Why.** Console and booking work had nowhere to run except PureMed production (push to `main`
+deploys), and a hosted sandbox was turned down on cost for now. Osman's call: build locally, so
+work carries on while Nafisa completes the DPIA.
+
+**Built 2 Oct 2026, committed locally, NOT pushed** (studio-platform 94a3679, 4ca56f0):
+
+- **DPIA B8.5 to B8.10** (PureMed, optional, never block signing): bookings as service messages,
+  naming the treatment in reminders, Stripe's role and transfer, keeping a card for no-show fees,
+  how long booking and deposit records are kept. Nothing about payments was in the DPIA before.
+  She only sees them once they are pushed, which is a production deploy; push before she finishes.
+- **Local sandbox, SOP-PLAT-004.** `studio_sandbox` in the local Docker Postgres, owned by a
+  non-superuser role as on DigitalOcean; fictional tenant `tenants/vera` (every address on
+  `.example`); 20 synthetic people seeded through the real capture path; mail to
+  `outbox-sandbox/` only. A guard (`APP_ENV=sandbox`) refuses Gmail, WhatsApp, Google
+  credentials, live Stripe keys, non-local or non-sandbox databases, and the `puremed` tenant.
+  `tenants/vera` on `main` never reaches production: the release job publishes `tenants/puremed`
+  only.
+
+**Next:** the booking and Stripe build spec (on the spine, per D3), then build it on a branch in
+the sandbox. The Vera public site runs as a local Astro server against `localhost:3450`.
 
 ## v0.10 change note, 1 October 2026: audiences and campaigns, email and WhatsApp
 
@@ -737,4 +760,5 @@ screens, and an operator SOP per module.
 > platform (`~/workspace/studio-platform/`, private repo github.com/osmanakhtar/studio-platform, not in
 > `wsbackup`; push to `main` deploys to DigitalOcean) is live for PureMed; run it with SOP-PLAT-001.
 > Next platform work: part B of the v0.8 note (DPA and DPIA onboarding, D10 to D12 open), then the
-> PureMed DPIA itself, which blocks Phase 2 (Faces in house).
+> PureMed DPIA itself, which blocks Phase 2 (Faces in house). Build new features in the local
+> sandbox first (SOP-PLAT-004, v0.11 note); next there = the booking and Stripe build spec.

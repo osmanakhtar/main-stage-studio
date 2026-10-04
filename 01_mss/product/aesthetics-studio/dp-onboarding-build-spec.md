@@ -322,8 +322,8 @@ Built in `studio-platform` commit d034ffc (not pushed). Tests: 109 pass (88 exis
   shown on the Risks screen once any agreed risk is rated high likelihood and high severity.
 - **MSS cannot enter answers for the clinic.** The operator view is read-only (8.5 allowed MSS to
   enter adviser answers on written instruction; not built, the owner enters them).
-- **"Something's wrong" email** goes to `MSS_NOTIFY_EMAIL` from the tenant mailbox. Not set on
-  DigitalOcean yet, so until it is, only the event is logged.
+- **"Something's wrong" email** goes to `MSS_NOTIFY_EMAIL` from the tenant mailbox. Set on
+  DigitalOcean to hello@mainstagestudio.co.uk (2 Oct 2026, was os@ from 1 Oct).
 - **Option order** of consultation answers is pinned into `dp.option_order` at publish, because
   the config body is jsonb and loses key order.
 - **Visible change for PureMed:** approvals made with the care@ login now read "Approved by
