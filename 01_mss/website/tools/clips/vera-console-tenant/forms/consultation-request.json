@@ -1,0 +1,14 @@
+{
+  "key": "consultation-request",
+  "name": "the consultation request form",
+  "page_url": "https://vera-aesthetics.example/consultation",
+  "honeypot": "website",
+  "fields": { "first_name": { "required": true, "max": 80 }, "email": { "required": true } },
+  "required_ticks": [],
+  "consent": [
+    { "purpose": "consultation_follow_up", "field": null, "wording": "consent/consultation-notice.v1.md" }
+  ],
+  "tags": ["consultation-requested"],
+  "success_redirect": "https://vera-aesthetics.example/consultation/thank-you",
+  "error_redirect": "https://vera-aesthetics.example/consultation"
+}

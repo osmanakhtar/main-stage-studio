@@ -239,3 +239,57 @@ video, and a `poster` attribute needs a plain URL.
 
 Clips are `preload="none"` with click-to-play. A page arguing for a fast static site
 should not spend 1.3MB on visitors who never press play.
+
+## Recording the showcase clips (Stage editor, campaign console)
+
+Added 1 Oct 2026. Two product clips for the MSS site, both 1920x1080: the
+product recorded at 1440x1080 with a 480px narration column composited on the
+left. The column text comes from the recorder's own log of when each beat
+started, so a line is on screen while the thing it describes happens.
+
+| File | What it does |
+|---|---|
+| `showcase-lib.js` | Cursor that survives page loads, driver, narration log |
+| `record-stage-editor.js` | Stage live-edit on PureMed's site: copy, photo swap, FAQ add, feedback pin, submit |
+| `record-campaign-console.js` | Platform console on Vera: overview, campaign rules, edit, preview, approve |
+| `vera-console-tenant/` | Vera tenant config + `seed-demo.sh` (own DB, outbox mail, 33 synthetic sign-ups) |
+| `composite-showcase.js` | Column stills, crossfades, H.264 encode, poster -> `out/` |
+
+**Both recorders edit, so both refuse anything but localhost.**
+
+Stage runs from a copy of the nightly backup, never the Pi:
+
+```
+rsync -a --exclude sessions --exclude '*.tgz' ~/Backups/stage-pi/nightly/<date>/stage/ <sandbox>/
+cd <sandbox> && npm install && mkdir sessions
+# overwrite config/users.json and config/session-secret.txt with demo values
+# (never read the real ones), then: node server.js   (port 3000)
+```
+
+Sign in once as the demo client and save the storage state, then
+`STAGE_STATE=<state.json> node record-stage-editor.js`. Restore the
+engagement's `output/` folder from a baseline copy before every take, or the
+edits stack up. The backup was missing `puremed_logo_nav.webp` and carried a
+194x138 logo resize in the overlay; both were corrected in the sandbox only.
+
+The console uses Vera, never PureMed: the PureMed console holds real patients
+and the approved copy only exists in production. `vera-console-tenant/seed-demo.sh`
+rebuilds `studio_platform_vera` and leaves the server on :3402 with
+`MAIL_TRANSPORT=outbox`; the dev DB and your :3400 server are not touched.
+Vera's emails sign off as "The Vera team" in plain text because the console
+preview's sample `{{sender_name}}` is hardcoded to PureMed (see below).
+
+```
+node composite-showcase.js stage-editor
+node composite-showcase.js campaign-console
+```
+
+Known defects seen while recording (not fixed here):
+
+- Stage phone preview draws the editor's own toolbar inside the phone frame.
+- "+ Add review" adds the card off-screen inside the carousel.
+- Console preview sample values (`console/emails.ts` `SAMPLE_VALUES`) are
+  PureMed's for every tenant: sender, clinic name, links, "Advanced Lift &
+  Tighten". The grey "Preview with sample details" line still shows it.
+- Config publish accepts `{{submitted_at}}` in a template fed by a plain form;
+  it only fails at send time ("no value for {{submitted_at}}").

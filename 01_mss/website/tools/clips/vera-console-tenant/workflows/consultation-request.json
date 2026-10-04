@@ -1,0 +1,18 @@
+{
+  "key": "consultation-request",
+  "name": "Consultation request: confirmation and what to expect",
+  "description": "Confirms a consultation request straight away, then sends one note the next day about what happens in the room, so nobody arrives nervous about being sold to.",
+  "trigger": { "type": "tag.added", "tag": "consultation-requested" },
+  "requires_consent": "consultation_follow_up",
+  "quiet_hours": { "start": 20, "end": 8, "release": 9 },
+  "steps": [
+    { "id": "1", "day": 0, "template": "11-request-received", "transactional": true, "exempt_from_quiet_hours": true },
+    { "id": "2", "day": 1, "template": "12-before-you-come" }
+  ],
+  "stop_when": [
+    { "id": "CR-STOP-01", "rule": "suppressed", "reason": "suppressed" },
+    { "id": "CR-STOP-02", "rule": "consent_withdrawn", "reason": "unsubscribed" },
+    { "id": "CR-STOP-03", "rule": "event_since_enrolment", "types": ["reply.received"], "reason": "replied" }
+  ],
+  "on_retrigger": { "id": "CR-RETRIGGER-01", "re_enrol_after_days": 30 }
+}
