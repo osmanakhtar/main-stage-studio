@@ -14,14 +14,42 @@ const brand = JSON.parse(fs.readFileSync(path.join(brandDir, 'brand.json'), 'utf
 const rules = JSON.parse(fs.readFileSync(path.join(brandDir, 'lint-rules.json'), 'utf8'));
 const example = JSON.parse(fs.readFileSync(path.join(brandDir, 'example-campaign.json'), 'utf8'));
 
-test('every template renders a full document with brand colours and escaped text', () => {
-  for (const t of Slides.TEMPLATES) {
-    const html = Slides.slideHtml({ template: t.id, numeral: '01', kicker: 'K', headline: 'A <b>bold</b> claim', body: 'Body' }, brand);
-    assert.match(html, /^<!doctype html>/);
-    assert.ok(html.includes(brand.palette.brand), `${t.id} uses the brand colour`);
-    assert.ok(html.includes('A &lt;b&gt;bold&lt;/b&gt; claim'), `${t.id} escapes text`);
-    assert.ok(!html.includes('<b>bold</b>'), `${t.id} never injects markup`);
+test('every style renders every slide type, with brand colours and escaped text', () => {
+  assert.ok(Slides.STYLES.length >= 6);
+  for (const st of Slides.STYLES) {
+    for (const t of Slides.TEMPLATES) {
+      const slide = { template: t.id, numeral: '01', kicker: 'K', headline: 'A <b>bold</b> claim', body: 'Body', media: { ref: 'brand:library/x.webp', kind: 'image' } };
+      const html = Slides.slideHtml(slide, brand, { style: st.id, index: 1, total: 5 });
+      const where = `${st.id}/${t.id}`;
+      assert.match(html, /^<!doctype html>/, where);
+      assert.ok(html.includes(`--brand:${brand.palette.brand}`), `${where} takes the brand palette`);
+      assert.ok(html.includes('A &lt;b&gt;bold&lt;/b&gt; claim'), `${where} escapes text`);
+      assert.ok(!html.includes('<b>bold</b>'), `${where} never injects markup`);
+      assert.ok(html.includes(`class="slide ${st.id} ${t.id}`), where);
+    }
   }
+});
+
+test('styles take every colour from the palette (white aside)', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'src', 'shared', 'styles.js'), 'utf8');
+  const hex = (src.match(/#[0-9a-fA-F]{3,8}\b/g) || []).filter((h) => h.toLowerCase() !== '#fff');
+  assert.deepStrictEqual(hex, []);
+});
+
+test('an unknown style falls back to classic', () => {
+  const html = Slides.slideHtml({ template: 'light', headline: 'H' }, brand, { style: 'nope' });
+  assert.ok(html.includes('class="slide classic light'));
+});
+
+test('the seamless line meets at slide edges', () => {
+  const pathAt = (index) => {
+    const html = Slides.slideHtml({ template: 'light', headline: 'H' }, brand, { style: 'flow', index, total: 3 });
+    const d = /<path d="([^"]+)"/.exec(html)[1];
+    return d.split(/[ML]/).filter(Boolean).map((p) => p.split(' ').map(Number));
+  };
+  const a = pathAt(0).find(([x]) => x === 1080);
+  const b = pathAt(1).find(([x]) => x === 0);
+  assert.ok(a && b && Math.abs(a[1] - b[1]) < 0.11, 'y at the right edge of slide 1 equals y at the left edge of slide 2');
 });
 
 test('asset refs resolve only to the two studio hosts', () => {

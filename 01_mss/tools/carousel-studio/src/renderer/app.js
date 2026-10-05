@@ -43,13 +43,15 @@ const post = () => state.campaign && state.campaign.posts.find((p) => p.id === s
 const slide = () => { const p = post(); return p && p.slides[state.slideIdx]; };
 const newId = () => Math.random().toString(36).slice(2, 10);
 const mediaUrl = (ref) => Slides.assetUrl(ref);
+const placeOf = (p, i, style) => ({ style: style || p.style || Slides.DEFAULT_STYLE, index: i, total: p.slides.length });
 
-// A slide drawn into a box of the given width (scaled iframe).
-function thumb(s, width, live) {
+// A slide drawn into a box of the given width (scaled iframe). place carries
+// the post's style and the slide's position (see placeOf).
+function thumb(s, width, live, place) {
   const scale = width / Slides.W;
   const box = el('div', { class: 'thumb', style: `width:${width}px;height:${Math.round(Slides.H * scale)}px` });
   const f = el('iframe', { tabindex: '-1', 'aria-hidden': 'true', style: `transform:scale(${scale})` });
-  f.srcdoc = Slides.slideHtml(s, state.brand, { live: !!live });
+  f.srcdoc = Slides.slideHtml(s, state.brand, { live: !!live, ...(place || {}) });
   box.append(f);
   return box;
 }
@@ -117,7 +119,7 @@ function renderCampaign() {
   for (const p of c.posts) {
     const issues = Lint.lintPost(state.lintRules, p, Slides.slideText).filter((i) => i.level === 'error').length;
     cards.append(el('button', { class: 'post-card', onclick: () => openPost(p.id) },
-      p.slides[0] ? thumb(p.slides[0], 190) : el('div', { class: 'thumb', style: 'width:190px;height:237px' }),
+      p.slides[0] ? thumb(p.slides[0], 190, false, placeOf(p, 0)) : el('div', { class: 'thumb', style: 'width:190px;height:237px' }),
       el('div', { class: 'meta' }, el('strong', {}, p.title || 'Untitled post'),
         el('span', {}, `${p.slides.length} slides${issues ? ` · ${issues} to fix` : ''}`))));
   }
@@ -181,7 +183,9 @@ async function newCampaign() {
 }
 
 function addPost(p) {
-  const np = { id: newId(), ...p };
+  // A new post starts in the style the campaign's latest post uses.
+  const last = state.campaign.posts[state.campaign.posts.length - 1];
+  const np = { id: newId(), style: (last && last.style) || Slides.DEFAULT_STYLE, ...p };
   state.campaign.posts.push(np);
   scheduleSave();
   openPost(np.id);
@@ -206,7 +210,28 @@ function renderPost() {
   renderStrip();
   renderPreview();
   renderInspector();
+  if (!$('styleList').closest('.tab-body').hidden) renderStyles();
   renderLint();
+}
+
+// The Style tab: her own post shown in every style (cover plus the slide
+// she's on), so she chooses by seeing her content, not a generic sample.
+function renderStyles() {
+  const p = post();
+  const list = $('styleList');
+  list.innerHTML = '';
+  const current = p.style || Slides.DEFAULT_STYLE;
+  const second = state.slideIdx > 0 ? state.slideIdx : Math.min(1, p.slides.length - 1);
+  for (const st of Slides.STYLES) {
+    const shots = [0, second].filter((v, i, a) => a.indexOf(v) === i)
+      .map((i) => thumb(p.slides[i], 128, false, placeOf(p, i, st.id)));
+    list.append(el('button', {
+      class: `style-card${st.id === current ? ' on' : ''}`,
+      onclick: () => { p.style = st.id; scheduleSave(); renderPost(); toast(`${st.label} applied to every slide`); },
+    }, el('div', { class: 'style-shots' }, shots),
+    el('strong', {}, st.label, st.id === current ? el('span', { class: 'cur' }, 'In use') : null),
+    el('span', {}, st.description)));
+  }
 }
 
 function renderStrip() {
@@ -216,7 +241,7 @@ function renderStrip() {
   p.slides.forEach((s, i) => {
     const flagged = Lint.lintText(state.lintRules, Slides.slideText(s)).some((x) => x.level === 'error');
     strip.append(el('button', { class: `slot${i === state.slideIdx ? ' on' : ''}`, title: `Slide ${i + 1}`, onclick: () => { state.slideIdx = i; renderPost(); } },
-      el('span', { class: 'n' }, String(i + 1)), flagged ? el('span', { class: 'flag', title: 'Has something to fix' }) : null, thumb(s, 104)));
+      el('span', { class: 'n' }, String(i + 1)), flagged ? el('span', { class: 'flag', title: 'Has something to fix' }) : null, thumb(s, 104, false, placeOf(p, i))));
   });
   if (p.slides.length < 10) {
     strip.append(el('button', { class: 'add', onclick: addSlide }, '+ Add slide'));
@@ -227,7 +252,7 @@ function refreshCurrentThumb() {
   const slot = $('strip').children[state.slideIdx];
   if (!slot) return;
   const old = slot.querySelector('.thumb');
-  old.replaceWith(thumb(slide(), 104));
+  old.replaceWith(thumb(slide(), 104, false, placeOf(post(), state.slideIdx)));
   const flagged = Lint.lintText(state.lintRules, Slides.slideText(slide())).some((x) => x.level === 'error');
   const f = slot.querySelector('.flag');
   if (flagged && !f) slot.append(el('span', { class: 'flag', title: 'Has something to fix' }));
@@ -248,7 +273,7 @@ function fitPreview() {
 function renderPreview() {
   const s = slide();
   if (!s) return;
-  $('preview').srcdoc = Slides.slideHtml(s, state.brand, { live: true });
+  $('preview').srcdoc = Slides.slideHtml(s, state.brand, { live: true, ...placeOf(post(), state.slideIdx) });
   fitPreview();
   $('moveLeft').disabled = state.slideIdx === 0;
   $('moveRight').disabled = state.slideIdx === post().slides.length - 1;
@@ -259,7 +284,7 @@ let previewTimer = null;
 function slideChanged() {
   scheduleSave();
   clearTimeout(previewTimer);
-  previewTimer = setTimeout(() => { renderPreview(); refreshCurrentThumb(); renderLint(); }, 120);
+  previewTimer = setTimeout(() => { renderPreview(); refreshCurrentThumb(); renderLint(); if (!$('styleList').closest('.tab-body').hidden) renderStyles(); }, 120);
 }
 
 function renderInspector() {
@@ -381,6 +406,7 @@ function showTab(name) {
   document.querySelectorAll('.tab').forEach((x) => x.classList.toggle('on', x.dataset.tab === name));
   document.querySelectorAll('.tab-body').forEach((b) => { b.hidden = b.dataset.body !== name; });
   if (name === 'captions') capCount();
+  if (name === 'style') renderStyles();
 }
 
 function capCount() {

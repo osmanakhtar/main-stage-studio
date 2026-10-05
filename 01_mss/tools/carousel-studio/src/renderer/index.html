@@ -107,9 +107,15 @@ Book a consultation via the link in bio.</pre>
 
         <div class="inspector">
           <div class="tabs" role="tablist">
+            <button class="tab" data-tab="style">Style</button>
             <button class="tab on" data-tab="slide">Slide</button>
             <button class="tab" data-tab="captions">Captions</button>
             <button class="tab" data-tab="check">Compliance <span id="checkCount"></span></button>
+          </div>
+
+          <div class="tab-body" data-body="style" hidden>
+            <p class="hint">Each style redraws the whole carousel in its own layout, always in the brand colours and fonts. Your words, photos and order stay as they are.</p>
+            <div id="styleList" class="style-list"></div>
           </div>
 
           <div class="tab-body" data-body="slide">
@@ -170,6 +176,7 @@ Book a consultation via the link in bio.</pre>
   <div id="busy" hidden><div class="busy-card"><div class="spinner"></div><p id="busyText">Working</p></div></div>
   <div id="toast" hidden></div>
 
+  <script src="studio://shared/styles.js"></script>
   <script src="studio://shared/slides.js"></script>
   <script src="studio://shared/lint.js"></script>
   <script src="studio://shared/outline.js"></script>

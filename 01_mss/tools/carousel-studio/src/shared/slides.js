@@ -1,9 +1,17 @@
-// slides.js — the slide templates. One function, slideHtml(), builds a full
-// 1080×1350 HTML document for a slide. The editor preview and the PNG/clip
-// export both render this exact document, so what Nafisa sees is what ships.
+// slides.js — builds one 1080×1350 HTML document per slide. The editor
+// preview and the PNG/clip export both render this exact document, so what
+// Nafisa sees is what ships.
 //
-// Brand values (palette, fonts, logo, footer) come from the brand pack's
-// brand.json; templates never hardcode a colour. Asset references:
+// Two axes:
+//   slide type (slide.template): what the slide is for. Cover, point, photo
+//     and text, statement, quote, closing call to action. Fixed set, fixed
+//     fields, so copy never depends on the look.
+//   style (post.style): how the whole carousel looks. Each style in styles.js
+//     draws all six slide types in its own layout and typography, but every
+//     colour and font comes from the brand pack. Switching style keeps all
+//     the content.
+//
+// Asset references:
 //   brand:<path>  → a file inside the brand pack (studio://brand/<path>)
 //   media:<file>  → a file she imported (studio://media/<file>)
 //
@@ -11,22 +19,26 @@
 (function (root) {
   'use strict';
 
+  const STYLES = typeof module !== 'undefined' && module.exports ? require('./styles') : root.SlideStyles;
+
   const W = 1080;
   const H = 1350;
 
   const TEMPLATES = [
-    { id: 'cover', label: 'Cover photo', media: true, fields: ['kicker', 'headline', 'body'], hint: 'Opening slide. Full-bleed photo or video with the headline over a soft scrim.' },
-    { id: 'light', label: 'Light card', media: false, fields: ['numeral', 'kicker', 'headline', 'body'], hint: 'Warm white with the gold hairline frame. For explaining one point.' },
-    { id: 'split', label: 'Split photo', media: true, fields: ['numeral', 'kicker', 'headline', 'body'], hint: 'Photo panel beside a light text panel.' },
-    { id: 'brand', label: 'Brand card', media: false, fields: ['kicker', 'headline', 'body'], hint: 'Deep navy card. For a key message or a summary.' },
-    { id: 'quote', label: 'Quote', media: false, fields: ['headline', 'kicker'], hint: 'A patient or practitioner quote. Kicker is the attribution.' },
-    { id: 'cta', label: 'Closing call to action', media: false, fields: ['headline', 'body'], hint: 'Last slide. One consultation-led ask and the handle.' },
+    { id: 'cover', label: 'Cover', media: true, fields: ['kicker', 'headline', 'body'], hint: 'The opening slide. A photo or video with the hook headline.' },
+    { id: 'light', label: 'Numbered point', media: false, fields: ['numeral', 'kicker', 'headline', 'body'], hint: 'One point per slide, with an optional number.' },
+    { id: 'split', label: 'Photo and text', media: true, fields: ['numeral', 'kicker', 'headline', 'body'], hint: 'A point with a photo beside or above it.' },
+    { id: 'brand', label: 'Statement', media: false, fields: ['kicker', 'headline', 'body'], hint: 'A key message or summary, in a contrasting colour.' },
+    { id: 'quote', label: 'Quote', media: false, fields: ['headline', 'kicker'], hint: 'A real patient or practitioner quote. The small heading is who said it.' },
+    { id: 'cta', label: 'Closing call to action', media: false, fields: ['headline', 'body'], hint: 'The last slide. One consultation-led ask and the handle.' },
   ];
 
   const FIELD_LABELS = {
     numeral: 'Number', kicker: 'Small heading', headline: 'Headline', body: 'Supporting text',
   };
   const FIELD_LIMITS = { numeral: 4, kicker: 40, headline: 90, body: 220 };
+
+  const DEFAULT_STYLE = 'classic';
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -52,7 +64,7 @@
   }
 
   // Headline size steps down as copy gets longer, so a long headline never
-  // overflows the card. Sizes are in px on the 1080-wide canvas.
+  // overflows. steps: [[maxChars, px], ...] on the 1080-wide canvas.
   function fit(text, steps) {
     const n = String(text || '').length;
     for (const [max, px] of steps) if (n <= max) return px;
@@ -73,160 +85,72 @@
     return `<img class="${cls}" src="${assetUrl(media.ref)}" style="object-position:${pos}" alt="">`;
   }
 
-  function footer() {
-    return '<div class="footer"><span class="f1"></span> <span class="f2"></span></div>';
+  const pad2 = (n) => String(n).padStart(2, '0');
+
+  // Everything a style needs to draw a slide, so styles never touch raw input.
+  function context(slide, brand, opts) {
+    const P = brand.palette;
+    const index = Number.isInteger(opts.index) ? opts.index : 0;
+    const total = Math.max(1, Number.isInteger(opts.total) ? opts.total : 1);
+    // Clip export of a video cover: the footage is laid under the rendered
+    // graphics, so the media window must be see-through. A style marks its
+    // media window with ctx.win(); in this mode the window becomes a hole and
+    // everything around it is painted in the style's --hole colour.
+    const hole = !!(opts.transparentMedia && slide.template === 'cover' && slide.media && slide.media.kind === 'video' && slide.media.ref);
+    const s = slide;
+    return {
+      P, brand, s, opts, index, total, hole,
+      isFirst: index === 0,
+      isLast: index === total - 1,
+      pager: `${pad2(index + 1)} / ${pad2(total)}`,
+      logoUrl: assetUrl('brand:' + brand.logo),
+      hasMedia: !!(s.media && s.media.ref),
+      esc, fit,
+      media: (cls) => mediaTag(s.media, opts, cls || 'fill'),
+      win: (cls, extra) => `<div class="mwin ${cls || ''}${hole ? ' hole' : ''}"${extra ? ` style="${extra}"` : ''}>${hole ? '' : mediaTag(s.media, opts, 'fill')}</div>`,
+      // cls: class name; st: optional inline style for per-layout sizing
+      kicker: (cls, st) => (s.kicker ? `<div class="${cls || 'kicker'}"${st ? ` style="${st}"` : ''}>${esc(s.kicker)}</div>` : ''),
+      numeral: (cls, st) => (s.numeral ? `<div class="${cls || 'numeral'}"${st ? ` style="${st}"` : ''}>${esc(s.numeral)}</div>` : ''),
+      body: (cls, st) => (s.body ? `<p class="${cls || 'body'}"${st ? ` style="${st}"` : ''}>${esc(s.body)}</p>` : ''),
+      h1: (steps, cls) => `<h1${cls ? ` class="${cls}"` : ''} style="font-size:${fit(s.headline, steps)}px">${esc(s.headline)}</h1>`,
+      footer: () => `<div class="footer"><span class="f1">${esc(brand.footer.text)}</span> <span class="f2">${esc(brand.footer.accent || '')}</span></div>`,
+      arrow: (color) => `<svg class="arrow" width="44" height="18" viewBox="0 0 44 18" aria-hidden="true"><path d="M0 9h40M32 1l8 8-8 8" fill="none" stroke="${color || 'currentColor'}" stroke-width="2"/></svg>`,
+    };
   }
 
-  // opts.live            → preview: video slides play inline
-  // opts.transparentMedia → clip export: leave video out and the page clear, so
-  //                         the graphics can be laid over the moving footage
+  // opts.style            → style id (post.style); default classic
+  // opts.index, opts.total → this slide's position in the carousel (styles use
+  //                          it for page numbers, progress bars and the
+  //                          seamless line that runs across slides)
+  // opts.live             → preview: video slides play inline
+  // opts.transparentMedia → clip export: leave video out, see above
   function slideHtml(slide, brand, opts) {
     opts = opts || {};
+    const style = STYLES.get(opts.style || DEFAULT_STYLE);
+    const ctx = context(slide, brand, opts);
+    const role = TEMPLATES.some((t) => t.id === slide.template) ? slide.template : 'light';
+    const out = style.render(role, ctx);
     const P = brand.palette;
-    const display = `'${brand.fonts.display.family}',${brand.fonts.display.fallback}`;
-    const body = `'${brand.fonts.body.family}',${brand.fonts.body.fallback}`;
-    const t = slide.template || 'light';
-    const s = slide;
-    const logoUrl = assetUrl('brand:' + brand.logo);
-    let inner = '';
-    let cls = t;
-
-    const kicker = s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : '';
-    const numeral = s.numeral ? `<div class="numeral">${esc(s.numeral)}</div>` : '';
-    const bodyP = s.body ? `<p class="body">${esc(s.body)}</p>` : '';
-
-    if (t === 'cover') {
-      const hasMedia = s.media && s.media.ref;
-      const hpx = fit(s.headline, [[24, 112], [40, 96], [60, 82], [999, 70]]);
-      inner = `
-        ${mediaTag(s.media, opts, 'bg')}
-        <div class="scrim ${hasMedia ? '' : 'solid'}"></div>
-        <div class="content bottom">
-          ${kicker}
-          <h1 style="font-size:${hpx}px">${esc(s.headline)}</h1>
-          ${bodyP}
-        </div>
-        ${footer()}`;
-    } else if (t === 'light') {
-      const hpx = fit(s.headline, [[28, 84], [50, 72], [999, 60]]);
-      inner = `
-        <div class="frame"></div>
-        <div class="content center">
-          ${numeral}${kicker}
-          <h1 style="font-size:${hpx}px">${esc(s.headline)}</h1>
-          ${bodyP}
-        </div>
-        ${footer()}`;
-    } else if (t === 'split') {
-      const hpx = fit(s.headline, [[24, 62], [44, 54], [999, 46]]);
-      const img = `<div class="panel-img">${mediaTag(s.media, opts, 'fill')}</div>`;
-      const txt = `<div class="panel-txt"><div class="content center">${numeral}${kicker}<h1 style="font-size:${hpx}px">${esc(s.headline)}</h1>${bodyP}</div>${footer()}</div>`;
-      inner = s.side === 'right' ? txt + img : img + txt;
-      cls += s.side === 'right' ? ' img-right' : ' img-left';
-    } else if (t === 'brand') {
-      const hpx = fit(s.headline, [[28, 92], [50, 78], [999, 64]]);
-      inner = `
-        <div class="content center">
-          ${kicker}
-          <h1 style="font-size:${hpx}px">${esc(s.headline)}</h1>
-          ${bodyP}
-        </div>
-        ${footer()}`;
-    } else if (t === 'quote') {
-      const hpx = fit(s.headline, [[60, 68], [110, 58], [999, 48]]);
-      inner = `
-        <div class="frame"></div>
-        <div class="content center">
-          <div class="qmark">&ldquo;</div>
-          <h1 style="font-size:${hpx}px">${esc(s.headline)}</h1>
-          ${s.kicker ? `<div class="attr">${esc(s.kicker)}</div>` : ''}
-        </div>
-        ${footer()}`;
-    } else if (t === 'cta') {
-      const hpx = fit(s.headline, [[28, 88], [50, 74], [999, 62]]);
-      inner = `
-        <img class="logo-mid" src="${logoUrl}" alt="">
-        <div class="content cta-body">
-          <h1 style="font-size:${hpx}px">${esc(s.headline)}</h1>
-          ${bodyP}
-          ${brand.handle ? `<div class="handle">${esc(brand.handle)}</div>` : ''}
-        </div>
-        ${footer()}`;
-    }
-
-    const transparent = opts.transparentMedia && s.media && s.media.kind === 'video';
-
     return `<!doctype html><html><head><meta charset="utf-8"><style>
 ${fontCss(brand)}
+:root{
+  --brand:${P.brand};--deep:${P.brandDeep};--accent:${P.accent};--gold:${P.accentOnDark};
+  --bg:${P.bg};--bg2:${P.bg2};--ink:${P.ink};--muted:${P.muted};--line:${P.line};
+  --display:'${brand.fonts.display.family}',${brand.fonts.display.fallback};
+  --sans:'${brand.fonts.body.family}',${brand.fonts.body.fallback};
+  --hole:${P.bg};
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:${W}px;height:${H}px;overflow:hidden;background:${transparent ? 'transparent' : P.bg}}
-.slide{position:relative;width:${W}px;height:${H}px;overflow:hidden;font-family:${body};color:${P.ink};-webkit-font-smoothing:antialiased}
-h1{font-family:${display};font-weight:300;line-height:1.06;letter-spacing:.005em;overflow-wrap:break-word}
-.kicker{font-size:24px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:26px}
-.body{font-size:32px;line-height:1.5;margin-top:28px;max-width:30ch}
-.numeral{font-family:${display};font-weight:300;font-size:150px;line-height:.9;color:${P.accent};margin-bottom:22px}
-.content{position:absolute;left:104px;right:104px;z-index:3}
-.content.center{top:0;bottom:120px;display:flex;flex-direction:column;justify-content:center}
-.footer{position:absolute;left:0;right:0;bottom:46px;text-align:center;font-size:17px;font-weight:600;letter-spacing:.34em;z-index:4}
-.footer .f1::before{content:'${esc(brand.footer.text)}'}
-.footer .f2::before{content:'${esc(brand.footer.accent || '')}';font-weight:400;opacity:.7}
-.frame{position:absolute;inset:30px;border:2px solid ${P.accent}99;z-index:1;pointer-events:none}
-
-/* cover */
-.cover{background:${transparent ? 'transparent' : P.brandDeep}}
-.cover .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.cover .scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,${P.brandDeep}8C 0%,${P.brandDeep}00 24%,${P.brandDeep}00 42%,${P.brandDeep}B3 70%,${P.brandDeep}F0 100%)}
-.cover .scrim.solid{background:linear-gradient(155deg,${P.brandDeep} 0%,${P.brand} 100%)}
-.cover .content.bottom{bottom:150px}
-.cover .kicker{color:${P.accentOnDark}}
-.cover h1{color:#fff}
-.cover .body{color:rgba(255,255,255,.86)}
-.cover .footer{color:${P.accentOnDark}}
-
-/* light */
-.light{background:${P.bg}}
-.light .kicker{color:${P.brand}}
-.light h1{color:${P.brand}}
-.light .body{color:${P.ink}}
-.light .footer{color:${P.muted}}
-
-/* split */
-.split{display:flex;background:${P.bg}}
-.split .panel-img{flex:0 0 44%;position:relative;overflow:hidden;background:${P.bg2}}
-.split .panel-img .fill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.split.img-left .panel-img{border-right:2px solid ${P.accent}99}
-.split.img-right .panel-img{border-left:2px solid ${P.accent}99}
-.split .panel-txt{flex:1;position:relative}
-.split .content{left:64px;right:64px}
-.split .numeral{font-size:110px}
-.split .kicker{color:${P.brand};font-size:21px}
-.split h1{color:${P.brand}}
-.split .body{color:${P.ink};font-size:28px}
-.split .footer{color:${P.muted};font-size:15px;letter-spacing:.28em}
-
-/* brand */
-.brand{background:linear-gradient(155deg,${P.brandDeep} 0%,${P.brand} 100%)}
-.brand .kicker{color:${P.accentOnDark}}
-.brand h1{color:#fff}
-.brand .body{color:rgba(255,255,255,.84)}
-.brand .footer{color:${P.accentOnDark}}
-
-/* quote */
-.quote{background:${P.bg}}
-.quote .qmark{font-family:${display};font-weight:300;font-size:240px;line-height:.6;height:110px;color:${P.accent}}
-.quote h1{font-style:italic;color:${P.brand};line-height:1.16}
-.quote .attr{margin-top:40px;font-size:23px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:${P.muted}}
-.quote .footer{color:${P.muted}}
-
-/* cta */
-.cta{background:linear-gradient(155deg,${P.brandDeep} 0%,${P.brand} 100%)}
-.cta .logo-mid{position:absolute;top:150px;left:50%;transform:translateX(-50%);width:300px;z-index:3}
-.cta .cta-body{top:420px;bottom:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.cta h1{color:#fff}
-.cta .body{color:rgba(255,255,255,.84);margin-left:auto;margin-right:auto}
-.cta .handle{margin-top:48px;padding:16px 40px;border:2px solid ${P.accentOnDark};color:${P.accentOnDark};font-size:26px;font-weight:600;letter-spacing:.12em}
-.cta .footer{color:${P.accentOnDark}}
-</style></head><body><div class="slide ${cls}">${inner}</div></body></html>`;
+html,body{width:${W}px;height:${H}px;overflow:hidden;background:${ctx.hole ? 'transparent' : P.bg}}
+.slide{position:relative;width:${W}px;height:${H}px;overflow:hidden;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+h1{font-family:var(--display);font-weight:300;overflow-wrap:break-word}
+.fill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.mwin{position:absolute;overflow:hidden;z-index:0}
+.slide.tx{background:transparent!important}
+.mwin.hole{box-shadow:0 0 0 3000px var(--hole);background:transparent!important}
+.arrow{display:inline-block;vertical-align:middle}
+${style.css}
+</style></head><body><div class="slide ${style.id} ${role} ${out.cls || ''}${ctx.hole ? ' tx' : ''}">${out.inner}</div></body></html>`;
   }
 
   // All public text on a slide, for the compliance check.
@@ -234,7 +158,10 @@ h1{font-family:${display};font-weight:300;line-height:1.06;letter-spacing:.005em
     return ['numeral', 'kicker', 'headline', 'body'].map((k) => slide[k]).filter(Boolean).join('\n');
   }
 
-  const api = { W, H, TEMPLATES, FIELD_LABELS, FIELD_LIMITS, slideHtml, slideText, assetUrl, esc };
+  const api = {
+    W, H, TEMPLATES, FIELD_LABELS, FIELD_LIMITS, DEFAULT_STYLE,
+    STYLES: STYLES.list, slideHtml, slideText, assetUrl, esc,
+  };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Slides = api;
 })(typeof self !== 'undefined' ? self : this);

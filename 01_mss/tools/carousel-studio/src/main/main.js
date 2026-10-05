@@ -193,16 +193,29 @@ function registerIpc() {
 }
 
 // Headless check used in development and CI: renders the example campaign's
-// first post to PNGs and both clip formats, then quits.
+// first post in every style (slides plus a quote and a statement slide, so
+// every slide type is covered), and both clip formats, then quits.
 async function selfTest(outDir) {
   const c = store.listCampaigns()[0];
   const post = c.posts[0];
   const errors = lintErrors(post);
   if (errors.length) throw new Error(`example post fails lint: ${JSON.stringify(errors)}`);
-  const files = await render.exportPngs(post, outDir);
-  const feed = await render.exportClip(post, path.join(outDir, 'clip-feed-4x5.mp4'), { format: '4:5', secondsPerSlide: 3 });
-  const reel = await render.exportClip(post, path.join(outDir, 'clip-reel-9x16.mp4'), { format: '9:16', secondsPerSlide: 3 });
-  console.log(`selftest ok: ${files.length} png, feed ${feed.seconds}s, reel ${reel.seconds}s -> ${outDir}`);
+  const allTypes = {
+    ...post,
+    slides: [
+      ...post.slides.slice(0, -1),
+      { template: 'quote', headline: 'I wanted a lift that still looked like me.', kicker: 'Example quote' },
+      { template: 'brand', kicker: 'In short', headline: 'Tighter, without the scalpel', body: 'Results build gradually over the months after treatment.' },
+      post.slides[post.slides.length - 1],
+    ],
+  };
+  let pngs = 0;
+  for (const st of Slides.STYLES) {
+    pngs += (await render.exportPngs({ ...allTypes, style: st.id }, path.join(outDir, st.id))).length;
+  }
+  const feed = await render.exportClip({ ...post, style: 'flow' }, path.join(outDir, 'clip-feed-4x5.mp4'), { format: '4:5', secondsPerSlide: 3 });
+  const reel = await render.exportClip({ ...post, style: 'statement' }, path.join(outDir, 'clip-reel-9x16.mp4'), { format: '9:16', secondsPerSlide: 3 });
+  console.log(`selftest ok: ${pngs} png across ${Slides.STYLES.length} styles, feed ${feed.seconds}s, reel ${reel.seconds}s -> ${outDir}`);
 }
 
 app.whenReady().then(async () => {

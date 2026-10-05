@@ -36,12 +36,30 @@ To update, download the new `.dmg` and drag it into Applications again. Your cam
 
 1. **New campaign.** Pick the treatment and content pillar, then paste the campaign content. Write one block per slide with an empty line between blocks. The first line of a block is the headline, and the lines after it are the supporting text. A short first line ending in a colon becomes the small heading.
 2. **Make slides from this content.** The first block becomes the cover, the middle ones become numbered cards, and the last becomes the closing call to action. If there's no closing slide, a consultation-led one is added.
-3. **Edit.** Click a slide in the strip to change its layout, words, photo or video, and framing. Six layouts: cover photo, light card, split photo, brand card, quote, and closing call to action.
-4. **Captions tab.** Write or paste the Instagram and Facebook captions. They're checked too.
-5. **Compliance tab.** Anything marked **Must fix** blocks export. **Check** items are worth a second look but don't block.
-6. **Export slides** saves the PNGs and `caption.txt` into Documents › PureMed Studio › exports. **Export clip** makes an mp4: still slides get a slow push-in, video on a cover slide plays under the headline, and slides crossfade.
+3. **Pick a style.** The **Style** tab shows her own post in each of the six styles. One click restyles every slide. Words, photos and slide order don't change, so she can try them all.
+4. **Edit.** Click a slide in the strip to change its slide type, words, photo or video, and framing. Six slide types: cover, numbered point, photo and text, statement, quote, and closing call to action.
+5. **Captions tab.** Write or paste the Instagram and Facebook captions. They're checked too.
+6. **Compliance tab.** Anything marked **Must fix** blocks export. **Check** items are worth a second look but don't block.
+7. **Export slides** saves the PNGs and `caption.txt` into Documents › PureMed Studio › exports. **Export clip** makes an mp4: still slides get a slow push-in, video on a cover slide plays under the headline, and slides crossfade.
 
 **Draft with Claude** (optional): add an Anthropic API key in Settings and the campaign screen can draft the slides and both captions from a brief, in PureMed's voice and within its rules. The draft goes through the same compliance check as anything typed by hand.
+
+## Styles
+
+Every style draws all six slide types in its own layout and typography, using only the brand pack's palette and fonts, so a new brand pack restyles all of them at once.
+
+| Style | Look | Suits |
+|---|---|---|
+| **Classic** | Warm white cards, gold hairline frame, light serif headlines, navy statement and closing cards | Everyday education posts |
+| **Editorial** | Magazine pages: masthead with page numbers, fine rules, gold-ruled labels, drop caps, photos set in the column with a caption | Longer, considered explainers |
+| **Clinical grid** | Sans-serif headlines on a visible column grid, square gold marker, page index, a progress bar that fills as you swipe | Facts, steps, aftercare |
+| **Soft arch** | Arched photo windows, pill labels, rounded cards on the warm second neutral, centred serif type | Treatment introductions, the patient journey |
+| **Bold statement** | Deep navy, oversized headlines anchored low, thick gold rule, outline numerals, duotone photos; the statement slide flips to light | Myth-busting, announcements |
+| **Seamless flow** | One gold line and soft circles run unbroken across every slide, so each swipe continues the last | Cover-to-close stories |
+
+Chosen from the 2026 carousel research (minimal editorial, magazine layouts, bold type, seamless panoramas) and filtered for a medically-led clinic: scrapbook and type-collage looks were left out as off-brand. Seamless panoramas were deferred in Studio's `slide-patterns-log.md` because they need each slide's position; here every style receives the slide's index and the carousel length, which is also what drives page numbers and the progress bar.
+
+To add a style, add a block to `src/shared/styles.js`. The unit tests check that every style renders every slide type and takes all its colours from the palette, and the render check exports the example post in every style.
 
 ## For MSS: building and releasing
 
@@ -50,7 +68,7 @@ cd 01_mss/tools/carousel-studio
 npm ci
 npm start        # run the app from source
 npm test         # unit tests: templates, compliance rules, content parsing
-npx electron . --selftest=./selftest-out   # renders the example post to PNGs and both clips, then quits
+npx electron . --selftest=./selftest-out   # renders the example post in every style, plus both clip formats, then quits
 ```
 
 **Release:** push a tag such as `carousel-studio-v0.1.0`. The `Carousel Studio — build Mac app` workflow runs the tests, does a real render check on macOS (from source and again from the packaged app), builds the Apple Silicon and Intel `.dmg` files, and publishes them as a GitHub release whose download link you can send to Nafisa. Running the workflow by hand from the Actions tab builds the same files as an artifact without publishing. A `.dmg` can't be built on Linux, so the Mac build only happens in that workflow.
@@ -62,7 +80,8 @@ The repo is public, so a release download is public too. The brand pack only hol
 | Path | What it is |
 |---|---|
 | `brands/puremed/` | The brand pack: `brand.json` (palette, fonts, logo, footer, handle, treatments, voice summary), `lint-rules.json` and `compliance.md` (copied from `content/config/` in `osmanakhtar/puremed-aesthetics`), `voice-social.md`, `pillars.json`, fonts, logo, starter `library/`, and the example campaign she sees on first launch |
-| `src/shared/slides.js` | The six slide templates. One HTML document per slide, used for both the on-screen preview and the export, so the preview is exactly what ships |
+| `src/shared/slides.js` | Builds one HTML document per slide from its type and the post's style, used for both the on-screen preview and the export, so the preview is exactly what ships |
+| `src/shared/styles.js` | The six styles |
 | `src/shared/lint.js` | The compliance check. Same rules and matching as Studio's `content-lint.js` |
 | `src/shared/outline.js` | Turns pasted content into slides |
 | `src/main/render.js` | PNG capture (Chromium DevTools capture at exactly 1080×1350, whatever the screen size) and clip assembly with the bundled ffmpeg |

@@ -118,12 +118,16 @@ function disposeCapture() {
 
 // ---- exports ---------------------------------------------------------------
 
+// Style and position for slide i of a post: page numbers, progress bars and
+// the seamless line all depend on where the slide sits in the carousel.
+const placement = (post, i, extra) => ({ style: post.style, index: i, total: post.slides.length, ...extra });
+
 async function exportPngs(post, outDir, onProgress) {
   fs.mkdirSync(outDir, { recursive: true });
   const files = [];
   for (let i = 0; i < post.slides.length; i++) {
     onProgress && onProgress({ step: `Slide ${i + 1} of ${post.slides.length}`, done: i, total: post.slides.length });
-    const png = await captureSlide(post.slides[i], {});
+    const png = await captureSlide(post.slides[i], placement(post, i));
     const file = path.join(outDir, `slide-${String(i + 1).padStart(2, '0')}.png`);
     fs.writeFileSync(file, png);
     files.push(file);
@@ -156,7 +160,7 @@ async function exportClip(post, outFile, opts, onProgress) {
       if (isVideo && slide.template === 'cover') {
         const src = store.resolveRef(slide.media.ref);
         const overlay = path.join(tmp, `ovl-${i}.png`);
-        fs.writeFileSync(overlay, await captureSlide(slide, { transparentMedia: true }));
+        fs.writeFileSync(overlay, await captureSlide(slide, placement(post, i, { transparentMedia: true })));
         const fx = slide.media.focusX != null ? slide.media.focusX : 0.5;
         const fy = slide.media.focusY != null ? slide.media.focusY : 0.5;
         await ffmpeg([
@@ -171,7 +175,7 @@ async function exportClip(post, outFile, opts, onProgress) {
       } else {
         // A video placed on a split slide still exports as its poster frame.
         const png = path.join(tmp, `slide-${i}.png`);
-        fs.writeFileSync(png, await captureSlide(slide, {}));
+        fs.writeFileSync(png, await captureSlide(slide, placement(post, i)));
         const frames = Math.round(dur * FPS);
         const vf = zoom
           // Upscale first so the push-in moves in sub-pixel steps without judder.

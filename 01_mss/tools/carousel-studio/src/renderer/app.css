@@ -170,3 +170,14 @@ code { font-size: 12px; background: var(--bg); padding: 1px 5px; border-radius: 
 @keyframes spin { to { transform: rotate(360deg); } }
 #toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--brand-deep); color: #fff; padding: 11px 18px; border-radius: 10px; z-index: 60; max-width: 560px; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
 #toast.err { background: var(--danger); }
+
+/* style tab */
+.style-list { display: flex; flex-direction: column; gap: 12px; }
+.style-card { display: block; width: 100%; text-align: left; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
+.style-card:hover { border-color: var(--brand); }
+.style-card.on { border: 2px solid var(--accent); padding: 11px; }
+.style-shots { display: flex; gap: 8px; margin-bottom: 10px; }
+.style-shots .thumb { border-radius: 4px; }
+.style-card strong { display: flex; align-items: center; gap: 8px; color: var(--brand); font-weight: 600; margin-bottom: 3px; }
+.style-card .cur { font-size: 11px; font-weight: 600; color: var(--ok); background: #e4efe8; padding: 2px 8px; border-radius: 10px; }
+.style-card > span { color: var(--muted); font-size: 12.5px; line-height: 1.45; }
