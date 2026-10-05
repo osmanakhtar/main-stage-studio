@@ -39,6 +39,8 @@
 | Tool | Purpose | Est. cost | Decision |
 |------|---------|-----------|----------|
 | Cloudways | Hosting — MSS + client sites | ~£20–30/mo | Confirm plan when first site goes live |
+| Anthropic API (Carousel Studio drafting) | Optional "Draft with Claude" in PureMed's Carousel Studio app | A few pence per draft, pay as you go | Optional. Decide whose key it runs on (Nafisa's or MSS's) before switching it on. The app itself costs nothing: unsigned build, free GitHub Actions macOS runners |
+| Apple Developer Program | Signing the Carousel Studio Mac app so it opens without the Open Anyway step | ~£79/yr | Not needed for the PureMed proof of concept. Revisit if a second client gets the app |
 
 ---
 

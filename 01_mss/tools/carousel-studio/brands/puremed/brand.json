@@ -1,0 +1,119 @@
+{
+  "id": "puremed",
+  "name": "PureMed Aesthetics",
+  "appName": "PureMed Studio",
+  "source": "Palette and type from .claude/puremed-brand-identity.md in osmanakhtar/puremed-aesthetics (reconciled 10 Aug 2026 to the live puremed.uk site). Do not reintroduce #23476A or Inter: content/config/theme.json in that repo still carries the retired values.",
+  "palette": {
+    "brand": "#343a67",
+    "brandDeep": "#2a2e54",
+    "forest": "#33335a",
+    "accent": "#d0ac61",
+    "accentOnDark": "#e0c27a",
+    "bg": "#f8f8f6",
+    "bg2": "#eceae4",
+    "ink": "#23262A",
+    "muted": "#656986",
+    "line": "#ddd7c9"
+  },
+  "fonts": {
+    "display": {
+      "family": "Cormorant Garamond",
+      "note": "Stand-in for Majesty Light, which is commercial and not yet licensed. Same stand-in the live site uses (site/src/styles/fonts.css). To switch: drop Majesty's woff2 into fonts/ and add it below with weight 300.",
+      "faces": [
+        {
+          "file": "fonts/cormorant-garamond-latin-300-normal.woff2",
+          "weight": 300,
+          "style": "normal"
+        },
+        {
+          "file": "fonts/cormorant-garamond-latin-300-italic.woff2",
+          "weight": 300,
+          "style": "italic"
+        },
+        {
+          "file": "fonts/cormorant-garamond-latin-500-normal.woff2",
+          "weight": 500,
+          "style": "normal"
+        }
+      ],
+      "fallback": "Georgia, serif"
+    },
+    "body": {
+      "family": "Hanken Grotesk",
+      "faces": [
+        {
+          "file": "fonts/hanken-grotesk-latin-400-normal.woff2",
+          "weight": 400,
+          "style": "normal"
+        },
+        {
+          "file": "fonts/hanken-grotesk-latin-500-normal.woff2",
+          "weight": 500,
+          "style": "normal"
+        },
+        {
+          "file": "fonts/hanken-grotesk-latin-600-normal.woff2",
+          "weight": 600,
+          "style": "normal"
+        }
+      ],
+      "fallback": "-apple-system, sans-serif"
+    }
+  },
+  "logo": "logo.png",
+  "footer": {
+    "text": "PUREMED",
+    "accent": "AESTHETICS"
+  },
+  "handle": "@puremedaesthetics",
+  "location": "Winslow, Buckinghamshire",
+  "bookingUrl": "https://facesconsent.com/v1/bookings/puremedaesthetics?clinicSlug=puremed-aesthetics-466185",
+  "topicLabel": "Treatment",
+  "topics": [
+    {
+      "id": "laser-lift",
+      "name": "Laser Lift",
+      "pomSensitive": false
+    },
+    {
+      "id": "liquid-facelift",
+      "name": "Liquid Facelift",
+      "pomSensitive": false
+    },
+    {
+      "id": "anti-wrinkle",
+      "name": "Anti-Wrinkle Treatments",
+      "pomSensitive": true
+    },
+    {
+      "id": "polynucleotides",
+      "name": "Polynucleotides",
+      "pomSensitive": false
+    },
+    {
+      "id": "rf-microneedling",
+      "name": "RF Microneedling",
+      "pomSensitive": false
+    },
+    {
+      "id": "skin-boosters",
+      "name": "Skin Boosters",
+      "pomSensitive": false
+    }
+  ],
+  "promptFiles": [
+    "voice-social.md",
+    "compliance.md"
+  ],
+  "voiceSummary": "An experienced medical aesthetics practitioner speaking directly to a patient: knowledgeable, honest and reassuring, never clinical, corporate or polished. Plain British English. 'You' for the reader, 'we' for PureMed, Nafisa's first person where natural. Consultation-led, never pushy. Never promise perfection, guaranteed or permanent results. Never make the reader feel embarrassed about ageing. No em dashes, ever.",
+  "defaultCta": {
+    "headline": "Not sure if it's right for you?",
+    "body": "The best place to start is a consultation. Book via the link in bio."
+  },
+  "iconCrop": {
+    "x": 0.416,
+    "y": 0.0099,
+    "w": 0.1663,
+    "h": 0.4045
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "name": "Laser Lift launch (example)",
+  "topic": "laser-lift",
+  "pillar": "education",
+  "brief": "Introduce Laser Lift (Endolift) to women noticing laxity along the jaw and neck who don't want surgery. How it works in three steps, then a consultation-led close. Facts from the treatments page: ultrafine fibre through a pinpoint entry, no incisions or stitches, no general anaesthetic, immediate contraction, collagen builds over 3–6 months, 1–2 sessions, minimal downtime, results typically 18–24 months.",
+  "created": "2026-10-05T00:00:00.000Z",
+  "updated": "2026-10-05T00:00:00.000Z",
+  "posts": [
+    {
+      "id": "example-laser-lift",
+      "title": "How Laser Lift works",
+      "slides": [
+        {
+          "template": "cover",
+          "kicker": "Laser Lift",
+          "headline": "Lift without surgery",
+          "body": "How it works, in three steps.",
+          "media": {
+            "ref": "brand:library/puremed-laser-lift-hero-3.webp",
+            "kind": "image",
+            "focusX": 0.5,
+            "focusY": 0.4
+          }
+        },
+        {
+          "template": "split",
+          "numeral": "01",
+          "kicker": "How it works",
+          "headline": "A pinpoint entry",
+          "body": "An ultrafine Endolift fibre is guided under the skin. No incisions, no stitches.",
+          "media": {
+            "ref": "brand:library/puremed-face-assessment-hf-v1.webp",
+            "kind": "image"
+          },
+          "side": "left"
+        },
+        {
+          "template": "light",
+          "numeral": "02",
+          "kicker": "How it works",
+          "headline": "An immediate lift",
+          "body": "Laser energy heats the tissue beneath the skin, creating an immediate contraction and lift effect."
+        },
+        {
+          "template": "split",
+          "numeral": "03",
+          "kicker": "How it works",
+          "headline": "Results that keep building",
+          "body": "New collagen forms over 3–6 months, progressively improving firmness and definition.",
+          "media": {
+            "ref": "brand:library/puremed-skin-glow-closeup-hf-v1.webp",
+            "kind": "image"
+          },
+          "side": "right"
+        },
+        {
+          "template": "cta",
+          "headline": "No scalpel. No general anaesthetic.",
+          "body": "1–2 sessions, minimal downtime, results typically lasting 18–24 months. Book a consultation via the link in bio."
+        }
+      ],
+      "caption": {
+        "instagram": "Skin starting to feel less firm along the jawline? You don't need surgery to lift it.\n\nLaser Lift uses Endolift fibre-optic laser technology to tighten from within. An ultrafine fibre is guided under the skin through a pinpoint entry. No scalpel, no stitches, no general anaesthetic.\n\nThe laser energy creates an immediate contraction and lift. Then your skin does the rest: new collagen builds over 3–6 months, so results keep improving long after you've left the clinic.\n\nMost people need just 1–2 sessions, with minimal downtime, and results typically last 18–24 months.\n\nIf you've noticed laxity around your face, jaw or neck and surgery isn't for you, this is the conversation to have.\n\nBook a consultation. Link in bio.\n\n#LaserLift #SkinTightening #WinslowAesthetics #BuckinghamshireAesthetics #MedicalAesthetics",
+        "facebook": "Skin starting to feel less firm along the jawline? You don't need surgery to lift it.\n\nLaser Lift tightens from within using Endolift fibre-optic laser technology: no scalpel, no general anaesthetic, minimal downtime. There's an immediate lift, and then new collagen keeps building over 3–6 months, so results improve for months afterwards.\n\nMost people need just 1–2 sessions, with results typically lasting 18–24 months.\n\nIf you'd like to know whether it's right for your skin, book a consultation: https://facesconsent.com/v1/bookings/puremedaesthetics?clinicSlug=puremed-aesthetics-466185"
+      }
+    }
+  ]
+}

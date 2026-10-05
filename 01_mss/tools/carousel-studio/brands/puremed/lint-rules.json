@@ -1,0 +1,32 @@
+{
+  "description": "Machine-checkable subset of compliance.md. Errors block review; warnings need a human look. Patterns are case-insensitive JS regex.",
+  "errors": [
+    { "pattern": "\\bbotox\\b", "reason": "POM brand name — illegal to advertise to the public (CAP 12.12)" },
+    { "pattern": "\\bbocouture\\b", "reason": "POM brand name" },
+    { "pattern": "\\bazzalure\\b", "reason": "POM brand name" },
+    { "pattern": "\\bdysport\\b", "reason": "POM brand name" },
+    { "pattern": "\\bxeomin\\b", "reason": "POM brand name" },
+    { "pattern": "\\bvistabel\\b", "reason": "POM brand name" },
+    { "pattern": "\\bletybo\\b", "reason": "POM brand name" },
+    { "pattern": "botulinum", "reason": "POM — do not promote the drug itself; consultation-led framing only" },
+    { "pattern": "guarante", "reason": "No guarantee claims (covers guarantee/guaranteed)" },
+    { "pattern": "\\bpermanent\\b", "reason": "No permanence claims" },
+    { "pattern": "\\bpainless\\b", "reason": "No painless claims" },
+    { "pattern": "risk[- ]free", "reason": "No risk-free claims" },
+    { "pattern": "no downtime", "reason": "No absolute downtime claims — use 'minimal downtime' only if the site says so" },
+    { "pattern": "\\berase\\b|\\beliminate\\b", "reason": "No erase/eliminate efficacy claims" },
+    { "pattern": "#1\\b|\\bbest in\\b", "reason": "No superlative clinic claims" },
+    { "pattern": "last chance|don'?t miss|limited time|flash (sale|offer)|ends (today|soon|tonight)", "reason": "No urgency/pressure tactics" },
+    { "pattern": "—", "reason": "Em dash — the most recognisable AI tell. Rewrite with a comma, colon, or full stop (en dash in ranges like 3–6 months is fine)" }
+  ],
+  "warnings": [
+    { "pattern": "clinically proven", "reason": "Only if we hold the specific evidence — verify before approving" },
+    { "pattern": "\\bdiscount\\b|% off|\\bsale\\b|\\boffer\\b", "reason": "Price-led content is off-brand; POM price promotion is prohibited — check context" },
+    { "pattern": "before (and|&) after|b&a", "reason": "Before/after content is manual-approval-only, not pipeline content" },
+    { "pattern": "tweakment|quick jab", "reason": "Trivialising language about medical procedures" },
+    { "pattern": "anti[- ]wrinkle", "reason": "pomSensitive topic — confirm consultation-led framing, no price, no drug references" },
+    { "pattern": "isn'?t just|not just about|more than just", "reason": "AI-tell construction ('isn't just X, it's Y') — rewrite plainly" },
+    { "pattern": "here'?s the (truth|thing|secret)", "reason": "AI-tell opener — say the thing directly" },
+    { "pattern": "\\b(elevate|unlock|seamless|transformative|game.chang|delve)\\b", "reason": "AI-tell vocabulary — use plain words" }
+  ]
+}

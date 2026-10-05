@@ -1,0 +1,36 @@
+{
+  "pillars": [
+    {
+      "id": "education",
+      "name": "Treatment education",
+      "weight": 40,
+      "rotateTopics": true,
+      "guidance": "Explain one treatment or skin concern clearly: what it is, who it suits, what to expect. Grounded in the approved treatments page copy — no claims that aren't on the site. Educational without lecturing."
+    },
+    {
+      "id": "myth-busting",
+      "name": "Myth-busting",
+      "weight": 20,
+      "rotateTopics": true,
+      "guidance": "Take one common misconception (aesthetics = frozen faces, tightening lasers hurt, injectables are one-size-fits-all) and correct it with calm expertise. Straight-talking, never mocking the reader for believing the myth."
+    },
+    {
+      "id": "trust",
+      "name": "Clinic & practitioner trust",
+      "weight": 20,
+      "guidance": "Why medically-led matters: Nafisa's approach, consultation-first ethos, safety standards, honest suitability assessments (including when she says no). The client is the subject, not the treatment."
+    },
+    {
+      "id": "journey",
+      "name": "Patient journey & aftercare",
+      "weight": 10,
+      "guidance": "What a first visit looks like, how consultations work, aftercare guidance, realistic timelines for results. Reduces fear of the unknown for first-timers."
+    },
+    {
+      "id": "seasonal",
+      "name": "Seasonal & timely",
+      "weight": 10,
+      "guidance": "Season-relevant skin advice (summer SPF, post-holiday skin, event-season prep). Never discount-led — timeliness is the hook, not price."
+    }
+  ]
+}
