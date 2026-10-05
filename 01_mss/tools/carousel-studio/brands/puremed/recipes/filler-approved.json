@@ -15,15 +15,15 @@
    "body": "Many patients come in thinking they need filler when their face starts to look…",
    "items": [
     {
-     "icon": "spline",
+     "icon": "heavier",
      "title": "Heavier"
     },
     {
-     "icon": "face",
+     "icon": "jawline",
      "title": "Less defined"
     },
     {
-     "icon": "waves",
+     "icon": "tired",
      "title": "More tired"
     }
    ],
@@ -70,19 +70,19 @@
    "headline": "THEN I CREATE A PLAN THAT TARGETS *THE CAUSE*, NOT JUST THE SYMPTOM.",
    "items": [
     {
-     "icon": "sparkles",
+     "icon": "collagen",
      "title": "Stimulate collagen"
     },
     {
-     "icon": "droplets",
+     "icon": "texture",
      "title": "Improve skin quality"
     },
     {
-     "icon": "lift",
+     "icon": "profile",
      "title": "Restore support"
     },
     {
-     "icon": "smile",
+     "icon": "face",
      "title": "Enhance naturally"
     }
    ],
@@ -93,17 +93,17 @@
    "headline": "TREATMENTS I OFTEN USE INSTEAD (OR IN COMBINATION)",
    "items": [
     {
-     "icon": "flower",
+     "icon": "lotus",
      "title": "Sculptra®",
      "text": "to rebuild collagen"
     },
     {
-     "icon": "spline",
+     "icon": "fibre",
      "title": "Laser Lift (Endolift)",
      "text": "to tighten & lift"
     },
     {
-     "icon": "pipette",
+     "icon": "microneedling",
      "title": "Microneedling",
      "text": "to improve skin quality"
     },

@@ -329,7 +329,14 @@ function itemsEditor(s, tpl) {
   if (!Array.isArray(s.items)) s.items = [];
   const wrap = el('div', { class: 'items' }, el('div', { class: 'sub-head' }, el('span', {}, 'Points'),
     el('span', { class: 'note' }, 'Use *stars* round words to put them in italics')));
-  const iconOptions = (cur) => Object.entries(Slides.ICONS).map(([name, i]) => el('option', { value: name, selected: name === (cur || 'check') }, i.label));
+  // Icons grouped as in the suite: face and body, skin, treatments, results, care.
+  const iconOptions = (cur) => {
+    const groups = {};
+    for (const [name, i] of Object.entries(Slides.ICONS)) (groups[i.group] = groups[i.group] || []).push([name, i]);
+    const current = Slides.ICONS[cur] ? cur : (Slides.ICON_ALIASES[cur] || 'check');
+    return Object.entries(groups).map(([g, list]) => el('optgroup', { label: g },
+      list.map(([name, i]) => el('option', { value: name, selected: name === current }, i.label))));
+  };
   s.items.forEach((it, i) => {
     const icon = el('select', { title: 'Icon' }, iconOptions(it.icon));
     icon.addEventListener('change', () => { it.icon = icon.value; slideChanged(); });

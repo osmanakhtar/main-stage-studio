@@ -206,7 +206,7 @@ ${style.css}
 
   const api = {
     W, H, sizeOf, TEMPLATES, FIELD_LABELS, FIELD_LIMITS, DEFAULT_STYLE,
-    STYLES: STYLES.list, ICONS: ICONS.ICONS, slideHtml, slideText, assetUrl, esc, rich,
+    STYLES: STYLES.list, ICONS: ICONS.ICONS, ICON_ALIASES: ICONS.ALIASES, slideHtml, slideText, assetUrl, esc, rich,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Slides = api;

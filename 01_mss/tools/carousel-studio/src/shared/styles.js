@@ -573,7 +573,8 @@ h1{color:var(--brand);line-height:1.08}
 
   // ---------------------------------------------------------------- Shared list and row
   // The Icon list and Icon row slide types, for styles that don't draw their
-  // own: brand palette, display headline, icons in accent circles.
+  // own: brand palette, display headline, icons from the PureMed suite in
+  // accent circles.
   const fallbackCss = `
 .fb{position:absolute;inset:0;background:var(--bg);color:var(--ink)}
 .fb .fb-pg{position:absolute;left:72px;top:60px;font-size:22px;font-weight:600;letter-spacing:.12em;color:var(--muted)}
@@ -597,10 +598,10 @@ h1{color:var(--brand);line-height:1.08}
     const foot = `<div class="fb-foot">${c.esc(c.brand.footer.text)} ${c.esc(c.brand.footer.accent || '')}</div>`;
     const pg = `<div class="fb-pg">${c.pager}</div>`;
     if (role === 'row') {
-      const cells = c.items().slice(0, 4).map((it) => `<div class="fb-cell"><div class="fb-ic">${c.icon(it.icon, 60)}</div>${c.rich(it.title || '')}</div>`).join('');
+      const cells = c.items().slice(0, 4).map((it) => `<div class="fb-cell"><div class="fb-ic">${c.icon(it.icon, 116)}</div>${c.rich(it.title || '')}</div>`).join('');
       return { inner: `<div class="fb">${pg}<div class="fb-col" style="align-items:center;text-align:center">${c.h1([[40, 80], [80, 66], [999, 54]])}<div class="fb-row">${cells}</div>${c.s.body ? `<div class="fb-box">${c.rich(c.s.body)}</div>` : ''}</div>${foot}</div>` };
     }
-    const items = c.items().slice(0, 6).map((it) => `<div class="fb-it"><div class="fb-ic">${c.icon(it.icon, it.icon === 'check' || !it.icon ? 42 : 48)}</div><div><div class="fb-t">${c.rich(it.title || '')}</div>${it.text ? `<div class="fb-d">${c.rich(it.text)}</div>` : ''}</div></div>`).join('');
+    const items = c.items().slice(0, 6).map((it) => `<div class="fb-it"><div class="fb-ic">${c.icon(it.icon, it.icon === 'check' || !it.icon ? 56 : 66)}</div><div><div class="fb-t">${c.rich(it.title || '')}</div>${it.text ? `<div class="fb-d">${c.rich(it.text)}</div>` : ''}</div></div>`).join('');
     return { inner: `<div class="fb${c.hasMedia ? ' photo' : ''}">${c.hasMedia ? `<div class="fb-ph">${c.media('fill')}</div>` : ''}${pg}<div class="fb-col">${c.s.headline ? c.h1(c.hasMedia ? [[30, 70], [60, 58], [999, 48]] : [[30, 88], [60, 72], [999, 58]]) : ''}${c.body('fb-lead')}<div class="fb-list">${items}</div>${c.note('fb-note')}</div>${foot}</div>` };
   }
 
@@ -608,8 +609,8 @@ h1{color:var(--brand);line-height:1.08}
   // Recreates the carousel Nafisa approved on 5 Oct 2026, slide for slide:
   // square 1080×1080, page counter top left, serif headlines with copper
   // italic emphasis (*like this*), a short copper rule, a photo bleeding in
-  // from the right, the typographic PURE/MED lockup, icons in fine copper
-  // circles, deep-navy statement and closing slides, and a contact band.
+  // from the right, the typographic PURE/MED lockup, the line icon suite
+  // (icons.js) in fine copper circles, deep-navy statement and closing slides, and a contact band.
   // Its colours are the palette.signature tokens in brand.json (taken from
   // that carousel); without them it falls back to the main palette.
   add({
@@ -683,14 +684,14 @@ h1 .em,h1 .ital{font-weight:500}
         const its = items.map((it) => {
           const tick = !it.icon || it.icon === 'check';
           const d = tick ? (c.hasMedia ? (compact ? 50 : 60) : 74) : (compact ? 92 : 108);
-          return `<div class="it${tick ? ' tick' : ''}"><div class="ic" style="width:${d}px;height:${d}px">${c.icon(it.icon, tick ? Math.round(d * 0.5) : Math.round(d * 0.52), tick ? 1.6 : 1.2)}</div><div><div class="t">${c.rich(it.title || '')}</div>${it.text ? `<div class="d">${c.rich(it.text)}</div>` : ''}</div></div>`;
+          return `<div class="it${tick || !it.text ? ' tick' : ''}"><div class="ic" style="width:${d}px;height:${d}px">${c.icon(it.icon, tick ? Math.round(d * 0.62) : Math.round(d * 0.76), 1.2)}</div><div><div class="t">${c.rich(it.title || '')}</div>${it.text ? `<div class="d">${c.rich(it.text)}</div>` : ''}</div></div>`;
         }).join('');
         const w = c.hasMedia ? 430 : 860;
         const left = c.hasMedia ? 68 : 110;
         return { inner: `${photo()}${pg}<div class="col${c.hasMedia ? '' : ' wide'}" style="left:${left}px;top:120px;bottom:${L.place ? 220 : 180}px;width:${w}px;justify-content:center;gap:${compact ? 18 : 26}px">${s.headline ? c.h1(c.hasMedia ? [[16, 88], [32, 80], [44, 60], [999, 48]] : [[16, 96], [40, 80], [70, 64], [999, 52]]) : ''}${s.headline ? rule : ''}${c.body('lead')}<div style="display:flex;flex-direction:column;gap:${compact ? 14 : 22}px">${its}</div>${c.note('note')}</div>${lockup()}` };
       }
       if (role === 'row') {
-        const cells = c.items().slice(0, 4).map((it) => `<div class="cell"><div class="ic" style="width:150px;height:150px">${c.icon(it.icon, 76, 1.1)}</div><div>${c.rich(it.title || '')}</div></div>`).join('');
+        const cells = c.items().slice(0, 4).map((it) => `<div class="cell"><div class="ic" style="width:150px;height:150px">${c.icon(it.icon, 110, 1.15)}</div><div>${c.rich(it.title || '')}</div></div>`).join('');
         return { inner: `${pg}<div class="rowwrap">${c.h1([[40, 66], [80, 58], [999, 48]])}<div class="cells">${cells}</div>${s.body ? `<div class="callout">${c.rich(s.body)}</div>` : ''}</div>${lockup({ center: true })}` };
       }
       if (role === 'brand') {
@@ -714,7 +715,7 @@ h1 .em,h1 .ital{font-weight:500}
       }
       const ct = c.brand.contact || {};
       const band = (ct.place || ct.whatsapp)
-        ? `<div class="band"><span class="place">${c.icon('map-pin', 54, 1.6)}${c.esc((ct.place || '').toUpperCase())}</span><span>${ct.whatsapp ? `${c.icon('message', 54, 1.6)}${c.esc(ct.whatsapp)}` : c.esc(c.brand.handle || '')}</span></div>`
+        ? `<div class="band"><span class="place">${c.icon('pin', 60, 1.2)}${c.esc((ct.place || '').toUpperCase())}</span><span>${ct.whatsapp ? `${c.icon('whatsapp', 60, 1.2)}${c.esc(ct.whatsapp)}` : c.esc(c.brand.handle || '')}</span></div>`
         : '';
       return { inner: `${lockup({ center: true, place: false })}<div class="mid">${c.h1([[30, 96], [50, 88], [999, 66]])}${rule}${c.body('lead')}</div>${band}` };
     },

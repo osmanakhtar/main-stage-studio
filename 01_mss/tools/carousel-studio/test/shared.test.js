@@ -143,3 +143,15 @@ test('every post template uses known slide types and icons, and passes complianc
     assert.deepStrictEqual(errors, [], f);
   }
 });
+
+test('every icon draws, and every old icon name still resolves to a real icon', () => {
+  const Icons = require('../src/shared/icons');
+  assert.ok(Icons.names.length >= 40);
+  for (const n of Icons.names) {
+    const svg = Icons.icon(n, 64);
+    assert.match(svg, /^<svg class="ico"/, n);
+    assert.ok(!/NaN|undefined/.test(svg), n);
+    assert.ok(Icons.ICONS[n].label && Icons.ICONS[n].group, n);
+  }
+  for (const [alias, target] of Object.entries(Icons.ALIASES)) assert.ok(Icons.ICONS[target], `${alias} -> ${target}`);
+});

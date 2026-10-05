@@ -15,15 +15,15 @@
    "body": "[What patients often come in believing…]",
    "items": [
     {
-     "icon": "spline",
+     "icon": "heavier",
      "title": "[Concern one]"
     },
     {
-     "icon": "face",
+     "icon": "jawline",
      "title": "[Concern two]"
     },
     {
-     "icon": "waves",
+     "icon": "tired",
      "title": "[Concern three]"
     }
    ],
@@ -62,19 +62,19 @@
    "headline": "THEN I CREATE A PLAN THAT TARGETS *THE CAUSE*.",
    "items": [
     {
-     "icon": "sparkles",
+     "icon": "collagen",
      "title": "[Aim one]"
     },
     {
-     "icon": "droplets",
+     "icon": "texture",
      "title": "[Aim two]"
     },
     {
-     "icon": "lift",
+     "icon": "profile",
      "title": "[Aim three]"
     },
     {
-     "icon": "smile",
+     "icon": "face",
      "title": "[Aim four]"
     }
    ],
@@ -85,17 +85,17 @@
    "headline": "TREATMENTS I OFTEN USE",
    "items": [
     {
-     "icon": "flower",
+     "icon": "lotus",
      "title": "[Treatment]",
      "text": "[what it does]"
     },
     {
-     "icon": "spline",
+     "icon": "fibre",
      "title": "[Treatment]",
      "text": "[what it does]"
     },
     {
-     "icon": "pipette",
+     "icon": "microneedling",
      "title": "[Treatment]",
      "text": "[what it does]"
     }
