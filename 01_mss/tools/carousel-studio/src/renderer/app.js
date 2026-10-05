@@ -10,6 +10,7 @@ const state = {
   brand: null, lintRules: null, pillars: [], models: [],
   campaigns: [], campaign: null, postId: null, slideIdx: 0,
   media: [], settings: null,
+  mediaSlot: 'media', // which photo the media grid fills on a Three photos slide
 };
 
 // ---------------------------------------------------------------- helpers
@@ -240,7 +241,7 @@ function renderStrip() {
   const p = post();
   p.slides.forEach((s, i) => {
     const flagged = Lint.lintText(state.lintRules, Slides.slideText(s)).some((x) => x.level === 'error');
-    strip.append(el('button', { class: `slot${i === state.slideIdx ? ' on' : ''}`, title: `Slide ${i + 1}`, onclick: () => { state.slideIdx = i; renderPost(); } },
+    strip.append(el('button', { class: `slot${i === state.slideIdx ? ' on' : ''}`, title: `Slide ${i + 1}`, onclick: () => { state.slideIdx = i; state.mediaSlot = 'media'; renderPost(); } },
       el('span', { class: 'n' }, String(i + 1)), flagged ? el('span', { class: 'flag', title: 'Has something to fix' }) : null, thumb(s, 104, false, placeOf(p, i))));
   });
   if (p.slides.length < 10) {
@@ -298,7 +299,7 @@ function renderInspector() {
   fields.innerHTML = '';
   for (const f of tpl.fields) {
     const limit = Slides.FIELD_LIMITS[f];
-    const label = tpl.id === 'quote' && f === 'headline' ? 'Quote' : tpl.id === 'quote' && f === 'kicker' ? 'Who said it' : Slides.FIELD_LABELS[f];
+    const label = (tpl.labels && tpl.labels[f]) || Slides.FIELD_LABELS[f];
     const count = el('span', { class: 'count' });
     const setCount = () => {
       const n = (s[f] || '').length;
@@ -318,19 +319,35 @@ function renderInspector() {
   if (tpl.media) renderMediaGrid();
 }
 
+const SLOTS = [['media', 'Photo 1'], ['media2', 'Photo 2'], ['media3', 'Photo 3']];
+function slotKey() {
+  const s = slide();
+  return s && s.template === 'photos' ? state.mediaSlot : 'media';
+}
+
 function renderMediaGrid() {
   const s = slide();
+  const key = slotKey();
+  const slots = $('mediaSlots');
+  slots.innerHTML = '';
+  slots.hidden = s.template !== 'photos';
+  if (s.template === 'photos') {
+    for (const [k, label] of SLOTS) {
+      slots.append(el('button', { class: `chip${k === key ? ' on' : ''}`, onclick: () => { state.mediaSlot = k; renderMediaGrid(); } }, label));
+    }
+  }
   const grid = $('mediaGrid');
   grid.innerHTML = '';
-  const current = s.media && s.media.ref;
-  grid.append(el('button', { class: !current ? 'on' : '', title: 'No photo', onclick: () => { s.media = null; slideChanged(); renderMediaGrid(); } },
+  const cur = s[key];
+  const current = cur && cur.ref;
+  grid.append(el('button', { class: !current ? 'on' : '', title: 'No photo', onclick: () => { s[key] = null; slideChanged(); renderMediaGrid(); } },
     el('span', { class: 'none' }, 'None')));
   for (const m of state.media) {
     grid.append(el('button', {
       class: m.ref === current ? 'on' : '', title: m.name,
       onclick: () => {
-        s.media = { ref: m.ref, kind: m.kind, poster: m.poster || null, focusX: 0.5, focusY: 0.5 };
-        if (m.kind === 'video' && m.duration && !s.duration) s.duration = Math.min(8, Math.max(3, Math.round(m.duration)));
+        s[key] = { ref: m.ref, kind: m.kind, poster: m.poster || null, focusX: 0.5, focusY: 0.5 };
+        if (key === 'media' && m.kind === 'video' && m.duration && !s.duration) s.duration = Math.min(8, Math.max(3, Math.round(m.duration)));
         slideChanged(); renderMediaGrid();
       },
     }, el('img', { src: mediaUrl(m.kind === 'video' ? m.poster : m.ref), loading: 'lazy', alt: '' }),
@@ -339,10 +356,10 @@ function renderMediaGrid() {
   const has = !!current;
   $('mediaAdjust').hidden = !has;
   $('sideRow').hidden = s.template !== 'split';
-  $('durRow').hidden = !(has && s.media.kind === 'video' && s.template === 'cover');
+  $('durRow').hidden = !(has && cur.kind === 'video' && s.template === 'cover');
   if (has) {
-    $('focusX').value = s.media.focusX != null ? s.media.focusX : 0.5;
-    $('focusY').value = s.media.focusY != null ? s.media.focusY : 0.5;
+    $('focusX').value = cur.focusX != null ? cur.focusX : 0.5;
+    $('focusY').value = cur.focusY != null ? cur.focusY : 0.5;
     $('sideSelect').value = s.side || 'left';
     $('durInput').value = s.duration || '';
   }
@@ -355,15 +372,23 @@ function bindInspector() {
     const s = slide();
     s.template = sel.value;
     const tpl = Slides.TEMPLATES.find((t) => t.id === s.template);
-    if (tpl.media && !s.media) {
-      const img = state.media.find((m) => m.kind === 'image');
-      if (img) s.media = { ref: img.ref, kind: 'image', focusX: 0.5, focusY: 0.5 };
+    // Fill empty photo slots with library images so the layout shows at once.
+    const images = state.media.filter((m) => m.kind === 'image');
+    const used = new Set(SLOTS.map(([k]) => s[k] && s[k].ref).filter(Boolean));
+    const slotsNeeded = tpl.media === 3 ? SLOTS.map(([k]) => k) : tpl.media ? ['media'] : [];
+    for (const k of slotsNeeded) {
+      if (s[k]) continue;
+      const img = images.find((m) => !used.has(m.ref));
+      if (!img) break;
+      used.add(img.ref);
+      s[k] = { ref: img.ref, kind: 'image', focusX: 0.5, focusY: 0.5 };
     }
+    state.mediaSlot = 'media';
     slideChanged();
     renderInspector();
   });
-  $('focusX').addEventListener('input', (e) => { slide().media.focusX = Number(e.target.value); slideChanged(); });
-  $('focusY').addEventListener('input', (e) => { slide().media.focusY = Number(e.target.value); slideChanged(); });
+  $('focusX').addEventListener('input', (e) => { slide()[slotKey()].focusX = Number(e.target.value); slideChanged(); });
+  $('focusY').addEventListener('input', (e) => { slide()[slotKey()].focusY = Number(e.target.value); slideChanged(); });
   $('sideSelect').addEventListener('change', (e) => { slide().side = e.target.value; slideChanged(); });
   $('durInput').addEventListener('input', (e) => { slide().duration = Number(e.target.value) || null; scheduleSave(); });
   $('importMedia').addEventListener('click', async () => {

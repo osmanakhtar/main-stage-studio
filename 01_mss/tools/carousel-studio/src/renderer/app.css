@@ -181,3 +181,7 @@ code { font-size: 12px; background: var(--bg); padding: 1px 5px; border-radius: 
 .style-card strong { display: flex; align-items: center; gap: 8px; color: var(--brand); font-weight: 600; margin-bottom: 3px; }
 .style-card .cur { font-size: 11px; font-weight: 600; color: var(--ok); background: #e4efe8; padding: 2px 8px; border-radius: 10px; }
 .style-card > span { color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+
+.chips { display: flex; gap: 6px; margin-bottom: 8px; }
+.chip { padding: 5px 12px; font-size: 12.5px; border: 1px solid var(--line); border-radius: 20px; color: var(--muted); background: #fff; }
+.chip.on { border-color: var(--brand); color: var(--brand); background: var(--bg-2); }

@@ -1,6 +1,6 @@
-// styles.js — the carousel styles. Each one draws all six slide types
-// (cover, light = numbered point, split = photo and text, brand = statement,
-// quote, cta) with its own layout, typography and ornament.
+// styles.js — the carousel styles. Each one draws every slide type (cover,
+// light = numbered point, split = photo and text, brand = statement, fact,
+// photos, quote, cta) with its own layout, typography and ornament.
 //
 // Rules every style keeps:
 //   - colours only from the brand palette, via the CSS variables slides.js
@@ -65,7 +65,14 @@ h1{line-height:1.06;letter-spacing:.005em}
 .cta .content{top:420px;bottom:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .cta h1{color:#fff} .cta .body{color:rgba(255,255,255,.84);margin-left:auto;margin-right:auto}
 .cta .handle{margin-top:48px;padding:16px 40px;border:2px solid var(--gold);color:var(--gold);font-size:26px;font-weight:600;letter-spacing:.12em}
-.cta .footer{color:var(--gold)}`,
+.cta .footer{color:var(--gold)}
+.fact{background:var(--bg)}
+.fact .fig{font-family:var(--display);font-weight:300;line-height:.9;color:var(--accent);margin-bottom:10px;letter-spacing:-.01em}
+.fact h1{color:var(--brand)} .fact .body{color:var(--ink)} .fact .footer{color:var(--muted)}
+.photos{background:var(--bg)}
+.photos .ph{position:absolute;overflow:hidden;background:var(--bg2)}
+.photos .cap{position:absolute;left:72px;right:72px;top:1060px;z-index:3}
+.photos .kicker{color:var(--brand);margin-bottom:14px;font-size:21px} .photos h1{color:var(--brand)} .photos .footer{color:var(--muted)}`,
     render(role, c) {
       const s = c.s;
       if (role === 'cover') {
@@ -85,6 +92,16 @@ h1{line-height:1.06;letter-spacing:.005em}
       }
       if (role === 'quote') {
         return { inner: `<div class="frame"></div><div class="content center"><div class="qmark">&ldquo;</div>${c.h1([[60, 68], [110, 58], [999, 48]])}${c.kicker('attr')}</div>${c.footer()}` };
+      }
+      if (role === 'fact') {
+        return { inner: `<div class="frame"></div><div class="content center">${c.fig([[3, 300], [5, 240], [999, 180]])}${c.h1([[28, 64], [50, 56], [999, 48]])}${c.body()}</div>${c.footer()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `<div class="ph" style="left:72px;top:72px;width:520px;height:950px">${c.photo(1)}</div>
+          <div class="ph" style="left:616px;top:72px;width:392px;height:463px">${c.photo(2)}</div>
+          <div class="ph" style="left:616px;top:559px;width:392px;height:463px">${c.photo(3)}</div>
+          <div class="frame" style="inset:44px 44px auto 44px;height:1006px"></div>
+          <div class="cap">${c.kicker()}${c.h1([[30, 60], [60, 50], [999, 42]])}</div>${c.footer()}` };
       }
       return { inner: `<img class="logo" src="${c.logoUrl}" alt=""><div class="content">${c.h1([[28, 88], [50, 74], [999, 62]])}${c.body()}${c.brand.handle ? `<div class="handle">${c.esc(c.brand.handle)}</div>` : ''}</div>${c.footer()}` };
     },
@@ -115,7 +132,7 @@ h1{color:var(--brand);line-height:1.02;letter-spacing:-.005em}
 .cover .mwin{left:72px;right:72px;top:150px;height:640px;background:var(--bg2)}
 .cover .col{top:830px;gap:22px}
 .split .mwin{left:72px;right:72px;height:520px;background:var(--bg2)}
-.split .cap{position:absolute;left:72px;right:72px;font-family:var(--display);font-style:italic;font-weight:300;font-size:24px;color:var(--muted);z-index:2}
+.cap{position:absolute;left:72px;right:72px;font-family:var(--display);font-style:italic;font-weight:300;font-size:24px;color:var(--muted);z-index:2}
 .brand{background:var(--brand)}
 .brand .mast{color:var(--gold);border-color:var(--gold)} .brand .mast .pg{color:rgba(255,255,255,.6)}
 .brand .foot{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)} .brand .foot .swipe{color:var(--gold)}
@@ -123,7 +140,9 @@ h1{color:var(--brand);line-height:1.02;letter-spacing:-.005em}
 .quote{background:var(--bg2)}
 .quote .qm{font-family:var(--display);font-weight:300;font-size:300px;line-height:.55;height:130px;color:var(--accent)}
 .quote h1{font-style:italic;line-height:1.14}
-.cta .handle{align-self:flex-start;border:2px solid var(--brand);padding:18px 34px;font-size:26px;font-weight:600;letter-spacing:.1em;color:var(--brand)}`,
+.cta .handle{align-self:flex-start;border:2px solid var(--brand);padding:18px 34px;font-size:26px;font-weight:600;letter-spacing:.1em;color:var(--brand)}
+.fact .fig{font-family:var(--display);font-weight:300;font-style:italic;line-height:.82;color:var(--brand);letter-spacing:-.02em}
+.photos .ph{position:absolute;overflow:hidden;background:var(--bg2);z-index:1}`,
     render(role, c) {
       const s = c.s;
       const mast = (left) => `<div class="mast"><span>${c.esc(left || c.brand.footer.text)}</span><span class="pg">${c.pager}</span></div>`;
@@ -147,6 +166,16 @@ h1{color:var(--brand);line-height:1.02;letter-spacing:-.005em}
       }
       if (role === 'quote') {
         return { inner: `${mast()}<div class="col" style="top:190px;bottom:150px;justify-content:center"><div class="qm">&ldquo;</div>${c.h1([[60, 76], [110, 64], [999, 52]])}${c.kicker('label')}</div>${foot()}` };
+      }
+      if (role === 'fact') {
+        return { inner: `${mast()}<div class="col" style="top:190px;bottom:150px;justify-content:center">${c.fig([[3, 380], [5, 290], [999, 210]])}<div class="label" style="margin-top:10px">${c.esc(s.headline || '')}</div>${c.body('dc')}</div>${foot()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `${mast()}<div class="ph" style="left:72px;top:150px;width:580px;height:760px">${c.photo(1)}</div>
+          <div class="ph" style="left:676px;top:150px;width:332px;height:368px">${c.photo(2)}</div>
+          <div class="ph" style="left:676px;top:542px;width:332px;height:368px">${c.photo(3)}</div>
+          <div class="cap" style="top:926px">${c.esc(s.kicker || '')}</div>
+          <div class="col" style="top:990px">${c.h1([[30, 66], [60, 54], [999, 44]])}</div>${foot()}` };
       }
       return { inner: `${mast()}<div class="col" style="top:190px;bottom:150px;justify-content:center">${c.h1([[28, 96], [50, 82], [999, 66]])}${c.body('lede')}${c.brand.handle ? `<div class="handle">${c.esc(c.brand.handle)}</div>` : ''}</div>${foot()}` };
     },
@@ -189,7 +218,9 @@ h1{font-family:var(--sans);font-weight:600;letter-spacing:-.025em;line-height:1.
 .brand .prog i{background:rgba(255,255,255,.18)} .brand .prog i.on{background:var(--gold)} .brand .prog i.done{background:rgba(255,255,255,.4)}
 .quote .qm{font-family:var(--sans);font-weight:600;font-size:200px;line-height:.7;height:110px;color:var(--accent)}
 .quote h1{font-weight:500;letter-spacing:-.015em;line-height:1.18}
-.cta .btn{align-self:flex-start;background:var(--brand);color:#fff;border-radius:999px;padding:26px 46px;font-size:28px;font-weight:600;letter-spacing:.04em}`,
+.cta .btn{align-self:flex-start;background:var(--brand);color:#fff;border-radius:999px;padding:26px 46px;font-size:28px;font-weight:600;letter-spacing:.04em}
+.fact .fig{font-family:var(--sans);font-weight:400;letter-spacing:-.06em;line-height:.85;color:var(--brand)}
+.photos .ph{position:absolute;overflow:hidden;background:var(--bg2)}`,
     render(role, c) {
       const s = c.s;
       const prog = () => `<div class="prog">${Array.from({ length: c.total }, (_, i) => `<i class="${i === c.index ? 'on' : i < c.index ? 'done' : ''}"></i>`).join('')}</div>`;
@@ -215,6 +246,15 @@ h1{font-family:var(--sans);font-weight:600;letter-spacing:-.025em;line-height:1.
       }
       if (role === 'quote') {
         return { inner: `<div class="grid"></div>${head()}<div class="box" style="top:170px;bottom:150px;justify-content:center"><div class="qm">&ldquo;</div>${c.h1([[60, 62], [110, 52], [999, 44]])}${c.kicker('k')}</div>${prog()}` };
+      }
+      if (role === 'fact') {
+        return { inner: `<div class="grid"></div>${head()}<div class="box" style="top:170px;bottom:150px;justify-content:center">${c.fig([[3, 340], [5, 250], [999, 180]])}<div class="k">${c.esc(s.headline || '')}</div>${c.body()}</div>${prog()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `<div class="ph" style="left:0;top:0;width:538px;height:860px">${c.photo(1)}</div>
+          <div class="ph" style="left:546px;top:0;width:534px;height:426px">${c.photo(2)}</div>
+          <div class="ph" style="left:546px;top:434px;width:534px;height:426px">${c.photo(3)}</div>
+          <div class="box" style="top:910px;gap:22px">${c.kicker('k')}${c.h1([[30, 64], [60, 52], [999, 44]])}</div>${prog()}` };
       }
       return { inner: `<div class="grid"></div>${head()}<div class="box" style="top:170px;bottom:150px;justify-content:center">${c.h1([[28, 86], [50, 72], [999, 60]])}${c.body()}${c.brand.handle ? `<div class="btn">${c.esc(c.brand.handle)}</div>` : ''}</div>${prog()}` };
     },
@@ -254,7 +294,10 @@ h1{color:var(--brand);line-height:1.08;text-align:center}
 .cta .archfill{position:absolute;left:120px;top:110px;width:840px;height:1240px;border-radius:420px 420px 0 0;background:linear-gradient(170deg,var(--deep),var(--brand));z-index:1}
 .cta .logo{width:260px}
 .cta h1{color:#fff} .cta .body{color:rgba(255,255,255,.84)} .cta .pill{border-color:var(--gold);color:var(--gold);text-transform:none;letter-spacing:.08em;font-size:24px}
-.cta .footer{color:var(--gold)}`,
+.cta .footer{color:var(--gold)}
+.fact .ring{width:520px;height:520px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:var(--bg2)}
+.fact .fig{font-family:var(--display);font-weight:300;line-height:1;color:var(--brand)}
+.photos .ph{position:absolute;overflow:hidden;background:var(--bg);top:150px;width:290px;height:720px;border-radius:145px 145px 0 0}`,
     render(role, c) {
       const s = c.s;
       if (role === 'cover') {
@@ -275,6 +318,15 @@ h1{color:var(--brand);line-height:1.08;text-align:center}
       }
       if (role === 'quote') {
         return { inner: `<div class="card"></div><div class="stack" style="top:80px;bottom:150px;justify-content:center"><div class="qm">&ldquo;</div>${c.h1([[60, 64], [110, 54], [999, 46]])}${c.kicker('pill')}</div>${c.footer()}` };
+      }
+      if (role === 'fact') {
+        return { inner: `<div class="card"></div><div class="stack" style="top:80px;bottom:150px;justify-content:center"><div class="ring">${c.fig([[3, 220], [5, 150], [999, 110]])}</div>${c.h1([[28, 60], [50, 52], [999, 44]])}${c.body()}</div>${c.footer()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `<div class="ph" style="left:72px;top:190px">${c.photo(1)}</div>
+          <div class="ph" style="left:395px;top:110px">${c.photo(2)}</div>
+          <div class="ph" style="left:718px;top:190px">${c.photo(3)}</div>
+          <div class="stack" style="top:960px;gap:20px">${c.kicker('pill')}${c.h1([[30, 62], [60, 52], [999, 44]])}</div>${c.footer()}` };
       }
       return { inner: `<div class="archfill"></div><div class="stack" style="top:250px;bottom:170px;justify-content:center"><img class="logo" src="${c.logoUrl}" alt="">${c.h1([[28, 80], [50, 68], [999, 56]])}${c.body()}${c.brand.handle ? `<div class="pill">${c.esc(c.brand.handle)}</div>` : ''}</div>${c.footer()}` };
     },
@@ -313,7 +365,9 @@ h1{font-weight:500;color:#fff;line-height:.98;letter-spacing:-.012em}
 .quote .ghostq{position:absolute;left:40px;top:40px;font-family:var(--display);font-weight:300;font-size:640px;line-height:.8;color:transparent;-webkit-text-stroke:3px var(--gold);opacity:.45;z-index:1}
 .quote h1{font-weight:300;font-style:italic;line-height:1.1}
 .cta .logo{position:absolute;top:66px;left:80px;width:200px;z-index:3}
-.cta .handle{font-size:34px;font-weight:600;letter-spacing:.06em;color:var(--gold);border-bottom:3px solid var(--gold);align-self:flex-start;padding-bottom:6px}`,
+.cta .handle{font-size:34px;font-weight:600;letter-spacing:.06em;color:var(--gold);border-bottom:3px solid var(--gold);align-self:flex-start;padding-bottom:6px}
+.fact .fig{font-family:var(--display);font-weight:500;line-height:.85;color:#fff;letter-spacing:-.02em}
+.photos .ph{position:absolute;overflow:hidden}`,
     render(role, c) {
       const s = c.s;
       const count = () => `<div class="count">${c.pager}</div>`;
@@ -337,6 +391,16 @@ h1{font-weight:500;color:#fff;line-height:.98;letter-spacing:-.012em}
       }
       if (role === 'quote') {
         return { inner: `<div class="ghostq">&ldquo;</div>${count()}<div class="low">${c.h1([[60, 80], [110, 66], [999, 54]])}<div class="bar"></div>${c.kicker('k')}</div>${c.footer()}${swipe()}` };
+      }
+      if (role === 'fact') {
+        return { inner: `${count()}<div class="low">${c.fig([[3, 420], [5, 300], [999, 210]])}<div class="bar"></div><div class="k">${c.esc(s.headline || '')}</div>${c.body()}</div>${c.footer()}${swipe()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `<div class="ph" style="left:0;top:0;width:538px;height:1350px">${c.photo(1, 'fill duo')}<div class="tone"></div></div>
+          <div class="ph" style="left:546px;top:0;width:534px;height:671px">${c.photo(2, 'fill duo')}<div class="tone"></div></div>
+          <div class="ph" style="left:546px;top:679px;width:534px;height:671px">${c.photo(3, 'fill duo')}<div class="tone"></div></div>
+          <div class="shade"></div>${count()}
+          <div class="low">${c.kicker('k')}${c.h1([[30, 90], [60, 74], [999, 60]])}<div class="bar"></div></div>${c.footer()}${swipe()}` };
       }
       return { inner: `<img class="logo" src="${c.logoUrl}" alt=""><div class="low">${c.h1([[28, 104], [50, 86], [999, 70]])}<div class="bar"></div>${c.body()}${c.brand.handle ? `<div class="handle">${c.esc(c.brand.handle)}</div>` : ''}</div>${c.footer()}` };
     },
@@ -395,7 +459,9 @@ h1{color:var(--brand);line-height:1.06}
 .brand .footer,.brand .swipe{color:var(--gold)}
 .quote .qm{font-family:var(--display);font-weight:300;font-size:240px;line-height:.6;height:100px;color:var(--accent)}
 .quote h1{font-style:italic;line-height:1.14}
-.cta .handle{align-self:flex-start;border-radius:999px;border:2px solid var(--brand);padding:16px 36px;font-size:26px;font-weight:600;letter-spacing:.08em;color:var(--brand)}`,
+.cta .handle{align-self:flex-start;border-radius:999px;border:2px solid var(--brand);padding:16px 36px;font-size:26px;font-weight:600;letter-spacing:.08em;color:var(--brand)}
+.fact .fig{font-family:var(--display);font-weight:300;line-height:.85;color:var(--accent)}
+.photos .ph{position:absolute;overflow:hidden;border-radius:50%;background:var(--bg2);z-index:2}`,
     render(role, c) {
       const s = c.s;
       const swipe = () => (c.isLast ? '' : `<div class="swipe">Swipe ${c.arrow()}</div>`);
@@ -418,7 +484,89 @@ h1{color:var(--brand);line-height:1.06}
       if (role === 'quote') {
         return { inner: `${flowSvg(c, false, 'back')}${flowSvg(c, false, 'front')}<div class="txt" style="top:150px;bottom:240px;justify-content:center"><div class="qm">&ldquo;</div>${c.h1([[60, 66], [110, 56], [999, 46]])}${c.kicker('k')}</div>${c.footer()}${swipe()}` };
       }
+      if (role === 'fact') {
+        return { inner: `${flowSvg(c, false, 'back')}${flowSvg(c, false, 'front')}<div class="txt" style="top:150px;bottom:240px;justify-content:center">${c.fig([[3, 330], [5, 250], [999, 180]])}${c.h1([[28, 64], [50, 54], [999, 46]])}${c.body()}</div>${c.footer()}${swipe()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `${flowSvg(c, false, 'back')}<div class="ph" style="left:60px;top:150px;width:540px;height:540px">${c.photo(1)}</div>
+          <div class="ph" style="left:560px;top:80px;width:420px;height:420px">${c.photo(2)}</div>
+          <div class="ph" style="left:600px;top:470px;width:360px;height:360px">${c.photo(3)}</div>
+          ${flowSvg(c, false, 'front')}<div class="txt" style="top:840px;gap:18px">${c.kicker('k')}${c.h1([[30, 62], [60, 52], [999, 44]])}</div>${c.footer()}${swipe()}` };
+      }
       return { inner: `${flowSvg(c, false, 'back')}${flowSvg(c, false, 'front')}<div class="txt" style="top:150px;bottom:240px;justify-content:center">${c.h1([[28, 88], [50, 74], [999, 62]])}${c.body()}${c.brand.handle ? `<div class="handle">${c.esc(c.brand.handle)}</div>` : ''}</div>${c.footer()}${swipe()}` };
+    },
+  });
+
+  // ---------------------------------------------------------------- Gallery
+  // After Marp's MIT "border" theme and Apple Basic's photo layouts: the
+  // whole slide is a framed mount. A navy outer frame, a warm mat, photos
+  // set in white boards with a gold hairline like framed prints, and text
+  // set like a museum wall label with a catalogue number.
+  add({
+    id: 'gallery',
+    label: 'Gallery',
+    description: 'Framed like prints on a gallery wall: a navy frame, warm mat, photos in white mounts and museum-label text. Polished and premium.',
+    css: `
+.slide{background:var(--bg2)}
+.outer{position:absolute;inset:0;border:26px solid var(--brand);z-index:5;pointer-events:none}
+.board{position:absolute;border:30px solid var(--bg);z-index:2;box-shadow:0 14px 34px rgba(0,0,0,.12)}
+.board::after{content:'';position:absolute;inset:0;border:2px solid color-mix(in srgb,var(--accent) 70%,transparent)}
+.label{position:absolute;z-index:3;background:var(--bg);border:1px solid var(--line);padding:56px 60px;display:flex;flex-direction:column;gap:22px;box-shadow:0 10px 26px rgba(0,0,0,.08)}
+.cat{display:flex;justify-content:space-between;align-items:baseline;font-size:19px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:16px}
+.cat b{font-weight:600;color:var(--brand)}
+h1{color:var(--brand);line-height:1.08}
+.k{font-size:20px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--brand)}
+.body{font-size:29px;line-height:1.55;color:var(--ink)}
+.n{font-family:var(--display);font-weight:300;font-size:120px;line-height:.85;color:var(--accent)}
+.footer{position:absolute;left:0;right:0;bottom:52px;text-align:center;font-size:16px;font-weight:600;letter-spacing:.34em;color:var(--muted);z-index:6}
+.footer .f2{font-weight:400;opacity:.75}
+.cover{--hole:var(--bg2)}
+.cover .label{left:110px;right:110px;top:880px;bottom:120px;padding:40px 56px;gap:16px;justify-content:center}
+.brand .inner{position:absolute;inset:26px;background:var(--brand);z-index:1}
+.brand .inner::after{content:'';position:absolute;inset:40px;border:2px solid color-mix(in srgb,var(--gold) 70%,transparent)}
+.brand .stack{position:absolute;left:150px;right:150px;top:200px;bottom:200px;z-index:3;display:flex;flex-direction:column;justify-content:center;gap:28px}
+.brand h1{color:#fff} .brand .k{color:var(--gold)} .brand .body{color:rgba(255,255,255,.84)} .brand .footer{color:var(--gold)}
+.quote h1{font-style:italic;line-height:1.14}
+.quote .qm{font-family:var(--display);font-weight:300;font-size:200px;line-height:.55;height:80px;color:var(--accent)}
+.fact .fig{font-family:var(--display);font-weight:300;line-height:.85;color:var(--brand)}
+.cta .handle{align-self:flex-start;border:2px solid var(--brand);padding:16px 34px;font-size:25px;font-weight:600;letter-spacing:.1em;color:var(--brand)}`,
+    render(role, c) {
+      const s = c.s;
+      const cat = (left) => `<div class="cat"><span>${c.esc(left || c.brand.footer.text)}</span><b>No. ${String(c.index + 1).padStart(2, '0')}</b></div>`;
+      const board = (x, y, w, h) => `<div class="board" style="left:${x - 30}px;top:${y - 30}px;width:${w + 60}px;height:${h + 60}px"></div>`;
+      const frame = `<div class="outer"></div>`;
+      if (role === 'cover') {
+        const [x, y, w, h] = [140, 130, 800, 680];
+        const win = c.hasMedia ? c.win('', `left:${x}px;top:${y}px;width:${w}px;height:${h}px`) : `<div class="mwin" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:var(--brand)"></div>`;
+        return { inner: `${win}${board(x, y, w, h)}<div class="label">${c.kicker('k')}${c.h1([[24, 74], [40, 64], [60, 54], [999, 46]])}${c.body('body', 'font-size:26px')}</div>${frame}` };
+      }
+      const labelBox = (inner, pos) => `<div class="label" style="${pos || 'left:110px;right:110px;top:150px;bottom:170px;justify-content:center'}">${inner}</div>`;
+      if (role === 'light') {
+        return { inner: labelBox(`${cat(s.kicker)}${c.numeral('n')}${c.h1([[28, 74], [50, 64], [999, 54]])}${c.body()}`) + frame + c.footer() };
+      }
+      if (role === 'split') {
+        const left = s.side !== 'right';
+        const [x, y, w, h] = [left ? 110 : 600, 170, 370, 1000];
+        const img = `<div class="mwin" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${c.media('fill')}</div>${board(x, y, w, h)}`;
+        const box = labelBox(`${cat(s.kicker)}${c.numeral('n', 'font-size:90px')}${c.h1([[24, 52], [44, 46], [999, 40]])}${c.body('body', 'font-size:25px')}`,
+          `${left ? 'left:540px;right:100px' : 'left:100px;right:540px'};top:300px;bottom:300px;padding:40px 40px;justify-content:center`);
+        return { inner: img + box + frame + c.footer() };
+      }
+      if (role === 'brand') {
+        return { inner: `<div class="inner"></div><div class="stack">${c.kicker('k')}${c.h1([[28, 86], [50, 72], [999, 60]])}${c.body()}</div>${frame}${c.footer()}` };
+      }
+      if (role === 'quote') {
+        return { inner: labelBox(`<div class="qm">&ldquo;</div>${c.h1([[60, 62], [110, 52], [999, 44]])}${c.kicker('k')}`) + frame + c.footer() };
+      }
+      if (role === 'fact') {
+        return { inner: labelBox(`${cat()}${c.fig([[3, 300], [5, 220], [999, 160]])}<div class="k">${c.esc(s.headline || '')}</div>${c.body()}`) + frame + c.footer() };
+      }
+      if (role === 'photos') {
+        const ph = (n, x, y, w, h) => `<div class="mwin" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${c.photo(n)}</div>${board(x, y, w, h)}`;
+        return { inner: `${ph(1, 120, 130, 420, 620)}${ph(2, 610, 130, 350, 270)}${ph(3, 610, 480, 350, 270)}
+          ${labelBox(`${c.kicker('k')}${c.h1([[30, 56], [60, 48], [999, 40]])}`, 'left:110px;right:110px;top:860px;bottom:150px;padding:36px 56px;justify-content:center')}${frame}${c.footer()}` };
+      }
+      return { inner: labelBox(`${cat()}${c.h1([[28, 80], [50, 68], [999, 56]])}${c.body()}${c.brand.handle ? `<div class="handle">${c.esc(c.brand.handle)}</div>` : ''}`) + frame + c.footer() };
     },
   });
 

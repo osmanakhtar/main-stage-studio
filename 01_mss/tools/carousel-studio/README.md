@@ -36,8 +36,8 @@ To update, download the new `.dmg` and drag it into Applications again. Your cam
 
 1. **New campaign.** Pick the treatment and content pillar, then paste the campaign content. Write one block per slide with an empty line between blocks. The first line of a block is the headline, and the lines after it are the supporting text. A short first line ending in a colon becomes the small heading.
 2. **Make slides from this content.** The first block becomes the cover, the middle ones become numbered cards, and the last becomes the closing call to action. If there's no closing slide, a consultation-led one is added.
-3. **Pick a style.** The **Style** tab shows her own post in each of the six styles. One click restyles every slide. Words, photos and slide order don't change, so she can try them all.
-4. **Edit.** Click a slide in the strip to change its slide type, words, photo or video, and framing. Six slide types: cover, numbered point, photo and text, statement, quote, and closing call to action.
+3. **Pick a style.** The **Style** tab shows her own post in each of the seven styles. One click restyles every slide. Words, photos and slide order don't change, so she can try them all.
+4. **Edit.** Click a slide in the strip to change its slide type, words, photo or video, and framing. Eight slide types: cover, numbered point, photo and text, statement, key fact, three photos, quote, and closing call to action.
 5. **Captions tab.** Write or paste the Instagram and Facebook captions. They're checked too.
 6. **Compliance tab.** Anything marked **Must fix** blocks export. **Check** items are worth a second look but don't block.
 7. **Export slides** saves the PNGs and `caption.txt` into Documents › PureMed Studio › exports. **Export clip** makes an mp4: still slides get a slow push-in, video on a cover slide plays under the headline, and slides crossfade.
@@ -46,7 +46,7 @@ To update, download the new `.dmg` and drag it into Applications again. Your cam
 
 ## Styles
 
-Every style draws all six slide types in its own layout and typography, using only the brand pack's palette and fonts, so a new brand pack restyles all of them at once.
+Every style draws all eight slide types in its own layout and typography, using only the brand pack's palette and fonts, so a new brand pack restyles all of them at once.
 
 | Style | Look | Suits |
 |---|---|---|
@@ -56,8 +56,24 @@ Every style draws all six slide types in its own layout and typography, using on
 | **Soft arch** | Arched photo windows, pill labels, rounded cards on the warm second neutral, centred serif type | Treatment introductions, the patient journey |
 | **Bold statement** | Deep navy, oversized headlines anchored low, thick gold rule, outline numerals, duotone photos; the statement slide flips to light | Myth-busting, announcements |
 | **Seamless flow** | One gold line and soft circles run unbroken across every slide, so each swipe continues the last | Cover-to-close stories |
+| **Gallery** | A navy frame round the whole slide, a warm mat, photos in white mounts with a gold hairline, text set like a museum wall label with a catalogue number | Premium treatments, the clinic itself |
 
-Chosen from the 2026 carousel research (minimal editorial, magazine layouts, bold type, seamless panoramas) and filtered for a medically-led clinic: scrapbook and type-collage looks were left out as off-brand. Seamless panoramas were deferred in Studio's `slide-patterns-log.md` because they need each slide's position; here every style receives the slide's index and the carousel length, which is also what drives page numbers and the progress bar.
+### Where the styles and layouts come from
+
+Open-source carousel and slide-theme projects were reviewed for designs worth adapting. Only MIT-licensed work was considered, and nothing is copied: each idea is redrawn in PureMed's palette and fonts.
+
+| Source (license) | What it has | Taken |
+|---|---|---|
+| [Marp community themes](https://github.com/rnd195/marp-community-themes), `border` theme by rnd195 (MIT) | Thick frame round the whole slide | The **Gallery** style's frame-and-mat idea |
+| [Slidev official themes](https://github.com/slidevjs/themes), Apple Basic (MIT) | `3-images` and `fact` layouts | The **Three photos** and **Key fact** slide types |
+| [Slidev](https://github.com/slidevjs/slidev) core layouts (MIT) | cover, fact, quote, statement, image-left/right, two-cols, end | Confirms the slide-type set; statement and quote already covered |
+| [slidev-theme-linkedin-carousel](https://github.com/Open-reSource/slidev-theme-linkedin-carousel) (MIT) | Swipe cue, save prompt, author byline | Swipe cues (Editorial, Bold statement, Seamless flow). A practitioner byline is a good next step once Nafisa's credentials are confirmed |
+| [carousel](https://github.com/MohtashamMurshid/carousel) by Mohtasham Murshid (MIT) | One wide image sliced across slides ("pan") | Not yet: a panorama slide type is a candidate for later |
+| [Open Carrusel](https://github.com/Hainrixz/open-carrusel) (MIT, about 470 stars) | No bundled templates: Claude designs each slide in HTML | Confirms the approach; nothing to port |
+| [carousel-generator](https://github.com/FranciscoMoretti/carousel-generator) (MIT, about 210 stars) | Colour themes over one layout | Nothing: colour is fixed by the brand here |
+| Slidev Bricks and Shibainu themes, reveal.js and Marp Gaia/Uncover themes (MIT) | Playful geometric shapes, cartoon art, or palette and font swaps over one layout | Nothing: off-brand for a clinic, or only a palette change |
+
+The other styles come from the 2026 carousel trend research (minimal editorial, magazine layouts, bold type, seamless panoramas), filtered for a medically-led clinic: scrapbook and type-collage looks were left out as off-brand. Seamless panoramas were deferred in Studio's `slide-patterns-log.md` because they need each slide's position; here every style receives the slide's index and the carousel length, which is also what drives page numbers and the progress bar.
 
 To add a style, add a block to `src/shared/styles.js`. The unit tests check that every style renders every slide type and takes all its colours from the palette, and the render check exports the example post in every style.
 
@@ -81,7 +97,7 @@ The repo is public, so a release download is public too. The brand pack only hol
 |---|---|
 | `brands/puremed/` | The brand pack: `brand.json` (palette, fonts, logo, footer, handle, treatments, voice summary), `lint-rules.json` and `compliance.md` (copied from `content/config/` in `osmanakhtar/puremed-aesthetics`), `voice-social.md`, `pillars.json`, fonts, logo, starter `library/`, and the example campaign she sees on first launch |
 | `src/shared/slides.js` | Builds one HTML document per slide from its type and the post's style, used for both the on-screen preview and the export, so the preview is exactly what ships |
-| `src/shared/styles.js` | The six styles |
+| `src/shared/styles.js` | The seven styles |
 | `src/shared/lint.js` | The compliance check. Same rules and matching as Studio's `content-lint.js` |
 | `src/shared/outline.js` | Turns pasted content into slides |
 | `src/main/render.js` | PNG capture (Chromium DevTools capture at exactly 1080×1350, whatever the screen size) and clip assembly with the bundled ffmpeg |

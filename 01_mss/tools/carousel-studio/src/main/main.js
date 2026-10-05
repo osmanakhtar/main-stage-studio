@@ -204,6 +204,8 @@ async function selfTest(outDir) {
     ...post,
     slides: [
       ...post.slides.slice(0, -1),
+      { template: 'fact', numeral: '18–24', headline: 'Months results typically last', body: 'Collagen keeps building for months after treatment.' },
+      { template: 'photos', kicker: 'Inside the clinic', headline: 'Consultation first, always', media: { ref: 'brand:library/puremed-hero-consultation.webp', kind: 'image' }, media2: { ref: 'brand:library/puremed-skin-glow-closeup-hf-v1.webp', kind: 'image' }, media3: { ref: 'brand:library/puremed-patient-clinic-relaxed-hf-v1.webp', kind: 'image' } },
       { template: 'quote', headline: 'I wanted a lift that still looked like me.', kicker: 'Example quote' },
       { template: 'brand', kicker: 'In short', headline: 'Tighter, without the scalpel', body: 'Results build gradually over the months after treatment.' },
       post.slides[post.slides.length - 1],

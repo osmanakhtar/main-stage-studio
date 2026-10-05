@@ -15,10 +15,10 @@ const rules = JSON.parse(fs.readFileSync(path.join(brandDir, 'lint-rules.json'),
 const example = JSON.parse(fs.readFileSync(path.join(brandDir, 'example-campaign.json'), 'utf8'));
 
 test('every style renders every slide type, with brand colours and escaped text', () => {
-  assert.ok(Slides.STYLES.length >= 6);
+  assert.ok(Slides.STYLES.length >= 7);
   for (const st of Slides.STYLES) {
     for (const t of Slides.TEMPLATES) {
-      const slide = { template: t.id, numeral: '01', kicker: 'K', headline: 'A <b>bold</b> claim', body: 'Body', media: { ref: 'brand:library/x.webp', kind: 'image' } };
+      const slide = { template: t.id, numeral: '01', kicker: 'K', headline: 'A <b>bold</b> claim', body: 'Body', media: { ref: 'brand:library/x.webp', kind: 'image' }, media2: { ref: 'brand:library/y.webp', kind: 'image' } };
       const html = Slides.slideHtml(slide, brand, { style: st.id, index: 1, total: 5 });
       const where = `${st.id}/${t.id}`;
       assert.match(html, /^<!doctype html>/, where);
@@ -103,4 +103,12 @@ test('a closing slide is added when the content does not end with one', () => {
   const slides = Outline.outlineToSlides('First\n\nSecond point', brand);
   assert.strictEqual(slides[slides.length - 1].template, 'cta');
   assert.strictEqual(slides[slides.length - 1].headline, brand.defaultCta.headline);
+});
+
+test('three-photo slides show every photo, with a placeholder for a missing one', () => {
+  for (const st of Slides.STYLES) {
+    const html = Slides.slideHtml({ template: 'photos', headline: 'H', media: { ref: 'brand:library/a.webp', kind: 'image' }, media3: { ref: 'brand:library/c.webp', kind: 'image' } }, brand, { style: st.id });
+    assert.ok(html.includes('library/a.webp') && html.includes('library/c.webp'), st.id);
+    assert.ok(html.includes('background:var(--bg2)'), `${st.id} fills the empty slot`);
+  }
 });

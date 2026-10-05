@@ -3,9 +3,10 @@
 // Nafisa sees is what ships.
 //
 // Two axes:
-//   slide type (slide.template): what the slide is for. Cover, point, photo
-//     and text, statement, quote, closing call to action. Fixed set, fixed
-//     fields, so copy never depends on the look.
+//   slide type (slide.template): what the slide is for. Cover, numbered
+//     point, photo and text, statement, key fact, three photos, quote,
+//     closing call to action. Fixed set, fixed fields, so copy never depends
+//     on the look.
 //   style (post.style): how the whole carousel looks. Each style in styles.js
 //     draws all six slide types in its own layout and typography, but every
 //     colour and font comes from the brand pack. Switching style keeps all
@@ -29,14 +30,16 @@
     { id: 'light', label: 'Numbered point', media: false, fields: ['numeral', 'kicker', 'headline', 'body'], hint: 'One point per slide, with an optional number.' },
     { id: 'split', label: 'Photo and text', media: true, fields: ['numeral', 'kicker', 'headline', 'body'], hint: 'A point with a photo beside or above it.' },
     { id: 'brand', label: 'Statement', media: false, fields: ['kicker', 'headline', 'body'], hint: 'A key message or summary, in a contrasting colour.' },
-    { id: 'quote', label: 'Quote', media: false, fields: ['headline', 'kicker'], hint: 'A real patient or practitioner quote. The small heading is who said it.' },
+    { id: 'fact', label: 'Key fact', media: false, fields: ['numeral', 'headline', 'body'], labels: { numeral: 'The figure', headline: 'What it measures' }, hint: 'One figure that matters, shown large: a timeline, a session count, a recovery time. Only use figures the treatment page states.' },
+    { id: 'photos', label: 'Three photos', media: 3, fields: ['kicker', 'headline'], hint: 'A grid of three photos with a short caption. Pick each photo with the Photo 1, 2 and 3 buttons.' },
+    { id: 'quote', label: 'Quote', media: false, fields: ['headline', 'kicker'], labels: { headline: 'Quote', kicker: 'Who said it' }, hint: 'A real patient or practitioner quote. The small heading is who said it.' },
     { id: 'cta', label: 'Closing call to action', media: false, fields: ['headline', 'body'], hint: 'The last slide. One consultation-led ask and the handle.' },
   ];
 
   const FIELD_LABELS = {
     numeral: 'Number', kicker: 'Small heading', headline: 'Headline', body: 'Supporting text',
   };
-  const FIELD_LIMITS = { numeral: 4, kicker: 40, headline: 90, body: 220 };
+  const FIELD_LIMITS = { numeral: 8, kicker: 40, headline: 90, body: 220 };
 
   const DEFAULT_STYLE = 'classic';
 
@@ -107,11 +110,15 @@
       hasMedia: !!(s.media && s.media.ref),
       esc, fit,
       media: (cls) => mediaTag(s.media, opts, cls || 'fill'),
+      // Photo n (1-3) of a Three photos slide; a soft placeholder if empty.
+      photo: (n, cls) => mediaTag(s[n === 1 ? 'media' : `media${n}`], { ...opts, live: false }, cls || 'fill') || '<div class="fill" style="background:var(--bg2)"></div>',
       win: (cls, extra) => `<div class="mwin ${cls || ''}${hole ? ' hole' : ''}"${extra ? ` style="${extra}"` : ''}>${hole ? '' : mediaTag(s.media, opts, 'fill')}</div>`,
       // cls: class name; st: optional inline style for per-layout sizing
       kicker: (cls, st) => (s.kicker ? `<div class="${cls || 'kicker'}"${st ? ` style="${st}"` : ''}>${esc(s.kicker)}</div>` : ''),
       numeral: (cls, st) => (s.numeral ? `<div class="${cls || 'numeral'}"${st ? ` style="${st}"` : ''}>${esc(s.numeral)}</div>` : ''),
       body: (cls, st) => (s.body ? `<p class="${cls || 'body'}"${st ? ` style="${st}"` : ''}>${esc(s.body)}</p>` : ''),
+      // The figure on a Key fact slide, sized by its length.
+      fig: (steps, cls) => (s.numeral ? `<div class="${cls || 'fig'}" style="font-size:${fit(s.numeral, steps)}px">${esc(s.numeral)}</div>` : ''),
       h1: (steps, cls) => `<h1${cls ? ` class="${cls}"` : ''} style="font-size:${fit(s.headline, steps)}px">${esc(s.headline)}</h1>`,
       footer: () => `<div class="footer"><span class="f1">${esc(brand.footer.text)}</span> <span class="f2">${esc(brand.footer.accent || '')}</span></div>`,
       arrow: (color) => `<svg class="arrow" width="44" height="18" viewBox="0 0 44 18" aria-hidden="true"><path d="M0 9h40M32 1l8 8-8 8" fill="none" stroke="${color || 'currentColor'}" stroke-width="2"/></svg>`,

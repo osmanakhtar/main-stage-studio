@@ -16,7 +16,7 @@ const MODELS = [
   { id: 'claude-sonnet-5-5', label: 'Claude Sonnet 5.5 (about half the cost)' },
 ];
 
-const TEMPLATE_IDS = ['cover', 'light', 'split', 'brand', 'quote', 'cta'];
+const TEMPLATE_IDS = ['cover', 'light', 'split', 'brand', 'fact', 'quote', 'cta'];
 
 const SCHEMA = {
   type: 'object',
@@ -66,10 +66,11 @@ ${ruleLines}
 Slide templates you can use:
 - cover: first slide. A short hook headline (ideally under 8 words) that earns the swipe. Optional kicker. Body optional and short.
 - light: one point per slide. numeral "01", "02"... in order, a short kicker, headline under 50 characters, body under 200 characters.
-- brand: a key message or summary on the navy card. No numeral.
+- brand: a key message or summary in a contrasting colour. No numeral.
+- fact: one figure shown large. numeral is the figure, kept short (for example "18–24" or "1–2"), headline says what it measures (for example "Months results typically last"). Only figures stated in the brief or the brand files; never estimate one.
 - quote: headline is the quote, kicker is who said it. Only use for a quote the brief actually provides; never invent testimonials.
 - cta: last slide. One consultation-led ask, never urgency. Body points to the link in bio.
-Do not use "split"; she adds photos herself.
+Do not use "split" or "photos"; she adds photos herself.
 Leave numeral, kicker or body as an empty string when a template doesn't use them.
 
 Captions: follow the Instagram and Facebook rules in the voice file (hook in the first 125 characters, one CTA at the end, hashtags as specified, booking link ${b.bookingUrl} only on Facebook). British English. No em dashes anywhere.`;
