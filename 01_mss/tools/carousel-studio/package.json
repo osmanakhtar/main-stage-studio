@@ -29,7 +29,7 @@
     "productName": "PureMed Studio",
     "directories": {
       "output": "dist",
-      "buildResources": "build"
+      "buildResources": "packaging"
     },
     "files": [
       "src/**",
@@ -45,7 +45,7 @@
         "dmg"
       ],
       "category": "public.app-category.graphics-design",
-      "icon": "build/icon.png",
+      "icon": "packaging/icon.png",
       "identity": "-",
       "hardenedRuntime": false,
       "gatekeeperAssess": false

@@ -1,4 +1,4 @@
-// make-icon.js — builds build/icon.png (1024×1024) from the brand pack: the
+// make-icon.js — builds packaging/icon.png (1024×1024) from the brand pack: the
 // logo's mark on the brand's deep colour, in the macOS rounded-square shape.
 // electron-builder turns it into the .icns. Run: npx electron scripts/make-icon.js
 'use strict';
@@ -42,8 +42,8 @@ app.whenReady().then(async () => {
   await win.loadURL(`data:text/html;base64,${Buffer.from(html).toString('base64')}`);
   await win.webContents.executeJavaScript('document.images[0].decode().then(() => true)');
   const shot = await dbg.sendCommand('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1024, height: 1024, scale: 1 } });
-  fs.mkdirSync(path.join(root, 'build'), { recursive: true });
-  fs.writeFileSync(path.join(root, 'build', 'icon.png'), Buffer.from(shot.data, 'base64'));
-  console.log('wrote build/icon.png');
+  fs.mkdirSync(path.join(root, 'packaging'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'packaging', 'icon.png'), Buffer.from(shot.data, 'base64'));
+  console.log('wrote packaging/icon.png');
   app.exit(0);
 });

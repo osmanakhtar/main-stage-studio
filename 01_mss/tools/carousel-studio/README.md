@@ -68,7 +68,7 @@ The repo is public, so a release download is public too. The brand pack only hol
 | `src/main/render.js` | PNG capture (Chromium DevTools capture at exactly 1080×1350, whatever the screen size) and clip assembly with the bundled ffmpeg |
 | `src/main/claude.js` | The optional drafting add-on |
 | `src/renderer/` | The editor UI |
-| `scripts/make-icon.js` | Rebuilds `build/icon.png` from the brand pack |
+| `scripts/make-icon.js` | Rebuilds `packaging/icon.png` from the brand pack |
 
 **A second client** is a new folder in `brands/` and a change to `studioBrand`, `build.appId`, `build.productName` and `build.dmg` in `package.json`. The templates and checks don't change.
 
