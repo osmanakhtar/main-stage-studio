@@ -526,6 +526,7 @@ h1{color:var(--brand);line-height:1.08}
 .brand .inner::after{content:'';position:absolute;inset:40px;border:2px solid color-mix(in srgb,var(--gold) 70%,transparent)}
 .brand .stack{position:absolute;left:150px;right:150px;top:200px;bottom:200px;z-index:3;display:flex;flex-direction:column;justify-content:center;gap:28px}
 .brand h1{color:#fff} .brand .k{color:var(--gold)} .brand .body{color:rgba(255,255,255,.84)} .brand .footer{color:var(--gold)}
+.brand .footer{bottom:100px}
 .quote h1{font-style:italic;line-height:1.14}
 .quote .qm{font-family:var(--display);font-weight:300;font-size:200px;line-height:.55;height:80px;color:var(--accent)}
 .fact .fig{font-family:var(--display);font-weight:300;line-height:.85;color:var(--brand)}
