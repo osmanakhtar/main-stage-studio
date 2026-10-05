@@ -571,10 +571,161 @@ h1{color:var(--brand);line-height:1.08}
     },
   });
 
+  // ---------------------------------------------------------------- Shared list and row
+  // The Icon list and Icon row slide types, for styles that don't draw their
+  // own: brand palette, display headline, icons in accent circles.
+  const fallbackCss = `
+.fb{position:absolute;inset:0;background:var(--bg);color:var(--ink)}
+.fb .fb-pg{position:absolute;left:72px;top:60px;font-size:22px;font-weight:600;letter-spacing:.12em;color:var(--muted)}
+.fb .fb-col{position:absolute;left:84px;right:84px;top:140px;bottom:170px;display:flex;flex-direction:column;justify-content:center;gap:34px;--em:var(--accent);text-align:left}
+.fb.photo .fb-col{right:500px;gap:26px}
+.fb .fb-ph{position:absolute;right:0;top:0;bottom:0;width:440px;overflow:hidden}
+.fb h1{color:var(--brand);line-height:1.06;font-weight:300;text-align:inherit}
+.fb .fb-lead{font-size:34px;line-height:1.42}
+.fb .fb-it{display:flex;align-items:center;gap:28px}
+.fb .fb-list{display:flex;flex-direction:column;gap:26px}
+.fb .fb-ic{width:92px;height:92px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.fb .fb-t{font-size:34px;font-weight:600;color:var(--brand)}
+.fb .fb-d{font-size:28px;color:var(--muted);margin-top:4px}
+.fb .fb-note{font-size:36px;line-height:1.35}
+.fb .fb-row{display:flex;justify-content:center;gap:34px;margin:10px 0}
+.fb .fb-cell{display:flex;flex-direction:column;align-items:center;gap:20px;width:210px;text-align:center;font-size:29px;line-height:1.25;color:var(--brand)}
+.fb .fb-cell .fb-ic{width:160px;height:160px}
+.fb .fb-box{background:var(--bg2);border-radius:18px;padding:36px 52px;font-size:33px;line-height:1.42;align-self:center;max-width:860px;text-align:left}
+.fb .fb-foot{position:absolute;left:0;right:0;bottom:52px;text-align:center;font-size:16px;font-weight:600;letter-spacing:.34em;color:var(--muted)}`;
+  function fallback(role, c) {
+    const foot = `<div class="fb-foot">${c.esc(c.brand.footer.text)} ${c.esc(c.brand.footer.accent || '')}</div>`;
+    const pg = `<div class="fb-pg">${c.pager}</div>`;
+    if (role === 'row') {
+      const cells = c.items().slice(0, 4).map((it) => `<div class="fb-cell"><div class="fb-ic">${c.icon(it.icon, 60)}</div>${c.rich(it.title || '')}</div>`).join('');
+      return { inner: `<div class="fb">${pg}<div class="fb-col" style="align-items:center;text-align:center">${c.h1([[40, 80], [80, 66], [999, 54]])}<div class="fb-row">${cells}</div>${c.s.body ? `<div class="fb-box">${c.rich(c.s.body)}</div>` : ''}</div>${foot}</div>` };
+    }
+    const items = c.items().slice(0, 6).map((it) => `<div class="fb-it"><div class="fb-ic">${c.icon(it.icon, it.icon === 'check' || !it.icon ? 42 : 48)}</div><div><div class="fb-t">${c.rich(it.title || '')}</div>${it.text ? `<div class="fb-d">${c.rich(it.text)}</div>` : ''}</div></div>`).join('');
+    return { inner: `<div class="fb${c.hasMedia ? ' photo' : ''}">${c.hasMedia ? `<div class="fb-ph">${c.media('fill')}</div>` : ''}${pg}<div class="fb-col">${c.s.headline ? c.h1(c.hasMedia ? [[30, 70], [60, 58], [999, 48]] : [[30, 88], [60, 72], [999, 58]]) : ''}${c.body('fb-lead')}<div class="fb-list">${items}</div>${c.note('fb-note')}</div>${foot}</div>` };
+  }
+
+  // ---------------------------------------------------------------- Signature
+  // Recreates the carousel Nafisa approved on 5 Oct 2026, slide for slide:
+  // square 1080×1080, page counter top left, serif headlines with copper
+  // italic emphasis (*like this*), a short copper rule, a photo bleeding in
+  // from the right, the typographic PURE/MED lockup, icons in fine copper
+  // circles, deep-navy statement and closing slides, and a contact band.
+  // Its colours are the palette.signature tokens in brand.json (taken from
+  // that carousel); without them it falls back to the main palette.
+  add({
+    id: 'signature',
+    label: 'Signature',
+    description: 'The look of the carousel Nafisa approved: square slides, serif headlines with copper italics, photos bleeding in from the right, icon lists and the PUREMED lockup.',
+    size: [1080, 1080],
+    handles: ['list', 'row'],
+    css: `
+.slide{--ink:var(--sig-ink,var(--brand));--night:var(--sig-night,var(--deep));--cream:var(--sig-cream,var(--bg));--blush:var(--sig-blush,var(--bg2));--cu:var(--sig-copper,var(--accent));--rose:var(--sig-rose,var(--gold));--band:var(--sig-band,var(--bg2));--callout:var(--sig-callout,var(--bg2));
+  background:var(--cream);color:var(--ink);--em:var(--cu);--hole:var(--cream)}
+h1{font-weight:500;color:var(--ink);line-height:1.05;letter-spacing:.004em}
+h1 .em,h1 .ital{font-weight:500}
+.em{font-weight:500}
+.pg{position:absolute;left:68px;top:54px;font-size:27px;letter-spacing:.02em;z-index:4}
+.rule{width:108px;height:3px;background:var(--cu);flex:0 0 auto}
+.col{position:absolute;left:68px;z-index:3;display:flex;flex-direction:column;gap:30px}
+.lead{font-size:35px;line-height:1.32}
+.lead .em,.note .em,.it .t .em,.callout .em,.cell .em{font-size:1.14em;line-height:1}
+.ph{position:absolute;top:0;right:0;bottom:0;width:600px;z-index:1;-webkit-mask-image:linear-gradient(to right,transparent 0,black 18%);mask-image:linear-gradient(to right,transparent 0,black 18%)}
+.lockup{position:absolute;left:68px;bottom:54px;z-index:4;display:flex;flex-direction:column;align-items:center}
+.lockup.center{left:50%;transform:translateX(-50%)}
+.lockup .lw{font-size:40px;letter-spacing:.14em;padding-left:.14em;line-height:1}
+.lockup .lw b{font-weight:400;color:var(--cu)}
+.lockup .la{font-size:15px;letter-spacing:.6em;padding-left:.6em;margin-top:10px}
+.lockup .lp{font-size:22px;font-weight:500;letter-spacing:.26em;padding-left:.26em;margin-top:12px}
+.it{display:flex;align-items:center;gap:26px}
+.ic{border-radius:50%;border:2px solid var(--cu);color:var(--cu);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.it .t{font-size:31px;font-weight:600;line-height:1.2}
+.it .d{font-size:26px;color:var(--muted);margin-top:4px}
+.it.tick .t{font-weight:400;font-size:31px}
+.wide .it .t{font-size:36px} .wide .it .d{font-size:29px}
+.note{font-size:38px;line-height:1.22}
+.wide .note{font-size:46px;line-height:1.15}
+.brand,.cta{background:var(--night);color:#fff;--em:var(--rose);--hole:var(--night)}
+.brand h1{color:var(--rose)} .brand .rule,.cta .rule{background:var(--rose)}
+.brand .lead{color:#fff;font-size:38px;line-height:1.32} .brand .lockup .lw b,.cta .lockup .lw b{color:var(--rose)}
+.brand .ph{-webkit-mask-image:linear-gradient(to right,transparent 0,black 30%);mask-image:linear-gradient(to right,transparent 0,black 30%)}
+.split,.quote,.fact{background:var(--blush)}
+.rowwrap{position:absolute;left:70px;right:70px;top:130px;bottom:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;text-align:center}
+.cells{display:flex;justify-content:center;gap:36px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:18px;width:190px;font-size:29px;line-height:1.22}
+.callout{background:var(--callout);border-radius:14px;padding:34px 70px;font-size:33px;line-height:1.38;text-align:left;width:800px}
+.cta h1{color:#fff;text-align:center}
+.cta .mid{position:absolute;left:70px;right:70px;top:230px;bottom:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;text-align:center}
+.cta .lead{color:rgba(255,255,255,.94);font-size:40px;line-height:1.3;max-width:820px}
+.cta .lockup{bottom:auto;top:84px}
+.cta .lockup .lw{font-size:50px}
+.cta .lockup .la{font-size:18px}
+.band{position:absolute;left:0;right:0;bottom:0;height:146px;background:var(--band);color:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 100px;z-index:4}
+.band span{display:flex;align-items:center;gap:26px;font-size:38px;letter-spacing:.06em}
+.band .place{letter-spacing:.14em}
+.big-n{font-family:var(--display);font-weight:300;color:var(--cu);line-height:.85}
+.k{font-size:21px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cu)}
+.qm{font-family:var(--display);font-weight:300;font-size:220px;line-height:.55;height:90px;color:var(--cu)}
+.quote h1{font-style:italic;font-weight:300}
+.pgrid .p{position:absolute;overflow:hidden;border-radius:6px}`,
+    render(role, c) {
+      const s = c.s;
+      const L = c.brand.lockup || { pre: c.brand.footer.text, accent: '', sub: c.brand.footer.accent || '' };
+      const lockup = (opts = {}) => `<div class="lockup${opts.center ? ' center' : ''}"><div class="lw">${c.esc(L.pre || '')}<b>${c.esc(L.accent || '')}</b></div>${L.sub ? `<div class="la">${c.esc(L.sub)}</div>` : ''}${opts.place !== false && L.place ? `<div class="lp">${c.esc(L.place)}</div>` : ''}</div>`;
+      const pg = `<div class="pg">${String(c.index + 1).padStart(2, '0')}/${String(c.total).padStart(2, '0')}</div>`;
+      const photo = () => (c.hasMedia ? (role === 'cover' ? c.win('ph') : `<div class="ph">${c.media('fill')}</div>`) : '');
+      const rule = '<div class="rule"></div>';
+      if (role === 'cover') {
+        return { inner: `${photo()}${pg}<div class="col" style="top:190px;width:${c.hasMedia ? 450 : 900}px">${c.h1([[24, 84], [40, 76], [60, 62], [999, 52]])}${rule}${c.body('lead')}</div>${lockup()}` };
+      }
+      if (role === 'list') {
+        const items = c.items().slice(0, 6);
+        const compact = items.length > 4;
+        const its = items.map((it) => {
+          const tick = !it.icon || it.icon === 'check';
+          const d = tick ? (c.hasMedia ? (compact ? 50 : 60) : 74) : (compact ? 92 : 108);
+          return `<div class="it${tick ? ' tick' : ''}"><div class="ic" style="width:${d}px;height:${d}px">${c.icon(it.icon, tick ? Math.round(d * 0.5) : Math.round(d * 0.52), tick ? 1.6 : 1.2)}</div><div><div class="t">${c.rich(it.title || '')}</div>${it.text ? `<div class="d">${c.rich(it.text)}</div>` : ''}</div></div>`;
+        }).join('');
+        const w = c.hasMedia ? 430 : 860;
+        const left = c.hasMedia ? 68 : 110;
+        return { inner: `${photo()}${pg}<div class="col${c.hasMedia ? '' : ' wide'}" style="left:${left}px;top:120px;bottom:${L.place ? 220 : 180}px;width:${w}px;justify-content:center;gap:${compact ? 18 : 26}px">${s.headline ? c.h1(c.hasMedia ? [[16, 88], [32, 80], [44, 60], [999, 48]] : [[16, 96], [40, 80], [70, 64], [999, 52]]) : ''}${s.headline ? rule : ''}${c.body('lead')}<div style="display:flex;flex-direction:column;gap:${compact ? 14 : 22}px">${its}</div>${c.note('note')}</div>${lockup()}` };
+      }
+      if (role === 'row') {
+        const cells = c.items().slice(0, 4).map((it) => `<div class="cell"><div class="ic" style="width:150px;height:150px">${c.icon(it.icon, 76, 1.1)}</div><div>${c.rich(it.title || '')}</div></div>`).join('');
+        return { inner: `${pg}<div class="rowwrap">${c.h1([[40, 66], [80, 58], [999, 48]])}<div class="cells">${cells}</div>${s.body ? `<div class="callout">${c.rich(s.body)}</div>` : ''}</div>${lockup({ center: true })}` };
+      }
+      if (role === 'brand') {
+        return { inner: `${photo()}${pg}<div class="col" style="top:170px;bottom:250px;width:${c.hasMedia ? 440 : 860}px;justify-content:center">${c.kicker('k')}${c.h1([[8, 122], [20, 96], [40, 74], [999, 58]])}${rule}${c.body('lead')}</div>${lockup({ place: false })}` };
+      }
+      if (role === 'split') {
+        return { inner: `${photo()}${pg}<div class="col" style="top:150px;bottom:250px;width:${c.hasMedia ? 440 : 860}px;justify-content:center">${c.numeral('big-n', 'font-size:110px')}${c.kicker('k')}${c.h1([[24, 90], [44, 80], [70, 64], [999, 52]])}${rule}${c.body('lead')}</div>${lockup()}` };
+      }
+      if (role === 'light') {
+        return { inner: `${pg}<div class="col" style="left:110px;top:130px;bottom:240px;width:860px;justify-content:center">${c.numeral('big-n', 'font-size:150px')}${c.kicker('k')}${c.h1([[28, 80], [50, 66], [999, 54]])}${rule}${c.body('lead')}</div>${lockup()}` };
+      }
+      if (role === 'fact') {
+        return { inner: `${pg}<div class="col" style="left:110px;top:130px;bottom:240px;width:860px;justify-content:center">${c.fig([[3, 300], [5, 230], [999, 170]], 'big-n')}${c.h1([[28, 60], [50, 52], [999, 44]])}${rule}${c.body('lead')}</div>${lockup()}` };
+      }
+      if (role === 'photos') {
+        return { inner: `${pg}<div class="pgrid"><div class="p" style="left:68px;top:120px;width:520px;height:640px">${c.photo(1)}</div><div class="p" style="left:612px;top:120px;width:400px;height:308px">${c.photo(2)}</div><div class="p" style="left:612px;top:452px;width:400px;height:308px">${c.photo(3)}</div></div>
+          <div class="col" style="top:800px;gap:14px;width:944px">${c.kicker('k')}${c.h1([[30, 58], [60, 48], [999, 40]])}</div>` };
+      }
+      if (role === 'quote') {
+        return { inner: `${pg}<div class="col" style="left:110px;top:130px;bottom:240px;width:860px;justify-content:center"><div class="qm">&ldquo;</div>${c.h1([[60, 64], [110, 54], [999, 46]])}${rule}${c.kicker('k')}</div>${lockup()}` };
+      }
+      const ct = c.brand.contact || {};
+      const band = (ct.place || ct.whatsapp)
+        ? `<div class="band"><span class="place">${c.icon('map-pin', 54, 1.6)}${c.esc((ct.place || '').toUpperCase())}</span><span>${ct.whatsapp ? `${c.icon('message', 54, 1.6)}${c.esc(ct.whatsapp)}` : c.esc(c.brand.handle || '')}</span></div>`
+        : '';
+      return { inner: `${lockup({ center: true, place: false })}<div class="mid">${c.h1([[30, 96], [50, 88], [999, 66]])}${rule}${c.body('lead')}</div>${band}` };
+    },
+  });
+
   const byId = new Map(styles.map((s) => [s.id, s]));
   const api = {
-    list: styles.map(({ id, label, description }) => ({ id, label, description })),
+    list: styles.map(({ id, label, description, size }) => ({ id, label, description, size: size || [1080, 1350] })),
     get: (id) => byId.get(id) || byId.get('classic'),
+    fallback,
+    fallbackCss,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.SlideStyles = api;

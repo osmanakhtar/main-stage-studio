@@ -88,7 +88,6 @@ async function getCaptureWindow() {
   await captureWin.loadURL('about:blank');
   const dbg = captureWin.webContents.debugger;
   dbg.attach('1.3');
-  await dbg.sendCommand('Emulation.setDeviceMetricsOverride', { width: Slides.W, height: Slides.H, deviceScaleFactor: 1, mobile: false });
   return captureWin;
 }
 
@@ -96,6 +95,8 @@ async function captureSlide(slide, opts) {
   const win = await getCaptureWindow();
   const dbg = win.webContents.debugger;
   const transparent = !!opts.transparentMedia;
+  const { w, h } = Slides.sizeOf(opts.style);
+  await dbg.sendCommand('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 1, mobile: false });
   await dbg.sendCommand('Emulation.setDefaultBackgroundColorOverride', transparent ? { color: { r: 0, g: 0, b: 0, a: 0 } } : {});
   const token = registerHtml(Slides.slideHtml(slide, store.brand, opts));
   await win.loadURL(`studio://render/${token}`);
@@ -105,7 +106,7 @@ async function captureSlide(slide, opts) {
       .then(() => true)`);
   const shot = await dbg.sendCommand('Page.captureScreenshot', {
     format: 'png',
-    clip: { x: 0, y: 0, width: Slides.W, height: Slides.H, scale: 1 },
+    clip: { x: 0, y: 0, width: w, height: h, scale: 1 },
     captureBeyondViewport: false,
   });
   return Buffer.from(shot.data, 'base64');
@@ -148,6 +149,7 @@ async function exportClip(post, outFile, opts, onProgress) {
   const vertical = opts.format === '9:16';
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'studio-clip-'));
   const total = post.slides.length + 1;
+  const { w: W, h: H } = Slides.sizeOf(post.style);
   try {
     const segs = [];
     const durs = [];
@@ -166,8 +168,8 @@ async function exportClip(post, outFile, opts, onProgress) {
         await ffmpeg([
           '-stream_loop', '-1', '-i', src, '-i', overlay,
           '-filter_complex',
-          `[0:v]scale=${Slides.W}:${Slides.H}:force_original_aspect_ratio=increase,` +
-          `crop=${Slides.W}:${Slides.H}:(in_w-${Slides.W})*${fx}:(in_h-${Slides.H})*${fy},fps=${FPS},setsar=1[v];` +
+          `[0:v]scale=${W}:${H}:force_original_aspect_ratio=increase,` +
+          `crop=${W}:${H}:(in_w-${W})*${fx}:(in_h-${H})*${fy},fps=${FPS},setsar=1[v];` +
           `[v][1:v]overlay=0:0,format=yuv420p[out]`,
           '-map', '[out]', '-t', String(dur), '-an',
           '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', seg,
@@ -179,7 +181,7 @@ async function exportClip(post, outFile, opts, onProgress) {
         const frames = Math.round(dur * FPS);
         const vf = zoom
           // Upscale first so the push-in moves in sub-pixel steps without judder.
-          ? `scale=${Slides.W * 2}:${Slides.H * 2},zoompan=z='1+0.04*on/${frames}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=${Slides.W}x${Slides.H}:fps=${FPS},format=yuv420p`
+          ? `scale=${W * 2}:${H * 2},zoompan=z='1+0.04*on/${frames}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=${W}x${H}:fps=${FPS},format=yuv420p`
           : `fps=${FPS},format=yuv420p`;
         await ffmpeg([
           '-loop', '1', '-framerate', String(FPS), '-i', png,
@@ -204,7 +206,7 @@ async function exportClip(post, outFile, opts, onProgress) {
     }
     const totalDur = durs.reduce((a, b) => a + b, 0) - XFADE * (segs.length - 1);
     const pad = vertical
-      ? `,pad=${Slides.W}:1920:0:(1920-${Slides.H})/2:color=${store.brand.palette.brandDeep}`
+      ? `,pad=${W}:1920:0:(1920-${H})/2:color=${store.brand.palette.brandDeep}`
       : '';
     parts.push(`${last}fade=t=in:st=0:d=0.3,fade=t=out:st=${Math.max(0, totalDur - 0.4).toFixed(3)}:d=0.4${pad},format=yuv420p[out]`);
     await ffmpeg([

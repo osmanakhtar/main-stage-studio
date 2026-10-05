@@ -15,10 +15,10 @@ const rules = JSON.parse(fs.readFileSync(path.join(brandDir, 'lint-rules.json'),
 const example = JSON.parse(fs.readFileSync(path.join(brandDir, 'example-campaign.json'), 'utf8'));
 
 test('every style renders every slide type, with brand colours and escaped text', () => {
-  assert.ok(Slides.STYLES.length >= 7);
+  assert.ok(Slides.STYLES.length >= 8);
   for (const st of Slides.STYLES) {
     for (const t of Slides.TEMPLATES) {
-      const slide = { template: t.id, numeral: '01', kicker: 'K', headline: 'A <b>bold</b> claim', body: 'Body', media: { ref: 'brand:library/x.webp', kind: 'image' }, media2: { ref: 'brand:library/y.webp', kind: 'image' } };
+      const slide = { template: t.id, numeral: '01', kicker: 'K', headline: 'A <b>bold</b> claim', body: 'Body', items: [{ icon: 'face', title: 'Point <i>', text: 'Detail' }], note: 'Note', media: { ref: 'brand:library/x.webp', kind: 'image' }, media2: { ref: 'brand:library/y.webp', kind: 'image' } };
       const html = Slides.slideHtml(slide, brand, { style: st.id, index: 1, total: 5 });
       const where = `${st.id}/${t.id}`;
       assert.match(html, /^<!doctype html>/, where);
@@ -110,5 +110,36 @@ test('three-photo slides show every photo, with a placeholder for a missing one'
     const html = Slides.slideHtml({ template: 'photos', headline: 'H', media: { ref: 'brand:library/a.webp', kind: 'image' }, media3: { ref: 'brand:library/c.webp', kind: 'image' } }, brand, { style: st.id });
     assert.ok(html.includes('library/a.webp') && html.includes('library/c.webp'), st.id);
     assert.ok(html.includes('background:var(--bg2)'), `${st.id} fills the empty slot`);
+  }
+});
+
+test('*accent* and _italic_ markup render, and never reach the compliance text', () => {
+  assert.strictEqual(Slides.rich("I *wouldn't* use _filler_ here"), 'I <em class="em">wouldn&#39;t</em> use <i class="ital">filler</i> here'.replace('&#39;', "'"));
+  assert.strictEqual(Slides.slideText({ headline: "_Good aesthetics_ *adding more.*", items: [{ title: 'A *fresher* look' }] }), 'Good aesthetics adding more.\nA fresher look');
+  assert.ok(!Slides.rich('<b>x</b> *y*').includes('<b>'));
+});
+
+test('list and row points are linted, so a banned word in a point blocks export', () => {
+  const post = { slides: [{ template: 'list', headline: 'H', items: [{ icon: 'check', title: 'Results guaranteed' }] }], caption: {} };
+  const errors = Lint.lintPost(rules, post, Slides.slideText).filter((i) => i.level === 'error');
+  assert.strictEqual(errors.length, 1);
+});
+
+test('Signature is square and every other style is 4:5', () => {
+  assert.deepStrictEqual(Slides.sizeOf('signature'), { w: 1080, h: 1080 });
+  assert.deepStrictEqual(Slides.sizeOf('classic'), { w: 1080, h: 1350 });
+  assert.match(Slides.slideHtml({ template: 'cover', headline: 'H' }, brand, { style: 'signature' }), /width:1080px;height:1080px/);
+});
+
+test('every post template uses known slide types and icons, and passes compliance', () => {
+  const dir = path.join(brandDir, 'recipes');
+  for (const f of fs.readdirSync(dir)) {
+    const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    for (const sl of r.slides) {
+      assert.ok(Slides.TEMPLATES.some((t) => t.id === sl.template), `${f}: ${sl.template}`);
+      for (const it of sl.items || []) assert.ok(Slides.ICONS[it.icon], `${f}: icon ${it.icon}`);
+    }
+    const errors = Lint.lintPost(rules, r, Slides.slideText).filter((i) => i.level === 'error');
+    assert.deepStrictEqual(errors, [], f);
   }
 });

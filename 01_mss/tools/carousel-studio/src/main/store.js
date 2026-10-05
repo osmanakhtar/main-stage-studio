@@ -140,6 +140,15 @@ function setSettings(next) {
   return { ...s, apiKey: s.apiKey ? 'saved' : '' };
 }
 
+// Post templates ("recipes"): a fixed slide sequence and style she can start
+// a post from, in the brand pack's recipes/ folder.
+function listRecipes() {
+  const dir = path.join(BRAND_DIR, 'recipes');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter((f) => f.endsWith('.json')).sort()
+    .map((f) => readJson(path.join(dir, f), null)).filter(Boolean);
+}
+
 function readBrandFile(rel) {
   try { return fs.readFileSync(path.join(BRAND_DIR, rel), 'utf8'); } catch { return ''; }
 }
@@ -148,5 +157,5 @@ module.exports = {
   BRAND_DIR, brand, lintRules, pillars, dirs, ensureDirs, newId, safeName,
   listCampaigns, getCampaign, saveCampaign, deleteCampaign, seedExample,
   listMedia, addMediaRecord, resolveRef, IMAGE_EXT, VIDEO_EXT,
-  getSettings, setSettings, readBrandFile,
+  getSettings, setSettings, readBrandFile, listRecipes,
 };

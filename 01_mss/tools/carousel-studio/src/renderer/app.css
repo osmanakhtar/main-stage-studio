@@ -185,3 +185,13 @@ code { font-size: 12px; background: var(--bg); padding: 1px 5px; border-radius: 
 .chips { display: flex; gap: 6px; margin-bottom: 8px; }
 .chip { padding: 5px 12px; font-size: 12.5px; border: 1px solid var(--line); border-radius: 20px; color: var(--muted); background: #fff; }
 .chip.on { border-color: var(--brand); color: var(--brand); background: var(--bg-2); }
+
+.items { margin: 4px 0 14px; }
+.items .sub-head .note { font-weight: 400; font-size: 11.5px; }
+.item { display: grid; grid-template-columns: 110px 1fr; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 8px; }
+.item select, .item input { margin: 0; }
+.item input:nth-of-type(2) { grid-column: 2; }
+.item button { grid-column: 2; justify-self: end; }
+
+.recipe-row { margin-bottom: 4px; }
+.recipe-row label.inline select { width: auto; min-width: 280px; margin: 0; }

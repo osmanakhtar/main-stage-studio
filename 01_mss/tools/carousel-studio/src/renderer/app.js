@@ -49,9 +49,10 @@ const placeOf = (p, i, style) => ({ style: style || p.style || Slides.DEFAULT_ST
 // A slide drawn into a box of the given width (scaled iframe). place carries
 // the post's style and the slide's position (see placeOf).
 function thumb(s, width, live, place) {
-  const scale = width / Slides.W;
-  const box = el('div', { class: 'thumb', style: `width:${width}px;height:${Math.round(Slides.H * scale)}px` });
-  const f = el('iframe', { tabindex: '-1', 'aria-hidden': 'true', style: `transform:scale(${scale})` });
+  const { w, h } = Slides.sizeOf(place && place.style);
+  const scale = width / w;
+  const box = el('div', { class: 'thumb', style: `width:${width}px;height:${Math.round(h * scale)}px` });
+  const f = el('iframe', { tabindex: '-1', 'aria-hidden': 'true', style: `width:${w}px;height:${h}px;transform:scale(${scale})` });
   f.srcdoc = Slides.slideHtml(s, state.brand, { live: !!live, ...(place || {}) });
   box.append(f);
   return box;
@@ -263,11 +264,14 @@ function refreshCurrentThumb() {
 function fitPreview() {
   const stage = document.querySelector('.stage');
   const frame = document.querySelector('.preview-frame');
+  const { w, h } = Slides.sizeOf(post() && post().style);
   const maxH = stage.clientHeight - 70;
   const maxW = stage.clientWidth - 40;
-  const scale = Math.max(0.2, Math.min(maxH / Slides.H, maxW / Slides.W));
-  frame.style.width = `${Math.round(Slides.W * scale)}px`;
-  frame.style.height = `${Math.round(Slides.H * scale)}px`;
+  const scale = Math.max(0.2, Math.min(maxH / h, maxW / w));
+  frame.style.width = `${Math.round(w * scale)}px`;
+  frame.style.height = `${Math.round(h * scale)}px`;
+  $('preview').style.width = `${w}px`;
+  $('preview').style.height = `${h}px`;
   $('preview').style.transform = `scale(${scale})`;
 }
 
@@ -298,6 +302,7 @@ function renderInspector() {
   const fields = $('fields');
   fields.innerHTML = '';
   for (const f of tpl.fields) {
+    if (f === 'items') { fields.append(itemsEditor(s, tpl)); continue; }
     const limit = Slides.FIELD_LIMITS[f];
     const label = (tpl.labels && tpl.labels[f]) || Slides.FIELD_LABELS[f];
     const count = el('span', { class: 'count' });
@@ -306,8 +311,8 @@ function renderInspector() {
       count.textContent = `${n}/${limit}`;
       count.classList.toggle('over', n > limit);
     };
-    const input = f === 'body' || (f === 'headline' && tpl.id === 'quote')
-      ? el('textarea', { rows: f === 'body' ? 4 : 3 })
+    const input = f === 'body' || f === 'note' || (f === 'headline' && tpl.id === 'quote')
+      ? el('textarea', { rows: f === 'body' ? 4 : 2 })
       : el('input', { type: 'text' });
     input.value = s[f] || '';
     input.addEventListener('input', () => { s[f] = input.value; setCount(); slideChanged(); });
@@ -317,6 +322,34 @@ function renderInspector() {
 
   $('mediaBlock').hidden = !tpl.media;
   if (tpl.media) renderMediaGrid();
+}
+
+// The points on an Icon list or Icon row slide: icon, point, optional detail.
+function itemsEditor(s, tpl) {
+  if (!Array.isArray(s.items)) s.items = [];
+  const wrap = el('div', { class: 'items' }, el('div', { class: 'sub-head' }, el('span', {}, 'Points'),
+    el('span', { class: 'note' }, 'Use *stars* round words to put them in italics')));
+  const iconOptions = (cur) => Object.entries(Slides.ICONS).map(([name, i]) => el('option', { value: name, selected: name === (cur || 'check') }, i.label));
+  s.items.forEach((it, i) => {
+    const icon = el('select', { title: 'Icon' }, iconOptions(it.icon));
+    icon.addEventListener('change', () => { it.icon = icon.value; slideChanged(); });
+    const title = el('input', { type: 'text', placeholder: 'Point', maxlength: '60' });
+    title.value = it.title || '';
+    title.addEventListener('input', () => { it.title = title.value; slideChanged(); });
+    const row = el('div', { class: 'item' }, icon, title);
+    if (tpl.itemFields.includes('text')) {
+      const text = el('input', { type: 'text', placeholder: 'Detail (optional)', maxlength: '80' });
+      text.value = it.text || '';
+      text.addEventListener('input', () => { it.text = text.value; slideChanged(); });
+      row.append(text);
+    }
+    row.append(el('button', { class: 'ghost small danger', title: 'Remove this point', onclick: () => { s.items.splice(i, 1); slideChanged(); renderInspector(); } }, 'Remove'));
+    wrap.append(row);
+  });
+  if (s.items.length < (tpl.maxItems || 6)) {
+    wrap.append(el('button', { class: 'ghost small', onclick: () => { s.items.push({ icon: 'check', title: '' }); slideChanged(); renderInspector(); } }, '+ Add point'));
+  }
+  return wrap;
 }
 
 const SLOTS = [['media', 'Photo 1'], ['media2', 'Photo 2'], ['media3', 'Photo 3']];
@@ -375,7 +408,11 @@ function bindInspector() {
     // Fill empty photo slots with library images so the layout shows at once.
     const images = state.media.filter((m) => m.kind === 'image');
     const used = new Set(SLOTS.map(([k]) => s[k] && s[k].ref).filter(Boolean));
-    const slotsNeeded = tpl.media === 3 ? SLOTS.map(([k]) => k) : tpl.media ? ['media'] : [];
+    // Optional photos (Statement, Icon list) start empty; she adds one if wanted.
+    const slotsNeeded = tpl.media === 3 ? SLOTS.map(([k]) => k) : tpl.media === true ? ['media'] : [];
+    if ((s.template === 'list' || s.template === 'row') && !Array.isArray(s.items)) {
+      s.items = [{ icon: 'check', title: 'First point' }, { icon: 'check', title: 'Second point' }, { icon: 'check', title: 'Third point' }];
+    }
     for (const k of slotsNeeded) {
       if (s[k]) continue;
       const img = images.find((m) => !used.has(m.ref));
@@ -547,7 +584,7 @@ async function saveSettings() {
 
 async function init() {
   const b = await api.brand();
-  Object.assign(state, { brand: b.brand, lintRules: b.lintRules, pillars: b.pillars, models: b.models });
+  Object.assign(state, { brand: b.brand, lintRules: b.lintRules, pillars: b.pillars, models: b.models, recipes: b.recipes || [] });
   const P = b.brand.palette;
   const root = document.documentElement.style;
   root.setProperty('--brand', P.brand); root.setProperty('--brand-deep', P.brandDeep); root.setProperty('--accent', P.accent);
@@ -568,6 +605,18 @@ async function init() {
   state.media = await api.media.list();
   state.campaigns = await api.campaigns.list();
 
+  for (const r of state.recipes) $('recipeSelect').append(el('option', { value: r.id }, r.name));
+  const showRecipeHint = () => { const r = state.recipes.find((x) => x.id === $('recipeSelect').value); $('recipeHint').textContent = r ? r.description : ''; };
+  $('recipeSelect').addEventListener('change', showRecipeHint);
+  showRecipeHint();
+  $('useRecipe').disabled = !state.recipes.length;
+  $('useRecipe').addEventListener('click', () => {
+    const r = state.recipes.find((x) => x.id === $('recipeSelect').value);
+    if (!r) return;
+    const copy = JSON.parse(JSON.stringify(r));
+    addPost({ title: copy.title, style: copy.style, slides: copy.slides, caption: copy.caption || { instagram: '', facebook: '' } });
+    toast(`${r.name} added. Replace the text in brackets and add the photos.`);
+  });
   bindCampaignFields();
   bindInspector();
   $('newCampaign').addEventListener('click', newCampaign);

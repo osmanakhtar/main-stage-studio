@@ -36,17 +36,18 @@ To update, download the new `.dmg` and drag it into Applications again. Your cam
 
 1. **New campaign.** Pick the treatment and content pillar, then paste the campaign content. Write one block per slide with an empty line between blocks. The first line of a block is the headline, and the lines after it are the supporting text. A short first line ending in a colon becomes the small heading.
 2. **Make slides from this content.** The first block becomes the cover, the middle ones become numbered cards, and the last becomes the closing call to action. If there's no closing slide, a consultation-led one is added.
-3. **Pick a style.** The **Style** tab shows her own post in each of the seven styles. One click restyles every slide. Words, photos and slide order don't change, so she can try them all.
-4. **Edit.** Click a slide in the strip to change its slide type, words, photo or video, and framing. Eight slide types: cover, numbered point, photo and text, statement, key fact, three photos, quote, and closing call to action.
-5. **Captions tab.** Write or paste the Instagram and Facebook captions. They're checked too.
-6. **Compliance tab.** Anything marked **Must fix** blocks export. **Check** items are worth a second look but don't block.
-7. **Export slides** saves the PNGs and `caption.txt` into Documents › PureMed Studio › exports. **Export clip** makes an mp4: still slides get a slow push-in, video on a cover slide plays under the headline, and slides crossfade.
+3. **Or start from a post template.** On the campaign screen, **Start from a template** creates a post with a fixed slide sequence and style. **Expert explainer (9 slides)** is the structure of the carousel Nafisa approved on 5 Oct 2026; **Filler: why I wouldn't use it here** is that carousel itself. Replace the bracketed text and add the photos.
+4. **Pick a style.** The **Style** tab shows her own post in each of the eight styles. One click restyles every slide. Words, photos and slide order don't change, so she can try them all.
+5. **Edit.** Click a slide in the strip to change its slide type, words, photo or video, and framing. Ten slide types: cover, numbered point, photo and text, statement, key fact, three photos, icon list, icon row, quote, and closing call to action. In any text, `*stars*` set words in the style's accent italic (copper in Signature), `_underscores_` in plain italic, and a new line starts a new line.
+6. **Captions tab.** Write or paste the Instagram and Facebook captions. They're checked too.
+7. **Compliance tab.** Anything marked **Must fix** blocks export. **Check** items are worth a second look but don't block.
+8. **Export slides** saves the PNGs and `caption.txt` into Documents › PureMed Studio › exports. **Export clip** makes an mp4: still slides get a slow push-in, video on a cover slide plays under the headline, and slides crossfade.
 
 **Draft with Claude** (optional): add an Anthropic API key in Settings and the campaign screen can draft the slides and both captions from a brief, in PureMed's voice and within its rules. The draft goes through the same compliance check as anything typed by hand.
 
 ## Styles
 
-Every style draws all eight slide types in its own layout and typography, using only the brand pack's palette and fonts, so a new brand pack restyles all of them at once.
+Every style draws every slide type in its own layout and typography, using only the brand pack's palette and fonts, so a new brand pack restyles all of them at once.
 
 | Style | Look | Suits |
 |---|---|---|
@@ -56,6 +57,7 @@ Every style draws all eight slide types in its own layout and typography, using 
 | **Soft arch** | Arched photo windows, pill labels, rounded cards on the warm second neutral, centred serif type | Treatment introductions, the patient journey |
 | **Bold statement** | Deep navy, oversized headlines anchored low, thick gold rule, outline numerals, duotone photos; the statement slide flips to light | Myth-busting, announcements |
 | **Seamless flow** | One gold line and soft circles run unbroken across every slide, so each swipe continues the last | Cover-to-close stories |
+| **Signature** | Square 1080×1080. Built from the carousel Nafisa approved: page counter, serif headlines with copper italics, short copper rule, photo bleeding in from the right, icons in fine copper circles, deep-navy statement and closing slides, the PURE**MED** lockup and a location and WhatsApp band | Her default: first-person expert posts |
 | **Gallery** | A navy frame round the whole slide, a warm mat, photos in white mounts with a gold hairline, text set like a museum wall label with a catalogue number | Premium treatments, the clinic itself |
 
 ### Where the styles and layouts come from
@@ -97,7 +99,9 @@ The repo is public, so a release download is public too. The brand pack only hol
 |---|---|
 | `brands/puremed/` | The brand pack: `brand.json` (palette, fonts, logo, footer, handle, treatments, voice summary), `lint-rules.json` and `compliance.md` (copied from `content/config/` in `osmanakhtar/puremed-aesthetics`), `voice-social.md`, `pillars.json`, fonts, logo, starter `library/`, and the example campaign she sees on first launch |
 | `src/shared/slides.js` | Builds one HTML document per slide from its type and the post's style, used for both the on-screen preview and the export, so the preview is exactly what ships |
-| `src/shared/styles.js` | The seven styles |
+| `src/shared/styles.js` | The eight styles, plus the shared Icon list and Icon row layouts the first seven use |
+| `src/shared/icons.js` | 36 line icons from [Lucide](https://lucide.dev) (ISC licence), generated by `scripts/build-icons.js` |
+| `brands/puremed/recipes/` | Post templates: a slide sequence, style and placeholder copy |
 | `src/shared/lint.js` | The compliance check. Same rules and matching as Studio's `content-lint.js` |
 | `src/shared/outline.js` | Turns pasted content into slides |
 | `src/main/render.js` | PNG capture (Chromium DevTools capture at exactly 1080×1350, whatever the screen size) and clip assembly with the bundled ffmpeg |
@@ -110,6 +114,9 @@ The repo is public, so a release download is public too. The brand pack only hol
 **Keeping the rules in step:** `lint-rules.json`, `compliance.md`, `voice-social.md` and `pillars.json` are copies. If they change in the PureMed repo, copy them in again and cut a new release.
 
 ## Known limits and open items
+
+- **Signature's colours and lockup aren't in the brand canon.** They were sampled from the carousel Nafisa approved (copper `#a8796a`, navy `#18203a`, night `#04132a`, cream and blush) and live under `palette.signature` and `lockup` in `brand.json`. The canon in `puremed-brand-identity.md` is gold `#d0ac61`, navy `#343a67` and the gold face-mark logo. One of the two should be updated so they agree.
+- **Signature's headline face.** Her carousel's serif is close to, but not the same as, Cormorant Garamond (the Majesty stand-in), so headlines and copper italics are a touch lighter than the original.
 
 - **Majesty font.** The brand display face is Majesty Light, which is commercial and not yet licensed. The app uses Cormorant Garamond Light as a stand-in, the same as the live site. To switch, add the woff2 to `brands/puremed/fonts/` and list it in `brand.json`.
 - **Retired palette still in Studio.** `content/config/theme.json` in the PureMed repo still has the retired `#23476A` and Inter values. This app uses the reconciled live palette from `puremed-brand-identity.md`. Studio's own renderer will drift from this app until that file is updated.

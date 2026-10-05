@@ -101,6 +101,7 @@ function registerIpc() {
     lintRules: store.lintRules,
     pillars: store.pillars,
     models: claude.MODELS,
+    recipes: store.listRecipes(),
     workDir: store.dirs().root,
   }));
 
@@ -172,7 +173,7 @@ function registerIpc() {
     const dir = exportFolderFor(c, post);
     fs.mkdirSync(dir, { recursive: true });
     const settings = store.getSettings();
-    const outFile = path.join(dir, `clip-${format === '9:16' ? 'reel-9x16' : 'feed-4x5'}.mp4`);
+    const outFile = path.join(dir, `clip-${format === '9:16' ? 'reel-9x16' : 'feed'}.mp4`);
     const res = await render.exportClip(post, outFile, { format, secondsPerSlide: settings.clipSeconds, gentleZoom: settings.gentleZoom }, progress('export:progress'));
     shell.showItemInFolder(outFile);
     return res;
@@ -211,11 +212,14 @@ async function selfTest(outDir) {
       post.slides[post.slides.length - 1],
     ],
   };
+  allTypes.slides.splice(2, 0,
+    { template: 'list', headline: 'I look at the *bigger* picture.', body: 'In every consultation, I assess:', items: [{ icon: 'check', title: 'Skin laxity' }, { icon: 'check', title: 'Collagen & elastin' }, { icon: 'check', title: 'Facial structure' }] },
+    { template: 'row', headline: 'A plan that targets *the cause*', items: [{ icon: 'sparkles', title: 'Stimulate collagen' }, { icon: 'droplets', title: 'Improve skin quality' }, { icon: 'lift', title: 'Restore support' }], body: 'It depends on *you* and *your goals*.' });
   let pngs = 0;
   for (const st of Slides.STYLES) {
     pngs += (await render.exportPngs({ ...allTypes, style: st.id }, path.join(outDir, st.id))).length;
   }
-  const feed = await render.exportClip({ ...post, style: 'flow' }, path.join(outDir, 'clip-feed-4x5.mp4'), { format: '4:5', secondsPerSlide: 3 });
+  const feed = await render.exportClip({ ...post, style: 'flow' }, path.join(outDir, 'clip-feed.mp4'), { format: 'feed', secondsPerSlide: 3 });
   const reel = await render.exportClip({ ...post, style: 'statement' }, path.join(outDir, 'clip-reel-9x16.mp4'), { format: '9:16', secondsPerSlide: 3 });
   console.log(`selftest ok: ${pngs} png across ${Slides.STYLES.length} styles, feed ${feed.seconds}s, reel ${reel.seconds}s -> ${outDir}`);
 }

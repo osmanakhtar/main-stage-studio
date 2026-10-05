@@ -60,6 +60,11 @@ Not sure if it's right for you?
 Book a consultation via the link in bio.</pre>
           <p>The first block becomes the cover, the middle blocks become numbered cards, and the last becomes the closing slide.</p>
         </details>
+        <div class="actions recipe-row">
+          <label class="inline">Start from a template <select id="recipeSelect"></select></label>
+          <button class="secondary" id="useRecipe">Use template</button>
+        </div>
+        <p id="recipeHint" class="hint"></p>
         <div class="actions">
           <button class="primary" id="buildFromBrief">Make slides from this content</button>
           <span class="or">or</span>
@@ -83,7 +88,7 @@ Book a consultation via the link in bio.</pre>
           <div class="menu">
             <button class="primary" id="exportClipBtn">Export clip &#9662;</button>
             <div class="menu-list" id="clipMenu" hidden>
-              <button data-format="4:5">Feed post (4:5)</button>
+              <button data-format="feed">Feed post (same shape as the slides)</button>
               <button data-format="9:16">Reel or Story (9:16)</button>
             </div>
           </div>
@@ -177,6 +182,7 @@ Book a consultation via the link in bio.</pre>
   <div id="busy" hidden><div class="busy-card"><div class="spinner"></div><p id="busyText">Working</p></div></div>
   <div id="toast" hidden></div>
 
+  <script src="studio://shared/icons.js"></script>
   <script src="studio://shared/styles.js"></script>
   <script src="studio://shared/slides.js"></script>
   <script src="studio://shared/lint.js"></script>
