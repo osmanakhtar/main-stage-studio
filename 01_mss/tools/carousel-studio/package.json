@@ -11,7 +11,7 @@
     "start": "electron .",
     "selftest": "electron . --selftest=./selftest-out",
     "build:mac": "electron-builder --mac",
-    "icon": "node scripts/make-icon.js",
+    "icon": "electron scripts/make-icon.js",
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
