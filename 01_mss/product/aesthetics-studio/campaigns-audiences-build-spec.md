@@ -658,12 +658,57 @@ a1c6a44 review request live 13:01). 200 tests pass.
   (day 14, once per 180 days) with a draft email. Ticks recorded while paused never send later.
   DPIA Part A has an "Ask for a review" row; a signed DPIA would reopen A3 and A4.
 
+## 13c. WhatsApp onboarding, 6 and 7 October 2026 (Meta side, no code)
+
+**Route changed (decided 6 Oct, Osman; mss-decisions-log):** Meta's docs, checked 6 Oct, allow
+coexistence (a clinic keeps its WhatsApp Business app and chats) only through **Embedded Signup run
+by a registered Tech Provider or Solution Partner**. Section 6.1 and SOP-PLAT-003 section 2 assume a
+system-user token pasted into Settings; that cannot onboard a Business app number. MSS becomes the
+Tech Provider (C-2 and C-3 both kept). Section 6.1 item 4 is superseded by this.
+
+Done:
+- PureMed portfolio `262496467650024`: Osman added as admin; **business verification VERIFIED 6 Oct**
+  (use case WhatsApp, PUREMED AESTHETICS LTD 07703741, registered office).
+- What PureMed has on Meta: its real number **+44 7850 087025** (the number on puremed.uk) is in a
+  WhatsApp Business app account `1241317149724110`, not on Cloud API yet. A second, stray number
+  **+44 7459 721674** sits in a Cloud API account "PureMed" `1222201179405952` with **Manychat as a
+  full-control partner** (once used for Facebook comment auto-replies, now unused; Manychat is also
+  a partner app on the Facebook Page). No payment method on either; no developer app in PureMed's
+  portfolio.
+- App **"Main Stage Studio Messaging", App ID `1286420996923046`**, in the MSS portfolio
+  `1984830552236121`, WhatsApp use case, unpublished, **declared Tech Provider 6 Oct (Meta: cannot be
+  reversed)**.
+
+Blocked:
+- **MSS business verification can't start.** Since the developer-account re-confirmation on 6 Oct,
+  every Business Suite page for the MSS portfolio says "You don't have access / This feature isn't
+  available to you yet", for Osman too, while PureMed's portfolio loads on the same login. On Osman:
+  check Account Quality for a restriction and request review; else wait 24 to 48 hours; else
+  developer support with the two IDs above. MSS is a sole trader, so verification needs documents
+  in the trading name (no Companies House record).
+- After that, in order: access verification (Meta reviews within 5 days), App Review for Advanced
+  Access to `whatsapp_business_messaging` and `whatsapp_business_management` (screen recordings of
+  a send and a template create).
+- Removing Manychat from "PureMed" `1222201179405952` failed ("Failed to remove partner from
+  conversation routing"). Deleting the 07459 account is permanent and needs the messaging account
+  removed first: Osman or Nafisa do it, after disconnecting Manychat from inside Manychat and
+  checking the Facebook Page's WhatsApp button doesn't use 07459. When onboarding 07850, never put
+  it under `1222201179405952`.
+
+Platform code still to build (needed for App Review too): Embedded Signup button in Settings
+(replacing the pasted token), the onboarding calls within 24 hours of the clinic connecting (skip
+number registration), webhooks `history`, `smb_app_state_sync`, `smb_message_echoes`. Coexistence
+turns off broadcast lists, disappearing and view-once messages and live location in her app, and
+unlinks WhatsApp for Windows; 20 messages a second. **DPIA question for the clinic's adviser:**
+onboarding offers to sync 180 days of chat history and the phone's contacts into the platform;
+whether to accept or decline the history is theirs to decide, not ours.
+
 ## Resume prompt
 
 > Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`,
-> sections 13 and 13b. Review request: get PureMed's Google review link from Osman, add it as
-> `links.review_url` in `tenants/puremed/tenant.json`, push; Nafisa approves the email and the DPIA
-> covers the "Ask for a review" row before it is turned on. Earlier: deployed 2 Oct. Before Nafisa sends a first campaign: check the Mailchimp list-upload
-> source value on the DO console (SOP-PLAT-003 section 1). Then the P1 items in
-> `campaigns-ux-review-2026-10-02.md`, and start Meta business verification and the coexistence
-> check (SOP-PLAT-003 section 2).
+> section 13c. WhatsApp: once Meta lifts the block on the MSS portfolio, run MSS business
+> verification (sole trader, Osman uploads documents), then access verification, then write and
+> build the Embedded Signup + coexistence webhooks spec in studio-platform, then App Review. In
+> parallel: Manychat disconnected and the 07459 account deleted by Osman or Nafisa. Still open from
+> 13b: PureMed's Google review link as `links.review_url`, the C-7 check, the P1 items in
+> `campaigns-ux-review-2026-10-02.md`.
