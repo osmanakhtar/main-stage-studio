@@ -715,7 +715,9 @@ def c_collect():
 
 def chooser():
     """The front door on Stage: client-facing, one card per direction."""
-    opts = [
+    opts = [  # in the order they were made: version 2 first, then A, B, C, D
+        ("ayesha-johar-v2.html", "water", "Where we started", "Version 2",
+         "The single-page version you have already seen, kept here so you can compare."),
         (A.home, "dancing-trees", "Direction A", "The Walk",
          "Each room is painted wall to wall in the colours of the paintings inside it, with its own mural behind the work. Your paintings hang under soft gallery light, and you walk along the wall from one to the next."),
         (B.home, "breeze", "Direction B", "Colour Field",
@@ -724,13 +726,11 @@ def chooser():
          "Your idea made literal. Each room arrives quiet and grey, and its colours come through as you look. A lens shows any painting in full colour, up close."),
         ("ayesha-johar-v4.html", "tower", "Direction D", "Colour in Motion",
          "Soft colour drifts behind everything, taken from your paintings, and shifts with each painting you reach. Five doors open into the rooms."),
-        ("ayesha-johar-v2.html", "water", "Where we started", "Version 2",
-         "The single-page version you have already seen, kept here so you can compare."),
     ]
     cards = ""
     for href, art, k, n, d in opts:
         w = W[art]
-        cards += (f'<li><a href="{href}"><img src="assets/art/{art}-sm.webp" alt="" width="{w["w"]}" height="{w["h"]}" loading="lazy">'
+        cards += (f'<li><a href="{href}"><span class="pic"><img src="assets/art/{art}-sm.webp" alt="" width="{w["w"]}" height="{w["h"]}" loading="lazy"></span>'
                   f'<span class="k">{E(k)}</span><b>{E(n)}</b><span class="d">{E(d)}</span><span class="go">Open {E(n)}</span></a></li>')
     return f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Website directions · Art by Ayesha Johar</title>
@@ -743,13 +743,14 @@ main{{max-width:1320px;margin:0 auto;padding:clamp(40px,7vw,96px) clamp(16px,4vw
 .kick{{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#5A524C}}
 h1{{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2.8rem,7vw,5.6rem);line-height:.95;margin:14px 0 20px}}h1 em{{color:#B4441B}}
 .lead p{{max-width:62ch;margin-bottom:12px}}
-ul{{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:44px}}
-li a{{display:flex;flex-direction:column;gap:8px;height:100%;background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 20px 40px -28px rgba(0,0,0,.45);transition:transform .5s cubic-bezier(.16,1,.3,1)}}
+ul{{list-style:none;display:grid;gap:20px;margin-top:44px}}
+li a{{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-rows:1fr auto auto 1fr auto;column-gap:clamp(20px,3.5vw,48px);row-gap:8px;padding-right:clamp(20px,3.5vw,48px);background:#fff;border-radius:18px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 20px 40px -28px rgba(0,0,0,.45);transition:transform .5s cubic-bezier(.16,1,.3,1)}}
 li a:hover,li a:focus-visible{{transform:translateY(-6px)}}a:focus-visible{{outline:3px solid #1B1714;outline-offset:3px}}
-li img{{width:100%;aspect-ratio:4/3;object-fit:cover}}
-.k{{padding:14px 22px 0;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8A3A16}}
-li b{{padding:0 22px;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:2rem;line-height:1}}
-.d{{padding:0 22px;flex:1}}.go{{margin:6px 22px 22px;font-weight:700;border-bottom:2px solid currentColor;align-self:flex-start}}
+.pic{{grid-column:1;grid-row:1/-1;position:relative;min-height:260px}}li img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}}
+.k{{grid-column:2;grid-row:2;padding-top:24px;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8A3A16}}
+li b{{grid-column:2;grid-row:3;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(2rem,3.4vw,2.6rem);line-height:1}}
+.d{{grid-column:2;grid-row:4;max-width:60ch}}.go{{grid-column:2;grid-row:5;margin:6px 0 24px;font-weight:700;border-bottom:2px solid currentColor;justify-self:start}}
+@media (max-width:640px){{li a{{grid-template-columns:1fr;grid-template-rows:none;padding:0}}.pic{{grid-row:auto;min-height:0;aspect-ratio:16/9}}.k,li b,.d,.go{{grid-column:1;grid-row:auto;padding-left:20px;padding-right:20px}}.k{{padding-top:12px}}.go{{margin:6px 20px 20px;padding:0}}}}
 .same{{margin-top:56px;max-width:70ch}}.same h2{{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:2rem;margin-bottom:10px}}.same li{{margin:0 0 8px 20px;list-style:disc}}.same ul{{display:block;margin:0}}</style></head>
 <body><main>
 <section class="lead" data-stage-section="intro"><p class="kick">Art by Ayesha Johar · Website directions · October 2026</p>
