@@ -1,0 +1,22 @@
+{
+  "key": "first-visit-guide",
+  "name": "First visit guide and follow-up series",
+  "description": "Sends the free \"Your first visit\" guide straight away, then four short emails over ten days that answer the worries people bring to a first appointment, and invite them to book a consultation when they're ready.",
+  "trigger": { "type": "tag.added", "tag": "first-visit-guide" },
+  "requires_consent": "marketing_email",
+  "quiet_hours": { "start": 20, "end": 8, "release": 9 },
+  "steps": [
+    { "id": "1", "day": 0, "template": "01-guide", "transactional": true, "exempt_from_quiet_hours": true },
+    { "id": "2", "day": 2, "template": "02-look-done" },
+    { "id": "3", "day": 4, "template": "03-consultation" },
+    { "id": "4", "day": 7, "template": "04-questions" },
+    { "id": "5", "day": 10, "template": "05-no-rush" }
+  ],
+  "stop_when": [
+    { "id": "FV-STOP-01", "rule": "suppressed", "reason": "suppressed" },
+    { "id": "FV-STOP-02", "rule": "consent_withdrawn", "reason": "unsubscribed" },
+    { "id": "FV-STOP-03", "rule": "event_since_enrolment", "types": ["booking.created", "booking.recorded_manually"], "reason": "booked" },
+    { "id": "FV-STOP-04", "rule": "event_since_enrolment", "types": ["reply.received"], "reason": "replied" }
+  ],
+  "on_retrigger": { "id": "FV-RETRIGGER-01", "re_enrol_after_days": 90 }
+}

@@ -1,0 +1,13 @@
+{
+  "key": "consultation-staff-alert",
+  "name": "Consultation request: alert the clinic",
+  "description": "Tells the clinic inbox about every consultation request, so someone can call back the same day.",
+  "trigger": { "type": "tag.added", "tag": "consultation-requested" },
+  "requires_consent": null,
+  "quiet_hours": null,
+  "steps": [
+    { "id": "1", "day": 0, "template": "90-staff-new-request", "recipient": "staff", "transactional": true, "exempt_from_quiet_hours": true }
+  ],
+  "stop_when": [],
+  "on_retrigger": { "id": "CR-ALERT-RETRIGGER-01", "re_enrol_after_days": 0 }
+}

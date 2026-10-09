@@ -1,0 +1,18 @@
+{
+  "key": "guide-opt-in",
+  "name": "the guide sign-up form",
+  "page_url": "https://vera-aesthetics.example/guide",
+  "honeypot": "website",
+  "fields": { "first_name": { "required": false, "max": 80 }, "email": { "required": true } },
+  "required_ticks": [
+    { "field": "consent_marketing", "error": "consent_required" },
+    { "field": "age_18", "error": "age_required" }
+  ],
+  "consent": [
+    { "purpose": "marketing_email", "field": "consent_marketing", "wording": "consent/marketing-email.v1.md" },
+    { "purpose": "age_confirmed_18", "field": "age_18", "wording": "consent/age-18.v1.md" }
+  ],
+  "tags": ["first-visit-guide"],
+  "success_redirect": "https://vera-aesthetics.example/guide/thank-you",
+  "error_redirect": "https://vera-aesthetics.example/guide"
+}

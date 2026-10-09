@@ -1,0 +1,39 @@
+{
+  "slug": "vera",
+  "name": "Vera Aesthetics",
+  "timezone": "Europe/London",
+  "pack": "aesthetics",
+  "mailbox": { "address": "hello@vera-aesthetics.example", "display_name": "The Vera team" },
+  "sending": { "mode": "live", "test_allowlist": [], "daily_cap": 500 },
+  "allowed_origins": ["https://vera-aesthetics.example", "http://localhost:4321"],
+  "links": {
+    "guide_url": "https://vera-aesthetics.example/guide/your-first-visit",
+    "booking_url": "https://vera-aesthetics.example/consultation"
+  },
+  "staff": [
+    { "email": "hello@vera-aesthetics.example", "name": "Vera", "role": "owner", "kind": "person" }
+  ],
+  "unsubscribe_withdraws": ["marketing_email", "consultation_follow_up"],
+  "brand": {
+    "logo": "brand/logo-light.png",
+    "logo_alt": "Vera Aesthetics",
+    "colours": {
+      "primary": "#1E2B4D",
+      "primary_hover": "#2A3B66",
+      "accent": "#C6A667",
+      "ink": "#141A2B",
+      "muted": "#5B6275",
+      "bg": "#F5F2EC",
+      "line": "#DCD9D2",
+      "header_bg": "#1E2B4D"
+    },
+    "email": {
+      "logo": "brand/logo-email.png",
+      "footer_logo": "brand/logo-light.png",
+      "colours": { "brand": "#1E2B4D", "accent": "#C6A667", "bg": "#F5F2EC", "ink": "#141A2B", "muted": "#5B6275", "line": "#DCD9D2" },
+      "tagline": "Nurse-led, natural results. A demonstration clinic by Main Stage Studio.",
+      "address": "Vera Aesthetics is a fictional clinic. It takes no patients.",
+      "website": "https://vera-aesthetics.example"
+    }
+  }
+}
