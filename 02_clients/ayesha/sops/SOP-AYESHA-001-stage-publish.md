@@ -75,6 +75,8 @@ Escalation: roll back by restoring the newest backups in the engagement folder o
 
 - Never hand-edit or rename existing `data-stage-id` values. Her edits and comment pins hang off them.
 - Keep page id `index` for version 2; her September comments are on it.
+- The engagement is **View only** since 9 Oct 2026 (Stage admin dashboard switch, SOP-OPS-012 step 6): she can click through but not edit or comment. Publishing keeps it. Turn it off on the dashboard before asking her for edits or comments.
+- Change only the Directions page with `chooser()` from `build-v3.py` if you do not want to rebuild every page; a full build is fine too, because step 3 re-tags.
 - The script never removes manifest ids, never deletes pages on the Pi, and never touches `output/` (her edits, comments and submissions).
 - Never force the upload with a different engagement id. The engagement id is fixed as `ayesha-johar-site`.
 
@@ -82,3 +84,4 @@ Escalation: roll back by restoring the newest backups in the engagement folder o
 
 - 2026-09-30: created. Engagement first published by hand the same day; the script codifies those steps and was run end to end.
 - 2026-10-09: multi-page. Publishes all four directions (v3 A, B, C and v4) plus v2 as 34 pages, Directions as the front door, links rewritten to `/prototype/` paths, `allowNavigation` on. Run end to end and verified live (navigation, painting pages, enquiry hand-off, Rooms menu).
+- 2026-10-09 (evening): Directions page reordered by creation (Version 2 first, then A to D), wide tiles, heading "Five ways into your work."; engagement set View only. Publish run end to end; `+0 new` ids on the reorder confirmed tags re-derive unchanged.
