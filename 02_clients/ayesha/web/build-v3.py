@@ -754,7 +754,7 @@ li b{{grid-column:2;grid-row:3;font-family:'Instrument Serif',Georgia,serif;font
 .same{{margin-top:56px;max-width:70ch}}.same h2{{font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:2rem;margin-bottom:10px}}.same li{{margin:0 0 8px 20px;list-style:disc}}.same ul{{display:block;margin:0}}</style></head>
 <body><main>
 <section class="lead" data-stage-section="intro"><p class="kick">Art by Ayesha Johar · Website directions · October 2026</p>
-<h1>Four ways into <em>your work.</em></h1>
+<h1>Five ways into <em>your work.</em></h1>
 <p>These directions are built on everything you told us: the site should feel calm, original and easy to relate to; colourful, elegant, sophisticated and approachable; and it should help you sell your work and be seen.</p>
 <p>Each one is a full website: a home page, a room for each of your five bodies of work, Who I am, and Collect. Open each one, walk through the rooms, and tell us which feels most like you. Mixing is welcome too: "the rooms from one with the colours of another" is a perfectly good answer.</p></section>
 <ul data-stage-section="directions">{cards}</ul>
