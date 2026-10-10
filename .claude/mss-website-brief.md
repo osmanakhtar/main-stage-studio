@@ -1,173 +1,104 @@
-# Main Stage Studio — Website Brief
+# Main Stage Studio: Website Brief
 
-*Use alongside `mss-brand-identity.md`. That file is the visual source of truth.*
-*Last reviewed: 16 July 2026 — repositioning v3 (presence partner)*
+*Use alongside `mss-brand-identity.md` (visual source of truth) and `mss-tone-of-voice.md`.*
+*v6, 10 Oct 2026. Positioning and page map: `01_mss/strategy/mss-positioning-v6-proposal.md` §9. Build order: `01_mss/strategy/mss-v6-build-plan.md`. v1 brief archived in `_archive/brand-v1/`.*
 
 ---
 
 ## Proposition
-*"You don't need a bigger team. You need a better system."*
 
-Target: Established small businesses and funded founders with a run-rate problem. Values filter unchanged — drawn to people whose work means something beyond the commercial, intent over industry.
+**Run the show.** Brand, website, content and the systems behind them, built by one studio and handed over with the controls. Six products with prices on the page: Identity, Website, Campaign, Content, Platform, Care.
 
-Positioning: presence partner — MSS builds and runs a client's brand, site, and content on retainer. The delivery pipeline (Astro, Higgsfield, Stage review) is the mechanism, not the pitch.
-
-Offer architecture: **Launch** (build engagement) / **Run** (ongoing retainer, the centre of gravity — Campaign folded in rather than named separately). New Run proposals anchor £1,500–£3,000/mo (qualitative on-site, used in proposals only).
+The site's job is to sell those six products. Every product page opens on a short clip of the real tool doing its job.
 
 ---
 
-## Creative Direction
+## Creative direction
 
-**Aesthetic:** Editorial motion — considered layouts, typographically confident, kinetic moments used as punctuation not decoration.
+Direction A, "Stage": dark-first, Stage Black with one Tungsten spotlight per view, Archivo wide headlines, Geist Mono for prices and labels, the Spike mark. Reference build: `01_mss/brand/mss-v6-specimen.html`.
 
-**Feel:** Warm, direct, quietly confident. Not corporate. Not try-hard. The rigour runs underneath; it's not the message.
-
-**Motion approach**
-- Hero: ambient 3D mark loop or Higgsfield video — slow, intentional, one continuous motion
-- Below hero: editorial stillness — typography and space do the work
-- Scroll-triggered moments: kinetic typography, image reveals, section transitions
-- Motion is the punctuation, not the sentence
+Client work appears in the client's own colours, framed by the spike. Case studies and long reads may sit on House Lights.
 
 ---
 
-## Palette
-```css
---color-parchment:  #F5EFE5;
---color-blush:      #E8C9AE;
---color-terracotta: #BF6B47;
---color-ember:      #8C4A2F;
---color-near-black: #1C1712;
-```
+## Page map
+
+| Page | Job |
+|---|---|
+| `/` | Promise, the six products, one proof, how it works, who's behind it, start |
+| `/identity`, `/website`, `/campaign`, `/content`, `/platform`, `/care` | One product each, same template |
+| `/work` | Case studies, filterable by product, each labelled live, in progress, self-initiated or demo |
+| `/work/puremed` | Flagship case study |
+| `/how-it-works` | Soundcheck, Rehearsal, Your cue, Showtime, The run, with real screens |
+| `/pricing` | Every product's founding and target price |
+| `/about` | Osman: two decades of systems, why MSS exists, what it believes |
+| `/start` | Form opening on "What do you need?" with the six products plus "Not sure" |
+| `/journal` | Point-of-view pieces |
+
+Keep working via redirects: `/work/conveyancing-onboarding/`, `/work/accountancy-intake/`, `/work/clinic-booking/`, `/work/sable/`.
+
+**Product page template:** name and one-line promise; who it's for; what you get; what you own at the end; timeline and price in mono (founding large, target struck through); the clip; one proof with its status label; how the cue works for this product; three FAQs; start this.
 
 ---
 
-## Typography
-- **Display / headings:** Cormorant Garamond, 300–400 weight
-- **Body / UI:** Plus Jakarta Sans, 300–500 weight
-- Headlines large, tracked tight, left-aligned
-- Body 16px, line-height relaxed, max-width ~65ch
+## Media
+
+The tool clips live in `01_mss/website/tools/clips/out-v6/`: a narrated cut and an 8-second loop per product, as MP4, WebM and a WebP poster. Cards use the loop (muted, autoplay, loop, playsinline, poster set); product pages offer the narrated cut. Under `prefers-reduced-motion`, show the poster and a play button instead of autoplay.
+
+| Product | Clip |
+|---|---|
+| Website | `website` |
+| Campaign | `campaign` |
+| Content | `content`, plus `pipeline` for the content checks |
+| Platform | `console` |
+| Identity | to record after the brand book exists |
+| Care | none; a static panel is enough |
+
+Retired assets: `3d-mark-animation.mp4`, `hero-mark-poster.webp` (old two-squares mark).
 
 ---
 
-## Page Structure
-
-### Hero
-- Full viewport height (`min-h-[100dvh]`)
-- Left-aligned headline — proposition
-- Ambient video or 3D mark loop right side (Higgsfield asset)
-- Single CTA: Start a project
-- Navigation: wordmark left, links + CTA right
-
-**Copy direction:** Opens with the reader's experience, not the studio's offer. Empathy before capability. States the offer without decorating it — no adjectives doing the work that substance should do. First impression register: direct, clear, warm. The reader should feel recognised before they feel sold to.
-
-**Copy source of record (16 July 2026):** full hero, section, and page copy for v3 (presence partner) lives in `01_mss/strategy/mss-website-copy-v2.md` §2. That is the copy of record for the next build; it doesn't ship until the Astro rebuild (MSS site cutover holds for proof #2 — see `mss-decisions-log.md`).
-
-**Retired hero copy (locked 05 June 2026, superseded 16 July 2026 — line moved to About, see below):**
-
-~~*Your vision doesn't need permission. It needs form.*~~
-
-~~Most people with something real to say spend years waiting for the right moment, the right structure, the right framework that finally gives them permission to say it. That moment rarely arrives on its own.~~
-
-~~Main Stage Studio exists for the people who stop waiting.~~
-
-~~We work with people who have something real to say and need a thought partner who can help them find the form to say it. The brief is rarely the real brief. That's always where we start.~~
-
----
-
-### Work / Portfolio
-- Case studies as editorial cards
-- Each card: client name, sector, services, visual thumbnail
-- Card links to framing page — full case study accessible from there
-- No carousel — grid or stacked layout
-- Homepage shows curated highlights: two or three strongest case studies
-- "View all work" link leads to dedicated Work page
-- Work page not built until three case studies are fully complete
-
-**Copy direction:** Each case study leads with the client's world, not the studio's process. The problem emerges from the person, not from a brief. Deliverables are not achievements — outcomes are. Make the client feel recognised, not just described.
-
----
-
-### What we do / How it works
-*(supersedes the old standalone "Process" section — 16 July 2026, repositioning v3)*
-- No longer a 4-stage process page section. Folded into two Phase 1 sections per `mss-website-copy-v2.md` §4–5: **What we do** (Launch / Run, the offer architecture) and **How it works** (the review-system story, told as the client's experience, ending on the AI honesty paragraph).
-- The old 4-stage build sequence — Discovery, Brand Expression, Design System, Web Presence — still describes the real Launch methodology internally, but doesn't surface as a named 4-stage journey on the homepage anymore. It resurfaces, expanded, on the Phase 2 `/how-it-works` page as "the Launch journey" (see plan §7 Phase 2 skeleton).
-- Editorial layout retained for both sections; system section runs on dark background for contrast (matches "How it works" as the trust/mechanism beat).
-
-**Copy direction:** What we do is framed as two ways of working, not a service menu — most engagements start with Launch and settle into Run. How it works is told as the client's experience (one review space, one gate) not the internal machinery, closing on the honesty paragraph verbatim every time it appears.
-
----
-
-### About
-- One person — product management background; creative director at heart
-- The tools have changed what's possible; the judgment about what to do with them hasn't changed hands
-- Values: rigour, creative empathy, intent over industry
-- The thinking is public. The person stays private.
-
-**Copy direction:** Honest about the model without over-explaining it. Product management is the differentiator — the discipline of understanding the problem before touching the solution. That runs underneath everything. No bios, no headshots, no personal disclosure beyond what serves the work.
-
-**Locked about copy (05 June 2026):**
-
-Main Stage was built by someone who spent years being effective at things that weren't quite the right fit. The rigour stayed. The expression got parked. This is what happens when you stop parking it.
-
-The background is product management, which means one thing above everything else: understand the problem properly before you touch the solution. That discipline runs underneath everything the studio makes.
-
-The tools have changed what's possible. The judgment about what to do with them hasn't changed hands.
-
-Drawn to people whose work means something beyond the commercial. If what you're building matters to you, it matters here.
-
----
-
-### Start a project
-- Name, email, tell me about your project
-- No long forms — low friction entry
-
----
-
-## Technical Stack
+## Technical stack
 
 | Layer | Tool |
 |-------|------|
-| Build (primary) | Astro static (Bricks Builder retired 25 June 2026 — see `_archive/bricks-era/`) |
+| Build (primary) | Astro static (Bricks Builder retired 25 June 2026; see `_archive/bricks-era/`) |
 | Prototyping | HTML/CSS via Claude Code |
 | Client review | Stage on the Pi (`mss-review.duckdns.org`) |
-| Design assets | Higgsfield (video/3D), Claude (SVG, components) |
-| DAM | Deprioritised — WebP compression + Cloudways direct serving |
+| Design assets | Real tool recordings (`tools/clips/clip-kit.js`); Higgsfield is on hold (0 credits) |
+| DAM | Deprioritised: WebP compression and Cloudways direct serving |
 | Hosting | Cloudways |
 
 ### Build approach
-1. HTML prototype in Claude Code — layout, typography, motion
+1. HTML prototype in Claude Code, with `data-stage-section` on every section from the first draft
 2. Stage review and sign-off
-3. Astro build from approved prototype (`data-stage-id` preserved)
-4. Drop in Higgsfield assets
-5. GitHub Actions: merge-to-main → Cloudways staging, manual-confirm dispatch → production
+3. Astro build from the approved prototype (`data-stage-id` preserved)
+4. Drop in the clips and posters
+5. GitHub Actions: merge-to-main to Cloudways staging, manual-confirm dispatch to production (deploy-preflight first)
 
 ### Code principles
-- Asymmetric, editorial — not centred or symmetric
-- No centred hero bias — split screen or left-aligned always
-- No generic card overuse — use space and borders instead
-- Hardware-accelerated motion only — `transform` and `opacity`
-- `min-h-[100dvh]` not `h-screen` for full-height sections
-- Tailwind CSS for styling
-- No emoji, no purple/blue AI aesthetic, no gradient backgrounds
+- Dark-first; light surfaces only for long reads and case studies
+- Asymmetric and editorial; no centred hero
+- No generic card overuse; use space, rules and borders
+- Hardware-accelerated motion only (`transform`, `opacity`); respect `prefers-reduced-motion`
+- `min-h-[100dvh]`, not `h-screen`, for full-height sections
+- Tailwind CSS for styling, tokens from `01_mss/brand/mss-v6-tokens.css`
+- No emoji, no purple or blue AI aesthetic, no gradient backgrounds, no glass panels
+- Contrast: body text 4.5:1 minimum; never Tungsten or Cue Red as text on light
 
 ---
 
-## Logo SVG — canonical mark (light background)
+## Logo SVG: the Spike (on dark)
 ```svg
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Terracotta square — bottom-left, recedes behind -->
-  <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
-  <!-- Near-black square — top-right, leads, sits on top -->
-  <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#1C1712"/>
-  <!-- Parchment cutout — at intersection -->
-  <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+  <path d="M5 17V5H17" stroke="#FFB21A" stroke-width="5" stroke-linecap="square"/>
+  <path d="M35 23V35H23" stroke="#FFB21A" stroke-width="5" stroke-linecap="square"/>
 </svg>
 ```
-
-**Dark background variant** — near-black square uses `#3D3128`.
-See `mss-brand-identity.md` for full mark specification and variants.
+On light surfaces the strokes are `#12110F`. Files and rules: `mss-brand-identity.md`.
 
 ---
 
-## Open Decisions
-None outstanding on this file as of 16 July 2026 — see `mss-decisions-log.md` for anything current. (DAM, hero asset, and contact form were all resolved June 2026 and are tracked there.)
+## Open decisions
+- Care price when a Platform is running (only the site rate is set).
+- Identity clip: record once the brand book page exists.

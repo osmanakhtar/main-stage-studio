@@ -66,26 +66,17 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 
 ### Brand Identity — Visual
 
+*v6 direction A ("Stage"), locked 10 Oct 2026. Full rules: `mss-brand-identity.md`. v1 rows (parchment, terracotta, Cormorant, two-squares mark) archived with the v1 docs in `_archive/brand-v1/`.*
+
 | Decision | What's locked |
 |----------|--------------|
-| Palette — Parchment | `#F5EFE5` — base / background / large surfaces |
-| Palette — Warm blush | `#E8C9AE` — cards / secondary sections / subtle texture |
-| Palette — Dusty terracotta | `#BF6B47` — primary accent / CTAs / logo mark / key moments |
-| Palette — Deep ember | `#8C4A2F` — accent hover / depth |
-| Palette — Near black | `#1C1712` — all type / structural elements / primary buttons |
-| Colour principles | Max one accent colour per composition. Parchment is default background — never stark white or cool grey. Near-black for body type — never pure black. Terracotta as punctuation, not wallpaper. |
-| Logo mark — structure | Two offset squares with deliberate negative space at intersection. Near-black top-right (leads, on top). Terracotta bottom-left (recedes behind). Parchment cutout at intersection. |
-| Logo mark — corner radius | 2.5px on both squares, 1.5px on cutout |
-| Logo mark — dark bg variant | Near-black square uses `#3D3128` to remain visible against dark backgrounds |
-| Wordmark — Main Stage | Cormorant Garamond, weight 400, letter-spacing 0.02em |
-| Wordmark — Studio | Plus Jakarta Sans, weight 400, letter-spacing 0.24em, uppercase, terracotta |
-| Flat mark usage | Always primary in functional contexts — favicon, header, print, documents, email signatures |
-| 3D mark / Higgsfield usage | Expressive layer only — hero video, brand film, social content. Never replace flat mark in functional contexts. |
-| Minimum mark size | 32px |
-| Typography — primary | Cormorant Garamond — display headings, wordmark, editorial moments. Weights 300–400 only. |
-| Typography — secondary | Plus Jakarta Sans — body copy, navigation, UI labels, sub-headings. Weights 300–500. |
-| Typography — Inter | Never use. Too generic for this identity. |
-| Typographic principles | Headlines: large, tracked tight, left-aligned. Body: 16px, relaxed line-height, max-width ~65ch. All caps only for labels/descriptors at small sizes with wide tracking. No centred hero bias. |
+| Palette | Stage Black `#12110F`, Riser `#1F1D1A`, Line `#2E2B27`, House Lights `#F3F1EC`, Rigging Grey `#8C8981` / Deep `#5E5B55`, Tungsten `#FFB21A` (the one accent), Cue Red `#E5402A` (signals only). Tokens: `01_mss/brand/mss-v6-tokens.css` |
+| Colour rules | One Tungsten moment per view. Tungsten never text on light (1.6:1). Text on Tungsten is Stage Black. Cue Red never small text (4.6:1 on Stage Black, under 4.5:1 on every raised surface). Focus on a client page is two-tone (Tungsten + thin black) |
+| Mode | Dark-first; House Lights for documents, proposals and long reads |
+| Typography | Archivo: display at width 112 to 125, weight 700 to 900; body at width 100. Geist Mono for labels, prices, timelines and tool buttons (capitals only here). Never Inter or Anton, nor faces used in client work |
+| Mark | The Spike: two square-capped corners on a 40 grid, stroke 5, framing empty space. Tungsten on dark, black on light and on Tungsten. Minimum 20px. Files `01_mss/brand/mark/` |
+| Wordmark | MAIN STAGE in Archivo wide 800; STUDIO in Geist Mono, tracked wide |
+| Studio vs client layer | MSS tools (Stage chrome, Studio, console type and controls) are in A; client sites, colours, logos, posts and emails stay the client's |
 
 ---
 
@@ -93,11 +84,10 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 
 | Decision | What's locked |
 |----------|--------------|
-| Style direction | Editorial motion — considered, typographically confident layouts. Kinetic moments that hit hard because surrounding space is calm. |
-| Motion principles | Hardware-accelerated only — `transform` and `opacity`. Never `top/left/width/height`. Motion is punctuation, not sentence. |
-| What to avoid | Centred hero layouts. Generic card overuse. Purple/blue AI aesthetic. Gradient backgrounds. Motion as decoration. |
-| Identity system — Layer 1 (Static) | Flat SVG mark + wordmark + palette + typography. Use for: PDF proposals, documents, favicons, email signatures, headers. |
-| Identity system — Layer 2 (Live) | 3D mark render + Higgsfield video + scroll-triggered motion + kinetic typography. Use for: website hero, case study openers, social content, brand films. |
+| Style direction | The lit stage: mostly black and white, one warm spotlight on what matters. Asymmetric and editorial |
+| Motion | Lighting cue, not decoration: Tungsten fades up on the key element. `transform` and `opacity` only; respect reduced motion |
+| Imagery | The real work in use (tool recordings, demo data only), client work in its own colours framed by the spike. Hard-lit still life dropped for launch. No stock people, glossy AI portraits or real client data in demos |
+| What to avoid | Centred hero layouts, generic card overuse, purple/blue AI aesthetic, gradients, glass panels, emoji |
 
 ---
 
@@ -109,18 +99,21 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 | Logo mark colour meaning, corrected | 6 Aug 2026: `mss-brand-identity.md`'s mark description had the symbolism backwards. Black is MSS's own structure/systems, invisible support, "a shadow that supports the client." Terracotta is the client, elevated and made visible. Not "black = vision." Position description (black leads/top-right, terracotta recedes/bottom-left) was always correct and is unchanged. |
 | Higgsfield Gap + What We Do + How It Works assets | Generated and locked, 6 Aug 2026. Three placements: Gap section anchor image, shared texture behind the Retainer + Systems cards, and a dark-background variant of the same motif in the How It Works left column, deliberately not one image per card, per the "no generic card overuse" principle. Seedream 4.5, same offset near-black/terracotta motif as the logo mark throughout, no new visual language introduced. The Gap and How It Works anchors both get a single quiet scroll parallax (±12px translateY, transform-only) — not a loop, not a hover state. Cost 3 credits total for the three stills. Bonus: a 5s abstract motion loop in the same motif generated for the social content plan (22.5 credits), saved to `01_mss/marketing/assets/ig-brand-loop-v1.mp4`, not used on the site. |
 
+| v1 generated assets retired | 10 Oct 2026: the v1 hero asset and the 6 Aug Gap / What We Do / How It Works images belong to the parchment identity and are not used in v6. `3d-mark-animation.mp4` and `hero-mark-poster.webp` show the old mark and are retired |
 ---
 
 ### Tone of Voice
 
+*v6, locked 10 Oct 2026. Full rules: `mss-tone-of-voice.md`; examples: `copy-contexts.md`.*
+
 | Decision | What's locked |
 |----------|--------------|
-| Brand character | Quietly confident, and genuinely empathetic. The rigour is real. So is the warmth. Neither works without the other. |
-| Non-conformist thread | The confidence in the voice has a spine. A belief that the vision deserves to be heard regardless of where it comes from or what structures it has to navigate. This doesn't appear on the surface. It runs underneath everything. |
-| What it never sounds like | Fluffy (no passion without substance). Arrogant (no "most studios do it wrong"). Unsure (no excessive hedging). Corporate (no passive voice, no buzzword stacking). |
-| Copy principles | Say what you mean. No filler. Active voice. Lead with the reader's world, not the studio's process. Endings close with weight. Empathy before capability. |
-| Five copy contexts | First impression / Discovery framing / Case study / Editorial / Proposal — each with distinct register. See `mss-tone-of-voice.md` and `copy-contexts.md`. |
-| Empathy layer | Added 02 June 2026. The voice shift: same rigour, more warmth. Same clarity, more expressiveness. The studio understands what it feels like to have a vision you haven't found the words for. That's not stated as autobiography — it comes through in how the studio listens and works. |
+| Character | Plain. Specific. A bit of swagger. The empathy shows in what MSS does, not in long sentences |
+| Person | First person "I" (one founder); "we" only for studio and client together |
+| Principles | Name the thing; show the receipt (figures gate); talk like the owner; hand over the mic; short wins; point of view out loud; only say what the screen shows |
+| Vocabulary | Soundcheck, Rehearsal, Your cue, Showtime, The run for the process; products keep plain names |
+| Lines | Hero "Run the show."; gate "Nothing goes live until you give the cue."; AI "AI does the typing. I do the deciding. You do the approving." |
+| Never | Agency-speak, false scale, hedging, fake urgency, anything a regulated client couldn't forward to compliance, em dashes |
 
 ---
 
@@ -252,6 +245,10 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 
 | Date | What changed | Why |
 |------|-------------|-----|
+| 10 October 2026 (brand canon) | **Brand canon rewritten for v6 A** (build plan step 9): `mss-brand-identity.md`, `mss-tone-of-voice.md`, `copy-contexts.md`, `mss-website-brief.md` and the `CLAUDE.md` router; the visual, aesthetic and tone tables above replaced; v1 docs archived in `_archive/brand-v1/`. Also on 10 Oct: Stage editor pop-ups, admin pages and the dock restyled to A, console reskin live, five tool clips recorded | Ratified v6 had to become the canon every session reads, so new work stops being built from v1 rules. |
+| 10 October 2026 (tool reskin) | MSS tools reskinned to v6 A **on the MSS layer only**: Stage editing chrome, the console's type and chrome (Archivo + Geist Mono replace Cormorant + Inter), and the Studio app. Client colours and logos in the console stay theirs (from `tenant.json`); every product video is framed in A in post | Founder. The videos must match the new style, but the console is white-labelled on purpose: an MSS-coloured client console would show a product clients never get, and would break A's own rule that the spike frames client work and never recolours it. |
+| 10 October 2026 (later) | **Positioning v6 ratified**, all eleven decisions in §11 of `01_mss/strategy/mss-positioning-v6-proposal.md`: product-led positioning for owner-led businesses (regulated firms a segment); six products (Identity, Website, Campaign, Content, Platform, Care) plus Opening Night; prices published; "Run the show"; visual identity A; founder visible on /about (employers and personal life private); first-person voice; Platform sold only once the scope-of-responsibility clause exists; no reopening for 12 months unless a paying client proves it wrong. **Prices amended by Osman:** targets Identity £2,500, Website £1,800 for 10 pages, extra page £75, Campaign £1,800, Platform Foundation £8,000, Content £3,500/mo and Care £350/mo kept; Opening Night £4,300 (sum of the two); founding = 30% of target for the first three clients per product. Hard-lit generated stills dropped for launch; Ayesha has agreed to be shown | Founder review of the proposal and the three specimens. Supersedes v5 (4 Aug) once the v6 site ships; the v1 palette, type and mark rows above stay live until then. |
+| 10 October 2026 | v6 visual direction chosen: **Specimen A, "Stage"** (Stage Black, House Lights, Tungsten; Archivo + Geist Mono; Spike mark). B (Curtain) and C (Glass Box) not taken. Tool videos on product pages carry into A | Founder choice after comparing all three on Stage (`mss-v6-brand`). Only §11 item 11 of `01_mss/strategy/mss-positioning-v6-proposal.md` is decided; items 1 to 10 (positioning, products, prices, founder visibility, etc.) are still open, and the v1 palette/type/mark rows above stay canon until the build ships. |
 | 9 October 2026 | Ayesha: the five website options (Version 2, then directions A to D, in the order they were made) are shared with her **view only**: no editing and no comments at this stage | Osman, before sending the Directions page to Ayesha. Built as a Stage-wide View only switch per engagement (`scripts/stage-patches/2026-10-09-view-only/`). View only also hides comment pins, so she cannot comment on Stage while it is on; switch it off on the Stage dashboard when she should edit or pin comments. |
 | 6 October 2026 | Aesthetics Studio WhatsApp: MSS becomes a Meta **Tech Provider**; clinics connect their existing WhatsApp Business number by Embedded Signup (coexistence) from the console | Meta's docs (checked 6 Oct) allow coexistence only through Embedded Signup run by a registered Tech Provider or Solution Partner, so the 2 Oct build's pasted system-user token cannot onboard PureMed's 07850 number. Founder chose MSS as Tech Provider over PureMed's own app, a reseller (would reverse C-3) or dropping coexistence (would reverse C-2), because every later clinic onboards the same way. App 'Main Stage Studio Messaging' (1286420996923046) created and declared Tech Provider the same day (irreversible). Still needs MSS business verification, access verification, App Review and new platform code; see campaigns-audiences-build-spec.md 13c. |
 | 4 October 2026 | Platform: a post-treatment review request is **marketing**, and is the single, locked exception to G2 (a recorded treatment never starts marketing): marketing email consent, one email, never the treatment named, a staff "OK to ask for a review" tick off by default, re-ask window of 30 days or more. Pushed to production paused, before PureMed's review link exists | Osman, after PureMed asked for review requests. No dependency on the booking system: recording a treatment is the trigger. Classing it as service would let it go without consent while promoting the clinic; the tick stands in for a complication flag until CARE-001/CARE-002. Whether marketing consent is the right basis is left to PureMed's adviser via the DPIA. Canon: `campaigns-audiences-build-spec.md` 13b, SOP-PLAT-003 3b, CRM-007 |

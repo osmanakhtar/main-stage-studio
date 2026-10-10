@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MSS Specimen C</title>
+<meta name="description" content="Main Stage Studio v6 brand specimen C: Glass Box, day and night. Proposal, not locked.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* Theme before paint: ?theme= wins, then the saved choice, then the system */
+(function(){
+  var t = null;
+  try { t = new URLSearchParams(location.search).get("theme"); } catch(e){}
+  if (t !== "day" && t !== "night") { try { t = localStorage.getItem("mss-c-theme"); } catch(e){ t = null; } }
+  if (t === "day" || t === "night") document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+<style>
+/* ---------- Tokens: night (default) ---------- */
+:root{
+  --bg:#0B0C0E; --bg-2:#121419; --fg:#F2F2EF; --muted:#9A9DA3; --line:rgba(255,255,255,.10);
+  --card:#121419; --card-hover:#171A20;
+  --accent:#FFB21A; --accent-text:#FFB21A; --on-accent:#0B0C0E; --live:#5FD08A;
+  --lit-color:#FFB21A; --lit-band:none;
+  --glass-bg:rgba(20,22,27,.72); --glass-edge:rgba(255,255,255,.16); --glass-hi:rgba(255,255,255,.22);
+  --glass-shadow:0 10px 40px -12px rgba(0,0,0,.6); --glass-solid:#1B1E24;
+  --orb-a:rgba(255,178,26,.20); --orb-b:rgba(70,140,170,.18);
+  /* fictional client in the mock-ups: Vera (navy and gold) */
+  --vera-bg:#F7F3EC; --vera-ink:#1E2B4D; --vera-gold:#C6A667; --vera-soft:#E6DFD2;
+  --display:"Archivo",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  --gutter:clamp(16px,4vw,56px); --max:1280px; --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:dark;
+}
+/* ---------- Tokens: day ---------- */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="night"]){
+    --bg:#F4F4F1; --bg-2:#ECECE8; --fg:#121417; --muted:#5A5E66; --line:rgba(18,20,23,.12);
+    --card:#FFFFFF; --card-hover:#FAFAF8;
+    --accent:#FFB21A; --accent-text:#8A5A00; --on-accent:#121417; --live:#1F7A46;
+    --lit-color:var(--fg); --lit-band:linear-gradient(transparent 64%,rgba(255,178,26,.85) 64%,rgba(255,178,26,.85) 90%,transparent 90%);
+    --glass-bg:rgba(255,255,255,.70); --glass-edge:rgba(255,255,255,.85); --glass-hi:rgba(255,255,255,.95);
+    --glass-shadow:0 10px 40px -14px rgba(18,20,23,.28); --glass-solid:#FFFFFF;
+    --orb-a:rgba(255,178,26,.26); --orb-b:rgba(70,140,170,.20);
+    color-scheme:light;
+  }
+}
+:root[data-theme="day"]{
+  --bg:#F4F4F1; --bg-2:#ECECE8; --fg:#121417; --muted:#5A5E66; --line:rgba(18,20,23,.12);
+  --card:#FFFFFF; --card-hover:#FAFAF8;
+  --accent:#FFB21A; --accent-text:#8A5A00; --on-accent:#121417; --live:#1F7A46;
+  --lit-color:var(--fg); --lit-band:linear-gradient(transparent 64%,rgba(255,178,26,.85) 64%,rgba(255,178,26,.85) 90%,transparent 90%);
+  --glass-bg:rgba(255,255,255,.70); --glass-edge:rgba(255,255,255,.85); --glass-hi:rgba(255,255,255,.95);
+  --glass-shadow:0 10px 40px -14px rgba(18,20,23,.28); --glass-solid:#FFFFFF;
+  --orb-a:rgba(255,178,26,.26); --orb-b:rgba(70,140,170,.20);
+  color-scheme:light;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--display);font-variation-settings:"wdth" 100;font-size:16px;line-height:1.55;overflow-x:hidden;transition:background-color .4s var(--ease),color .4s var(--ease)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono)}
+.display{font-variation-settings:"wdth" 125;font-weight:800;line-height:.95;letter-spacing:-.02em}
+h2.display{font-size:clamp(34px,5.6vw,76px)}
+.lit{color:var(--accent-text)}
+h1 .lit,h2 .lit,.end .lit{color:var(--lit-color);background:var(--lit-band);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+section{position:relative;padding:clamp(72px,10vw,136px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;margin-bottom:clamp(36px,5vw,64px)}
+@media(min-width:900px){.sec-head{grid-template-columns:200px minmax(0,1fr)}}
+.sec-head .lede{max-width:60ch;color:var(--muted);margin-top:18px;font-size:18px}
+
+/* ---------- Ambient light: the content glass refracts ---------- */
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;width:60vmax;height:60vmax;border-radius:50%;filter:blur(60px);will-change:transform}
+body::before{background:radial-gradient(circle,var(--orb-a),transparent 62%);left:-15vmax;top:-20vmax;animation:drift1 28s ease-in-out infinite alternate}
+body::after{background:radial-gradient(circle,var(--orb-b),transparent 62%);right:-20vmax;top:30vh;animation:drift2 34s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(18vmax,22vmax)}}
+@keyframes drift2{to{transform:translate(-16vmax,-14vmax)}}
+
+/* ---------- Glass: controls only ---------- */
+.glass{position:relative;background:var(--glass-bg);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border:1px solid var(--glass-edge);box-shadow:inset 0 1px 0 var(--glass-hi),var(--glass-shadow);border-radius:18px;isolation:isolate}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 42%);z-index:-1}
+.glass.pill{border-radius:999px}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){ .glass{background:var(--glass-solid)} }
+@media (prefers-reduced-transparency: reduce){ .glass{background:var(--glass-solid);-webkit-backdrop-filter:none;backdrop-filter:none} }
+
+/* ---------- Nav ---------- */
+.nav{position:sticky;top:12px;z-index:30;margin-top:12px}
+.nav .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px;padding:0 10px 0 18px}
+.lockup{display:flex;align-items:center;gap:10px;text-decoration:none;min-height:44px}
+.lockup .wm{font-variation-settings:"wdth" 125;font-weight:800;font-size:16px;white-space:nowrap}
+.lockup .wm small{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.24em;color:var(--muted);margin-left:6px}
+.nav-links{display:none;gap:22px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.nav-links a:hover{color:var(--fg)}
+@media(min-width:980px){.nav-links{display:flex}}
+.nav-right{display:flex;align-items:center;gap:8px}
+.theme-switch{display:inline-flex;padding:4px;gap:2px;border-radius:999px;background:var(--line)}
+.theme-switch button{display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .25s var(--ease),color .25s var(--ease)}
+.theme-switch button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.theme-switch svg{width:14px;height:14px}
+@media(max-width:520px){.theme-switch .t-word{display:none}.lockup .wm small{display:none}}
+.spec-tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;display:none}
+@media(min-width:700px){.spec-tag{display:inline}}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;font-family:var(--mono);font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border:1px solid var(--line);color:var(--fg);background:transparent;cursor:pointer;transition:transform .2s var(--ease),background-color .2s var(--ease),border-color .2s var(--ease)}
+.btn:hover{border-color:var(--fg)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:500}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn svg{width:14px;height:14px}
+
+/* ---------- Hero ---------- */
+.hero{padding-top:clamp(40px,7vw,96px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(36px,5vw,64px);align-items:center}
+@media(min-width:1000px){.hero-grid{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}}
+.hero h1{font-size:clamp(60px,10vw,148px);font-variation-settings:"wdth" 125;font-weight:900;line-height:.88;letter-spacing:-.035em}
+.hero .proof{font-size:clamp(20px,2.2vw,26px);font-weight:600;margin-top:24px;max-width:24ch;line-height:1.25}
+.hero .sub{color:var(--muted);font-size:18px;max-width:38ch;margin-top:14px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+
+/* ---------- Mock screens (the "videos") ---------- */
+.screen{position:relative;border-radius:20px;overflow:hidden;background:var(--vera-bg);color:var(--vera-ink);border:1px solid var(--line);box-shadow:0 40px 80px -40px rgba(0,0,0,.55)}
+.screen .chrome{display:flex;align-items:center;gap:6px;height:32px;padding:0 12px;background:#EDE7DC;border-bottom:1px solid #DDD5C7}
+.screen .chrome i{width:9px;height:9px;border-radius:50%;background:#CFC6B6}
+.screen .chrome span{margin-left:10px;font-family:var(--mono);font-size:11px;color:#5C5547}
+.v-site{padding:6% 7% 9%;font-family:Georgia,"Times New Roman",serif}
+.v-nav{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#4A5470;margin-bottom:9%}
+.v-nav b{font-family:Georgia,serif;font-size:16px;letter-spacing:.02em;text-transform:none;color:var(--vera-ink)}
+.v-h{font-size:clamp(24px,3.2vw,42px);line-height:1.05;max-width:13ch}
+.v-p{font-family:system-ui,sans-serif;font-size:13px;color:#4A5470;max-width:36ch;margin-top:14px}
+.v-cta{position:relative;display:inline-grid;margin-top:22px}
+.v-cta > .old,.v-cta > .new{grid-area:1/1;display:inline-block;padding:10px 16px;background:var(--vera-ink);color:#F7F3EC;font-family:system-ui,sans-serif;font-size:13px;border-radius:2px;white-space:nowrap}
+.v-img{position:absolute;right:7%;top:24%;width:30%;aspect-ratio:3/4;background:linear-gradient(160deg,#D8CCB4,#B79F7C);border-radius:120px 120px 4px 4px}
+.sel{position:absolute;inset:-6px;border:2px solid var(--accent);border-radius:4px;opacity:0;pointer-events:none}
+.sel b{position:absolute;top:-22px;left:-2px;background:var(--accent);color:#121417;font-family:var(--mono);font-weight:500;font-size:10px;padding:3px 7px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.cursor{position:absolute;width:18px;height:18px;right:-10px;bottom:-14px;pointer-events:none;z-index:3}
+.cursor svg{width:18px;height:18px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+
+/* Glass dock floating over the screen */
+.dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px;z-index:2;white-space:nowrap}
+.dock .tool{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;border-radius:999px;font-family:var(--mono);font-size:11px;color:var(--fg);padding:0 10px}
+.dock .tool svg{width:16px;height:16px}
+.dock .tool[data-s]::after,.gatebar .b[data-s]::after,.mailbar .b[data-s]::after{content:attr(data-s)}
+.dock .sep{width:1px;height:20px;background:var(--line)}
+.dock .approve{background:var(--accent);color:#121417;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.toast{position:absolute;right:16px;top:48px;display:flex;align-items:center;gap:8px;padding:10px 14px;font-family:var(--mono);font-size:11px;color:var(--fg);z-index:2;opacity:0}
+.toast .ok{width:8px;height:8px;border-radius:50%;background:var(--live)}
+
+/* Loop control: animations run only while .play is on */
+.loop *{animation-play-state:paused !important}
+.loop.play *{animation-play-state:running !important}
+
+/* Hero / reel 1: live edit (8s) */
+.m-edit .cursor{animation:e-cur 8s var(--ease) infinite}
+.m-edit .sel{animation:e-sel 8s linear infinite}
+.m-edit .old{animation:e-old 8s linear infinite}
+.m-edit .new{animation:e-new 8s var(--ease) infinite}
+.m-edit .toast{animation:e-toast 8s var(--ease) infinite}
+.m-edit .approve{animation:e-pulse 8s linear infinite}
+@keyframes e-cur{0%{opacity:0;transform:translate(160px,90px)}6%{opacity:1}20%,56%{opacity:1;transform:none}70%,100%{opacity:0;transform:translate(120px,60px)}}
+@keyframes e-sel{0%,20%{opacity:0}24%,58%{opacity:1}62%,100%{opacity:0}}
+@keyframes e-old{0%,30%{opacity:1}34%,94%{opacity:0}98%,100%{opacity:1}}
+@keyframes e-new{0%,34%{opacity:0;transform:translateY(6px)}40%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+@keyframes e-toast{0%,66%{opacity:0;transform:translateY(-8px)}70%,90%{opacity:1;transform:none}94%,100%{opacity:0}}
+@keyframes e-pulse{0%,62%,74%,100%{transform:scale(1)}66%{transform:scale(.94)}}
+
+/* Reel cards */
+.reel{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+@media(min-width:820px){.reel{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.clip{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/11;background:var(--bg-2);border:1px solid var(--line)}
+.clip .stagebox{position:absolute;inset:0}
+.clip .stagebox .chrome span{visibility:hidden}
+.clip .caption{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;z-index:4}
+.clip .caption b{font-variation-settings:"wdth" 112;font-weight:700;font-size:16px}
+.clip .caption span{font-family:var(--mono);font-size:11px;color:var(--fg);opacity:.92;text-align:right}
+.clip .tc{position:absolute;top:12px;left:12px;z-index:4;font-family:var(--mono);font-size:10px;padding:5px 9px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg)}
+.clip .tc i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#E5402A;margin-right:6px;vertical-align:1px}
+
+/* Reel 2: approve gate (7s) */
+.m-gate{position:absolute;inset:0;background:linear-gradient(160deg,#20263A,#141824);display:flex;align-items:flex-start;justify-content:center;padding-top:44px}
+.post{width:34%;aspect-ratio:4/5;background:var(--vera-ink);border-radius:10px;position:relative;overflow:hidden;animation:g-post 7s var(--ease) infinite;box-shadow:0 20px 40px -20px rgba(0,0,0,.7)}
+.post .ph{position:absolute;inset:0 0 40% 0;background:linear-gradient(160deg,#D8CCB4,#9E865F)}
+.post .tx{position:absolute;left:10%;right:10%;bottom:10%;font-family:Georgia,serif;color:#F7F3EC;font-size:clamp(12px,1.4vw,16px);line-height:1.15}
+.post .tx small{display:block;font-family:var(--mono);font-size:9px;color:var(--vera-gold);letter-spacing:.12em;margin-bottom:6px}
+.gatebar{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);display:flex;gap:6px;padding:6px;z-index:3;white-space:nowrap}
+.gatebar .b{min-height:34px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;font-family:var(--mono);font-size:11px;color:var(--fg)}
+.gatebar .b.go{background:var(--accent);color:#121417;font-weight:500;animation:g-press 7s linear infinite}
+.cue{position:absolute;top:44px;right:14px;display:flex;align-items:center;gap:8px;padding:9px 13px;font-family:var(--mono);font-size:11px;color:var(--fg);z-index:3;opacity:0;animation:g-cue 7s var(--ease) infinite}
+.cue svg{width:14px;height:14px;color:var(--live)}
+@keyframes g-post{0%{opacity:0;transform:translateY(24px) scale(.96)}12%,88%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-12px)}}
+@keyframes g-press{0%,44%,56%,100%{transform:scale(1)}50%{transform:scale(.92)}}
+@keyframes g-cue{0%,52%{opacity:0;transform:translateY(-8px)}58%,88%{opacity:1;transform:none}96%,100%{opacity:0}}
+
+/* Reel 3: console email (8s) */
+.m-mail{position:absolute;inset:0;background:var(--vera-bg);display:grid;grid-template-columns:28% minmax(0,1fr);color:var(--vera-ink)}
+.m-mail aside{background:#EDE7DC;padding:16px 12px;display:grid;gap:8px;align-content:start;font-family:var(--mono);font-size:10px;color:#5C5547}
+.m-mail aside b{color:var(--vera-ink);font-size:11px;margin-bottom:6px}
+.m-mail aside span{padding:6px 8px;border-radius:6px}
+.m-mail aside span.on{background:#fff;color:var(--vera-ink)}
+.m-mail main{padding:18px;position:relative}
+.m-mail .subj{font-family:Georgia,serif;font-size:clamp(14px,1.6vw,19px);margin-bottom:12px}
+.m-mail .ln{height:8px;border-radius:4px;background:#D9D1C2;margin:9px 0;transform-origin:left;animation:m-type 8s var(--ease) infinite}
+.m-mail .ln:nth-child(3){width:92%;animation-delay:.2s}.m-mail .ln:nth-child(4){width:84%;animation-delay:.4s}.m-mail .ln:nth-child(5){width:60%;animation-delay:.6s}.m-mail .ln:nth-child(6){width:88%;animation-delay:.8s}
+@keyframes m-type{0%,6%{transform:scaleX(0)}30%,100%{transform:scaleX(1)}}
+.status{position:absolute;top:16px;right:16px;display:grid}
+.status span{grid-area:1/1;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:999px}
+.status .draft{background:#E6DFD2;color:#5C5547;animation:s-a 8s linear infinite}
+.status .liv{background:#1F7A46;color:#fff;opacity:0;animation:s-b 8s linear infinite}
+@keyframes s-a{0%,58%{opacity:1}62%,96%{opacity:0}100%{opacity:1}}
+@keyframes s-b{0%,58%{opacity:0}62%,96%{opacity:1}100%{opacity:0}}
+.mailbar{position:absolute;left:18px;bottom:62px;display:flex;gap:6px;padding:6px;z-index:3}
+.mailbar .b{min-height:32px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;font-family:var(--mono);font-size:11px;color:var(--fg)}
+.mailbar .b.go{background:var(--accent);color:#121417;font-weight:500;animation:g-press 8s linear infinite;animation-delay:.9s}
+
+/* Reel 4: carousel builder (8s) */
+.m-car{position:absolute;inset:0;background:linear-gradient(160deg,#1A1E2A,#10131B);padding:16px}
+.m-car .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:62%}
+.m-car .grid i{aspect-ratio:1;border-radius:6px;background:linear-gradient(160deg,#3A4566,#1E2B4D)}
+.m-car .grid i:nth-child(3n){background:linear-gradient(160deg,#D8CCB4,#9E865F)}
+.m-car .grid i:nth-child(5){background:linear-gradient(160deg,#C6A667,#8C7442)}
+.m-car .slides{position:absolute;left:16px;right:16px;bottom:64px;display:flex;gap:8px}
+.m-car .slides i{flex:1;aspect-ratio:4/5;border-radius:8px;background:var(--vera-ink);border:1px solid rgba(198,166,103,.55);opacity:0;animation:c-in 8s var(--ease) infinite;position:relative}
+.m-car .slides i::after{content:"";position:absolute;left:12%;right:12%;bottom:14%;height:10%;border-radius:2px;background:rgba(247,243,236,.85)}
+.m-car .slides i:nth-child(1){animation-delay:.3s}.m-car .slides i:nth-child(2){animation-delay:.9s}.m-car .slides i:nth-child(3){animation-delay:1.5s}.m-car .slides i:nth-child(4){animation-delay:2.1s}.m-car .slides i:nth-child(5){animation-delay:2.7s}
+@keyframes c-in{0%{opacity:0;transform:translateY(-40px) scale(.7)}12%,82%{opacity:1;transform:none}96%,100%{opacity:0}}
+
+/* ---------- Idea strip ---------- */
+.idea{display:grid;grid-template-columns:minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+@media(min-width:900px){.idea{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.idea > div{background:var(--card);padding:28px}
+.idea b{display:block;font-variation-settings:"wdth" 125;font-weight:800;font-size:clamp(24px,2.6vw,32px);line-height:1;margin-bottom:10px}
+.idea p{color:var(--muted)}
+
+/* ---------- Mark ---------- */
+.mark-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+@media(min-width:900px){.mark-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}}
+.mark-stage{position:relative;min-height:340px;border-radius:22px;overflow:hidden;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;background:var(--bg-2)}
+.mark-stage .behind{position:absolute;inset:18% 22%;border-radius:10px;background:linear-gradient(160deg,#D8CCB4,#9E865F)}
+.mark-stage .lens{position:relative;width:min(240px,56%);aspect-ratio:1;border-radius:22px;display:flex;align-items:center;justify-content:center}
+.mark-stage .lens svg{width:70%;height:auto}
+.rules{display:grid;gap:14px;align-content:start}
+.rule{padding:18px 20px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.rule b{display:block;font-variation-settings:"wdth" 112;font-weight:700;font-size:17px;margin-bottom:4px}
+.rule p{color:var(--muted);font-size:15px}
+
+/* ---------- Colour ---------- */
+.themes{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+@media(min-width:900px){.themes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.theme-card{border-radius:22px;overflow:hidden;border:1px solid var(--line)}
+.theme-card header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.theme-card .sws{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.theme-card .sw{aspect-ratio:4/3;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;font-family:var(--mono);font-size:11px}
+.theme-card .sw b{font-family:var(--display);font-variation-settings:"wdth" 112;font-size:14px}
+.tc-night{background:#0B0C0E;color:#F2F2EF}
+.tc-day{background:#F4F4F1;color:#121417}
+.ratios{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+@media(min-width:760px){.ratios{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.ratios{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.ratio{background:var(--card);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--mono);font-size:12px}
+.ratio .pair{display:flex;align-items:center;gap:10px}
+.ratio .pair i{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;font-style:normal;font-family:var(--display);font-weight:800;font-size:15px;flex:none}
+.ratio .pair i::after{content:attr(data-s)}
+.verdict{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.ok{color:var(--live)}.bad{color:#F06A55}
+:root[data-theme="day"] .bad{color:#B3261E}
+@media (prefers-color-scheme: light){:root:not([data-theme="night"]) .bad{color:#B3261E}}
+
+/* ---------- Type + voice ---------- */
+.type-row{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:24px 0;border-top:1px solid var(--line)}
+@media(min-width:900px){.type-row{grid-template-columns:220px minmax(0,1fr);align-items:baseline}}
+.t1{font-variation-settings:"wdth" 125;font-weight:900;font-size:clamp(44px,8vw,112px);line-height:.9;letter-spacing:-.03em}
+.t2{font-variation-settings:"wdth" 112;font-weight:700;font-size:clamp(22px,2.6vw,30px);line-height:1.15}
+.t3{font-size:18px;max-width:62ch}
+.t4{font-family:var(--mono);font-size:14px}
+.voice{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:40px}
+.v-row{display:grid;grid-template-columns:minmax(0,1fr);background:var(--card)}
+@media(min-width:900px){.v-row{grid-template-columns:150px minmax(0,1fr) minmax(0,1fr)}}
+.v-row > div{padding:18px 22px}
+.v-row .was{color:var(--muted)}
+.v-row .now{font-variation-settings:"wdth" 112;font-weight:700;font-size:18px;line-height:1.3}
+.v-row.head > div{padding:12px 22px}
+@media(max-width:899px){.v-row.head{display:none}.v-row > div:first-child{padding-bottom:0}}
+
+/* ---------- Lineup ---------- */
+.price-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
+.seg{display:inline-flex;padding:5px;gap:4px}
+.seg button{min-height:44px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .25s var(--ease),color .25s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#121417}
+.founding{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.founding i{width:8px;height:8px;border-radius:50%;background:var(--live)}
+.bento{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media(min-width:760px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.bento{grid-template-columns:repeat(3,minmax(0,1fr))}.card.wide{grid-column:span 2}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:14px;transition:background-color .3s var(--ease),transform .3s var(--ease)}
+.card:hover{background:var(--card-hover)}
+.slot{position:relative;border-radius:14px;overflow:hidden;height:120px;background:var(--bg-2);border:1px solid var(--line)}
+.slot .bars{position:absolute;inset:18% 10% 34% 10%;display:grid;gap:8px;align-content:start}
+.slot .bars i{display:block;height:7px;border-radius:4px;background:var(--line);transform-origin:left;animation:m-type 6s var(--ease) infinite}
+.slot .bars i:nth-child(2){width:70%;animation-delay:.3s}.slot .bars i:nth-child(3){width:85%;animation-delay:.6s}
+.slot .bars i:first-child{background:var(--accent);width:40%}
+.slot .tag{position:absolute;left:8px;bottom:8px;right:8px;padding:6px 10px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg);display:flex;justify-content:space-between;gap:8px}
+.card h3{font-variation-settings:"wdth" 125;font-weight:800;font-size:clamp(26px,2.8vw,36px);line-height:1}
+.card .promise{color:var(--muted)}
+.card ul{list-style:none;display:grid;gap:6px;font-size:15px}
+.card ul li{padding-left:18px;position:relative}
+.card ul li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-top:2px solid var(--muted);border-left:2px solid var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.badge{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid currentColor}
+.badge.live{color:var(--live)}.badge.prog{color:var(--accent-text)}.badge.anon{color:var(--muted)}
+.priceline{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px}
+.price{font-variation-settings:"wdth" 125;font-weight:800;font-size:clamp(30px,3.2vw,42px);line-height:1;font-variant-numeric:tabular-nums}
+.price small{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--muted);margin-left:4px}
+.was-price{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:line-through}
+.off{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:999px;background:var(--accent);color:#121417}
+[data-mode="target"] .was-price,[data-mode="target"] .off{display:none}
+
+.panel{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:24px}
+@media(min-width:900px){.panel{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}}
+.panel > div{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,3vw,32px)}
+.pages-n{font-variation-settings:"wdth" 125;font-weight:900;font-size:clamp(56px,7vw,92px);line-height:.9;color:var(--accent-text);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(to right,var(--accent) var(--fill,0%),var(--line) var(--fill,0%))}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:4px;background:var(--accent)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-11px;border-radius:50%;background:var(--glass-solid);border:1px solid var(--glass-edge);box-shadow:inset 0 1px 0 var(--glass-hi),0 4px 12px rgba(0,0,0,.3),0 0 0 4px var(--accent)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--glass-solid);border:4px solid var(--accent)}
+.ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.breakdown{display:grid;gap:10px;font-family:var(--mono);font-size:13px}
+.breakdown div{display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.breakdown span:first-child{color:var(--muted)}
+.breakdown .total{border-bottom:0}
+.note{font-size:14px;color:var(--muted);margin-top:14px}
+.opts{display:grid;gap:8px;margin-top:18px}
+.opt{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:52px;padding:8px 14px;border-radius:14px;border:1px solid var(--line);cursor:pointer;transition:border-color .2s var(--ease),background-color .2s var(--ease)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .box{width:20px;height:20px;border-radius:6px;border:1px solid var(--muted);position:relative}
+.opt input:checked ~ .box{background:var(--accent);border-color:var(--accent)}
+.opt input:checked ~ .box::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #121417;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.opt input:focus-visible ~ .box{outline:2px solid var(--accent);outline-offset:3px}
+.opt:has(input:checked){border-color:var(--accent)}
+.opt .nm{font-variation-settings:"wdth" 112;font-weight:700}
+.opt .pr{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.big{font-variation-settings:"wdth" 125;font-weight:900;font-size:clamp(42px,5vw,68px);line-height:.95;font-variant-numeric:tabular-nums}
+.bundle-hit{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--accent);font-size:14px}
+.bundle-hit.on{display:block}
+
+/* ---------- Process ---------- */
+.cues{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media(min-width:760px){.cues{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.cue-step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;min-height:190px;display:flex;flex-direction:column;gap:10px}
+.cue-step .k{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.cue-step h3{font-variation-settings:"wdth" 125;font-weight:800;font-size:22px;line-height:1}
+.cue-step p{color:var(--muted);font-size:15px}
+.cue-step.go{background:var(--accent);border-color:var(--accent);color:#121417}
+.cue-step.go .k,.cue-step.go p{color:#121417;opacity:.82}
+
+/* ---------- Case ---------- */
+.case{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
+@media(min-width:900px){.case{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}}
+.case h3{font-variation-settings:"wdth" 125;font-weight:800;font-size:clamp(30px,4vw,52px);line-height:.95;margin:12px 0 16px}
+.case p{font-size:18px;max-width:46ch}
+.flag{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.never{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px}
+.never span{font-family:var(--mono);font-size:12px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-decoration:line-through}
+
+footer{padding:56px 0 80px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:end}
+footer .end{font-variation-settings:"wdth" 125;font-weight:900;font-size:clamp(36px,6vw,72px);line-height:.9;letter-spacing:-.02em}
+
+/* ---------- Small screens: keep the edited button clear of the glass ---------- */
+@media(max-width:600px){
+  .screen .v-site{padding-bottom:84px}
+  .v-img{display:none}
+  .dock .tool:not(.approve):not(:first-child){display:none}
+  .dock .sep{display:none}
+  .clip{aspect-ratio:4/5}
+  .clip .caption{flex-direction:column;align-items:flex-start;gap:2px}
+  .clip .caption span{text-align:left}
+  .post{width:52%}
+}
+
+/* ---------- Reduced motion: loops freeze on their final frame ---------- */
+@media (prefers-reduced-motion: reduce){
+  body::before,body::after{animation:none}
+  .loop *, .slot *{animation-play-state:paused !important;animation-delay:-5.6s !important}
+  .btn,.card,.seg button,.theme-switch button,body{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="nav">
+    <div class="bar glass pill">
+      <a class="lockup" href="#top" aria-label="Main Stage Studio">
+        <svg width="26" height="26" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 17V5H17" stroke="#FFB21A" stroke-width="5" fill="none" stroke-linecap="square"/><path d="M35 23V35H23" stroke="#FFB21A" stroke-width="5" fill="none" stroke-linecap="square"/></svg>
+        <span class="wm" data-stage-id="main-stage-5">MAIN STAGE<small>STUDIO</small></span>
+      </a>
+      <nav class="nav-links" aria-label="Specimen sections">
+        <a href="#reel" data-stage-id="tools">Tools</a><a href="#lineup" data-stage-id="products">Products</a><a href="#colour" data-stage-id="day-night">Day / night</a>
+      </nav>
+      <div class="nav-right">
+        <span class="spec-tag" data-stage-id="specimen-c">Specimen C</span>
+        <div class="theme-switch" role="group" aria-label="Theme">
+          <button type="button" data-theme-btn="day" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3"/></g></svg><span class="t-word" data-stage-id="day">Day</span></button>
+          <button type="button" data-theme-btn="night" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7z" fill="currentColor"/></svg><span class="t-word" data-stage-id="night">Night</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" data-stage-section="hero" aria-labelledby="hero-h">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="label" style="margin-bottom:22px" data-stage-id="positioning-v6-specimen-c-glass">Positioning v6 · Specimen C · Glass Box</p>
+      <h1 id="hero-h" data-stage-id="run-the-3">Run the <span class="lit">show.</span></h1>
+      <p class="proof" data-stage-id="see-everything-change-anything-own">See everything. Change anything. Own all of it.</p>
+      <p class="sub" data-stage-id="brand-website-content-and-the-2">Brand, website, content and the systems behind them. Built by one studio, handed over with the controls.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#reel" data-stage-id="watch-the-tools">Watch the tools
+          <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></a>
+        <a class="btn" href="#lineup" data-stage-id="see-the-prices">See the prices</a>
+      </div>
+    </div>
+
+    <div class="loop m-edit" data-loop>
+      <div class="screen" role="img" aria-label="Animated mock-up: a clinic owner changes a button on her own website, the change saves and waits for approval">
+        <div class="chrome"><i></i><i></i><i></i><span data-stage-id="vera-clinic-example-editing">vera-clinic.example · editing</span></div>
+        <div class="v-site">
+          <div class="v-nav"><b data-stage-id="vera">Vera</b><span data-stage-id="treatments-journal-visit">Treatments · Journal · Visit</span></div>
+          <div class="v-h" data-stage-id="skin-that-looks-like-you">Skin that looks like you, rested.</div>
+          <p class="v-p" data-stage-id="considered-treatments-in-a-quiet">Considered treatments in a quiet room. Every plan starts with a conversation.</p>
+          <div class="v-cta"><span class="old" data-stage-id="book-a-consultation">Book a consultation</span><span class="new" style="opacity:0" data-stage-id="book-your-free-skin-check">Book your free skin check</span><i class="sel"><b data-stage-id="editing-vera">Editing · Vera</b></i><span class="cursor" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M2 1l13 7-6 1.5L6.5 16z" fill="#121417" stroke="#fff" stroke-width="1.2"/></svg></span></div>
+          <div class="v-img" aria-hidden="true"></div>
+        </div>
+                <div class="toast glass" aria-hidden="true" data-stage-id="saved-waiting-for-your-cue"><span class="ok"></span>Saved · waiting for your cue</div>
+        <div class="dock glass pill" aria-hidden="true">
+          <span class="tool"><svg viewBox="0 0 16 16"><path d="M3 13h10M5 10l6-6 2 2-6 6H5z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></span>
+          <span class="tool"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="6" cy="7" r="1.4" fill="currentColor"/><path d="M3 12l4-3 3 2 3-2" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></span>
+          <span class="tool" data-s="Undo"></span>
+          <span class="sep"></span>
+          <span class="tool approve" data-stage-id="approve-2">Approve</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IDEA -->
+<section data-stage-section="idea" aria-labelledby="idea-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="00-the-idea">00 · The idea</p>
+      <div>
+        <h2 id="idea-h" class="display" data-stage-id="a-glass-box">A glass box, <span class="lit">not a black box.</span></h2>
+        <p class="lede" data-stage-id="agencies-and-ai-tools-hide">Agencies and AI tools hide the machinery. MSS puts a clear layer of controls on top of your business. Glass is only ever that layer: the dock, the toggle, the approve button. Underneath, always, is the real work, moving.</p>
+      </div>
+    </div>
+    <div class="idea">
+      <div><b data-stage-id="see-everything">See everything.</b><p data-stage-id="every-page-post-and-email">Every page, post and email in one place, before it's real. Prices on the page.</p></div>
+      <div><b data-stage-id="change-anything">Change anything.</b><p data-stage-id="edit-your-own-site-write">Edit your own site, write your own emails, approve your own posts.</p></div>
+      <div><b data-stage-id="own-all-of-it">Own all of it.</b><p data-stage-id="your-code-your-data-your">Your code, your data, your accounts. Leave whenever you like, with everything.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOL REEL -->
+<section id="reel" data-stage-section="reel" aria-labelledby="reel-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="01-the-tools-moving">01 · The tools, moving</p>
+      <div>
+        <h2 id="reel-h" class="display" data-stage-id="show-the-tool">Show the tool, <span class="lit">not the promise.</span></h2>
+        <p class="lede" data-stage-id="every-product-page-opens-on">Every product page opens on a short loop of the tool doing its job. These are motion mock-ups with a fictional clinic (Vera). Real screen recordings replace them in the build.</p>
+      </div>
+    </div>
+    <div class="reel">
+      <article class="clip loop m-edit" data-loop>
+        <div class="tc glass pill" data-stage-id="website-live-edit"><i></i>Website · live edit</div>
+        <div class="stagebox screen" style="border-radius:0;border:0" role="img" aria-label="Animated mock-up: editing a button on a live site">
+          <div class="chrome"><i></i><i></i><i></i><span data-stage-id="vera-clinic-example">vera-clinic.example</span></div>
+          <div class="v-site" style="padding-top:5%">
+            <div class="v-nav"><b data-stage-id="vera-2">Vera</b><span data-stage-id="visit">Visit</span></div>
+            <div class="v-h" style="font-size:clamp(20px,2.4vw,30px)" data-stage-id="skin-that-looks-like-you-2">Skin that looks like you, rested.</div>
+            <div class="v-cta"><span class="old" data-stage-id="book-a-consultation-2">Book a consultation</span><span class="new" style="opacity:0" data-stage-id="book-your-free-skin-check-2">Book your free skin check</span><i class="sel"><b data-stage-id="editing">Editing</b></i><span class="cursor" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M2 1l13 7-6 1.5L6.5 16z" fill="#121417" stroke="#fff" stroke-width="1.2"/></svg></span></div>
+          </div>
+                    <div class="toast glass" aria-hidden="true" style="top:44px" data-stage-id="saved"><span class="ok"></span>Saved</div>
+        </div>
+        <div class="caption glass"><b data-stage-id="change-a-word-yourself">Change a word yourself</b><span data-stage-id="no-ticket-no-invoice">No ticket, no invoice</span></div>
+      </article>
+
+      <article class="clip loop" data-loop>
+        <div class="tc glass pill" data-stage-id="content-approval"><i></i>Content · approval</div>
+        <div class="m-gate" role="img" aria-label="Animated mock-up: a social post waits for approval, is approved, and is scheduled">
+          <div class="post"><div class="ph"></div><div class="tx"><small data-stage-id="vera-journal">VERA · JOURNAL</small>Three things we check before any treatment.</div></div>
+          <div class="gatebar glass pill" aria-hidden="true"><span class="b" data-s="Ask for a change"></span><span class="b go" data-stage-id="approve-3">Approve</span></div>
+          <div class="cue glass pill" aria-hidden="true" data-stage-id="your-cue-scheduled-tue-9"><svg viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg>Your cue · scheduled Tue 9:00</div>
+        </div>
+        <div class="caption glass"><b data-stage-id="nothing-ships-without-your-cue">Nothing ships without your cue</b><span data-stage-id="posts-reels-carousels">Posts, reels, carousels</span></div>
+      </article>
+
+      <article class="clip loop" data-loop>
+        <div class="tc glass pill" data-stage-id="platform-console"><i></i>Platform · console</div>
+        <div class="m-mail" role="img" aria-label="Animated mock-up: the owner writes an email in her console and approves it, and it goes live">
+          <aside><b data-stage-id="vera-console">Vera console</b><span data-stage-id="people">People</span><span class="on" data-stage-id="emails">Emails</span><span data-stage-id="forms">Forms</span><span data-stage-id="consent">Consent</span></aside>
+          <main>
+            <div class="status"><span class="draft" data-stage-id="draft">Draft</span><span class="liv" data-stage-id="live">Live</span></div>
+            <div class="subj" data-stage-id="your-skin-check-what-to">Your skin check: what to expect</div>
+            <i class="ln" style="display:block"></i><i class="ln" style="display:block"></i><i class="ln" style="display:block"></i><i class="ln" style="display:block"></i>
+          </main>
+          <div class="mailbar glass pill" aria-hidden="true"><span class="b" data-s="Preview"></span><span class="b go" data-stage-id="approve-4">Approve</span></div>
+        </div>
+        <div class="caption glass"><b data-stage-id="write-and-approve-your-own">Write and approve your own emails</b><span data-stage-id="one-record-per-person">One record per person</span></div>
+      </article>
+
+      <article class="clip loop" data-loop>
+        <div class="tc glass pill" data-stage-id="content-carousel-builder"><i></i>Content · carousel builder</div>
+        <div class="m-car" role="img" aria-label="Animated mock-up: clips from a library assemble into a five-slide carousel">
+          <div class="grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="slides" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="caption glass"><b data-stage-id="from-library-to-carousel">From library to carousel</b><span data-stage-id="built-in-your-brand">Built in your brand</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- MARK -->
+<section data-stage-section="mark" aria-labelledby="mark-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="02-the-mark">02 · The mark</p>
+      <div>
+        <h2 id="mark-h" class="display" data-stage-id="spike-2">Spike, <span class="lit">as a lens.</span></h2>
+        <p class="lede" data-stage-id="the-same-two-corners-as">The same two corners as A and B. In C they sit on a pane of glass held over the client's work: the selection frame you edit inside.</p>
+      </div>
+    </div>
+    <div class="mark-grid">
+      <div class="mark-stage">
+        <div class="behind" aria-hidden="true"></div>
+        <div class="lens glass">
+          <svg viewBox="0 0 40 40" role="img" aria-label="Spike mark on glass"><path d="M5 17V5H17" stroke="#FFB21A" stroke-width="5" fill="none" stroke-linecap="square"/><path d="M35 23V35H23" stroke="#FFB21A" stroke-width="5" fill="none" stroke-linecap="square"/></svg>
+        </div>
+      </div>
+      <div class="rules">
+        <div class="rule"><b data-stage-id="glass-is-only-ever-a">Glass is only ever a control.</b><p data-stage-id="nav-docks-toggles-toasts-captions">Nav, docks, toggles, toasts, captions. Never a content card, never a block of reading text.</p></div>
+        <div class="rule"><b data-stage-id="something-real-is-always-behind">Something real is always behind it.</b><p data-stage-id="glass-over-a-flat-background">Glass over a flat background is invisible. Put it over work, video or light.</p></div>
+        <div class="rule"><b data-stage-id="text-on-glass-is-tinted">Text on glass is tinted for the worst frame.</b><p data-stage-id="the-glass-carries-its-own">The glass carries its own scrim, and only full-strength type sits on it. Muted grey on glass fails over bright content (see the table).</p></div>
+        <div class="rule"><b data-stage-id="it-turns-solid-when-asked">It turns solid when asked.</b><p data-stage-id="reduced-transparency-or-a-browser">Reduced transparency, or a browser without blur, gets opaque panels. Reduced motion freezes every loop.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLOUR -->
+<section id="colour" data-stage-section="colour" aria-labelledby="colour-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="03-day-and-night">03 · Day and night</p>
+      <div>
+        <h2 id="colour-h" class="display" data-stage-id="one-accent">One accent, <span class="lit">two kinds of light.</span></h2>
+        <p class="lede" data-stage-id="tungsten-carries-over-from-a">Tungsten carries over from A, so C reads as an evolution, not a third brand. Night is the default for the tools; day is for reading, documents and anyone who prefers it. Use the switch at the top.</p>
+      </div>
+    </div>
+    <div class="themes">
+      <div class="theme-card tc-night">
+        <header><span data-stage-id="night-2">Night</span><span data-stage-id="0b0c0e">#0B0C0E</span></header>
+        <div class="sws">
+          <div class="sw" style="background:#0B0C0E;color:#F2F2EF"><b data-stage-id="base">Base</b>#0B0C0E</div>
+          <div class="sw" style="background:#121419;color:#F2F2EF"><b data-stage-id="card">Card</b>#121419</div>
+          <div class="sw" style="background:#F2F2EF;color:#0B0C0E"><b data-stage-id="type">Type</b>#F2F2EF</div>
+          <div class="sw" style="background:#9A9DA3;color:#0B0C0E"><b data-stage-id="muted">Muted</b>#9A9DA3</div>
+          <div class="sw" style="background:#FFB21A;color:#0B0C0E"><b data-stage-id="tungsten-2">Tungsten</b>#FFB21A</div>
+          <div class="sw" style="background:#5FD08A;color:#0B0C0E"><b data-stage-id="live-2">Live</b>#5FD08A</div>
+        </div>
+      </div>
+      <div class="theme-card tc-day">
+        <header><span data-stage-id="day-2">Day</span><span data-stage-id="f4f4f1">#F4F4F1</span></header>
+        <div class="sws">
+          <div class="sw" style="background:#F4F4F1;color:#121417"><b data-stage-id="base-2">Base</b>#F4F4F1</div>
+          <div class="sw" style="background:#FFFFFF;color:#121417"><b data-stage-id="card-2">Card</b>#FFFFFF</div>
+          <div class="sw" style="background:#121417;color:#F4F4F1"><b data-stage-id="type-2">Type</b>#121417</div>
+          <div class="sw" style="background:#5A5E66;color:#F4F4F1"><b data-stage-id="muted-2">Muted</b>#5A5E66</div>
+          <div class="sw" style="background:#FFB21A;color:#121417"><b data-stage-id="tungsten-3">Tungsten</b>#FFB21A · text #8A5A00</div>
+          <div class="sw" style="background:#1F7A46;color:#F4F4F1"><b data-stage-id="live-3">Live</b>#1F7A46</div>
+        </div>
+      </div>
+    </div>
+    <div class="ratios" id="ratios" aria-label="Contrast checks for the current theme, including text on glass over the brightest and darkest content"></div>
+  </div>
+</section>
+
+<!-- TYPE + VOICE -->
+<section data-stage-section="type-voice" aria-labelledby="type-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="04-type-and-voice">04 · Type and voice</p>
+      <div>
+        <h2 id="type-h" class="display" data-stage-id="calm-clear">Calm, clear, <span class="lit">still first person.</span></h2>
+        <p class="lede" data-stage-id="same-type-as-a-and">Same type as A and B. The persona moves from the performer to the clear operator: quieter, more precise, nothing hidden.</p>
+      </div>
+    </div>
+    <div class="type-row"><span class="label" data-stage-id="display-archivo-900-wide">Display · Archivo 900 wide</span><div class="t1" data-stage-id="your-cue-3">Your cue.</div></div>
+    <div class="type-row"><span class="label" data-stage-id="heading-archivo-700">Heading · Archivo 700</span><div class="t2" data-stage-id="a-fast-site-you-change-2">A fast site you change yourself. Typo on a Sunday night? Fix it.</div></div>
+    <div class="type-row"><span class="label" data-stage-id="body-archivo-400">Body · Archivo 400</span><p class="t3" data-stage-id="you-see-every-page-post">You see every page, post and email before it's real. You approve it, or it doesn't ship. When we're done, the code, the data and the accounts are yours.</p></div>
+    <div class="type-row"><span class="label" data-stage-id="system-geist-mono">System · Geist Mono</span><div class="t4" data-stage-id="website-10-pages-3-to-2">WEBSITE · 10 PAGES · 3 TO 5 WEEKS · £2,400 FOUNDING</div></div>
+    <div class="voice">
+      <div class="v-row head"><div class="label" data-stage-id="context-2">Context</div><div class="label" data-stage-id="a-the-performer">A: the performer</div><div class="label" data-stage-id="c-the-clear-operator">C: the clear operator</div></div>
+      <div class="v-row"><div class="label" data-stage-id="proof-line">Proof line</div><div class="was" data-stage-id="twenty-years-building-systems-that-2">Twenty years building systems that weren't allowed to fail.</div><div class="now" data-stage-id="see-everything-change-anything-own-2">See everything. Change anything. Own all of it.</div></div>
+      <div class="v-row"><div class="label" data-stage-id="offer-2">Offer</div><div class="was" data-stage-id="six-things-i-build-prices-2">Six things I build. Prices on the page.</div><div class="now" data-stage-id="six-products-each-shown-working">Six products, each shown working. Prices on the page.</div></div>
+      <div class="v-row"><div class="label" data-stage-id="ai-2">AI</div><div class="was" data-stage-id="ai-does-the-typing-i-2">AI does the typing. I do the deciding. You do the approving.</div><div class="now" data-stage-id="you-can-see-exactly-what">You can see exactly what the tools did, and nothing goes out until you say so.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LINEUP -->
+<section id="lineup" data-stage-section="lineup" aria-labelledby="lineup-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="05-applied-the-lineup-2">05 · Applied: the lineup</p>
+      <div>
+        <h2 id="lineup-h" class="display" data-stage-id="six-products">Six products, <span class="lit">each shown working.</span></h2>
+        <p class="lede" data-stage-id="every-card-opens-on-a">Every card opens on a clip of its tool (placeholders here). Founding prices are 55% to 61% below target, for the first three clients per product.</p>
+      </div>
+    </div>
+    <div class="price-top">
+      <div class="seg glass pill" role="group" aria-label="Price list">
+        <button type="button" data-mode-btn="intro" aria-pressed="true" data-stage-id="founding-price-2">Founding price</button>
+        <button type="button" data-mode-btn="target" aria-pressed="false" data-stage-id="target-price-2">Target price</button>
+      </div>
+      <p class="founding" data-stage-id="founding-rate-first-3-clients-2"><i aria-hidden="true"></i>Founding rate · first 3 clients per product</p>
+    </div>
+    <div class="bento" id="bento" data-mode="intro"></div>
+
+    <div class="panel">
+      <div>
+        <p class="label" data-stage-id="website-page-count-2">Website · page count</p>
+        <h3 class="t2" style="margin:10px 0 18px" data-stage-id="priced-for-ten-pages-each-2">Priced for ten pages. Each page after that is added on.</h3>
+        <div style="display:flex;align-items:baseline;gap:10px"><span class="pages-n" id="pages-n" data-stage-id="10-3">10</span><span class="label" data-stage-id="pages-2">pages</span></div>
+        <label for="pages" class="label" style="display:block;margin:16px 0 2px" data-stage-id="drag-to-set-your-page-2">Drag to set your page count</label>
+        <input id="pages" type="range" min="1" max="30" value="10" step="1">
+        <div class="ticks" aria-hidden="true"><span data-stage-id="1-3">1</span><span data-stage-id="10-4">10</span><span data-stage-id="20-3">20</span><span data-stage-id="30-2">30</span></div>
+      </div>
+      <div>
+        <div class="breakdown" id="pages-breakdown"></div>
+        <p class="note" data-stage-id="ten-pages-is-the-base-2">Ten pages is the base: under ten, the price stays the same. A page is a template plus its copy; blog posts and repeating items count once.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div>
+        <p class="label" data-stage-id="build-your-show-2">Build your show</p>
+        <h3 class="t2" style="margin-top:10px" data-stage-id="pick-what-you-need-see-2">Pick what you need. See it priced.</h3>
+        <div class="opts" id="opts"></div>
+      </div>
+      <div aria-live="polite">
+        <p class="label" data-stage-id="one-off-build-2">One-off build</p>
+        <div class="big" id="sum-oneoff" data-stage-id="0-4">£0</div>
+        <p class="label" style="margin-top:16px" data-stage-id="then-monthly-2">Then monthly</p>
+        <div class="big" id="sum-monthly" style="font-size:clamp(30px,3.4vw,46px)" data-stage-id="0-5">£0</div>
+        <div class="bundle-hit" id="bundle-hit"></div>
+        <p class="note" id="sum-note"></p>
+        <a class="btn primary" href="#top" style="margin-top:16px" data-stage-id="start-this-2">Start this</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section data-stage-section="process" aria-labelledby="process-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="06-how-it-works">06 · How it works</p>
+      <div><h2 id="process-h" class="display" data-stage-id="nothing-goes-live-until-you-3">Nothing goes live until you give the cue.</h2></div>
+    </div>
+    <div class="cues">
+      <div class="cue-step"><span class="k" data-stage-id="01-2">01</span><h3 data-stage-id="soundcheck-2">Soundcheck</h3><p data-stage-id="one-call-to-find-out-2">One call to find out what you actually need.</p></div>
+      <div class="cue-step"><span class="k" data-stage-id="02-2">02</span><h3 data-stage-id="rehearsal-2">Rehearsal</h3><p data-stage-id="everything-on-one-private-link-2">Everything on one private link, before it's real.</p></div>
+      <div class="cue-step go"><span class="k" data-stage-id="03-2">03</span><h3 data-stage-id="your-cue-4">Your cue</h3><p data-stage-id="you-approve-it-or-it-2">You approve it, or it doesn't ship.</p></div>
+      <div class="cue-step"><span class="k" data-stage-id="04-2">04</span><h3 data-stage-id="showtime-2">Showtime</h3><p data-stage-id="live-on-your-domain-in">Live, on your domain, in your name.</p></div>
+      <div class="cue-step"><span class="k" data-stage-id="05-2">05</span><h3 data-stage-id="the-run-2">The run</h3><p data-stage-id="i-keep-it-running-or-2">I keep it running, or you do. You have the keys.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE + IMAGERY -->
+<section data-stage-section="case" aria-labelledby="case-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-stage-id="07-proof-and-imagery">07 · Proof and imagery</p>
+      <div><p class="lede" style="margin-top:0" data-stage-id="case-studies-lead-with-a">Case studies lead with a recording of the client using what was built. Their colours, their screen, the glass controls on top.</p></div>
+    </div>
+    <div class="case">
+      <div class="loop m-edit" data-loop>
+        <div class="screen" role="img" aria-label="Placeholder for a case study recording">
+          <div class="chrome"><i></i><i></i><i></i><span data-stage-id="case-study-recording">case study · recording</span></div>
+          <div class="v-site">
+            <div class="v-nav"><b data-stage-id="client-site">Client site</b><span data-stage-id="recording-placeholder">Recording placeholder</span></div>
+            <div class="v-h" style="font-size:clamp(20px,2.4vw,30px)" data-stage-id="the-owner-editing-her-own">The owner, editing her own page.</div>
+            <div class="v-cta"><span class="old" data-stage-id="book-a-consultation-3">Book a consultation</span><span class="new" style="opacity:0" data-stage-id="book-your-free-skin-check-3">Book your free skin check</span><i class="sel"><b data-stage-id="editing-the-owner-2">Editing · the owner</b></i><span class="cursor" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M2 1l13 7-6 1.5L6.5 16z" fill="#121417" stroke="#fff" stroke-width="1.2"/></svg></span></div>
+          </div>
+                    <div class="toast glass" aria-hidden="true" data-stage-id="saved-2"><span class="ok"></span>Saved</div>
+        </div>
+      </div>
+      <div>
+        <span class="badge live" data-stage-id="live-client-2">Live client</span>
+        <h3 id="case-h" data-stage-id="a-clinic-that-runs-its-2">A clinic that runs its own show.</h3>
+        <p data-stage-id="puremed-s-owner-edits-her-2">PureMed's owner edits her own website, writes and approves her own emails, and keeps every client record in one place she controls.</p>
+        <p class="flag" data-stage-id="recording-and-figures-to-come">Recording and figures to come; nothing here is for publication yet.</p>
+        <div class="never" aria-label="Never use">
+          <span data-stage-id="glass-content-cards">Glass content cards</span><span data-stage-id="stock-people-2">Stock people</span><span data-stage-id="glossy-ai-portraits-2">Glossy AI portraits</span><span data-stage-id="purple-or-blue-ai-gradients-2">Purple or blue AI gradients</span><span data-stage-id="real-client-data-in-demos">Real client data in demos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer data-stage-section="footer">
+  <div class="wrap">
+    <div class="end" data-stage-id="run-the-4">Run the <span class="lit">show.</span></div>
+    <div class="mono" style="color:var(--muted);text-align:right;font-size:12px" data-stage-id="specimen-c-glass-box-10">Specimen C · Glass Box · 10 Oct 2026<br>Source: mss-positioning-v6-proposal.md §7.8</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- Theme switch ---------- */
+  var root = document.documentElement;
+  function current(){ var t = root.getAttribute("data-theme"); if (t) return t; return window.matchMedia("(prefers-color-scheme: light)").matches ? "day" : "night"; }
+  function syncButtons(){ var t = current(); document.querySelectorAll("[data-theme-btn]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-theme-btn") === t)); }); }
+  document.querySelectorAll("[data-theme-btn]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var t = b.getAttribute("data-theme-btn");
+      root.setAttribute("data-theme", t);
+      try { localStorage.setItem("mss-c-theme", t); } catch(e){}
+      syncButtons(); renderRatios();
+    });
+  });
+  syncButtons();
+
+  /* ---------- Loops: run only while on screen ---------- */
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var loops = document.querySelectorAll("[data-loop]");
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle("play", e.isIntersecting); }); }, { threshold:.25 });
+    loops.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---------- Prices: same data as specimens A and B ---------- */
+  var gbp = function(n){ return "£" + Math.round(n).toLocaleString("en-GB"); };
+  var pct = function(i,t){ return Math.round((1 - i/t) * 100); };
+  var products = [
+    { id:"identity", name:"Identity", promise:"Who you are, said once and properly.", clip:"Brand book, page by page",
+      gets:["Positioning on one page","A line that holds it","Voice guide","Mark, colour, type, imagery"], time:"3 to 4 weeks", intro:1800, target:4500, unit:"", proof:"Ayesha Johar", status:"prog" },
+    { id:"website", name:"Website", promise:"A fast site you change yourself.", clip:"Live edit", wide:true,
+      gets:["10 pages, copy in your voice","Live editing: you change words and images","Search and AI-search basics","Code in your own repository"], time:"3 to 5 weeks", intro:2400, target:5500, unit:"10 pages", proof:"PureMed", status:"live" },
+    { id:"campaign", name:"Campaign", promise:"One offer, one audience, built end to end.", clip:"Quiz to inbox",
+      gets:["Guide or quiz lead magnet","Landing and thank-you pages","4 to 6 email follow-ups"], time:"2 to 3 weeks", intro:1200, target:2800, unit:"", proof:"PureMed", status:"live" },
+    { id:"content", name:"Content", promise:"Your channels, kept moving every week.", clip:"Approve gate", wide:true,
+      gets:["Monthly calendar","Posts, carousels, edited reels","Checked against your rules, approved by you"], time:"Monthly · 3 month minimum", intro:1500, target:3500, unit:"/mo", monthly:true, proof:"Combat sports promotion", status:"anon" },
+    { id:"platform", name:"Platform", promise:"The system your business actually runs on.", clip:"Console", wide:true,
+      gets:["One record per customer, not four","Consent captured and kept properly","Emails you write and approve","Migration from your old tools"], time:"Foundation · 4 to 6 weeks", intro:4500, target:10000, unit:"Foundation", proof:"PureMed", status:"live" },
+    { id:"care", name:"Care", promise:"Keeping it all running.", clip:"Monthly check",
+      gets:["Hosting, backups, updates","Email sending","Small changes on request"], time:"Monthly", intro:150, target:350, unit:"/mo", monthly:true, proof:"PureMed", status:"live" }
+  ];
+  var page = { intro:120, target:300 };
+  var bundle = { name:"Opening Night", ids:["identity","website"], intro:3900, target:10000 };
+  var statusLabel = { live:"Live client", prog:"In progress", anon:"Anonymised" };
+  var mode = "intro";
+  var picked = { identity:true, website:true };
+  var range = document.getElementById("pages");
+
+  function renderBento(){
+    var el = document.getElementById("bento");
+    el.setAttribute("data-mode", mode);
+    el.innerHTML = products.map(function(p){
+      var unit = p.unit ? "<small>" + p.unit + "</small>" : "";
+      return '<article class="card' + (p.wide ? " wide" : "") + '">' +
+        '<div class="slot" aria-hidden="true"><div class="bars"><i></i><i></i><i></i></div><div class="tag glass pill"><span>Clip</span><span>' + p.clip + '</span></div></div>' +
+        '<h3>' + p.name + '</h3><p class="promise">' + p.promise + '</p>' +
+        '<ul>' + p.gets.map(function(g){ return "<li>" + g + "</li>"; }).join("") + '</ul>' +
+        '<div class="meta"><span>' + p.time + '</span><span class="badge ' + p.status + '">' + statusLabel[p.status] + '</span><span>Proof: ' + p.proof + '</span></div>' +
+        '<div class="priceline"><span class="price">' + gbp(p[mode]) + unit + '</span><span class="was-price">' + gbp(p.target) + '</span><span class="off">−' + pct(p.intro, p.target) + '%</span></div>' +
+      '</article>';
+    }).join("");
+  }
+  function renderPages(){
+    var n = +range.value, extra = Math.max(0, n - 10), base = products[1][mode], per = page[mode];
+    var other = mode === "intro" ? "target" : "intro";
+    document.getElementById("pages-n").textContent = n;
+    range.style.setProperty("--fill", ((n - 1) / 29 * 100) + "%");
+    document.getElementById("pages-breakdown").innerHTML =
+      '<div><span>Website, first 10 pages</span><span>' + gbp(base) + '</span></div>' +
+      '<div><span>Extra pages · ' + extra + ' × ' + gbp(per) + '</span><span>' + gbp(extra * per) + '</span></div>' +
+      '<div class="total"><span>Total, ' + (mode === "intro" ? "founding" : "target") + '</span><span class="price" style="font-size:30px">' + gbp(base + extra * per) + '</span></div>' +
+      '<div><span>' + (mode === "intro" ? "At target rate" : "At founding rate") + '</span><span>' + gbp(products[1][other] + extra * page[other]) + '</span></div>';
+  }
+  function renderOpts(){
+    document.getElementById("opts").innerHTML = products.map(function(p){
+      return '<label class="opt"><input type="checkbox" value="' + p.id + '"' + (picked[p.id] ? " checked" : "") + '><span class="box" aria-hidden="true"></span><span class="nm">' + p.name + '</span><span class="pr">' + gbp(p[mode]) + (p.monthly ? "/mo" : "") + '</span></label>';
+    }).join("");
+  }
+  function renderSum(){
+    var oneoff = 0, monthly = 0;
+    products.forEach(function(p){
+      if (!picked[p.id]) return;
+      var v = p[mode];
+      if (p.id === "website") v += Math.max(0, +range.value - 10) * page[mode];
+      if (p.monthly) monthly += v; else oneoff += v;
+    });
+    var hit = document.getElementById("bundle-hit");
+    if (bundle.ids.every(function(id){ return picked[id]; })) {
+      var parts = bundle.ids.reduce(function(s,id){ return s + products.filter(function(p){ return p.id === id; })[0][mode]; }, 0);
+      var saving = parts - bundle[mode];
+      oneoff -= saving;
+      hit.innerHTML = "<b>" + bundle.name + "</b> applied: Identity and Website together, " + gbp(saving) + " off.";
+      hit.classList.add("on");
+    } else { hit.classList.remove("on"); }
+    document.getElementById("sum-oneoff").textContent = gbp(oneoff);
+    document.getElementById("sum-monthly").textContent = gbp(monthly) + "/mo";
+    document.getElementById("sum-note").textContent = "Website priced at " + range.value + " pages. " + (mode === "intro" ? "Founding rate, first 3 clients per product." : "Target rate, after the founding places are taken.");
+  }
+  document.getElementById("opts").addEventListener("change", function(e){ picked[e.target.value] = e.target.checked; renderSum(); });
+  range.addEventListener("input", function(){ renderPages(); renderSum(); });
+  document.querySelectorAll("[data-mode-btn]").forEach(function(b){
+    b.addEventListener("click", function(){
+      mode = b.getAttribute("data-mode-btn");
+      document.querySelectorAll("[data-mode-btn]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+      renderBento(); renderPages(); renderOpts(); renderSum();
+    });
+  });
+
+  /* ---------- Contrast, including text on glass over the worst content ---------- */
+  function rgb(h){ return h.match(/\w\w/g).map(function(x){ return parseInt(x,16); }); }
+  function hex(c){ return "#" + c.map(function(v){ return ("0" + Math.round(v).toString(16)).slice(-2); }).join(""); }
+  function over(rgba, a, under){ var u = rgb(under); return hex(rgba.map(function(v,i){ return v * a + u[i] * (1 - a); })); }
+  function lum(h){ var c = rgb(h).map(function(v){ v /= 255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); }); return .2126*c[0] + .7152*c[1] + .0722*c[2]; }
+  function ratio(a,b){ var x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); }
+  function renderRatios(){
+    var day = current() === "day";
+    var g = day ? over([255,255,255], .70, "#1E2B4D") : over([20,22,27], .72, "#F7F3EC");
+    var pairs = day ? [
+      ["#121417","#F4F4F1","Type on base"], ["#5A5E66","#F4F4F1","Muted on base"], ["#8A5A00","#F4F4F1","Amber text on base"], ["#121417","#FFB21A","Type on Tungsten"],
+      ["#1F7A46","#FFFFFF","Live on card"], ["#121417", g, "Type on glass, darkest content"], ["#5A5E66", g, "Muted on glass (don't)"], ["#FFB21A","#F4F4F1","Tungsten as text (don't)"]
+    ] : [
+      ["#F2F2EF","#0B0C0E","Type on base"], ["#9A9DA3","#0B0C0E","Muted on base"], ["#FFB21A","#0B0C0E","Tungsten on base"], ["#0B0C0E","#FFB21A","Base on Tungsten"],
+      ["#5FD08A","#121419","Live on card"], ["#F2F2EF", g, "Type on glass, brightest content"], ["#9A9DA3", g, "Muted on glass (don't)"], ["#F2F2EF", over([20,22,27], .07, "#F7F3EC"), "Clear glass, no scrim (don't)"]
+    ];
+    document.getElementById("ratios").innerHTML = pairs.map(function(p){
+      var r = ratio(p[0], p[1]), ok = r >= 4.5;
+      return '<div class="ratio"><span class="pair"><i style="background:' + p[1] + ';color:' + p[0] + '" data-s="Aa" aria-hidden="true"></i><span>' + p[2] + '<br>' + r.toFixed(1) + ':1</span></span><span class="verdict ' + (ok ? "ok" : "bad") + '">' + (ok ? "Pass" : "Fail") + '</span></div>';
+    }).join("");
+  }
+  window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", function(){ syncButtons(); renderRatios(); });
+
+  renderBento(); renderPages(); renderOpts(); renderSum(); renderRatios();
+})();
+</script>
+</body>
+</html>

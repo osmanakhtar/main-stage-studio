@@ -7,7 +7,7 @@ Osman Akhtar's workspace. Multiple streams in one repo while each is early stage
 
 | Folder | Stream | What it is |
 |--------|--------|-----------|
-| `01_mss/` | Main Stage Studio | Creative agency for founders — brand, web, AI-assisted delivery |
+| `01_mss/` | Main Stage Studio | Six products for owner-led businesses: Identity, Website, Campaign, Content, Platform, Care. "Run the show" (v6, 10 Oct 2026) |
 | `02_clients/` | Client projects | Active client engagements. Current: Ayesha Johar |
 | `03_resources/` | Shared assets | DAM holding area — images, video, tools. Cloudflare R2 or Bunny.net TBD |
 
@@ -25,15 +25,14 @@ Osman Akhtar's workspace. Multiple streams in one repo while each is early stage
 | `.claude/mss-new-client-checklist.md` | Standard process for opening a new client engagement |
 | `.claude/mss-new-case-study-checklist.md` | Standard process for opening and publishing a case study |
 
-**Logo mark — canonical SVG (light background):**
+**Logo mark: the Spike (v6). On dark (Tungsten); on light the strokes are `#12110F`:**
 ```svg
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="2"  y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
-  <rect x="14" y="2"  width="24" height="22" rx="2.5" fill="#1C1712"/>
-  <rect x="14" y="16" width="12" height="8"  rx="1.5" fill="#F5EFE5"/>
+  <path d="M5 17V5H17" stroke="#FFB21A" stroke-width="5" stroke-linecap="square"/>
+  <path d="M35 23V35H23" stroke="#FFB21A" stroke-width="5" stroke-linecap="square"/>
 </svg>
 ```
-Near-black top-right (leads). Terracotta bottom-left (recedes). Parchment cutout at intersection.
+Two corners of stage tape framing empty space: the client's spot. Files in `01_mss/brand/mark/`.
 
 ---
 
@@ -50,7 +49,7 @@ Near-black top-right (leads). Terracotta bottom-left (recedes). Parchment cutout
 - **Prototyping:** HTML/CSS in Claude Code
 - **Production:** Astro static sites (Bricks Builder retired 25 June 2026 — legacy docs in `_archive/bricks-era/`)
 - **Client review:** Stage on the Pi (`mss-review.duckdns.org`)
-- **Assets:** Higgsfield for video/3D, Claude for SVG and components
+- **Assets:** real tool recordings (`01_mss/website/tools/clips/clip-kit.js`), Claude for SVG and components; Higgsfield on hold (0 credits)
 - **Hosting:** Cloudways (MSS production site now runs on Astro)
 - **DAM:** Deprioritised — WebP compression + Cloudways direct serving is sufficient
 
@@ -58,21 +57,24 @@ Near-black top-right (leads). Terracotta bottom-left (recedes). Parchment cutout
 
 ## MSS design principles (MSS work only)
 
+v6 direction A, "Stage". Full rules: `.claude/mss-brand-identity.md`. Tokens: `01_mss/brand/mss-v6-tokens.css`.
+
 ```css
---color-parchment:  #F5EFE5;
---color-blush:      #E8C9AE;
---color-terracotta: #BF6B47;
---color-ember:      #8C4A2F;
---color-near-black: #1C1712;
+--mss-stage-black: #12110F;  /* default background, type on light */
+--mss-riser:       #1F1D1A;  /* raised surfaces on dark */
+--mss-line:        #2E2B27;  /* rules and borders on dark */
+--mss-house:       #F3F1EC;  /* light surfaces, type on dark */
+--mss-rigging:     #8C8981;  /* secondary text on dark */
+--mss-tungsten:    #FFB21A;  /* the one accent: never text on light */
+--mss-cue-red:     #E5402A;  /* signals only: never small text */
 ```
 
-- Fonts: Cormorant Garamond (display) + Plus Jakarta Sans (body) via Google Fonts
-- No centred hero layouts — left-aligned or split screen
-- No generic card overuse — use space, borders, and negative space
-- Hardware-accelerated motion only — `transform` and `opacity`
-- `min-h-[100dvh]` not `h-screen` for full-height sections
-- Tailwind CSS for styling
-- No emoji, no purple/blue AI aesthetic, no gradient backgrounds
+- Fonts: Archivo (display at width 112 to 125, body at 100) + Geist Mono (labels, prices, buttons in tools), Google Fonts
+- Dark-first; one Tungsten moment per view; text on Tungsten is Stage Black
+- MSS's layer is in A; the client's layer (their site, colours, logo, posts, emails) stays theirs
+- No centred hero layouts; no generic card overuse; no emoji, no purple/blue AI aesthetic, no gradients, no glass
+- Hardware-accelerated motion only, `transform` and `opacity`; respect `prefers-reduced-motion`
+- `min-h-[100dvh]` not `h-screen` for full-height sections; Tailwind CSS for styling
 
 ---
 

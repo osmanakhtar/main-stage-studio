@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <title>pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* MSS v6 A tokens: main-stage-studio/01_mss/brand/mss-v6-tokens.css */
   * { box-sizing: border-box; margin: 0; }
   html, body { height: 100%; }
   body {
-    background: #0F1B27;
+    background: #12110F;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+    font-family: 'Geist Mono', 'Menlo', monospace;
   }
 
   .stage { width: 1140px; }
@@ -22,19 +24,20 @@
     display: flex; align-items: baseline; gap: 14px;
     height: 78px;
     padding: 0 4px 20px;
-    font-family: 'Georgia', serif;
+    font-family: 'Archivo', system-ui, sans-serif; font-variation-settings: 'wdth' 100;
   }
   .cap-n {
     font-size: 13px;
     letter-spacing: 0.18em;
-    color: #C6A77D;
+    color: #FFB21A;
+    font-family: 'Geist Mono', monospace;
     flex: none;
     padding-top: 5px;
   }
   .cap-t {
     font-size: 21px;
     line-height: 1.35;
-    color: #EAF1F8;
+    color: #F3F1EC;
     opacity: 0;
     transform: translateY(6px);
     transition: opacity 0.5s ease, transform 0.5s ease;
@@ -43,40 +46,41 @@
 
   .term {
     height: 596px;
-    background: #142434;
-    border-radius: 10px;
+    background: #1A1816;
+    border: 1px solid #2E2B27;
+    border-radius: 4px;
     box-shadow: 0 24px 70px rgba(0,0,0,0.45);
     display: flex; flex-direction: column;
     overflow: hidden;
   }
   .bar {
     height: 38px; flex: none;
-    background: #1B2E42;
+    background: #1F1D1A;
     display: flex; align-items: center; gap: 8px;
     padding: 0 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid #2E2B27;
   }
   .dot { width: 11px; height: 11px; border-radius: 50%; }
   .bar .t {
     margin-left: 12px;
-    color: rgba(255,255,255,0.42);
+    color: #8C8981;
     font-size: 12px; letter-spacing: 0.04em;
   }
   .body {
     flex: 1; padding: 20px 26px;
     font-size: 14.5px; line-height: 1.8;
-    color: #D6E2EE;
+    color: #D9D6CF;
     white-space: pre-wrap;
     overflow: hidden;
   }
-  .p  { color: #C6A77D; }
-  .c  { color: #FFFFFF; }
-  .ok { color: #7FD1A8; }
-  .wa { color: #E8C06A; }
-  .di { color: rgba(214,226,238,0.55); }
+  .p  { color: #FFB21A; }
+  .c  { color: #F3F1EC; }
+  .ok { color: #9BD48A; }
+  .wa { color: #FFB21A; }
+  .di { color: #8C8981; }
   .cursor {
     display: inline-block; width: 8px; height: 16px;
-    background: #C6A77D; vertical-align: -2px;
+    background: #FFB21A; vertical-align: -2px;
     animation: bl 1s steps(1) infinite;
   }
   @keyframes bl { 50% { opacity: 0; } }
@@ -90,18 +94,18 @@
     </div>
     <div class="term">
       <div class="bar">
-        <span class="dot" style="background:#E8695E"></span>
-        <span class="dot" style="background:#E8C06A"></span>
-        <span class="dot" style="background:#7FD1A8"></span>
-        <span class="t">puremed &mdash; content pipeline</span>
+        <svg width="18" height="18" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 17V5H17" stroke="#FFB21A" stroke-width="5" fill="none" stroke-linecap="square"/><path d="M35 23V35H23" stroke="#FFB21A" stroke-width="5" fill="none" stroke-linecap="square"/></svg>
+        <span class="t">puremed · content pipeline</span>
       </div>
       <div class="body" id="out"></div>
     </div>
   </div>
 
 <script>
-// Every terminal line below is verbatim stdout from a real run against
-// other-projects/puremed/ on 6 Aug 2026. The captions are written for the
+// Every terminal line below is verbatim stdout from a real run against the
+// PureMed content folder (re-run 10 Oct 2026 after the lint messages lost their
+// em dashes; the preview step is no longer shown because re-running it rewrites
+// tracked client files). The captions are written for the
 // recording; the output is not.
 //
 // The earlier cut linted the whole directory in one command, which pulled in
@@ -135,21 +139,12 @@ const script = [
   { t: 'prompt' },
   { t: 'type', s: 'node content-lint.js --client puremed --post 2026-08-07-anti-wrinkle' },
   { t: 'wait', ms: 620 },
-  { t: 'out', cls: 'wa', s: 'WARN  2026-08-07-anti-wrinkle/copy.md:1 "anti-wrinkle" — pomSensitive' },
-  { t: 'out', cls: 'wa', s: '      topic — confirm consultation-led framing, no price, no drug' },
+  { t: 'out', cls: 'wa', s: 'WARN  2026-08-07-anti-wrinkle/copy.md:1 "anti-wrinkle": pomSensitive' },
+  { t: 'out', cls: 'wa', s: '      topic: confirm consultation-led framing, no price, no drug' },
   { t: 'out', cls: 'wa', s: '      references' },
   { t: 'blank' },
   { t: 'out', cls: 'di', s: '1 post(s) linted: 0 error(s), 1 warning(s)' },
-  { t: 'wait', ms: 2500 },
-  { t: 'blank' },
-
-  { t: 'cap', n: '04', s: 'Only then is the month rendered as the feed the clinic will approve.' },
-  { t: 'prompt' },
-  { t: 'type', s: 'node content-preview.js --client puremed' },
-  { t: 'wait', ms: 700 },
-  { t: 'out', cls: 'ok', s: 'preview/index.html — 5 post card(s), assets copied,' },
-  { t: 'out', cls: 'ok', s: 'stage-manifest.json written' },
-  { t: 'wait', ms: 2400 }
+  { t: 'wait', ms: 3200 }
 ];
 
 const out = document.getElementById('out');

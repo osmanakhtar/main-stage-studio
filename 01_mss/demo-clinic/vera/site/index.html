@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home | Vera Aesthetics</title>
+<meta name="description" content="Vera Aesthetics is a fictional, nurse-led clinic used by Main Stage Studio to demonstrate its tools.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bone:#F5F2EC;--navy:#1E2B4D;--ink:#141A2B;--stone:#DCD9D2;--gold:#C6A667;--muted:#4E5568;
+  --serif:"Fraunces",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bone);color:var(--ink);font:17px/1.65 var(--sans)}
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+header{border-bottom:1px solid var(--stone);background:var(--bone)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:76px}
+.brand{display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none;color:var(--navy)}
+.brand b{font:500 28px/1 var(--serif);letter-spacing:-.01em}
+nav{display:flex;gap:26px;align-items:center;flex-wrap:wrap;font-size:15px}
+nav a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--muted)}
+nav a:hover,nav a[aria-current]{color:var(--navy)}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;background:var(--navy);color:var(--bone);text-decoration:none;border:1px solid var(--navy);font:500 15px/1 var(--sans);cursor:pointer}
+.btn:hover{background:var(--ink)}
+.btn.ghost{background:transparent;color:var(--navy)}
+.btn.ghost:hover{background:var(--navy);color:var(--bone)}
+nav .btn{min-height:44px;padding:0 18px;color:var(--bone)}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
+h1{font:400 clamp(40px,5.4vw,68px)/1.04 var(--serif);color:var(--navy);letter-spacing:-.015em}
+h2{font:400 clamp(30px,3.6vw,44px)/1.1 var(--serif);color:var(--navy);letter-spacing:-.01em}
+h3{font:500 22px/1.25 var(--serif);color:var(--navy)}
+.lede{font-size:19px;color:var(--muted);max-width:52ch;margin-top:20px}
+section{padding:88px 0}
+.hero{padding:72px 0 96px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center}
+.hero img{aspect-ratio:4/5;object-fit:cover;border-radius:180px 180px 4px 4px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:44px}
+.three p{color:var(--muted);margin-top:10px}
+.card{background:#fff;border:1px solid var(--stone)}
+.card img{aspect-ratio:3/4;object-fit:cover}
+.card .in{padding:22px 22px 26px}
+.card .in p{color:var(--muted);margin-top:8px;font-size:16px}
+.navy{background:var(--navy);color:var(--bone)}
+.navy h2,.navy h3{color:var(--bone)}
+.navy .lede,.navy p{color:#C9CDD8}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.split img{aspect-ratio:4/5;object-fit:cover}
+.list{list-style:none;margin-top:26px;display:grid;gap:14px}
+.list li{padding-left:22px;position:relative}
+.list li::before{content:"";position:absolute;left:0;top:12px;width:10px;height:1px;background:var(--gold)}
+.rows{margin-top:40px;border-top:1px solid var(--stone)}
+.row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:32px;padding:28px 0;border-bottom:1px solid var(--stone)}
+.row p{color:var(--muted)}
+.price{font:400 44px/1 var(--serif);color:var(--navy);margin:18px 0 6px}
+form{background:#fff;border:1px solid var(--stone);padding:34px;display:grid;gap:18px;max-width:560px}
+label{display:grid;gap:7px;font-size:15px;font-weight:500;color:var(--ink)}
+input[type=text],input[type=email],input[type=tel]{min-height:48px;padding:0 14px;border:1px solid var(--stone);background:var(--bone);font:16px var(--sans);color:var(--ink)}
+.tick{grid-template-columns:26px 1fr;align-items:start;gap:12px;font-weight:400;color:var(--muted);font-size:15px}
+.tick{min-height:44px}
+.tick input{width:24px;height:24px;margin-top:2px;accent-color:var(--navy)}
+.hp{position:absolute;left:-9999px}
+.small{font-size:14px;color:var(--muted)}
+footer{border-top:1px solid var(--stone);padding:44px 0 56px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px}
+.demo{color:var(--navy);font-weight:500}
+@media(max-width:860px){.hero .wrap,.split{grid-template-columns:1fr}.three{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:8px}nav{gap:14px;font-size:14px}header .wrap{padding-top:12px;padding-bottom:12px}}
+</style></head><body>
+<header data-stage-section="header"><div class="wrap">
+<a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M12 34 C12 20, 24 10, 36 12 C36 26, 24 36, 12 34 Z" stroke="currentColor" stroke-width="2.2"/><path d="M18 30 C24 24, 30 20, 34 16" stroke="#C6A667" stroke-width="2.2" stroke-linecap="round"/></svg><b data-stage-id="vera">vera</b></a>
+<nav aria-label="Main"><a href="treatments.html" data-stage-id="treatments">Treatments</a><a href="fresh-face-assessment.html" data-stage-id="fresh-face-assessment">Fresh-Face Assessment</a><a href="guide-opt-in.html" data-stage-id="free-guide">Free guide</a><a class="btn" href="fresh-face-assessment.html" data-stage-id="book-an-assessment">Book an assessment</a></nav>
+</div></header>
+<main>
+<section class="hero" data-stage-section="hero"><div class="wrap">
+<div>
+<p class="eyebrow" data-stage-id="nurse-led-aesthetics">Nurse-led aesthetics</p>
+<h1 data-stage-id="look-like-yourself-on-a">Look like yourself, on a good day.</h1>
+<p class="lede" data-stage-id="careful-consultation-led-treatment-from-one">Careful, consultation-led treatment from one nurse prescriber. We would rather talk you out of something than sell you something you don't need.</p>
+<div class="ctas"><a class="btn" href="fresh-face-assessment.html" data-stage-id="book-a-fresh-face-assessment">Book a Fresh-Face Assessment</a><a class="btn ghost" href="guide-opt-in.html" data-stage-id="read-the-free-guide">Read the free guide</a></div>
+</div>
+<img src="assets/experience-consult-4x5.webp" alt="A consultation at Vera: the practitioner talks a client through her plan at a desk" data-stage-img="img-experience-consult-4x5">
+</div></section>
+
+<section data-stage-section="how" style="padding-top:24px"><div class="wrap">
+<p class="eyebrow" data-stage-id="how-we-work">How we work</p>
+<h2 data-stage-id="a-plan-not-a-menu">A plan, not a menu.</h2>
+<div class="three">
+<div><h3 data-stage-id="we-listen-first">We listen first</h3><p data-stage-id="every-treatment-starts-with-a">Every treatment starts with a conversation about what you've noticed and what you want to keep.</p></div>
+<div><h3 data-stage-id="we-explain-everything">We explain everything</h3><p data-stage-id="what-each-option-can-and">What each option can and can't do, what it costs, and what recovery really looks like.</p></div>
+<div><h3 data-stage-id="no-pressure-ever">No pressure, ever</h3><p data-stage-id="you-leave-with-a-written">You leave with a written plan and time to think. Nothing is booked on the day unless you want it.</p></div>
+</div></div></section>
+
+<section data-stage-section="treatments-preview" style="padding-top:24px"><div class="wrap">
+<p class="eyebrow" data-stage-id="treatments-2">Treatments</p>
+<h2 data-stage-id="small-changes-chosen-carefully">Small changes, chosen carefully.</h2>
+<div class="three">
+<a class="card" href="treatments.html" style="text-decoration:none"><img src="assets/results-skin-macro-2k.webp" alt="Close-up of healthy skin texture" data-stage-img="img-results-skin-macro-2k"><div class="in"><h3 data-stage-id="skin-quality">Skin quality</h3><p data-stage-id="boosters-and-polynucleotides-for-skin">Boosters and polynucleotides for skin that looks rested and hydrated.</p></div></a>
+<a class="card" href="treatments.html" style="text-decoration:none"><img src="assets/treatment-marking-3x4.webp" alt="The practitioner marks a treatment plan on the skin" data-stage-img="img-treatment-marking-3x4"><div class="in"><h3 data-stage-id="lines-and-volume">Lines and volume</h3><p data-stage-id="wrinkle-softening-treatment-and-dermal-filler">Wrinkle-softening treatment and dermal filler, used sparingly.</p></div></a>
+<a class="card" href="treatments.html" style="text-decoration:none"><img src="assets/treatment-rf-handpiece-3x4.webp" alt="A radiofrequency handpiece used for skin tightening" data-stage-img="img-treatment-rf-handpiece-3x4"><div class="in"><h3 data-stage-id="firming">Firming</h3><p data-stage-id="radiofrequency-and-laser-for-gradual">Radiofrequency and laser for gradual, natural-looking tightening.</p></div></a>
+</div></div></section>
+
+<section class="navy" data-stage-section="guide-promo"><div class="wrap split">
+<div>
+<p class="eyebrow" style="color:#C9CDD8" data-stage-id="free-guide-2">Free guide</p>
+<h2 data-stage-id="why-do-i-look-tired">Why do I look tired?</h2>
+<p class="lede" data-stage-id="the-short-guide-we-wish">The short guide we wish everyone read before booking anything. Five common reasons a face looks tired, and what actually helps.</p>
+<div class="ctas"><a class="btn" href="guide-opt-in.html" style="background:var(--bone);color:var(--navy);border-color:var(--bone)" data-stage-id="get-the-guide">Get the guide</a></div>
+</div>
+<img src="assets/results-skin-jawline-4x5.webp" alt="Side profile showing a natural jawline" data-stage-img="img-results-skin-jawline-4x5">
+</div></section>
+</main>
+<footer data-stage-section="footer"><div class="wrap">
+<div><b class="demo" data-stage-id="vera-aesthetics-is-a-fictional">Vera Aesthetics is a fictional clinic.</b> It takes no patients. Main Stage Studio uses it to demonstrate its tools.</div>
+<div data-stage-id="1-example-street-exampleton">1 Example Street, Exampleton</div>
+</div></footer>
+</body></html>

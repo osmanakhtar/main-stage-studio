@@ -293,3 +293,36 @@ Known defects seen while recording (not fixed here):
   Tighten". The grey "Preview with sample details" line still shows it.
 - Config publish accepts `{{submitted_at}}` in a template fed by a plain form;
   it only fails at send time ("no value for {{submitted_at}}").
+
+## v6 tool clips (build plan step 6, from 10 Oct 2026)
+
+`clip-kit.js` is the shared recorder for every v6 clip: cursor, click ring and narration panel
+in direction A, 1440x810 capture, and `encode()` writes two cuts per capture into `out-v6/`:
+the full narrated clip and an 8-second silent loop for product cards, each as MP4 (H.264),
+WebM (VP9) and a WebP poster. `note()` refuses narration containing an em dash.
+
+Rules: real tools only; demo data only (fictional Vera clinic or MSS); narration only says what
+the screen shows; never film the sign-in.
+
+### Platform clip (`record-console.js`)
+The console against Vera in a **separate filming database**, so the shared sandbox (another
+session's) is never touched:
+1. Copy the sandbox: `docker compose exec -T postgres psql -U platform -d postgres -c "create database studio_film_sandbox owner sandbox_owner"`, then
+   `pg_dump -U platform --no-owner studio_sandbox | psql -U sandbox_owner -d studio_film_sandbox` (inside the postgres container).
+   The name must end in "sandbox" or the sandbox guard refuses it.
+2. Point a worktree's `.env.sandbox` at `studio_film_sandbox`, run the server on its own port with `WORKER_IN_PROCESS=0`.
+3. Give the filmed emails real copy through the console (off camera), and set `approved_by` to "Vera (clinic owner)"
+   on the latest `template_version` rows. The sandbox's own copy is placeholder text marked [DRAFT].
+4. Sign in off camera (magic link from `outbox-sandbox/`), save a storage state, then
+   `node record-console.js <state.json> http://localhost:<port>`.
+
+
+### Other v6 clips (10 Oct 2026)
+| Clip | Recorder | Demo surface | Notes |
+|---|---|---|---|
+| Content | `record-content.js` | Studio, Vera client, brand mode off | Builds one draft post, films it, then deletes it and reindexes. Render is not filmed: it prints local paths |
+| Campaign | `record-campaign.js` | Vera demo site on :4322 posting to the filming console | One synthetic person in `studio_film_sandbox` only. Rebuild the film DB first: `SERVER_DIR=<worktree>/service bash film/film-setup.sh` |
+| Website | `record-website.js` | Stage engagement `vera-demo-site` (admin-only) | Needs `node stage-auth.js` (admin). Resets the demo page's saved edits before and after every take, even on failure. Delete `stage-state.json` after |
+| Content checks | `record-pipeline.js` | `pipeline-terminal.html` | Verbatim lint output, re-run 10 Oct; the preview step is not shown (re-running it rewrites tracked client files) |
+
+The Vera demo site lives in `01_mss/demo-clinic/vera/site/` (`build-site.py`, `stage-publish.py`); its form wording is read from the platform's consent files.
