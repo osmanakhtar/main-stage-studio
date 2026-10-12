@@ -24,7 +24,17 @@ A = os.path.join(HERE, 'assets')
 os.makedirs(A, exist_ok=True)
 if not os.path.exists(os.path.join(A, 'still-website-edit.webp')):
     raise SystemExit('stills missing: run bash make-stills.sh first')
-shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26.webp'))
+shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26b.webp'))
+# the cue films (tools/clips/cue, rendered into out-v6): copied in with their posters
+CLIPS = os.path.join(MSS, 'website/tools/clips/out-v6')
+FILMS = {
+    'website': ('website-cue', 'A typo on a Sunday night, fixed in Stage', 'Live editing in Stage · Vera demo site'),
+    'content': ('content-cue', 'Content Studio plans and drafts a real week of posts', 'Content Studio · PureMed Aesthetics'),
+    'campaign': ('campaign-cue', 'One sign-up, the real follow-up series, stopped by a booking', 'Guide and follow-up series · Vera demo, days compressed for filming'),
+}
+for _f, _a, _c in FILMS.values():
+    for _ext in ('mp4', 'webm', 'webp'):
+        shutil.copy(os.path.join(CLIPS, f'{_f}.{_ext}'), os.path.join(A, f'{_f}.{_ext}'))
 
 # ── shared pieces ─────────────────────────────────────────────────────────────
 SPIKE = ('<svg class="spike" viewBox="0 0 40 40" fill="none" aria-hidden="true">'
@@ -357,6 +367,8 @@ section.light{padding:clamp(48px,6vw,88px) 0}
 .spot-set img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transform:scale(1.04);transition:opacity .7s var(--ease),transform 3.2s linear}
 .spot-set img.on{opacity:1;transform:scale(1)}
 .spot-set .panel{position:absolute;inset:0;border:0;align-content:center}
+.spot-set video,.film-clip video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.film-clip{position:relative;aspect-ratio:16/10}
 .spot-cap{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px;min-height:20px}
 .bars{display:flex;gap:6px}
 .bars i{position:relative;width:28px;height:2px;background:var(--line);overflow:hidden}
@@ -396,10 +408,17 @@ JS = """
       });
     });
   });
-  // a set of stills that runs on its own while it is lit (the lineup stage)
+  // cue films on the product pages: play while on screen, never under reduced motion (the poster stays)
+  var play = function(v){ if (!reduce) { var p = v.play(); if (p && p.catch) p.catch(function(){}); } };
+  if ('IntersectionObserver' in window) {
+    var fo = new IntersectionObserver(function(es){ es.forEach(function(e){ var v = e.target.querySelector('video'); if (e.isIntersecting) play(v); else v.pause(); }); }, {threshold:.35});
+    $$('[data-film]').forEach(function(f){ fo.observe(f); });
+  }
+  // a set of stills that runs on its own while it is lit (the lineup stage); a film plays instead
   var HOLD = 3200;
   function runner(set, bars){
-    var imgs = $$('img', set), k = 0, t = 0;
+    var imgs = $$('img', set), k = 0, t = 0, vid = set.querySelector('video');
+    if (vid) return { start: function(){ vid.currentTime = 0; play(vid); }, stop: function(){ vid.pause(); } };
     function show(n){
       k = n; imgs.forEach(function(im, j){ im.classList.toggle('on', j === n); });
       if (bars) $$('i', bars).forEach(function(b, j){ b.className = j === n ? '' : (j < n ? 'done' : ''); void b.offsetWidth; if (j === n) b.className = 'on'; });
@@ -598,6 +617,18 @@ def still(name, alt='', cls='', lazy=True):
             f'{f" class={chr(34)}{cls}{chr(34)}" if cls else ""}{" loading=lazy" if lazy else ""} decoding="async">')
 
 
+def film(pid, cls=''):
+    """A cue film: muted, looping, played by the page script only while it is on stage."""
+    name, alt, _ = FILMS[pid]
+    return (f'<video class="film{" " + cls if cls else ""}" muted loop playsinline preload="none" poster="assets/{name}.webp" aria-label="{alt}">'
+            f'<source src="assets/{name}.webm" type="video/webm"><source src="assets/{name}.mp4" type="video/mp4"></video>')
+
+
+def film_figure(pid):
+    return (f'<figure class="clip-wrap" data-film><div class="framed"><div class="clip film-clip">{film(pid)}</div></div>'
+            f'<figcaption class="cliprow"><span class="label">{FILMS[pid][2]}</span></figcaption></figure>')
+
+
 def gallery(pid, caption, only=None):
     """A framed still with thumbs that swap it. only: limit to these still names."""
     shots = [x for x in SHOTS[pid] if not only or x[0] in only]
@@ -654,12 +685,14 @@ def lineup_spotlight():
     items, sets = '', ''
     for i, (pid, name, line, f, t, unit, time, cap) in enumerate(PRODUCTS):
         shots = SHOTS.get(pid, [])
-        thumb = still(shots[0][0]) if shots else SHEET
+        thumb = (f'<img src="assets/{FILMS[pid][0]}.webp" alt="" width="1600" height="1000" loading="lazy">' if pid in FILMS
+                 else still(shots[0][0]) if shots else SHEET)
         items += (f'<li><a class="spot-item" href="{pid}.html"><div class="spot-thumb" aria-hidden="true">{thumb}</div>'
                   f'<span class="num">0{i + 2}</span><div><h3>{name}</h3><p>{line}</p>'
                   f'<div class="meta">{price(f, t, unit)}<span class="label">{time}</span></div></div><span class="go">{ARROW}</span></a></li>')
-        inner = ''.join(still(n, a, 'on' if j == 0 else '') for j, (n, a) in enumerate(shots)) if shots else run_panel()
-        sets += f'<div class="spot-set{" on" if i == 0 else ""}" data-cap="{name} · {cap}">{inner}</div>'
+        inner = (film(pid) if pid in FILMS else
+                 ''.join(still(n, a, 'on' if j == 0 else '') for j, (n, a) in enumerate(shots)) if shots else run_panel())
+        sets += f'<div class="spot-set{" on" if i == 0 else ""}" data-cap="{name} · {FILMS[pid][2] if pid in FILMS else cap}">{inner}</div>'
     return (f'<div class="spot"><ol class="spot-list">{items}</ol>'
             f'<div class="spot-stage"><div class="framed"><div class="spot-win">{sets}</div></div>'
             f'<div class="spot-cap"><span class="label" aria-live="polite"></span><span class="bars" aria-hidden="true"></span></div></div></div>')
@@ -779,7 +812,7 @@ def product_pages():
              'Launch and domain handled'],
             'The code, in your own repository. Your domain. Your content. If you leave, you take all of it.',
             price('540', '1,800', '10 pages · 3–5 weeks', big=True), ['Extra pages £22.50, target £75, each'],
-            gallery('website', 'Live editing in Stage, Vera demo site'),
+            film_figure('website'),
             [('live', 'Live · PureMed Aesthetics',
               'puremed.uk, live since 30 September 2026. The owner changes her own pages through the same editor as in the clip, plus a consultation quiz and guide sign-ups that feed her client records.', *PM)],
             'You review every page on a private link before launch, and leave comments on the page itself. After launch, your edits go through the same check: you change it, you publish it.',
@@ -796,7 +829,7 @@ def product_pages():
             'The pages, the emails and the list. The people who sign up are your contacts, not mine.',
             price('540', '1,800', 'one-off · 2–3 weeks', big=True),
             ['Attaches to a site (yours, or a Website from me) and needs somewhere to send email from (a Platform, or the tool you already use)'],
-            gallery('campaign', 'Guide sign-up to console, Vera demo'),
+            film_figure('campaign'),
             [('live', 'Live · PureMed Aesthetics',
               'Two guides and a consultation quiz, each with its own sign-up and email series. The owner writes and approves every email in her own console before it sends.', *PM)],
             "You approve each email in the series before it goes live. Once you have, the series goes to every new sign-up on schedule. In my console, an email you haven't approved can't send.",
@@ -813,7 +846,7 @@ def product_pages():
              'Your approval on every post before it goes anywhere'],
             'Every asset and every source file, delivered to your own storage.',
             price('1,050', '3,500', '/month · 3-month minimum', big=True), [],
-            gallery('content', 'Carousel builder and content checks, Vera demo'),
+            film_figure('content'),
             [('prog', 'In progress · PureMed Aesthetics',
               'The content pipeline is built: posts and carousels drafted in her brand, checked against her rules, waiting for her approval. Publishing starts once her social accounts are connected.', None, None)],
             "You see the month before it starts, and every post before it goes out. The checks catch the words your industry can't use; you catch everything else.",
@@ -1043,7 +1076,7 @@ def about():
     body = (
         sec('intro', '<div class="split wide-left" style="align-items:end"><div><p class="label">About</p>'
                      '<h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">I\'m Os. I run Main Stage Studio.</h1></div>'
-                     '<div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5-oct26.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000"></div></div>', 'first')
+                     '<div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5-oct26b.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000"></div></div>', 'first')
         + sec('career', '<div class="split"><div><p class="label">Before MSS</p></div><div class="body lede">'
                         '<p>I spent ten years in broadcast technology, launching TV channels across three continents, where a mistake goes out live to everyone at once. Then over a decade in financial services: banking, lending and wealth platforms, building the onboarding and identity systems that millions of customers go through to open an account. Systems that weren\'t allowed to fail.</p>'
                         '<p>Your website is not the hard part of my week. That\'s the point.</p></div></div>')

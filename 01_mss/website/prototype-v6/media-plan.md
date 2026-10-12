@@ -40,9 +40,9 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
 |---|---|---|---|
 | Review | "What lands" panel | Code | Done |
 | Identity | H3 at full size | as H3 | Done (Sable) |
-| Website | `website` narrated | Existing | Done |
-| Campaign | H5 at full size, narrated | as H5 | Re-cut |
-| Content | H6 at full size, plus the `pipeline` terminal clip | as H6 + existing | To record |
+| Website | Website cue film (`website-cue`), also on the home lineup | `tools/clips/cue/`, real Stage editor | Done 12 Oct |
+| Campaign | Campaign cue film (`campaign-cue`), also on the home lineup: one sign-up, the real series, stopped by a booking | `tools/clips/cue/`, Vera filming console, days compressed (captioned) | Done 12 Oct |
+| Content | Content cue film (`content-cue`), also on the home lineup: Content Studio plans and drafts a real PureMed week | `tools/clips/cue/`, PureMed's app edition, film profile | Done 12 Oct |
 | Platform | H7 at full size, narrated | as H7 | Record |
 | Care | "The run" panel | Code | Done |
 
@@ -55,7 +55,7 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
 | How it works | 04 Showtime | none | Reuse H2 once filmed |
 | Work | Cards | none | Add posters from H2 to H7 when filmed |
 | PureMed case | Before / Now | none | H2 under "Now" once filmed; puremed.uk still |
-| About | Portrait | `brand/founder/osman-mono-4x5.webp` (new studio shot, 12 Oct) | Done |
+| About | Portrait | `brand/founder/osman-mono-4x5.webp` (from `osman-original-2026-10b.jpeg`, 12 Oct) | Done |
 
 ## Consent (agreed 11 Oct 2026, per Os)
 

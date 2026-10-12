@@ -333,6 +333,8 @@ section.light{padding:clamp(48px,6vw,88px) 0}
 .spot-set img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:0;transform:scale(1.04);transition:opacity .7s var(--ease),transform 3.2s linear}
 .spot-set img.on{opacity:1;transform:scale(1)}
 .spot-set .panel{position:absolute;inset:0;border:0;align-content:center}
+.spot-set video,.film-clip video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.film-clip{position:relative;aspect-ratio:16/10}
 .spot-cap{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px;min-height:20px}
 .bars{display:flex;gap:6px}
 .bars i{position:relative;width:28px;height:2px;background:var(--line);overflow:hidden}
@@ -392,10 +394,17 @@ section.light{padding:clamp(48px,6vw,88px) 0}
       });
     });
   });
-  // a set of stills that runs on its own while it is lit (the lineup stage)
+  // cue films on the product pages: play while on screen, never under reduced motion (the poster stays)
+  var play = function(v){ if (!reduce) { var p = v.play(); if (p && p.catch) p.catch(function(){}); } };
+  if ('IntersectionObserver' in window) {
+    var fo = new IntersectionObserver(function(es){ es.forEach(function(e){ var v = e.target.querySelector('video'); if (e.isIntersecting) play(v); else v.pause(); }); }, {threshold:.35});
+    $$('[data-film]').forEach(function(f){ fo.observe(f); });
+  }
+  // a set of stills that runs on its own while it is lit (the lineup stage); a film plays instead
   var HOLD = 3200;
   function runner(set, bars){
-    var imgs = $$('img', set), k = 0, t = 0;
+    var imgs = $$('img', set), k = 0, t = 0, vid = set.querySelector('video');
+    if (vid) return { start: function(){ vid.currentTime = 0; play(vid); }, stop: function(){ vid.pause(); } };
     function show(n){
       k = n; imgs.forEach(function(im, j){ im.classList.toggle('on', j === n); });
       if (bars) $$('i', bars).forEach(function(b, j){ b.className = j === n ? '' : (j < n ? 'done' : ''); void b.offsetWidth; if (j === n) b.className = 'on'; });
