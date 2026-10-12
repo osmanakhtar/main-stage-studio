@@ -43,7 +43,7 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
 | Website | Website cue film (`website-cue`), also on the home lineup | `tools/clips/cue/`, real Stage editor | Done 12 Oct |
 | Campaign | Campaign cue film (`campaign-cue`), also on the home lineup: one sign-up, the real series, stopped by a booking | `tools/clips/cue/`, Vera filming console, days compressed (captioned) | Done 12 Oct |
 | Content | Content cue film (`content-cue`), also on the home lineup: Content Studio plans and drafts a real PureMed week | `tools/clips/cue/`, PureMed's app edition, film profile | Done 12 Oct |
-| Platform | H7 at full size, narrated | as H7 | Record |
+| Platform | Platform cue film (`platform-cue`), also on the home lineup: old records imported (DPIA signed first), one record, a batch recall | `tools/clips/cue/`, Vera filming console, fictional patients | Done 12 Oct |
 | Care | "The run" panel | Code | Done |
 
 ## Other pages

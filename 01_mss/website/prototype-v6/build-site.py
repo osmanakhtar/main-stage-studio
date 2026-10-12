@@ -30,6 +30,7 @@ CLIPS = os.path.join(MSS, 'website/tools/clips/out-v6')
 FILMS = {
     'website': ('website-cue', 'A typo on a Sunday night, fixed in Stage', 'Live editing in Stage · Vera demo site'),
     'content': ('content-cue', 'Content Studio plans and drafts a real week of posts', 'Content Studio · PureMed Aesthetics'),
+    'platform': ('platform-cue', 'Four old sources become one record, then a batch recall in one search', 'Old records brought in, one record, a recall · Vera demo, fictional patients'),
     'campaign': ('campaign-cue', 'One sign-up, the real follow-up series, stopped by a booking', 'Guide and follow-up series · Vera demo, days compressed for filming'),
 }
 for _f, _a, _c in FILMS.values():
@@ -865,7 +866,7 @@ def product_pages():
             'Your data, in your own space, exportable whenever you want it.',
             '<p class="label" style="margin-bottom:10px">Foundation</p>' + price('2,400', '8,000', '4–6 weeks', big=True),
             ['Anything beyond the Foundation is scoped and quoted first'],
-            gallery('platform', 'The console, Vera demo'),
+            film_figure('platform'),
             [('live', 'Live · PureMed Aesthetics',
               'Client records, a consent ledger, emails the owner writes herself, consultation scoring. 1,642 past appointments moved across from two old systems. DPIA signed and a data processing agreement in place before anything was imported.', *PM),
              ('demo', 'Demo, fictional clients',
