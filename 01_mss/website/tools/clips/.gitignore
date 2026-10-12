@@ -1,3 +1,7 @@
 stage-state.json
 raw*/
 chk/
+cue/frames-*/
+cue/.render/
+out-v6/*-LOCALDEV.*
+out-v6/*-test.jpg
