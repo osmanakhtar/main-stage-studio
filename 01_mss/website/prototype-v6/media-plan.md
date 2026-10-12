@@ -39,7 +39,7 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
 | Page | Media | Source | Status |
 |---|---|---|---|
 | Review | "What lands" panel | Code | Done |
-| Identity | H3 at full size | as H3 | Done (Sable) |
+| Identity | Identity cue film (`identity-cue`), also on the home lineup: Sable's identity from her brief, spread by spread | `tools/clips/cue/`, her brief and existing images | Done 12 Oct |
 | Website | Website cue film (`website-cue`), also on the home lineup | `tools/clips/cue/`, real Stage editor | Done 12 Oct |
 | Campaign | Campaign cue film (`campaign-cue`), also on the home lineup: one sign-up, the real series, stopped by a booking | `tools/clips/cue/`, Vera filming console, days compressed (captioned) | Done 12 Oct |
 | Content | Content cue film (`content-cue`), also on the home lineup: Content Studio plans and drafts a real PureMed week | `tools/clips/cue/`, PureMed's app edition, film profile | Done 12 Oct |

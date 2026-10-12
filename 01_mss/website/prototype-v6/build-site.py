@@ -28,6 +28,7 @@ shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26b.webp'))
 # the cue films (tools/clips/cue, rendered into out-v6): copied in with their posters
 CLIPS = os.path.join(MSS, 'website/tools/clips/out-v6')
 FILMS = {
+    'identity': ('identity-cue', "Sable's identity, spread by spread: the idea, the name, the colour, the type, the light", 'Sable · self-initiated'),
     'website': ('website-cue', 'A typo on a Sunday night, fixed in Stage', 'Live editing in Stage · Vera demo site'),
     'content': ('content-cue', 'Content Studio plans and drafts a real week of posts', 'Content Studio · PureMed Aesthetics'),
     'platform': ('platform-cue', 'Four old sources become one record, then a batch recall in one search', 'Old records brought in, one record, a recall · Vera demo, fictional patients'),
@@ -794,7 +795,7 @@ def product_pages():
              'A short brand book', 'A starter set of templates and images'],
             'Every source file. The brand book in a format you can edit. A note of every font licence, so nothing surprises you later.',
             price('750', '2,500', 'one-off · 3–4 weeks', big=True), [],
-            gallery('identity', 'Sable, self-initiated'),
+            film_figure('identity'),
             [('prog', 'In progress · Art by Ayesha Johar',
               'A painter\'s brand, built from her own work. The meaning of her name, the line "beauty is a form of resistance", and directions drawn from her paintings. In review with Ayesha now.', 'work-ayesha.html', 'Read the case study'),
              ('self', 'Self-initiated · Sable',
