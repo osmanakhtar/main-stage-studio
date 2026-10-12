@@ -56,7 +56,7 @@ function html(tl, src) {
   #cursor{position:absolute;left:0;top:0;width:44px;height:44px}
   .ring{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;border:3px solid #FFB21A;border-radius:50%;opacity:0}
   .corner{position:absolute;left:0;top:0;width:64px;height:64px;opacity:0}
-  #note{position:absolute;left:80px;bottom:64px;font:500 20px/1 'Geist Mono',monospace;letter-spacing:.14em;color:#8C8981;opacity:0;text-shadow:0 0 18px rgba(18,17,15,.9)}
+  #note{position:absolute;left:80px;bottom:64px;font:500 20px/1 'Geist Mono',monospace;letter-spacing:.14em;color:#8C8981;opacity:0}
   #mono{position:absolute;left:80px;top:72px;font:500 26px/1 'Geist Mono',monospace;letter-spacing:.14em;color:#F3F1EC;opacity:0;text-shadow:0 0 18px rgba(18,17,15,.9)}
   #card{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding-left:180px;opacity:0}
   #card p{margin:0 0 64px;font:500 24px/1 'Geist Mono',monospace;letter-spacing:.16em;color:#8C8981}
