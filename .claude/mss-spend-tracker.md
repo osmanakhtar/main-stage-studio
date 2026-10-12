@@ -1,7 +1,7 @@
 # Main Stage Studio — Spend Tracker
 
 *All committed and one-off costs. Update when a new subscription is added, changed, or cancelled.*
-*Last reviewed: 19 June 2026*
+*Last reviewed: 12 October 2026 (DigitalOcean, Cloudways and Higgsfield updated; Claude plan and domain still to confirm). Product-level run costs: `sops/sop-mss-005-products-scope-and-cost.md` §4b.*
 
 ---
 
@@ -10,9 +10,11 @@
 | Tool | Purpose | Cost | Billing | Started | Notes |
 |------|---------|------|---------|---------|-------|
 | Claude Pro | Strategy, copy, code, thought partner | £20 | Monthly | 2025 | Primary tool |
-| Higgsfield | 3D / video / image asset generation | $45 | Monthly | June 2026 | Month one committed. Extension under review after month one. |
+| Higgsfield | Image and video generation | £35 | In months it is bought | June 2026 | Lapsed (0 credits) as of Oct 2026. Bought only when a paid Identity or Content job needs it; absorbed into the fee (decision 12 Oct 2026) |
+| DigitalOcean | Platform hosting: App Platform app + Managed Postgres, lon1 | £15 | Monthly | 29 Sep 2026 | Serves every Platform tenant; PureMed pays at cost from Jan 2027 |
+| Cloudways | Static site hosting, server `mss-do-lon-01` | about £12 | Monthly | 2026 | Last month's bill; MSS, PureMed and client sites |
 
-**Monthly total: £20 + $45 (Higgsfield, month one committed)**
+**Monthly total: about £47 (Claude £20, DigitalOcean £15, Cloudways about £12), plus £35 in months generation is bought**
 
 ---
 
@@ -38,14 +40,15 @@
 
 | Tool | Purpose | Est. cost | Decision |
 |------|---------|-----------|----------|
-| Cloudways | Hosting — MSS + client sites | ~£20–30/mo | Confirm plan when first site goes live |
+| Apple Developer Program | Sign and notarise the Content Studio app | about £79 a year | Recommended (SOP-MSS-005 §4c) |
+| Stage off the Pi | Managed host for client review and editing | £5 to £10 a month | Recommended before the next self-editing client (SOP-MSS-005 §4b.2) |
 
 ---
 
 ## Budget notes
 
 - Year 1 target revenue: £3–5k
-- Current committed monthly spend: £20 (Claude Pro) plus $45 (Higgsfield, month one)
+- Current committed monthly spend: about £47 (Claude, DigitalOcean, Cloudways), plus £35 in generation months
 - Keep overhead minimal until first paying client
 
 ---
