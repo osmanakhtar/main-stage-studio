@@ -12,7 +12,8 @@
      corners [{ from, to, rect }]         Spike corners snap in at `from`, fade at `to`
      labels  [[from, to, text | (t) => text]]
      lights  [[t, 0..1], ...]             0 = black, 1 = lit
-     card    { from, to, label, word }    the closing card on black */
+     card    { from, to, label, word }    the closing card on black
+     note    { from, to, text }           optional small caption, bottom left (a disclosure) */
 const { chromium } = require('/Users/osmanakhtar/workspace/scripts/node_modules/playwright');
 const path = require('path');
 const fs = require('fs');
@@ -55,6 +56,7 @@ function html(tl, src) {
   #cursor{position:absolute;left:0;top:0;width:44px;height:44px}
   .ring{position:absolute;left:0;top:0;width:60px;height:60px;margin:-30px 0 0 -30px;border:3px solid #FFB21A;border-radius:50%;opacity:0}
   .corner{position:absolute;left:0;top:0;width:64px;height:64px;opacity:0}
+  #note{position:absolute;left:80px;bottom:64px;font:500 20px/1 'Geist Mono',monospace;letter-spacing:.14em;color:#8C8981;opacity:0;text-shadow:0 0 18px rgba(18,17,15,.9)}
   #mono{position:absolute;left:80px;top:72px;font:500 26px/1 'Geist Mono',monospace;letter-spacing:.14em;color:#F3F1EC;opacity:0;text-shadow:0 0 18px rgba(18,17,15,.9)}
   #card{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding-left:180px;opacity:0}
   #card p{margin:0 0 64px;font:500 24px/1 'Geist Mono',monospace;letter-spacing:.16em;color:#8C8981}
@@ -67,7 +69,7 @@ function html(tl, src) {
 <svg class="corner" id="ctl" viewBox="0 0 40 40">${SPIKE_TL}</svg><svg class="corner" id="cbr" viewBox="0 0 40 40">${SPIKE_BR}</svg>
 <div class="ring" id="r1"></div>
 <svg id="cursor" viewBox="0 0 24 24" fill="none"><path d="M5 2.5 19.5 11.2l-6.4.9-3.2 6.1z" fill="#F3F1EC" stroke="#12110F" stroke-width="1.3" stroke-linejoin="round"/></svg>
-<div id="mono"></div>
+<div id="mono"></div><div id="note"></div>
 <div class="layer" id="black" style="background:#12110F"></div>
 <div id="card"><p id="cardLabel"></p><h2><span id="cardWord"></span><svg class="tl" viewBox="0 0 40 40">${SPIKE_TL}</svg><svg class="br" viewBox="0 0 40 40">${SPIKE_BR}</svg></h2></div>
 </body></html>`;
@@ -92,6 +94,7 @@ function state(score, tl, t) {
     ring: ring ? { ...scr(ring.p), k: ring.k } : null,
     corners: ck, cbox: c ? { ...scr(c.rect), w: c.rect.w * s, h: c.rect.h * s } : null, cscale: 1.35 - .35 * clamp(c ? (t - c.from) / .22 : 0),
     mono: lab ? (typeof lab[2] === 'function' ? lab[2](t) : lab[2]) : '', monoOn: lab ? clamp((t - lab[0]) / .25) * (1 - clamp((t - lab[1] + .25) / .25)) : 0,
+    note: score.note ? score.note.text : '', noteOn: score.note ? clamp((t - score.note.from) / .3) * (1 - clamp((t - score.note.to) / .3)) : 0,
     card: clamp((t - card.from) / .35) * (1 - clamp((t - card.to) / .45)), cardY: 24 * (1 - clamp((t - card.from) / .35)),
     cardLabel: card.label, cardWord: card.word,
   };
@@ -117,6 +120,7 @@ const APPLY = st => {
   }
   $('ctl').style.opacity = st.corners; $('cbr').style.opacity = st.corners;
   $('mono').textContent = st.mono; $('mono').style.opacity = st.monoOn;
+  $('note').textContent = st.note; $('note').style.opacity = st.noteOn;
   $('card').style.opacity = st.card; $('card').style.transform = `translateY(${st.cardY}px)`;
   $('cardLabel').textContent = st.cardLabel; $('cardWord').textContent = st.cardWord;
 };
