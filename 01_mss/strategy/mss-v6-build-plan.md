@@ -28,7 +28,7 @@
 
 **Record new:** Vera guide signup to console enrolment (Campaign); carousel builder with Vera (Content); MSS brand book scroll (Identity, after step 9); fresh screenshots of live puremed.uk.
 
-**Have:** founder portrait graded, `01_mss/brand/founder/osman-mono-4x5.webp` (site) and `osman-colour-1x1.jpg` (LinkedIn). Ayesha agreed to be shown.
+**Have:** founder portrait graded, `01_mss/brand/founder/osman-mono-4x5.webp` (site; replaced 12 Oct 2026 with a mono crop of the new studio shot `osman-original-2026-10.png`) and `osman-colour-1x1.jpg` (LinkedIn; still the old shot, recrop from the new one if wanted). Ayesha agreed to be shown.
 
 **Dropped for launch:** generated hard-lit stills (Higgsfield at 0 credits).
 

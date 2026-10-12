@@ -55,7 +55,7 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
 | How it works | 04 Showtime | none | Reuse H2 once filmed |
 | Work | Cards | none | Add posters from H2 to H7 when filmed |
 | PureMed case | Before / Now | none | H2 under "Now" once filmed; puremed.uk still |
-| About | Portrait | `brand/founder/osman-mono-4x5.webp` | Done |
+| About | Portrait | `brand/founder/osman-mono-4x5.webp` (new studio shot, 12 Oct) | Done |
 
 ## Consent (agreed 11 Oct 2026, per Os)
 
