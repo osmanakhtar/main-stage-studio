@@ -185,6 +185,7 @@ input,textarea{cursor:text}
 .split{display:grid;gap:clamp(32px,5vw,64px)}
 @media(min-width:900px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
 section.first{border-top:0}
+section[id]{scroll-margin-top:64px}
 @media(min-width:900px){.split.wide-left{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}.split.lead{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
 /* cues */
 .cues{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -224,10 +225,19 @@ section.first{border-top:0}
 .cards{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 @media(min-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1100px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.wcard{background:var(--black);padding:28px;display:flex;flex-direction:column;gap:14px;min-height:240px;text-decoration:none}
+.wcard{background:var(--black);display:flex;flex-direction:column;text-decoration:none}
 a.wcard:hover{background-color:#171613}
+.wthumb{aspect-ratio:16/10;overflow:hidden;background:var(--riser);border-bottom:1px solid var(--line)}
+.wthumb img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .8s var(--ease)}
+.wcard:hover .wthumb img{transform:scale(1.04)}
+.wthumb .sheet{height:100%;padding:20px 24px;display:grid;align-content:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rig)}
+.wthumb .sheet i{font-style:normal;color:var(--house)}
+.wbody{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
+.wgo{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;color:var(--house)}
+.wgo svg{width:14px;height:14px;transition:transform .35s var(--ease)}
+.wcard:hover .wgo svg{transform:translateX(4px)}
 .wcard h3{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700;font-size:24px;line-height:1.15}
-.wcard .prods{margin-top:auto}
+.wcard .prods{margin-top:2px}
 .wcard[hidden]{display:none}
 /* light surface (case study) */
 .light{background:var(--house);color:var(--black)}
@@ -338,12 +348,12 @@ section.light{padding:clamp(48px,6vw,88px) 0}
   <nav aria-label="Main"><ul class="nav"><li><details><summary data-stage-id="products-25">Products</summary><ul class="menu"><li><a href="review.html" data-stage-id="review-30">Review<span>The way in</span></a></li><li><a href="identity.html" data-stage-id="identity-32">Identity</a></li><li><a href="website.html" data-stage-id="website-31">Website</a></li><li><a href="campaign.html" data-stage-id="campaign-31">Campaign</a></li><li><a href="content.html" data-stage-id="content-30">Content</a></li><li><a href="platform.html" data-stage-id="platform-33">Platform</a></li><li><a href="care.html" data-stage-id="care-29">Care</a></li></ul></details></li><li><a href="work.html" data-stage-id="work-38">Work</a></li><li><a href="how-it-works.html" data-stage-id="how-it-works-40">How it works</a></li><li><a href="pricing.html" data-stage-id="pricing-38">Pricing</a></li><li><a href="about.html" aria-current="page" data-stage-id="about-37">About</a></li></ul></nav><div class="top-right"><details class="mnav"><summary class="btn" aria-label="Menu"><span class="m-open" data-stage-id="menu-13">Menu</span><span class="m-close" data-stage-id="close-13">Close</span></summary><div class="sheet-m"><span class="label" data-stage-id="products-26">Products</span><a href="review.html" data-stage-id="review-31">Review</a><a href="identity.html" data-stage-id="identity-33">Identity</a><a href="website.html" data-stage-id="website-32">Website</a><a href="campaign.html" data-stage-id="campaign-32">Campaign</a><a href="content.html" data-stage-id="content-31">Content</a><a href="platform.html" data-stage-id="platform-34">Platform</a><a href="care.html" data-stage-id="care-30">Care</a><span class="label" data-stage-id="studio-13">Studio</span><a href="work.html" data-stage-id="work-39">Work</a><a href="how-it-works.html" data-stage-id="how-it-works-41">How it works</a><a href="pricing.html" data-stage-id="pricing-39">Pricing</a><a href="about.html" aria-current="page" data-stage-id="about-38">About</a><a class="btn primary" href="start.html" data-stage-id="start-a-project-28">Start a project <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a></div></details><a class="btn start-btn" href="start.html" data-stage-id="start-a-project-29">Start a project</a></div>
 </div></header>
 <main>
-<section data-stage-section="intro" class="first"><div class="wrap"><div class="split wide-left" style="align-items:end"><div><p class="label" data-stage-id="about-39">About</p><h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)" data-stage-id="i-m-os-i-run">I'm Os. I run Main Stage Studio.</h1></div><div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000" data-stage-img="img-os-akhtar-mono-4x5"></div></div></div></section>
-<section data-stage-section="career"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="before-mss">Before MSS</p></div><div class="body lede"><p data-stage-id="i-spent-ten-years-in">I spent ten years in broadcast technology, launching TV channels across three continents, where a mistake goes out live to everyone at once. Then over a decade in financial services: banking, lending and wealth platforms, building the onboarding and identity systems that millions of customers go through to open an account. Systems that weren't allowed to fail.</p><p data-stage-id="your-website-is-not-the">Your website is not the hard part of my week. That's the point.</p></div></div></div></section>
-<section data-stage-section="why"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="why-mss-exists">Why MSS exists</p></div><div class="body lede"><p data-stage-id="i-kept-seeing-good-businesses">I kept seeing good businesses rent their own front door. Their site, their list and their records sat with someone else, and every change cost a ticket and an invoice. I'd rather build things you can run without me. If you keep paying me, it should be because the work is good, not because you're locked in.</p></div></div></div></section>
-<section data-stage-section="beliefs"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="what-i-believe">What I believe</p></div><ol class="beliefs"><li><span data-stage-id="01-4">01</span><span data-stage-id="you-should-own-what-you">You should own what you pay for. Code, content, customer records.</span></li><li><span data-stage-id="02-5">02</span><span data-stage-id="prices-belong-on-the-page">Prices belong on the page.</span></li><li><span data-stage-id="03-5">03</span><span data-stage-id="ai-does-the-typing-i-2">AI does the typing. I do the deciding. You do the approving.</span></li><li><span data-stage-id="04-5">04</span><span data-stage-id="nothing-goes-live-until-you-3">Nothing goes live until you give the cue.</span></li></ol></div></div></section>
-<section data-stage-section="one-studio"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="one-studio">One studio</p></div><div class="body lede"><p data-stage-id="it-s-me-not-a">It's me. Not a team, not a network of freelancers. You deal with the person who builds it. I take on a small number of clients at a time, and I'm drawn to people whose work means something beyond the commercial.</p></div></div></div></section>
-<section data-stage-section="close"><div class="wrap"><div class="split" style="align-items:center"><h2 class="d2" data-stage-id="if-what-you-re-building">If what you're building matters to you, it matters here.</h2><div class="ctas"><a class="btn primary" href="start.html" data-stage-id="start-a-project-30">Start a project <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a></div></div></div></section>
+<section id="intro" data-stage-section="intro" class="first"><div class="wrap"><div class="split wide-left" style="align-items:end"><div><p class="label" data-stage-id="about-39">About</p><h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)" data-stage-id="i-m-os-i-run">I'm Os. I run Main Stage Studio.</h1></div><div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000" data-stage-img="img-os-akhtar-mono-4x5"></div></div></div></section>
+<section id="career" data-stage-section="career"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="before-mss">Before MSS</p></div><div class="body lede"><p data-stage-id="i-spent-ten-years-in">I spent ten years in broadcast technology, launching TV channels across three continents, where a mistake goes out live to everyone at once. Then over a decade in financial services: banking, lending and wealth platforms, building the onboarding and identity systems that millions of customers go through to open an account. Systems that weren't allowed to fail.</p><p data-stage-id="your-website-is-not-the">Your website is not the hard part of my week. That's the point.</p></div></div></div></section>
+<section id="why" data-stage-section="why"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="why-mss-exists">Why MSS exists</p></div><div class="body lede"><p data-stage-id="i-kept-seeing-good-businesses">I kept seeing good businesses rent their own front door. Their site, their list and their records sat with someone else, and every change cost a ticket and an invoice. I'd rather build things you can run without me. If you keep paying me, it should be because the work is good, not because you're locked in.</p></div></div></div></section>
+<section id="beliefs" data-stage-section="beliefs"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="what-i-believe">What I believe</p></div><ol class="beliefs"><li><span data-stage-id="01-4">01</span><span data-stage-id="you-should-own-what-you">You should own what you pay for. Code, content, customer records.</span></li><li><span data-stage-id="02-5">02</span><span data-stage-id="prices-belong-on-the-page">Prices belong on the page.</span></li><li><span data-stage-id="03-5">03</span><span data-stage-id="ai-does-the-typing-i-2">AI does the typing. I do the deciding. You do the approving.</span></li><li><span data-stage-id="04-5">04</span><span data-stage-id="nothing-goes-live-until-you-3">Nothing goes live until you give the cue.</span></li></ol></div></div></section>
+<section id="one-studio" data-stage-section="one-studio"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="one-studio">One studio</p></div><div class="body lede"><p data-stage-id="it-s-me-not-a">It's me. Not a team, not a network of freelancers. You deal with the person who builds it. I take on a small number of clients at a time, and I'm drawn to people whose work means something beyond the commercial.</p></div></div></div></section>
+<section id="close" data-stage-section="close"><div class="wrap"><div class="split" style="align-items:center"><h2 class="d2" data-stage-id="if-what-you-re-building">If what you're building matters to you, it matters here.</h2><div class="ctas"><a class="btn primary" href="start.html" data-stage-id="start-a-project-30">Start a project <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a></div></div></div></section>
 
 </main>
 <footer><div class="wrap">
@@ -359,7 +369,7 @@ section.light{padding:clamp(48px,6vw,88px) 0}
   var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
   var $$ = function(sel, root){ return [].slice.call((root || document).querySelectorAll(sel)); };
   // the beam, scaled down: a light that follows the pointer across anything you can press
-  var GLOW = '.btn,.row,.wcard[href],.chip,.opt span,.nav a,.nav summary,.flinks a,.faq summary,.spot-item,.g-thumbs button,.mnav .sheet-m a:not(.btn)';
+  var GLOW = '.btn,.row,.wcard,.chip,.opt span,.nav a,.nav summary,.flinks a,.faq summary,.spot-item,.g-thumbs button,.mnav .sheet-m a:not(.btn)';
   if (fine && !reduce) {
     $$(GLOW).forEach(function(el){ if (!el.classList.contains('btn')) el.classList.add('glow'); });
     var lit = null;
@@ -383,7 +393,7 @@ section.light{padding:clamp(48px,6vw,88px) 0}
       });
     });
   });
-  // a set of stills that runs on its own while it is lit (spotlight stage, peek)
+  // a set of stills that runs on its own while it is lit (the lineup stage)
   var HOLD = 3200;
   function runner(set, bars){
     var imgs = $$('img', set), k = 0, t = 0;

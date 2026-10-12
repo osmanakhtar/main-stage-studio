@@ -41,4 +41,10 @@ img sable-cover     sable-album-cover-01.webp
 img sable-home      sable-homepage-image-01.webp
 img sable-presented sable-arrival-presented-01.png
 img sable-portrait  sable-hero-arrival-01.webp
+# Work page cards: live demo journeys, puremed.uk and Ayesha's v3 room (needs network)
+node "$HERE/work-shots.js" "$TMP"
+for n in work-thackray work-marbury work-vera work-puremed work-ayesha; do
+  ffmpeg -v error -y -i "$TMP/$n.png" -vf "scale=1440:-2" "$TMP/$n-s.png"
+  cwebp -quiet -q 82 "$TMP/$n-s.png" -o "$OUT/still-$n.webp"
+done
 ls "$OUT"/still-*

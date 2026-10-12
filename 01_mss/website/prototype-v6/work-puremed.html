@@ -185,6 +185,7 @@ input,textarea{cursor:text}
 .split{display:grid;gap:clamp(32px,5vw,64px)}
 @media(min-width:900px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
 section.first{border-top:0}
+section[id]{scroll-margin-top:64px}
 @media(min-width:900px){.split.wide-left{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}.split.lead{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
 /* cues */
 .cues{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -224,10 +225,19 @@ section.first{border-top:0}
 .cards{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 @media(min-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1100px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.wcard{background:var(--black);padding:28px;display:flex;flex-direction:column;gap:14px;min-height:240px;text-decoration:none}
+.wcard{background:var(--black);display:flex;flex-direction:column;text-decoration:none}
 a.wcard:hover{background-color:#171613}
+.wthumb{aspect-ratio:16/10;overflow:hidden;background:var(--riser);border-bottom:1px solid var(--line)}
+.wthumb img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .8s var(--ease)}
+.wcard:hover .wthumb img{transform:scale(1.04)}
+.wthumb .sheet{height:100%;padding:20px 24px;display:grid;align-content:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rig)}
+.wthumb .sheet i{font-style:normal;color:var(--house)}
+.wbody{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
+.wgo{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;color:var(--house)}
+.wgo svg{width:14px;height:14px;transition:transform .35s var(--ease)}
+.wcard:hover .wgo svg{transform:translateX(4px)}
 .wcard h3{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700;font-size:24px;line-height:1.15}
-.wcard .prods{margin-top:auto}
+.wcard .prods{margin-top:2px}
 .wcard[hidden]{display:none}
 /* light surface (case study) */
 .light{background:var(--house);color:var(--black)}
@@ -338,12 +348,12 @@ section.light{padding:clamp(48px,6vw,88px) 0}
   <nav aria-label="Main"><ul class="nav"><li><details><summary data-stage-id="products-23">Products</summary><ul class="menu"><li><a href="review.html" data-stage-id="review-28">Review<span>The way in</span></a></li><li><a href="identity.html" data-stage-id="identity-30">Identity</a></li><li><a href="website.html" data-stage-id="website-28">Website</a></li><li><a href="campaign.html" data-stage-id="campaign-28">Campaign</a></li><li><a href="content.html" data-stage-id="content-28">Content</a></li><li><a href="platform.html" data-stage-id="platform-30">Platform</a></li><li><a href="care.html" data-stage-id="care-27">Care</a></li></ul></details></li><li><a href="work.html" data-stage-id="work-35">Work</a></li><li><a href="how-it-works.html" data-stage-id="how-it-works-37">How it works</a></li><li><a href="pricing.html" data-stage-id="pricing-35">Pricing</a></li><li><a href="about.html" data-stage-id="about-34">About</a></li></ul></nav><div class="top-right"><details class="mnav"><summary class="btn" aria-label="Menu"><span class="m-open" data-stage-id="menu-12">Menu</span><span class="m-close" data-stage-id="close-12">Close</span></summary><div class="sheet-m"><span class="label" data-stage-id="products-24">Products</span><a href="review.html" data-stage-id="review-29">Review</a><a href="identity.html" data-stage-id="identity-31">Identity</a><a href="website.html" data-stage-id="website-29">Website</a><a href="campaign.html" data-stage-id="campaign-29">Campaign</a><a href="content.html" data-stage-id="content-29">Content</a><a href="platform.html" data-stage-id="platform-31">Platform</a><a href="care.html" data-stage-id="care-28">Care</a><span class="label" data-stage-id="studio-12">Studio</span><a href="work.html" data-stage-id="work-36">Work</a><a href="how-it-works.html" data-stage-id="how-it-works-38">How it works</a><a href="pricing.html" data-stage-id="pricing-36">Pricing</a><a href="about.html" data-stage-id="about-35">About</a><a class="btn primary" href="start.html" data-stage-id="start-a-project-26">Start a project <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a></div></details><a class="btn start-btn" href="start.html" data-stage-id="start-a-project-27">Start a project</a></div>
 </div></header>
 <main class="light">
-<section data-stage-section="intro" class="first"><div class="wrap"><p><span class="badge live" data-stage-id="live-website-campaign-platform-care">Live · Website · Campaign · Platform · Care</span></p><h1 class="d1" style="margin-top:24px;font-size:clamp(48px,8vw,120px)" data-stage-id="a-clinic-that-runs-its-3">A clinic that runs its own show.</h1></div></section>
-<section data-stage-section="before"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="before">Before</p></div><p class="lede" data-stage-id="before-one-puremed-client-could">Before, one PureMed client could live in up to four places: the old website, the mailing list, the clinic records and the booking tool. Changing a price on the website meant asking someone and waiting.</p></div></div></section>
-<section data-stage-section="built"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="what-i-built">What I built</p></div><div class="built"><div><b data-stage-id="website-30">Website</b><p data-stage-id="puremed-uk-rebuilt-as-a">puremed.uk, rebuilt as a fast static site she edits herself, page by page.</p></div><div><b data-stage-id="campaign-30">Campaign</b><p data-stage-id="two-guides-and-a-consultation-2">Two guides and a consultation quiz, each with its own sign-up, consent wording and email series.</p></div><div><b data-stage-id="platform-32">Platform</b><p data-stage-id="one-record-per-client-a">One record per client, a consent ledger, and a console where she writes and approves every email.</p></div><div><b data-stage-id="migration">Migration</b><p data-stage-id="her-history-from-two-old">Her history from two old systems, moved across only after the data protection paperwork was signed.</p></div></div></div></div></section>
-<section data-stage-section="now"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="now">Now</p></div><p class="d3" data-stage-id="she-changes-her-own-pages">She changes her own pages. She writes and approves her own emails. Every client record sits in one place she controls.</p></div></div></section>
-<section data-stage-section="receipts"><div class="wrap"><div class="head"><p class="label" data-stage-id="the-receipts">The receipts</p></div><div class="receipts"><div><span class="label" data-stage-id="live-on-puremed-uk">Live on puremed.uk</span><b data-stage-id="30-sep-2026">30 Sep 2026</b></div><div><span class="label" data-stage-id="past-appointments-migrated">Past appointments migrated</span><b data-stage-id="1-642">1,642</b></div><div><span class="label" data-stage-id="dpia">DPIA</span><b data-stage-id="signed-before-import">Signed before import</b></div></div></div></section>
-<section data-stage-section="start"><div class="wrap"><div class="split" style="align-items:center"><h2 class="d2" data-stage-id="want-this-for-your-business">Want this for your business?</h2><div class="ctas"><a class="btn primary" href="start.html" data-stage-id="start-a-project-like-this">Start a project like this <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a></div></div></div></section>
+<section id="intro" data-stage-section="intro" class="first"><div class="wrap"><p><span class="badge live" data-stage-id="live-website-campaign-platform-care">Live · Website · Campaign · Platform · Care</span></p><h1 class="d1" style="margin-top:24px;font-size:clamp(48px,8vw,120px)" data-stage-id="a-clinic-that-runs-its-3">A clinic that runs its own show.</h1></div></section>
+<section id="before" data-stage-section="before"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="before">Before</p></div><p class="lede" data-stage-id="before-one-puremed-client-could">Before, one PureMed client could live in up to four places: the old website, the mailing list, the clinic records and the booking tool. Changing a price on the website meant asking someone and waiting.</p></div></div></section>
+<section id="built" data-stage-section="built"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="what-i-built">What I built</p></div><div class="built"><div><b data-stage-id="website-30">Website</b><p data-stage-id="puremed-uk-rebuilt-as-a">puremed.uk, rebuilt as a fast static site she edits herself, page by page.</p></div><div><b data-stage-id="campaign-30">Campaign</b><p data-stage-id="two-guides-and-a-consultation-2">Two guides and a consultation quiz, each with its own sign-up, consent wording and email series.</p></div><div><b data-stage-id="platform-32">Platform</b><p data-stage-id="one-record-per-client-a">One record per client, a consent ledger, and a console where she writes and approves every email.</p></div><div><b data-stage-id="migration">Migration</b><p data-stage-id="her-history-from-two-old">Her history from two old systems, moved across only after the data protection paperwork was signed.</p></div></div></div></div></section>
+<section id="now" data-stage-section="now"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="now">Now</p></div><p class="d3" data-stage-id="she-changes-her-own-pages">She changes her own pages. She writes and approves her own emails. Every client record sits in one place she controls.</p></div></div></section>
+<section id="receipts" data-stage-section="receipts"><div class="wrap"><div class="head"><p class="label" data-stage-id="the-receipts">The receipts</p></div><div class="receipts"><div><span class="label" data-stage-id="live-on-puremed-uk">Live on puremed.uk</span><b data-stage-id="30-sep-2026">30 Sep 2026</b></div><div><span class="label" data-stage-id="past-appointments-migrated">Past appointments migrated</span><b data-stage-id="1-642">1,642</b></div><div><span class="label" data-stage-id="dpia">DPIA</span><b data-stage-id="signed-before-import">Signed before import</b></div></div></div></section>
+<section id="start" data-stage-section="start"><div class="wrap"><div class="split" style="align-items:center"><h2 class="d2" data-stage-id="want-this-for-your-business">Want this for your business?</h2><div class="ctas"><a class="btn primary" href="start.html" data-stage-id="start-a-project-like-this">Start a project like this <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a></div></div></div></section>
 
 </main>
 <footer><div class="wrap">
@@ -359,7 +369,7 @@ section.light{padding:clamp(48px,6vw,88px) 0}
   var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
   var $$ = function(sel, root){ return [].slice.call((root || document).querySelectorAll(sel)); };
   // the beam, scaled down: a light that follows the pointer across anything you can press
-  var GLOW = '.btn,.row,.wcard[href],.chip,.opt span,.nav a,.nav summary,.flinks a,.faq summary,.spot-item,.g-thumbs button,.mnav .sheet-m a:not(.btn)';
+  var GLOW = '.btn,.row,.wcard,.chip,.opt span,.nav a,.nav summary,.flinks a,.faq summary,.spot-item,.g-thumbs button,.mnav .sheet-m a:not(.btn)';
   if (fine && !reduce) {
     $$(GLOW).forEach(function(el){ if (!el.classList.contains('btn')) el.classList.add('glow'); });
     var lit = null;
@@ -383,7 +393,7 @@ section.light{padding:clamp(48px,6vw,88px) 0}
       });
     });
   });
-  // a set of stills that runs on its own while it is lit (spotlight stage, peek)
+  // a set of stills that runs on its own while it is lit (the lineup stage)
   var HOLD = 3200;
   function runner(set, bars){
     var imgs = $$('img', set), k = 0, t = 0;

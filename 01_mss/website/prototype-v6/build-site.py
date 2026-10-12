@@ -209,6 +209,7 @@ input,textarea{cursor:text}
 .split{display:grid;gap:clamp(32px,5vw,64px)}
 @media(min-width:900px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
 section.first{border-top:0}
+section[id]{scroll-margin-top:64px}
 @media(min-width:900px){.split.wide-left{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}.split.lead{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
 /* cues */
 .cues{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -248,10 +249,19 @@ section.first{border-top:0}
 .cards{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 @media(min-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1100px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.wcard{background:var(--black);padding:28px;display:flex;flex-direction:column;gap:14px;min-height:240px;text-decoration:none}
+.wcard{background:var(--black);display:flex;flex-direction:column;text-decoration:none}
 a.wcard:hover{background-color:#171613}
+.wthumb{aspect-ratio:16/10;overflow:hidden;background:var(--riser);border-bottom:1px solid var(--line)}
+.wthumb img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .8s var(--ease)}
+.wcard:hover .wthumb img{transform:scale(1.04)}
+.wthumb .sheet{height:100%;padding:20px 24px;display:grid;align-content:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rig)}
+.wthumb .sheet i{font-style:normal;color:var(--house)}
+.wbody{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
+.wgo{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;color:var(--house)}
+.wgo svg{width:14px;height:14px;transition:transform .35s var(--ease)}
+.wcard:hover .wgo svg{transform:translateX(4px)}
 .wcard h3{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700;font-size:24px;line-height:1.15}
-.wcard .prods{margin-top:auto}
+.wcard .prods{margin-top:2px}
 .wcard[hidden]{display:none}
 /* light surface (case study) */
 .light{background:var(--house);color:var(--black)}
@@ -361,7 +371,7 @@ JS = """
   var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
   var $$ = function(sel, root){ return [].slice.call((root || document).querySelectorAll(sel)); };
   // the beam, scaled down: a light that follows the pointer across anything you can press
-  var GLOW = '.btn,.row,.wcard[href],.chip,.opt span,.nav a,.nav summary,.flinks a,.faq summary,.spot-item,.g-thumbs button,.mnav .sheet-m a:not(.btn)';
+  var GLOW = '.btn,.row,.wcard,.chip,.opt span,.nav a,.nav summary,.flinks a,.faq summary,.spot-item,.g-thumbs button,.mnav .sheet-m a:not(.btn)';
   if (fine && !reduce) {
     $$(GLOW).forEach(function(el){ if (!el.classList.contains('btn')) el.classList.add('glow'); });
     var lit = null;
@@ -533,7 +543,7 @@ def nav(fname):
 
 
 def sec(sid, inner, cls=''):
-    return f'<section data-stage-section="{sid}"{f" class={chr(34)}{cls}{chr(34)}" if cls else ""}><div class="wrap">{inner}</div></section>\n'
+    return f'<section id="{sid}" data-stage-section="{sid}"{f" class={chr(34)}{cls}{chr(34)}" if cls else ""}><div class="wrap">{inner}</div></section>\n'
 
 
 def price(f, t, unit='', big=False):
@@ -657,7 +667,7 @@ def home():
               "<p>Looking professional shouldn't cost you control of your own business.</p></div></div>"
               # media plan H2: placeholder until the real PureMed edit is filmed (needs Nafisa's OK)
               + gallery('website', "Placeholder, Vera demo · Real image to come: an owner's edit, live on her site minutes later", only=['website-edit']) + '</div>', 'light')
-        + sec('lineup', f'<div class="head" id="lineup"><p class="label">The lineup</p><h2 class="d2">Six products. Prices on the page.</h2></div>'
+        + sec('lineup', f'<div class="head"><p class="label">The lineup</p><h2 class="d2">Six products. Prices on the page.</h2></div>'
               f'{rows}{FOUNDING}'
               f'<div class="asides"><div><p class="label">Opening Night</p><p>Need a brand and a site together? <b>Opening Night</b> is Identity and Website as one project.</p>{price("1,290", "4,300")}</div>'
               f'<div><p class="label">The way in</p><p>Not sure where to start? A <b>Review</b> is one week: what\'s working, what isn\'t, and what to build next.</p>'
@@ -868,22 +878,33 @@ def how():
 
 
 def work():
+    DEMO = 'https://mainstagestudio.co.uk/work/'
+    # (name, badge kind, badge, products, product label, line, href, link label, still or None)
     cards = [
-        ('PureMed Aesthetics', 'live', 'Live', 'website campaign platform care', 'Website · Campaign · Platform · Care', 'A clinic that runs its own show.', 'work-puremed.html'),
-        ('Art by Ayesha Johar', 'prog', 'In progress', 'identity', 'Identity', "A painter's brand, built from her own work.", None),
-        ('A televised combat sports promotion', 'anon', 'Anonymised', 'review', 'Review', 'Brand guidelines and a fight-week campaign calendar, in one week.', None),
-        ('Sable', 'self', 'Self-initiated', 'identity', 'Identity', 'An identity built around a character and a world.', None),
-        ('Conveyancing onboarding', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo client journey with example checks.', None),
-        ('Accountancy intake', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'New-client intake without the email chain.', None),
-        ('Clinic booking', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo booking flow with example suitability questions.', None),
+        ('PureMed Aesthetics', 'live', 'Live', 'website campaign platform care', 'Website · Campaign · Platform · Care', 'A clinic that runs its own show.',
+         'work-puremed.html', 'Read the case study', 'work-puremed'),
+        ('Art by Ayesha Johar', 'prog', 'In progress', 'identity', 'Identity', "A painter's brand, built from her own work.",
+         'identity.html#proof', 'See it on Identity', 'work-ayesha'),
+        ('A televised combat sports promotion', 'anon', 'Anonymised', 'review', 'Review', 'Brand guidelines and a fight-week campaign calendar, in one week.',
+         'review.html#proof', 'See it on Review', None),
+        ('Sable', 'self', 'Self-initiated', 'identity', 'Identity', 'An identity built around a character and a world.',
+         'identity.html#proof', 'See it on Identity', 'sable-presented'),
+        ('Conveyancing onboarding', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo client journey with example checks.',
+         DEMO + 'conveyancing-onboarding/', 'Try the demo', 'work-thackray'),
+        ('Accountancy intake', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'New-client intake without the email chain.',
+         DEMO + 'accountancy-intake/', 'Try the demo', 'work-marbury'),
+        ('Clinic booking', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo booking flow with example suitability questions.',
+         DEMO + 'clinic-booking/', 'Try the demo', 'work-vera'),
     ]
     filt = ''.join(f'<button class="chip" type="button" data-filter="{f.lower()}" aria-pressed="{"true" if f == "All" else "false"}">{f}</button>'
                    for f in ['All', 'Review', 'Identity', 'Website', 'Campaign', 'Content', 'Platform'])
+    anon = ('<div class="sheet" aria-hidden="true"><i>One week</i><span>Brand guidelines</span>'
+            '<span>Fight-week calendar</span><span>Anonymised</span></div>')
     grid = ''.join(
-        (f'<a class="wcard" href="{href}"' if href else '<div class="wcard"') + f' data-products="{prods}">'
-        f'<p>{badge(k, lbl)}</p><h3>{name}</h3><p class="muted">{line}</p><p class="label prods">{plabel}</p>'
-        + ('</a>' if href else '</div>')
-        for name, k, lbl, prods, plabel, line, href in cards)
+        f'<a class="wcard" href="{href}" data-products="{prods}"><div class="wthumb">{still(img) if img else anon}</div>'
+        f'<div class="wbody"><p>{badge(k, lbl)}</p><h3>{name}</h3><p class="muted">{line}</p><p class="label prods">{plabel}</p>'
+        f'<span class="wgo label">{go} {ARROW}</span></div></a>'
+        for name, k, lbl, prods, plabel, line, href, go, img in cards)
     body = (
         sec('intro', '<p class="label">Work</p><h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">The work, labelled honestly.</h1>'
                      '<p class="lede muted" style="margin-top:24px">Live means a paying client is using it today. Demo means a fictional client, built to show how something works.</p>', 'first')

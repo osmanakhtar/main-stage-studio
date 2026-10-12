@@ -52,15 +52,15 @@ if not DRY:
     run(["node", AUTOTAG, "--site", HERE, "--files", ",".join(os.path.join(HERE, f) for f, _, _ in PAGES), "--relroot", HERE])
 
 def link(m):
-    name, query = m.group(1), m.group(2) or ""
-    return f'href="/prototype/{ENG}/{IDS[name]}{query}"' if name in IDS else m.group(0)
+    name, query, frag = m.group(1), m.group(2) or "", m.group(3) or ""
+    return f'href="/prototype/{ENG}/{IDS[name]}{query}{frag}"' if name in IDS else m.group(0)
 
 srcs = {}
 for f, pid, _ in PAGES:
     src = open(os.path.join(HERE, f), encoding="utf-8").read(); srcs[pid] = src
     out = re.sub(r'(src|poster)="assets/', rf'\1="/assets/{ENG}/', src)
     out = out.replace("'assets/' + n", f"'/assets/{ENG}/' + n")  # narrated-cut swap in the inline script
-    out = re.sub(r'href="([a-z0-9-]+)\.html(\?[^"]*)?"', link, out)
+    out = re.sub(r'href="([a-z0-9-]+)\.html(\?[^"#]*)?(#[^"]*)?"', link, out)
     open(f"{tmp}/prototype/{pid}.html", "w", encoding="utf-8").write(out)
     left = re.findall(r'(?:href|src|poster)="(?!/|#|https?:|mailto:|data:)([^"]+)"', out)
     if left: print(f"WARNING {pid}: relative links left: {sorted(set(left))[:5]}")
