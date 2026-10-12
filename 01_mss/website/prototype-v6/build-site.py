@@ -197,7 +197,7 @@ input,textarea{cursor:text}
 .founding-note{margin-top:20px}
 /* proof, badges */
 .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border:1px solid currentColor}
-.badge.live{color:var(--ok)}.badge.prog{color:var(--tung)}.badge.anon,.badge.self,.badge.demo{color:var(--rig)}
+.badge.live{color:var(--ok)}.badge.prog{color:var(--tung)}.badge.self,.badge.demo{color:var(--rig)}
 .badge.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
 .proofs{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 @media(min-width:900px){.proofs.pair{grid-template-columns:1fr 1fr}}
@@ -254,8 +254,6 @@ a.wcard:hover{background-color:#171613}
 .wthumb{aspect-ratio:16/10;overflow:hidden;background:var(--riser);border-bottom:1px solid var(--line)}
 .wthumb img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .8s var(--ease)}
 .wcard:hover .wthumb img{transform:scale(1.04)}
-.wthumb .sheet{height:100%;padding:20px 24px;display:grid;align-content:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rig)}
-.wthumb .sheet i{font-style:normal;color:var(--house)}
 .wbody{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
 .wgo{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;color:var(--house)}
 .wgo svg{width:14px;height:14px;transition:transform .35s var(--ease)}
@@ -315,7 +313,7 @@ section.light+section:not(.light){border-top-color:var(--line)}
 .light .panel li{border-top-color:#DAD6CE}
 .light .framed::before,.light .framed::after,.light .marked::before,.light .marked::after{border-color:var(--black)}
 .light .badge.prog{color:var(--black)}
-.light .badge.anon,.light .badge.self,.light .badge.demo{color:var(--rig-deep)}
+.light .badge.self,.light .badge.demo{color:var(--rig-deep)}
 .light .p b{color:var(--black)}
 .light .p s,.light .p small{color:var(--rig-deep)}
 .light .faq,.light .faq details{border-color:#DAD6CE}
@@ -702,7 +700,7 @@ def product(pid, num, name, promise, who, get, own, price_html, notes, media, pr
         + sec('own', f'<div class="split"><div><p class="label">What you own at the end</p></div><p class="d3">{own}</p></div>', 'light')
         + sec('price', f'<div class="split"><div><p class="label">Price and time</p></div><div>{price_html}'
                        + ''.join(f'<p class="label" style="margin-top:14px">{n}</p>' for n in notes) + f'{FOUNDING}</div></div>', 'light')
-        + sec('proof', f'<div class="head"><p class="label">The proof</p></div>{proofs_html}', 'light')
+        + (sec('proof', f'<div class="head"><p class="label">The proof</p></div>{proofs_html}', 'light') if proofs else '')
         + sec('cue', f'<div class="split"><div><p class="label">How the cue works here</p></div><p class="lede">{cue}</p></div>', 'light')
         + sec('faq', f'<div class="split"><div><p class="label qlabel">Questions</p></div>{faq(faqs)}</div>', 'light')
         + sec('start', f'<div class="split" style="align-items:center"><h2 class="d2">{start_label}.</h2>'
@@ -722,8 +720,7 @@ def product_pages():
             "The findings, the guidelines, the calendar and the plan. Take them to anyone. You don't have to build any of it with me.",
             price('450', '1,500', 'one week', big=True), ['Buy any product within 8 weeks and the Review fee comes off it'],
             REVIEW_PANEL,
-            [('anon', 'Anonymised · A televised combat sports promotion',
-              'One week before a televised event: brand guidelines written down from the live brand, and a campaign calendar for fight week.', None, None)],
+            [],  # no proof shown until the first paid Review is delivered
             "You see the findings in draft and tell me what I've got wrong. The final version only lands once you've said it's right.",
             [('How is this different from the Soundcheck?', 'The Soundcheck is a free call to work out what you need. A Review is a week of actual work, written down, that you keep.'),
              ('Do I have to buy something afterwards?', 'No. The plan is yours either way. If you do buy within 8 weeks, the fee comes off.'),
@@ -885,8 +882,6 @@ def work():
          'work-puremed.html', 'Read the case study', 'work-puremed'),
         ('Art by Ayesha Johar', 'prog', 'In progress', 'identity', 'Identity', "A painter's brand, built from her own work.",
          'identity.html#proof', 'See it on Identity', 'work-ayesha'),
-        ('A televised combat sports promotion', 'anon', 'Anonymised', 'review', 'Review', 'Brand guidelines and a fight-week campaign calendar, in one week.',
-         'review.html#proof', 'See it on Review', None),
         ('Sable', 'self', 'Self-initiated', 'identity', 'Identity', 'An identity built around a character and a world.',
          'identity.html#proof', 'See it on Identity', 'sable-presented'),
         ('Conveyancing onboarding', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo client journey with example checks.',
@@ -897,11 +892,9 @@ def work():
          DEMO + 'clinic-booking/', 'Try the demo', 'work-vera'),
     ]
     filt = ''.join(f'<button class="chip" type="button" data-filter="{f.lower()}" aria-pressed="{"true" if f == "All" else "false"}">{f}</button>'
-                   for f in ['All', 'Review', 'Identity', 'Website', 'Campaign', 'Content', 'Platform'])
-    anon = ('<div class="sheet" aria-hidden="true"><i>One week</i><span>Brand guidelines</span>'
-            '<span>Fight-week calendar</span><span>Anonymised</span></div>')
+                   for f in ['All', 'Identity', 'Website', 'Campaign', 'Content', 'Platform'])
     grid = ''.join(
-        f'<a class="wcard" href="{href}" data-products="{prods}"><div class="wthumb">{still(img) if img else anon}</div>'
+        f'<a class="wcard" href="{href}" data-products="{prods}"><div class="wthumb">{still(img)}</div>'
         f'<div class="wbody"><p>{badge(k, lbl)}</p><h3>{name}</h3><p class="muted">{line}</p><p class="label prods">{plabel}</p>'
         f'<span class="wgo label">{go} {ARROW}</span></div></a>'
         for name, k, lbl, prods, plabel, line, href, go, img in cards)

@@ -15,7 +15,7 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
    are filmed on the Vera demo tenant (`film/film-setup.sh`, DB `studio_film_sandbox`).
 4. **Framing.** Every clip sits in the Spike frame (`.framed`), 16:10 unless the row says otherwise. Loops
    are 8 to 12s, muted, poster = first meaningful frame. Narrated versions only where marked.
-5. **Badge = honesty label.** Live / In progress / Self-initiated / Demo, fictional client / Anonymised,
+5. **Badge = honesty label.** Live / In progress / Self-initiated / Demo, fictional client,
    matching the proof block beside it.
 6. **Generated imagery** (Higgsfield, 0 credits) goes only into non-evidence placements, and each one
    gets a credit estimate before it is unparked.

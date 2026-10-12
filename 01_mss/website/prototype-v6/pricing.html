@@ -173,7 +173,7 @@ input,textarea{cursor:text}
 .founding-note{margin-top:20px}
 /* proof, badges */
 .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border:1px solid currentColor}
-.badge.live{color:var(--ok)}.badge.prog{color:var(--tung)}.badge.anon,.badge.self,.badge.demo{color:var(--rig)}
+.badge.live{color:var(--ok)}.badge.prog{color:var(--tung)}.badge.self,.badge.demo{color:var(--rig)}
 .badge.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
 .proofs{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 @media(min-width:900px){.proofs.pair{grid-template-columns:1fr 1fr}}
@@ -230,8 +230,6 @@ a.wcard:hover{background-color:#171613}
 .wthumb{aspect-ratio:16/10;overflow:hidden;background:var(--riser);border-bottom:1px solid var(--line)}
 .wthumb img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .8s var(--ease)}
 .wcard:hover .wthumb img{transform:scale(1.04)}
-.wthumb .sheet{height:100%;padding:20px 24px;display:grid;align-content:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rig)}
-.wthumb .sheet i{font-style:normal;color:var(--house)}
 .wbody{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
 .wgo{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;color:var(--house)}
 .wgo svg{width:14px;height:14px;transition:transform .35s var(--ease)}
@@ -291,7 +289,7 @@ section.light+section:not(.light){border-top-color:var(--line)}
 .light .panel li{border-top-color:#DAD6CE}
 .light .framed::before,.light .framed::after,.light .marked::before,.light .marked::after{border-color:var(--black)}
 .light .badge.prog{color:var(--black)}
-.light .badge.anon,.light .badge.self,.light .badge.demo{color:var(--rig-deep)}
+.light .badge.self,.light .badge.demo{color:var(--rig-deep)}
 .light .p b{color:var(--black)}
 .light .p s,.light .p small{color:var(--rig-deep)}
 .light .faq,.light .faq details{border-color:#DAD6CE}

@@ -173,7 +173,7 @@ input,textarea{cursor:text}
 .founding-note{margin-top:20px}
 /* proof, badges */
 .badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border:1px solid currentColor}
-.badge.live{color:var(--ok)}.badge.prog{color:var(--tung)}.badge.anon,.badge.self,.badge.demo{color:var(--rig)}
+.badge.live{color:var(--ok)}.badge.prog{color:var(--tung)}.badge.self,.badge.demo{color:var(--rig)}
 .badge.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
 .proofs{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
 @media(min-width:900px){.proofs.pair{grid-template-columns:1fr 1fr}}
@@ -230,8 +230,6 @@ a.wcard:hover{background-color:#171613}
 .wthumb{aspect-ratio:16/10;overflow:hidden;background:var(--riser);border-bottom:1px solid var(--line)}
 .wthumb img{width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .8s var(--ease)}
 .wcard:hover .wthumb img{transform:scale(1.04)}
-.wthumb .sheet{height:100%;padding:20px 24px;display:grid;align-content:center;gap:6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rig)}
-.wthumb .sheet i{font-style:normal;color:var(--house)}
 .wbody{padding:24px 28px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
 .wgo{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;color:var(--house)}
 .wgo svg{width:14px;height:14px;transition:transform .35s var(--ease)}
@@ -291,7 +289,7 @@ section.light+section:not(.light){border-top-color:var(--line)}
 .light .panel li{border-top-color:#DAD6CE}
 .light .framed::before,.light .framed::after,.light .marked::before,.light .marked::after{border-color:var(--black)}
 .light .badge.prog{color:var(--black)}
-.light .badge.anon,.light .badge.self,.light .badge.demo{color:var(--rig-deep)}
+.light .badge.self,.light .badge.demo{color:var(--rig-deep)}
 .light .p b{color:var(--black)}
 .light .p s,.light .p small{color:var(--rig-deep)}
 .light .faq,.light .faq details{border-color:#DAD6CE}
@@ -353,7 +351,6 @@ section.light{padding:clamp(48px,6vw,88px) 0}
 <section id="get" data-stage-section="get" class="light"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="what-you-get">What you get</p></div><ul class="ticks"><li><span data-stage-id="a-close-look-at-your">A close look at your brand, website, social channels and the tools behind them</span></li><li><span data-stage-id="written-findings-in-plain-english">Written findings, in plain English</span></li><li><span data-stage-id="brand-guidelines-tidied-up-or">Brand guidelines, tidied up or written down for the first time</span></li><li><span data-stage-id="a-campaign-calendar">A campaign calendar</span></li><li><span data-stage-id="a-plan-what-to-build">A plan: what to build, in what order, and what each part costs</span></li><li><span data-stage-id="a-call-to-walk-you">A call to walk you through it</span></li></ul></div></div></section>
 <section id="own" data-stage-section="own" class="light"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="what-you-own-at-the">What you own at the end</p></div><p class="d3" data-stage-id="the-findings-the-guidelines-the">The findings, the guidelines, the calendar and the plan. Take them to anyone. You don't have to build any of it with me.</p></div></div></section>
 <section id="price" data-stage-section="price" class="light"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="price-and-time">Price and time</p></div><div><span class="p big"><b data-stage-id="450-2">£450</b><s data-stage-id="1-500-2">£1,500</s> <small data-stage-id="one-week">one week</small></span><p class="label" style="margin-top:14px" data-stage-id="buy-any-product-within-8">Buy any product within 8 weeks and the Review fee comes off it</p><p class="label founding-note" data-stage-id="founding-price-for-my-first-2">Founding price for my first three clients on each product. After that, the target price applies.</p></div></div></div></section>
-<section id="proof" data-stage-section="proof" class="light"><div class="wrap"><div class="head"><p class="label" data-stage-id="the-proof">The proof</p></div><div class="proofs"><div><p><span class="badge anon" data-stage-id="anonymised-a-televised-combat-sports">Anonymised · A televised combat sports promotion</span></p><p class="lede" data-stage-id="one-week-before-a-televised">One week before a televised event: brand guidelines written down from the live brand, and a campaign calendar for fight week.</p></div></div></div></section>
 <section id="cue" data-stage-section="cue" class="light"><div class="wrap"><div class="split"><div><p class="label" data-stage-id="how-the-cue-works-here">How the cue works here</p></div><p class="lede" data-stage-id="you-see-the-findings-in">You see the findings in draft and tell me what I've got wrong. The final version only lands once you've said it's right.</p></div></div></section>
 <section id="faq" data-stage-section="faq" class="light"><div class="wrap"><div class="split"><div><p class="label qlabel" data-stage-id="questions">Questions</p></div><div class="faq"><details><summary data-stage-id="how-is-this-different-from">How is this different from the Soundcheck?</summary><p data-stage-id="the-soundcheck-is-a-free">The Soundcheck is a free call to work out what you need. A Review is a week of actual work, written down, that you keep.</p></details><details><summary data-stage-id="do-i-have-to-buy">Do I have to buy something afterwards?</summary><p data-stage-id="no-the-plan-is-yours">No. The plan is yours either way. If you do buy within 8 weeks, the fee comes off.</p></details><details><summary data-stage-id="what-do-you-need-from">What do you need from me?</summary><p data-stage-id="access-to-whatever-you-want">Access to whatever you want looked at, and two short calls: one to start, one to walk through the findings.</p></details></div></div></div></section>
 <section id="start" data-stage-section="start"><div class="wrap"><div class="split" style="align-items:center"><h2 class="d2" data-stage-id="start-a-review">Start a Review.</h2><div class="ctas"><a class="btn primary" href="start.html?p=review" data-stage-id="start-a-review-2">Start a Review <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg></a><a class="btn" href="pricing.html" data-stage-id="all-prices">All prices</a></div></div></div></section>
