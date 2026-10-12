@@ -24,7 +24,7 @@ A = os.path.join(HERE, 'assets')
 os.makedirs(A, exist_ok=True)
 if not os.path.exists(os.path.join(A, 'still-website-edit.webp')):
     raise SystemExit('stills missing: run bash make-stills.sh first')
-shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5.webp'))
+shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26.webp'))
 
 # ── shared pieces ─────────────────────────────────────────────────────────────
 SPIKE = ('<svg class="spike" viewBox="0 0 40 40" fill="none" aria-hidden="true">'
@@ -1043,7 +1043,7 @@ def about():
     body = (
         sec('intro', '<div class="split wide-left" style="align-items:end"><div><p class="label">About</p>'
                      '<h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">I\'m Os. I run Main Stage Studio.</h1></div>'
-                     '<div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000"></div></div>', 'first')
+                     '<div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5-oct26.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000"></div></div>', 'first')
         + sec('career', '<div class="split"><div><p class="label">Before MSS</p></div><div class="body lede">'
                         '<p>I spent ten years in broadcast technology, launching TV channels across three continents, where a mistake goes out live to everyone at once. Then over a decade in financial services: banking, lending and wealth platforms, building the onboarding and identity systems that millions of customers go through to open an account. Systems that weren\'t allowed to fail.</p>'
                         '<p>Your website is not the hard part of my week. That\'s the point.</p></div></div>')
