@@ -16,8 +16,13 @@ grep -q '/studio_film_sandbox' "$SERVER_DIR/.env.sandbox" || { echo "$SERVER_DIR
 SERVER_DIR="$SERVER_DIR" bash "$HERE/../film/film-setup.sh" < /dev/null
 (cd "$SERVER_DIR" && npm run -s sandbox:migrate | grep -v '^skip' || true)
 
-KIT=$(mktemp -d)/vera
+# The copy sits at <root>/tenants/vera with <root>/packs beside it: the platform finds the pack's
+# data protection content and email lint relative to the kit, and drops them silently without it.
+ROOT=$(mktemp -d); mkdir -p "$ROOT/tenants"; ln -s "$SERVER_DIR/../packs" "$ROOT/packs"
+KIT="$ROOT/tenants/vera"
 cp -R "$SERVER_DIR/../tenants/vera" "$KIT"
+# EXTRA_DP=1 (the Platform film): Vera's own old-records DPIA questions, so its DPIA can cover the legacy import
+[ "${EXTRA_DP:-}" = 1 ] && cp "$HERE/vera-film-dp/extra-questions.json" "$KIT/dp/"
 python3 - "$KIT/tenant.json" "$DAY_MS" <<'EOF'
 import json, sys
 p, day = sys.argv[1], int(sys.argv[2])
@@ -34,6 +39,6 @@ if [ -n "$PID" ]; then
   [ "$(lsof -a -p "$PID" -d cwd -Fn | sed -n 's/^n//p')" = "$SERVER_DIR" ] || { echo "something else is on :3451 (pid $PID); not touching it"; exit 1; }
   kill "$PID"; sleep 2
 fi
-(cd "$SERVER_DIR" && WORKER_IN_PROCESS=1 nohup npx tsx --env-file=.env.sandbox src/api/server.ts > "$SERVER_DIR/.film-server.log" 2>&1 < /dev/null &)
+(cd "$SERVER_DIR" && WORKER_IN_PROCESS=1 nohup npx tsx --env-file=.env.sandbox src/api/server.ts > /tmp/mss-film-server.log 2>&1 < /dev/null &)
 for i in $(seq 1 30); do curl -s --max-time 2 -o /dev/null -f http://localhost:3451/console/vera/login && echo "filming console up (one day = ${DAY_MS}ms)" && exit 0; sleep 1; done
 echo "the filming console did not come back up"; exit 1

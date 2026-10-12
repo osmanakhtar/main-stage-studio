@@ -1,0 +1,11 @@
+{
+  "_": "Filming only: Vera's own old-records questions, so its DPIA can cover the Platform film's legacy import (the importer requires B10.1 yes and B10.2 answered). Worded for the fictional clinic; PureMed's own B10 questions stay in tenants/puremed.",
+  "questions": [
+    { "id": "B10.1", "section": "Old records", "type": "yes_no_unsure", "required": true,
+      "text": "The platform would hold {{clinic}}'s old records as read-only history on each person: client details from the old client system, and every past appointment, with the practitioner's notes, from the old booking system. Should it?" },
+    { "id": "B10.2", "section": "Old records", "type": "period", "required": true,
+      "text": "How long should these old treatment notes be kept?" },
+    { "id": "B10.3", "section": "Old records", "type": "yes_no_unsure", "required": true,
+      "text": "If a former client asks to be erased, should the platform delete their old treatment notes along with everything else it holds about them?" }
+  ]
+}

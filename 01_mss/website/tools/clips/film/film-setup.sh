@@ -24,7 +24,7 @@ echo "== copy studio_sandbox -> studio_film_sandbox"
 psql_ -d postgres -c "drop database if exists studio_film_sandbox with (force)" -c "create database studio_film_sandbox owner sandbox_owner"
 docker compose exec -T postgres sh -c 'pg_dump -U platform --no-owner studio_sandbox | psql -U sandbox_owner -v ON_ERROR_STOP=1 -q -d studio_film_sandbox'
 echo "== start the filming server"
-(cd "$SERVER_DIR" && WORKER_IN_PROCESS=1 nohup npx tsx --env-file=.env.sandbox src/api/server.ts > "$SERVER_DIR/.film-server.log" 2>&1 &)
+(cd "$SERVER_DIR" && WORKER_IN_PROCESS=1 nohup npx tsx --env-file=.env.sandbox src/api/server.ts > /tmp/mss-film-server.log 2>&1 &)
 for i in $(seq 1 30); do curl -s --max-time 2 -o /dev/null -f http://localhost:3451/console/vera/login && break; sleep 1; done
 echo "== sign in off camera, write the filmed copy"
 node "$HERE/console-auth.js" "$STATE"

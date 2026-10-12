@@ -62,6 +62,7 @@ function html(tl, src) {
   #card p{margin:0 0 64px;font:500 24px/1 'Geist Mono',monospace;letter-spacing:.16em;color:#8C8981}
   #card h2{margin:0;font-family:Archivo;font-weight:800;font-stretch:118%;font-size:200px;line-height:.92;letter-spacing:-.02em;color:#F3F1EC;position:relative;display:inline-block;align-self:flex-start;padding:0 20px 0 6px}
   #card h2 svg{position:absolute;width:56px;height:56px}
+  #cardWord{white-space:pre-line}
   #card .tl{left:-34px;top:-30px}#card .br{right:-26px;bottom:-34px}
 </style></head><body>
 <div id="world">${tl.frames.map((f, i) => `<img src="file://${path.join(src, f.file)}">`).join('')}</div>
