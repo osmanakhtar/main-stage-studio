@@ -9,7 +9,7 @@
 
 **Run the show.** Main Stage Studio builds the brand, the website, the content and the systems behind them for owner-led businesses, then hands over the controls. Everything it builds, the client can change, approve and take with them.
 
-Six products, priced on the page: Identity, Website, Campaign, Content, Platform, Care. Full detail and prices: proposal §5 and §5.8.
+Six products plus Review, priced on the page: Review, Identity, Website, Campaign, Content, Platform, Care. Full detail and prices: proposal §5, §5.8 and §5.9.
 
 ---
 
@@ -45,7 +45,8 @@ Tokens as CSS: `01_mss/brand/mss-v6-tokens.css`. Tools that cannot import it cop
 - **Cue Red is never small text.** It scrapes 4.6:1 on Stage Black and falls under 4.5:1 on every raised surface (4.1:1 on Riser, 3.4:1 on Line). Use it for dots, borders and fills; use Error text for words.
 - **Focus rings on a client's page are two-tone:** Tungsten plus a thin Stage Black line, because Tungsten alone disappears on white. In MSS's own dark chrome, Tungsten alone.
 - **Dark-first.** Product UI, tools and the site default to Stage Black. Documents, proposals and long reads sit on House Lights.
-- No purple or blue AI gradients, no glass panels, no gradient backgrounds, no emoji.
+- **On the website, black is the stage, not the whole building** (11 Oct 2026). Dark where the work performs: the hero, the product lineup, product clips, the final cue. House Lights where the buyer reads and weighs trust: the problem, proof, how it works, the founder, and a product page's who/what/own/price/questions. Change the lights no more than three or four times a page, and on a light section the Spike strokes go Stage Black.
+- No purple or blue AI gradients, no glass panels, no gradient backgrounds, no emoji. **One exception: the hero beam.** It's a soft Tungsten radial light on the home hero only. It counts as lighting, not a background, and appears once per page at most. **Extended 12 Oct 2026 (Os):** a scaled-down beam (a small Tungsten radial light) also follows the pointer across anything you can press, on desktop only. It lights the thing under the pointer, never a surface on its own.
 
 ---
 
@@ -106,6 +107,12 @@ Never: stock people, glossy AI portraits, laptops on desks, before-and-after as 
 ## Motion
 
 Motion is a lighting cue, not decoration. The signature move is the spotlight: Tungsten fades up on the key element as it enters view. `transform` and `opacity` only, `prefers-reduced-motion` respected everywhere.
+
+**Home hero, "finding your light" (11 Oct 2026):** the page loads dark, the beam fades up and settles on the marked word, then the two Spike corners snap in around it like stage tape. 2.5s at most, once per session, headline readable from the first frame. Afterwards the beam follows the pointer on desktop and drifts slowly on touch. Under reduced motion: beam static, no sweep.
+
+**CTAs and clickables (12 Oct 2026):** on hover a button's fill wipes in from the left, the arrow takes a bow (out right, back in from the left), and two Spike corners snap in at opposite corners like the hero's stage tape; a press sinks to 97%. Anything you can press carries the small beam under the pointer. Cursor: arrow over reading text, hand over anything you can press (text cursor only in form fields and in Stage's edit mode; Stage's prototype mode fixed to match, patch `scripts/stage-patches/2026-10-12-preview-cursor`).
+
+**Product lineup, "Spotlight" (12 Oct 2026):** the running order on the left, one framed stage on the right that lights whichever product you are on (hover, focus or scroll) and runs through its stills; other names dim to Rigging Grey. Phones get each product's still inline. Product imagery is stills cut from the real tool recordings until the clips are properly made. Chosen by Os on 12 Oct over a hover-peek list and a 3D drum (after the 21st.dev works-wheel).
 
 ---
 
