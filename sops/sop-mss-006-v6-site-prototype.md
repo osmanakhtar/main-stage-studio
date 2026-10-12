@@ -40,6 +40,7 @@ After any change to the prototype's copy, layout or images, and whenever Os want
 |---|---|---|
 | Images load locally but not on Stage | An asset is in a subfolder. Stage serves `/assets/<engagement>/<file>` flat and rewrites every image `src` to its bare filename | Keep every asset flat in `assets/` |
 | `build-site.py` exits with "stills missing" | `make-stills.sh` has not run | Run step 2 |
+| A replaced image still shows the old version on Stage | Stage serves assets with a one-day browser cache (`max-age=86400`), so a file swapped under the same name stays stale | Give the new file a new name (e.g. a `-oct26` suffix) in `build-site.py`, `git rm` the old copy in `assets/`, rebuild and publish |
 | `make-stills.sh` fails in `work-shots.js` | A live demo or puremed.uk is down, or there's no network | Retry later. The existing stills stay valid |
 | Audit FAIL `image-collapsed` | An image is loaded inside a container hidden at that width | Hide the `img` itself at that breakpoint, not only its parent |
 | A page is missing from Stage's page switcher | It isn't in `PAGES` in `stage-publish.py` | Add it and republish |
@@ -54,4 +55,5 @@ Escalation: Stage's own code is `~/stage/server.js` and `public/live-edit.js` on
 
 ## Change log
 
+- 2026-10-12: added the stale-image row (founder portrait swap).
 - 2026-10-12: created. Stills replace the clips (`make-stills.sh`, `work-shots.js`), and the asset rsync now recurses.
