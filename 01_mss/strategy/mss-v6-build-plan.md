@@ -18,9 +18,9 @@
 | 7 | **DONE with step 6** (clip-kit encodes both cuts). Cut each clip twice (6 to 10s silent loop for cards, full narrated for product pages), framed in A, poster frames | same | None | MP4 + WebM + WebP posters |
 | 8 | Mark set: favicons, apple-touch, per-page 1200x630 share images; retire `3d-mark-animation.mp4` and `hero-mark-poster.webp` | `01_mss/website/site/public/` | None | Assets |
 | 9 | **DONE 10 Oct.** Brand canon rewritten for v6 A: `.claude/mss-brand-identity.md`, `mss-tone-of-voice.md`, `copy-contexts.md`, `mss-website-brief.md`, `CLAUDE.md` router, decisions-log brand tables; v1 archived in `_archive/brand-v1/`. Brand book `01_mss/brand/mss-brand-book.html` (built from specimen A by `build-brand-book.py`) | `main-stage-studio` | None | Canon |
-| 10 | Site copy v4 (home, six product pages, PureMed case study, about, pricing, start) through copy-reviewer and figures gates | `01_mss/strategy/` | None | Copy doc |
-| 11 | HTML prototype on Stage, `data-stage-section` from the first draft, design-reviewer at 390/768/1440 | `01_mss/website/` | None | Prototype |
-| 12 | Astro build, redirects for old `/work/` URLs, deploy-preflight, cutover | `01_mss/website/site/` | **Live** site. Deploy on Osman's OK | v6 live |
+| 10 | **DRAFTED 10 Oct.** `mss-website-copy-v4.md`: every page in the map. Copy-reviewer pass 1 done, fixes applied. Figures gate (`mss-website-copy-v4.figures.json`): 12 of 14 pass, all prices included; 2 fail by design until checked in production (1,642 appointments, zero unapproved sends). Open calls for Osman at the end of the doc | `01_mss/strategy/` | None | Copy doc |
+| 11 | **BUILT and on Stage 11 Oct** (engagement `mss-v6-site`, admin only): 14 pages from `01_mss/website/prototype-v6/build-site.py` (edit the script, not the HTML), published with `stage-publish.py`. Viewport audit PASS on all 14 at 390/768/1440. Real clips and posters; no page nav (Stage's pill switches pages). Design-reviewer pass: see below. **Revised 12 Oct** (commits 898cc43, cbc1f3f, fcdc511, ee99020 on `mss-v6-copy`): clips replaced by stills until the clips are properly made (`make-stills.sh` + `work-shots.js`, written flat to `assets/still-*.webp` because Stage serves assets flat only); home lineup is Spotlight (Os chose it over two other concepts); CTA motion and pointer beam on every clickable; combat sports promotion removed; 19 pages now, including v6 case studies for Ayesha, Sable and the three demos | `01_mss/website/` | None | Prototype |
+| 12 | **NEXT.** Astro build from `prototype-v6`, redirects for old `/work/` URLs (the three demo case studies now have v6 pages; `/work/booking-engine/prototype/` must keep serving, the demo case studies link to it), deploy-preflight, cutover | `01_mss/website/site/` | **Live** site. Deploy on Osman's OK | v6 live |
 
 ## Assets
 
@@ -48,5 +48,9 @@
 
 ## Open
 
+- Case study copy (Ayesha, Sable, three demos, 12 Oct) has had no copy-reviewer pass; `mss-website-copy-v4.md` does not yet carry it, the stills or the Spotlight lineup.
+- Sable is described on the site as "a character I created": Os to confirm the wording.
+- Ayesha has agreed to be shown, but has not seen her case study page (it quotes her answers and shows her unreleased directions).
+- Positioning v6 §5.9 still names the combat sports promotion as Review proof; the site no longer does. Review has no proof until its first paid engagement.
 - Care target for a site plus Platform (only the site rate is set).
 - The viewport auditor reports PASS on a missing file (`scripts/viewport-audit.js:529`); fix offered, not yet approved.

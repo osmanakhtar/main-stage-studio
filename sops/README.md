@@ -9,3 +9,4 @@ template live in `~/workspace/sops/`.
 | [SOP-MSS-002](sop-mss-002-brand-film-production.md) | Producing an MSS brand film through Higgsfield | 2026-08-07 |
 | [SOP-MSS-003](sop-mss-003-linkedin-content-engine.md) | Drafting and posting to the MSS LinkedIn page | Not yet run |
 | [SOP-MSS-004](sop-mss-004-tool-clips.md) | Recording the v6 tool clips (console, Studio, Stage) on demo data | 2026-10-10 |
+| [SOP-MSS-006](sop-mss-006-v6-site-prototype.md) | Building the v6 site prototype and publishing it to Stage | 2026-10-12 |
