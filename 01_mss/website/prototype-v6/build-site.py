@@ -271,6 +271,9 @@ a.wcard:hover{background-color:#171613}
 @media(min-width:760px){.receipts{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .receipts>div{background:var(--house);padding:24px;display:grid;gap:8px}
 .receipts b{font-family:var(--display);font-variation-settings:"wdth" 125;font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1}
+.facts{display:grid;gap:0;border-top:1px solid var(--line);align-self:start}
+.facts div{display:grid;gap:4px;padding:14px 0;border-bottom:1px solid var(--line)}
+.light .facts,.light .facts div{border-color:#DAD6CE}
 .built{display:grid;gap:0;border-top:1px solid #DAD6CE}
 .built div{display:grid;gap:8px;padding:20px 0;border-bottom:1px solid #DAD6CE}
 @media(min-width:900px){.built div{grid-template-columns:200px minmax(0,1fr)}}
@@ -557,7 +560,7 @@ def badge(kind, text):
 SHOTS = {
     'identity': [('sable-presented', "Sable's homepage: her name set large on cream, beside a portrait"),
                  ('sable-cover', 'Sable album cover: a thin line of light across black'),
-                 ('identity-book', "Main Stage Studio's own brand book, opening on Run the show")],
+                 ('sable-home', "Sable's homepage on dark: her name over the full-length portrait")],
     'website': [('website-edit', 'Stage editor on the Vera demo site: the headline being changed on the page itself'),
                 ('website-hero', 'The Vera demo site home page, as a visitor sees it'),
                 ('website-phone', 'The same change checked in phone view before it is sent')],
@@ -571,6 +574,23 @@ SHOTS = {
                  ('platform-email', 'An email in the series, approved by the owner, with its wording'),
                  ('platform-preview', 'The email preview, exactly as a client would receive it')],
 }
+
+
+SHOTS.update({
+    'case-ayesha': [('work-ayesha-choose', "Ayesha's website directions, side by side for her to choose"),
+                    ('work-ayesha', 'Direction A, the Love room: the quietest body of her work'),
+                    ('work-ayesha-about', "Direction A, Who I am: her own words beside a space for her photograph")],
+    'case-sable': [('sable-presented', "Sable's homepage on Bone: the wordmark, with london beneath in gold"),
+                   ('sable-cover', 'Sable album cover: a thin line of light across black'),
+                   ('sable-home', "Sable's homepage on Night, over the full-length portrait")],
+    'case-conveyancing': [('work-thackray', "Thackray Vane's site, with the five stages of a conveyance drawn as a rail"),
+                          ('work-thackray-2', 'Every fee and disbursement itemised before a client instructs, with the rules engine note beside it')],
+    'case-accountancy': [('work-marbury', "Marbury Hale's site: key dates and the fee schedule, ruled like a ledger"),
+                         ('work-marbury-2', 'The fee schedule by service, with the rules engine note beside it')],
+    'case-clinic': [('work-vera', "Vera's site: consultation first, because your face is not a menu"),
+                    ('work-vera-2', 'Treatments, with Consultation first in the list')],
+    'case-puremed': [('work-puremed', 'puremed.uk, live: the home page the owner edits herself')],
+})
 
 
 def still(name, alt='', cls='', lazy=True):
@@ -687,14 +707,19 @@ def home():
          'I build the brand, the website, the content and the systems behind them for owner-led businesses, then hand you the controls. Prices on the page.', body)
 
 
+def proof_links(href, lbl):
+    links = href if isinstance(href, list) else ([(href, lbl)] if href else [])
+    return ('<div class="ctas">' + ''.join(f'<a class="btn" href="{h}">{l} {ARROW}</a>' for h, l in links) + '</div>') if links else ''
+
+
 def product(pid, num, name, promise, who, get, own, price_html, notes, media, proofs, cue, faqs, start_label, title, desc):
     proofs_html = '<div class="proofs' + (' pair' if len(proofs) > 1 else '') + '">' + ''.join(
-        f'<div><p>{badge(k, l)}</p><p class="lede">{t}</p>{f"<div class=ctas><a class=btn href={chr(34)}{href}{chr(34)}>{lbl} {ARROW}</a></div>" if href else ""}</div>'
+        f'<div><p>{badge(k, l)}</p><p class="lede">{t}</p>{proof_links(href, lbl)}</div>'
         for k, l, t, href, lbl in proofs) + '</div>'
     body = (
-        sec('promise', f'<div class="split wide-left" style="align-items:center"><div><p class="label">Product {num} of 7</p>'
-                       f'<h1 class="d1" style="margin-top:20px;font-size:clamp(56px,9vw,136px)">{name}.</h1>'
-                       f'<p class="lede" style="margin-top:24px">{promise}</p></div><div>{media}</div></div>', 'first')
+        sec('promise', f'<p class="label">Product {num} of 7</p>'
+                       f'<h1 class="d1" style="margin-top:20px;font-size:clamp(44px,9vw,136px)">{name}.</h1>'
+                       f'<div class="split wide-left" style="margin-top:clamp(24px,3vw,40px)"><p class="lede">{promise}</p><div>{media}</div></div>', 'first')
         + sec('for', f'<div class="head"><p class="label">Who it\'s for</p><p class="d3" style="max-width:32ch">{who}</p></div>', 'light')
         + sec('get', f'<div class="split"><div><p class="label">What you get</p></div>{ticks(get)}</div>', 'light')
         + sec('own', f'<div class="split"><div><p class="label">What you own at the end</p></div><p class="d3">{own}</p></div>', 'light')
@@ -735,11 +760,11 @@ def product_pages():
              'A short brand book', 'A starter set of templates and images'],
             'Every source file. The brand book in a format you can edit. A note of every font licence, so nothing surprises you later.',
             price('750', '2,500', 'one-off · 3–4 weeks', big=True), [],
-            gallery('identity', 'Sable, self-initiated, and the MSS brand book'),
+            gallery('identity', 'Sable, self-initiated'),
             [('prog', 'In progress · Art by Ayesha Johar',
-              'A painter\'s brand, built from her own work. The meaning of her name, the line "beauty is a form of resistance", and directions drawn from her paintings. In review with Ayesha now.', None, None),
+              'A painter\'s brand, built from her own work. The meaning of her name, the line "beauty is a form of resistance", and directions drawn from her paintings. In review with Ayesha now.', 'work-ayesha.html', 'Read the case study'),
              ('self', 'Self-initiated · Sable',
-              "A musician's brand built from one idea, soft and sharp at once: her name, her look, her album cover and her moving image.", None, None)],
+              "A musician's brand built from one idea, soft and sharp at once: her name, her look, her album cover and her moving image.", 'work-sable.html', 'Read the case study')],
             'You see each direction on a private link and comment on it there. I refine one. Nothing is final until you say so.',
             [('Do I need Identity before a Website?', "No. If you already have a brand you're happy with, I build the site around it. If you need both, Opening Night does them as one project: £1,290 founding, £4,300 target."),
              ('Will you rename my business?', 'Only if you ask. Most people keep their name; the work is in what it says.'),
@@ -811,7 +836,8 @@ def product_pages():
             [('live', 'Live · PureMed Aesthetics',
               'Client records, a consent ledger, emails the owner writes herself, consultation scoring. 1,642 past appointments moved across from two old systems. DPIA signed and a data processing agreement in place before anything was imported.', *PM),
              ('demo', 'Demo, fictional clients',
-              'Booking and intake journeys for a conveyancing firm, an accountancy practice and a clinic.', 'work.html', 'See the demos')],
+              'Booking and intake journeys for a conveyancing firm, an accountancy practice and a clinic.',
+              [('work-conveyancing.html', 'Conveyancing'), ('work-accountancy.html', 'Accountancy'), ('work-clinic.html', 'Clinic')], None)],
             "You approve the data map before any data moves. You approve every email before it sends. Old records only come across after you've signed off how they'll be kept.",
             [('Is this a CRM?', "It does what you'd want a CRM to do for a small business, without the forty features you'd never open."),
              ("Who can see my customers' data?", 'You. I act as your processor, under the agreement you sign. Any sub-processors are listed in it.'),
@@ -875,21 +901,20 @@ def how():
 
 
 def work():
-    DEMO = 'https://mainstagestudio.co.uk/work/'
     # (name, badge kind, badge, products, product label, line, href, link label, still or None)
     cards = [
         ('PureMed Aesthetics', 'live', 'Live', 'website campaign platform care', 'Website · Campaign · Platform · Care', 'A clinic that runs its own show.',
          'work-puremed.html', 'Read the case study', 'work-puremed'),
         ('Art by Ayesha Johar', 'prog', 'In progress', 'identity', 'Identity', "A painter's brand, built from her own work.",
-         'identity.html#proof', 'See it on Identity', 'work-ayesha'),
+         'work-ayesha.html', 'Read the case study', 'work-ayesha'),
         ('Sable', 'self', 'Self-initiated', 'identity', 'Identity', 'An identity built around a character and a world.',
-         'identity.html#proof', 'See it on Identity', 'sable-presented'),
+         'work-sable.html', 'Read the case study', 'sable-presented'),
         ('Conveyancing onboarding', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo client journey with example checks.',
-         DEMO + 'conveyancing-onboarding/', 'Try the demo', 'work-thackray'),
+         'work-conveyancing.html', 'Read the case study', 'work-thackray'),
         ('Accountancy intake', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'New-client intake without the email chain.',
-         DEMO + 'accountancy-intake/', 'Try the demo', 'work-marbury'),
+         'work-accountancy.html', 'Read the case study', 'work-marbury'),
         ('Clinic booking', 'demo', 'Demo, fictional client', 'platform', 'Platform', 'A demo booking flow with example suitability questions.',
-         DEMO + 'clinic-booking/', 'Try the demo', 'work-vera'),
+         'work-clinic.html', 'Read the case study', 'work-vera'),
     ]
     filt = ''.join(f'<button class="chip" type="button" data-filter="{f.lower()}" aria-pressed="{"true" if f == "All" else "false"}">{f}</button>'
                    for f in ['All', 'Identity', 'Website', 'Campaign', 'Content', 'Platform'])
@@ -910,6 +935,7 @@ def puremed():
     body = (
         sec('intro', f'<p>{badge("live", "Live · Website · Campaign · Platform · Care")}</p>'
                      '<h1 class="d1" style="margin-top:24px;font-size:clamp(48px,8vw,120px)">A clinic that runs its own show.</h1>', 'first')
+        + sec('media', gallery('case-puremed', 'puremed.uk, live since 30 September 2026'))
         + sec('before', '<div class="split"><div><p class="label">Before</p></div><p class="lede">Before, one PureMed client could live in up to four places: the old website, the mailing list, the clinic records and the booking tool. Changing a price on the website meant asking someone and waiting.</p></div>')
         + sec('built', '<div class="split"><div><p class="label">What I built</p></div><div class="built">'
                        '<div><b>Website</b><p>puremed.uk, rebuilt as a fast static site she edits herself, page by page.</p></div>'
@@ -925,6 +951,90 @@ def puremed():
     )
     page('work-puremed.html', 'PureMed Aesthetics: a clinic that runs its own show | Main Stage Studio',
          'Website, campaigns and the platform behind them for an aesthetics clinic. Live since 30 September 2026.', body, light=True)
+
+DEMO_JOURNEY = 'https://mainstagestudio.co.uk/work/booking-engine/prototype/?tenant='
+
+
+def case(slug, kind, badge_text, title, intro, facts, brief_label, brief, built, status, caption, product_id, try_href=None, seo=''):
+    """A case study: what was offered and why, what I built, where it stands, then the way in."""
+    facts_html = '<div class="facts">' + ''.join(f'<div><span class="label">{k}</span><p>{v}</p></div>' for k, v in facts) + '</div>'
+    built_html = '<div class="built">' + ''.join(f'<div><b>{h}</b><p>{t}</p></div>' for h, t in built) + '</div>'
+    try_html = (f'<div class="ctas" style="margin-top:28px"><a class="btn primary" href="{try_href}" target="_blank" rel="noopener">Try the working demo {ARROW}</a></div>'
+                '<p class="label" style="margin-top:14px">Opens in a new tab, in the fictional client\'s own branding</p>') if try_href else ''
+    pname = product_id.capitalize()
+    body = (
+        sec('intro', f'<p>{badge(kind, badge_text)}</p><h1 class="d1" style="margin-top:24px;font-size:clamp(44px,8vw,120px)">{title}</h1>'
+                     f'<div class="split wide-left" style="margin-top:clamp(24px,3vw,40px)"><p class="lede">{intro}</p>{facts_html}</div>', 'first')
+        + sec('media', gallery(f'case-{slug}', caption))
+        + sec('brief', f'<div class="split"><div><p class="label">{brief_label}</p></div><div class="body lede">{brief}</div></div>')
+        + sec('built', f'<div class="split"><div><p class="label">What I built</p></div>{built_html}</div>')
+        + sec('status', f'<div class="split"><div><p class="label">Where it stands</p></div><div><p class="d3">{status}</p>{try_html}</div></div>')
+        + sec('start', f'<div class="split" style="align-items:center"><h2 class="d2">Want this for your business?</h2>'
+                       f'<div class="ctas"><a class="btn primary" href="start.html?p={product_id}">Start {"an" if pname[0] in "AEIOU" else "a"} {pname} {ARROW}</a>'
+                       f'<a class="btn" href="{product_id}.html">About {pname}</a></div></div>')
+    )
+    page(f'work-{slug}.html', f'{badge_text.split(" · ")[-1] if " · " in badge_text else title} | Main Stage Studio', seo or intro[:155], body, light=True)
+
+
+def cases():
+    case('ayesha', 'prog', 'In progress · Identity · Art by Ayesha Johar', "A painter's brand, built from her own work.",
+         'Ayesha Johar is a painter, born in Mauritius and living in London. She asked for a website that sells her work and makes her a more visible artist. Before that, the brand needed saying properly: what her name means, what holds her paintings together, and how the site should feel.',
+         [('Product', 'Identity, then Website'), ('Client', 'Art by Ayesha Johar'), ('Status', 'In review with Ayesha')],
+         'The brief',
+         '<p>In her words, the site is there "to sell, and to be a more visible artist". Someone landing on it should feel calm, like they are seeing something original and can relate to it. The look she asked for: colourful, elegant, sophisticated, and approachable at the same time.</p>'
+         '<p>So the work had to start with the paintings, not with a template.</p>',
+         [('The work, read closely', 'Five bodies of work found in her paintings: Sacred, Nature, World, Witness and Love. Each one becomes a room on the site.'),
+          ('Her name and her line', 'Johar, in her own statement: jewel, courage and ultimate sacrifice. The line, in her own words: "Beauty is a form of resistance."'),
+          ('A brand direction document', 'Written for her, now in its third version as her answers came in, so every decision traces back to something she said.'),
+          ('Website directions', 'Several full directions, each with a home page, a room for every body of work, an about page and a way to buy. Colours are sampled from her paintings, not chosen for her.')],
+         'Ayesha is choosing a direction on a private link now. Nothing is final until she says so.',
+         'Art by Ayesha Johar: website directions, in review', 'identity')
+    case('sable', 'self', 'Self-initiated · Identity · Sable', 'An identity built around a character and a world.',
+         'Sable is a character I created to run the Identity process end to end with no client in the room: a young musician from London, soft and sharp at once. The brief, the name, the look and the moving image all came out of one idea.',
+         [('Product', 'Identity'), ('Client', 'None: self-initiated'), ('Made', 'May 2026')],
+         'The idea',
+         '<p>Sable contains contradictions and does not resolve them for you. Soul and grit. Open in the music, guarded in the world. The brand had to live in that tension instead of flattening it.</p>',
+         [('The wordmark', 'Her name in a wide-tracked lowercase serif, with london beneath it in gold. No icon. The name carries itself.'),
+          ('Colour', 'Bone leads, intimate and unguarded. Night takes over as the site deepens into the music. Gold runs through both, never in charge.'),
+          ('The album cover', 'One thin line of light across black. The same restraint as the wordmark.'),
+          ('The homepage and the walk-out', 'Her site and a short moving piece that ends on its hero, so the brand is shown in use, not on a board.')],
+         'Self-initiated, so nobody paid for it. It shows the process and what comes out of it.',
+         'Sable, self-initiated: homepage, album cover, homepage on Night', 'identity')
+    case('conveyancing', 'demo', 'Demo, fictional client · Platform · Conveyancing', 'The whole cost, before they instruct.',
+         'A client onboarding journey for Thackray Vane, a fictional firm of conveyancing solicitors. A buyer goes from enquiry to instructed matter in one sitting, with the checks the firm is obliged to run built into the journey instead of chased by email afterwards.',
+         [('Product', 'Platform'), ('Sector', 'Residential conveyancing'), ('Status', 'Working demo, open to try')],
+         'The problem',
+         '<p>Before a firm can act on a purchase it has to check identity and source of funds, assess money-laundering risk, rule out a conflict, send a client care letter and take money on account. Get one wrong and it is a regulatory problem, not a design one.</p>'
+         '<p>Done by hand, that is a person remembering every rule, for every enquiry, on a busy Friday. A nicer enquiry form does not change that. The rules have to live in the journey.</p>',
+         [('The whole cost, up front', 'The fee and every disbursement, itemised with VAT, before a client commits to anything. There is no way for the page to show a headline fee instead.'),
+          ('A conflict stops the journey', 'If the other side has already approached the firm, the journey ends there, with the reason on the page. No continue button.'),
+          ('The chain, drawn as a sequence', 'A conveyance is five stages, so the site shows a numbered rail. The client always knows where they are and what happens next.'),
+          ('Identity and source of funds, once', 'Done in the same sitting, with a signed record at the end, instead of a chase for documents over email.')],
+         'A working demo, not a mock-up. The rules fire against what you choose, and the panel beside the journey shows which rule asked for what.',
+         'Thackray Vane, a fictional firm: the journey, then the fees', 'platform', DEMO_JOURNEY + 'thackray')
+    case('accountancy', 'demo', 'Demo, fictional client · Platform · Accountancy', 'Booked, signed and paid, in one sitting.',
+         'A new-client intake journey for Marbury Hale, a fictional firm of chartered accountants. Becoming a client happens in one visit instead of five separate handoffs, and the line the practice must draw around regulated advice cannot quietly drop out of a proposal.',
+         [('Product', 'Platform'), ('Sector', 'Chartered accountancy'), ('Status', 'Working demo, open to try')],
+         'The problem',
+         '<p>A practice rarely loses a new client to bad design. It loses them between the enquiry and the engagement: a call to book, an email with the engagement letter, a chase for the signature, another call for the deposit. Every extra step is a chance for someone with three other quotes open to not get round to it.</p>',
+         [('One sitting, not five handoffs', 'Book a slot, pass the risk questions, read and sign the engagement letter and authorise the deposit, all in the same visit.'),
+          ('The advice boundary, kept automatically', 'The practice cannot give investment, pension or insurance advice, so every advisory engagement carries a scope statement that cannot be removed at proposal stage.'),
+          ('Every question traces to a rule', 'Beside the journey, each question the client was asked and the numbered rule that required it. Ask why something was asked, and the answer is on screen.'),
+          ('The record commits when the client does', 'The signed letter is fingerprinted, timestamped and filed the moment the client sees their confirmation. Nothing waits for someone to file it later.')],
+         'A working demo, not a mock-up. The rules fire against what you choose, the signature is real for the run, and so is the reference you get at the end.',
+         'Marbury Hale, a fictional practice: the site, then the fee schedule', 'platform', DEMO_JOURNEY + 'marbury')
+    case('clinic', 'demo', 'Demo, fictional client · Platform · Clinic', 'Consent that stands up in a file review.',
+         'A booking and consent journey for Vera Aesthetics, a fictional nurse-led clinic. Not a scheduler with a form bolted on: signatures that hold up as evidence, a screening step that can decline or reroute a booking, and a rule that will not let anyone book a prescription treatment without a consultation first.',
+         [('Product', 'Platform'), ('Sector', 'Medical aesthetics'), ('Status', 'Working demo, open to try')],
+         'The problem',
+         '<p>A clinic handles health data, consent that has to stand up later, and medicines it is not allowed to name in public. A generic booking tool with a PDF consent form does not touch any of that.</p>'
+         '<p>The clinic needs to open the record for any booking and show exactly what was asked, what was signed, and when.</p>',
+         [('Consultation before treatment', 'Pick a prescription treatment with no consultation on record and the journey sends you to a consultation instead, with the reason on the page.'),
+          ('Signatures that stand up', 'A drawn or typed signature, each clause acknowledged and timestamped, and the signed document fingerprinted so it can be checked later.'),
+          ('Photo consent kept separate', 'Consent to treatment and consent to before-and-after photos are two signatures, because refusing one must never mean losing the other.'),
+          ('Medicines never named', 'Prescription medicines cannot be advertised, so the site, the journey and the confirmation use a public treatment name instead.')],
+         'A working demo, not a mock-up. The rules fire against what you choose, and every booking ends with a record the clinic can open and show.',
+         'Vera Aesthetics, a fictional clinic: the site, then the treatments', 'platform', DEMO_JOURNEY + 'vera')
 
 
 def about():
@@ -976,5 +1086,5 @@ def start():
     page('start.html', 'Start a project | Main Stage Studio', 'Tell me what you need. I reply within two working days.', body)
 
 
-home(); product_pages(); pricing(); how(); work(); puremed(); about(); start()
+home(); product_pages(); pricing(); how(); work(); puremed(); cases(); about(); start()
 print('built:', ', '.join(sorted(f for f in os.listdir(HERE) if f.endswith('.html'))))

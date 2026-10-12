@@ -24,7 +24,9 @@ PAGES = [("index.html", "index", "Home"), ("review.html", "review", "Review"), (
          ("website.html", "website", "Website"), ("campaign.html", "campaign", "Campaign"), ("content.html", "content", "Content"),
          ("platform.html", "platform", "Platform"), ("care.html", "care", "Care"), ("pricing.html", "pricing", "Pricing"),
          ("how-it-works.html", "how-it-works", "How it works"), ("work.html", "work", "Work"),
-         ("work-puremed.html", "work-puremed", "Work: PureMed"), ("about.html", "about", "About"), ("start.html", "start", "Start")]
+         ("work-puremed.html", "work-puremed", "Work: PureMed"), ("work-ayesha.html", "work-ayesha", "Work: Ayesha"),
+         ("work-sable.html", "work-sable", "Work: Sable"), ("work-conveyancing.html", "work-conveyancing", "Work: Conveyancing"),
+         ("work-accountancy.html", "work-accountancy", "Work: Accountancy"), ("work-clinic.html", "work-clinic", "Work: Clinic"), ("about.html", "about", "About"), ("start.html", "start", "Start")]
 IDS = {f[:-5]: pid for f, pid, _ in PAGES}
 
 
