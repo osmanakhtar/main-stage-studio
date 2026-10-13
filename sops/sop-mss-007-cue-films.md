@@ -32,9 +32,10 @@ Every film is two scripts: `capture-<film>.js` writes `frames-<film>/` (stills p
    - Campaign: `SERVER_DIR=~/workspace/.worktrees/sp-v6-reskin/service bash film-campaign-setup.sh`. You should see `filming console up (one day = 30000ms)`. Then `node capture-campaign.js` (about 5.5 minutes: ten Vera days of 30 seconds).
    - Platform: `SERVER_DIR=... DATA=/tmp/vera-legacy bash film-platform-setup.sh`, then `node capture-platform.js /tmp/vera-legacy`. You should see `COMMITTED, migration job ...`.
    - Identity (Sable) and Ayesha: no setup. `node capture-identity.js`, `node capture-ayesha.js`.
+   - Door, Care, Review, Cues (code-directed, no capture): `node render-stage.js door|care|review|cues` renders straight to `out-v6/` (`--still 4.2` for a test frame). Type, light and paper only: never draw a product screen.
 3. Check four or five test frames before a full render: `node render-<film>.js --still 6.2`, and look at them.
 4. `node render-<film>.js`. You should see the three files with sizes (aim for 1.5MB or less).
-5. Watch the film. Then add it to `FILMS` in `prototype-v6/build-site.py` and publish under SOP-MSS-006.
+5. Watch the film. Then add it to `FILMS` in `prototype-v6/build-site.py` and publish under SOP-MSS-006. The build copies each film under a content hash (`website-cue-10af6b.mp4`), so a re-cut is always a new URL on Stage.
 6. Commit the scripts and `out-v6/<film>-cue.*` on `mss-v6-copy`, by name. Frames and film profiles are git-ignored.
 
 ## Checks
@@ -63,3 +64,4 @@ Every film is two scripts: `capture-<film>.js` writes `frames-<film>/` (stills p
 ## Change log
 
 - 2026-10-12: created with the first six films.
+- 2026-10-13: `render-stage.js` adds four code-directed films (door, care, review, cues); films published under a content hash to beat Stage's asset cache.

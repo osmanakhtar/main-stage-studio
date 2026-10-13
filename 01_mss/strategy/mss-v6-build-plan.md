@@ -47,6 +47,10 @@ in code (camera, Tungsten light, scripted cursor, Spike corners, a closing card)
 | `platform-cue` | Four old sources, the DPIA signed first, the real legacy import, one record, a batch recall (Vera, fictional) | Platform page, lineup |
 | `identity-cue` | Sable's identity spread by spread, from her brief word for word; the crowd footage dropped (it broke her brief) | Identity page, lineup |
 | `ayesha-cue` | Built from her own work: paintings, five bodies, name, line, sampled colour, the five directions shown neutrally | Ayesha case study (replaces the stills gallery) and her proof card on Identity, 13 Oct |
+| `door-cue` | Code-directed: change tickets slide under a locked door and pile up; "Your own front door." | Home Problem (replaces the Vera placeholder still), 13 Oct |
+| `care-cue` | Code-directed: a month of Care, one line lit at a time; the small change waits for your go | Care page, lineup, 13 Oct |
+| `review-cue` | Code-directed: house lights up on the four things a Review leaves you | Review page, 13 Oct |
+| `cues-cue` | Code-directed: five cue lamps; 03 holds red on standby until pressed, then green | Home How it works, 13 Oct |
 
 Found and fixed on the way: the console's series-stop reasons (shipped to PureMed, see platform-design.md); Vera's filming config had lost
 its data protection content (my scratch kit copy sat away from the packs). Found and not fixed: Content Studio only matches a library folder

@@ -34,10 +34,20 @@ FILMS = {
     'platform': ('platform-cue', 'Four old sources become one record, then a batch recall in one search', 'Old records brought in, one record, a recall · Vera demo, fictional patients'),
     'ayesha': ('ayesha-cue', "Ayesha's brand, from her own work: her paintings, five bodies of work, her name, her line, colour sampled from a canvas, the five directions she is choosing between", 'Art by Ayesha Johar · in review'),
     'campaign': ('campaign-cue', 'One sign-up, the real follow-up series, stopped by a booking', 'Guide and follow-up series · Vera demo, days compressed for filming'),
+    # code-directed (render-stage.js): no tool to capture, so type, light and paper, never a mocked screen
+    'door': ('door-cue', 'Change requests slide under a locked door and pile up', 'Brand film'),
+    'care': ('care-cue', "A month of Care, one line at a time: hosting, backups, updates, email, a small change, the monthly check", 'What Care runs, every month'),
+    'review': ('review-cue', "The house lights come up on what a Review leaves you: findings, brand guidelines, a campaign calendar and a costed plan", 'What lands at the end of the week'),
+    'cues': ('cues-cue', 'Five cue lamps light in turn; yours holds on standby until you press it', 'The five cues'),
 }
-for _f, _a, _c in FILMS.values():
+# Published under a content hash (website-cue-3f9a1c.mp4): Stage caches assets for a day, so a re-cut
+# film with the same name kept showing the old one or nothing (13 Oct). A new cut is a new URL.
+import hashlib
+for _pid, (_f, _a, _c) in list(FILMS.items()):
+    _h = hashlib.sha1(b''.join(open(os.path.join(CLIPS, f'{_f}.{e}'), 'rb').read() for e in ('mp4', 'webm', 'webp'))).hexdigest()[:6]
     for _ext in ('mp4', 'webm', 'webp'):
-        shutil.copy(os.path.join(CLIPS, f'{_f}.{_ext}'), os.path.join(A, f'{_f}.{_ext}'))
+        shutil.copy(os.path.join(CLIPS, f'{_f}.{_ext}'), os.path.join(A, f'{_f}-{_h}.{_ext}'))
+    FILMS[_pid] = (f'{_f}-{_h}', _a, _c)
 
 # ── shared pieces ─────────────────────────────────────────────────────────────
 SPIKE = ('<svg class="spike" viewBox="0 0 40 40" fill="none" aria-hidden="true">'
@@ -733,8 +743,7 @@ def home():
         + sec('problem', '<div class="split wide-left" style="align-items:center"><div><h2 class="d2">Most small businesses rent their own front door.</h2>'
               '<div class="body lede" style="margin-top:28px"><p>The designer you have to email to change a word. Four logins to send one newsletter. The agency that launched it and kept the keys.</p>'
               "<p>Looking professional shouldn't cost you control of your own business.</p></div></div>"
-              # media plan H2: placeholder until the real PureMed edit is filmed (needs Nafisa's OK)
-              + gallery('website', "Placeholder, Vera demo · Real image to come: an owner's edit, live on her site minutes later", only=['website-edit']) + '</div>', 'light')
+              + film_figure('door', caption=False) + '</div>', 'light')
         + sec('lineup', f'<div class="head"><p class="label">The lineup</p><h2 class="d2">Six products. Prices on the page.</h2></div>'
               f'{rows}{FOUNDING}'
               f'<div class="asides"><div><p class="label">Opening Night</p><p>Need a brand and a site together? <b>Opening Night</b> is Identity and Website as one project.</p>{price("1,290", "4,300")}</div>'
@@ -745,6 +754,7 @@ def home():
               f'<div class="body lede"><p>PureMed\'s owner edits her own website, writes and approves her own emails, and keeps every client record in one place she controls. Live on puremed.uk since 30 September 2026.</p>'
               f'<div class="ctas" style="margin-top:24px"><a class="btn" href="work-puremed.html">Read the case study {ARROW}</a></div></div></div>', 'light')
         + sec('how', '<div class="head"><p class="label">How it works</p><h2 class="d2">Nothing goes live until you give the cue.</h2></div>'
+              + '<div style="max-width:880px;margin-bottom:clamp(28px,4vw,48px)">' + film_figure('cues', caption=False) + '</div>'
               '<div class="cues">' + ''.join(f'<div class="cue"><p class="label">{k}</p><p class="cue-line">{v}</p></div>' for k, v in cues) + '</div>'
               f'<div class="ctas" style="margin-top:28px"><a class="btn" href="how-it-works.html">How it works {ARROW}</a></div>', 'light')
         + sec('founder', '<div class="split lead"><h2 class="d2">Twenty years building systems that weren\'t allowed to fail.</h2>'
@@ -794,7 +804,7 @@ def product_pages():
              'A plan: what to build, in what order, and what each part costs', 'A call to walk you through it'],
             "The findings, the guidelines, the calendar and the plan. Take them to anyone. You don't have to build any of it with me.",
             price('450', '1,500', 'one week', big=True), ['Buy any product within 8 weeks and the Review fee comes off it'],
-            REVIEW_PANEL,
+            film_figure('review'),
             [],  # no proof shown until the first paid Review is delivered
             "You see the findings in draft and tell me what I've got wrong. The final version only lands once you've said it's right.",
             [('How is this different from the Soundcheck?', 'The Soundcheck is a free call to work out what you need. A Review is a week of actual work, written down, that you keep.'),
@@ -901,7 +911,7 @@ def product_pages():
             ['Hosting', 'Backups', 'Security updates', 'Email sending', 'Small changes when you ask', 'A monthly check, written up in plain English'],
             "Everything you owned before. Care doesn't lock anything in: stop it and your site, code and data stay yours.",
             price('105', '350', '/month · for a site', big=True), ['With a Platform: priced when we scope it'],
-            run_panel(),
+            film_figure('care'),
             [('live', 'Live · PureMed Aesthetics',
               'Hosting, backups and updates run this way since puremed.uk went live on 30 September 2026.', None, None)],
             'Small changes still go through you. I make them, you see them, you say go.',
