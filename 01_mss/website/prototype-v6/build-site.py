@@ -24,6 +24,8 @@ A = os.path.join(HERE, 'assets')
 os.makedirs(A, exist_ok=True)
 if not os.path.exists(os.path.join(A, 'still-website-edit.webp')):
     raise SystemExit('stills missing: run bash make-stills.sh first')
+for _fav in ('favicon.svg', 'favicon.ico', 'favicon-32x32.png', 'favicon-16x16.png', 'apple-touch-icon.png'):  # brand/mark/make-favicons.sh
+    shutil.copy(os.path.join(MSS, 'brand/mark/favicons', _fav), os.path.join(A, _fav))
 shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26c.webp'))
 # the cue films (tools/clips/cue, rendered into out-v6): copied in with their posters
 CLIPS = os.path.join(MSS, 'website/tools/clips/out-v6')
@@ -430,7 +432,12 @@ JS = """
     });
   });
   // cue films on the product pages: play while on screen, never under reduced motion (the poster stays)
-  var play = function(v){ if (!reduce) { var p = v.play(); if (p && p.catch) p.catch(function(){}); } };
+  var play = function(v){
+    if (reduce) return;
+    var p = v.play(); if (p && p.catch) p.catch(function(){});
+    // a film that stalls on its first load (a dropped or stale request) gets one fresh try
+    if (!v._retry) { v._retry = setTimeout(function(){ if (v.readyState < 2 && !v.paused) { v.load(); var q = v.play(); if (q && q.catch) q.catch(function(){}); } }, 4000); }
+  };
   if ('IntersectionObserver' in window) {
     var fo = new IntersectionObserver(function(es){ es.forEach(function(e){ var v = e.target.querySelector('video'); if (e.isIntersecting) play(v); else v.pause(); }); }, {threshold:.35});
     $$('[data-film]').forEach(function(f){ fo.observe(f); });
@@ -519,7 +526,13 @@ JS = """
     var want = (location.search.match(/[?&]p=([a-z-]+)/) || [])[1];
     if (want) { var box = form.querySelector('input[value="' + want + '"]'); if (box) box.checked = true; }
     form.addEventListener('submit', function(e){
-      e.preventDefault(); form.hidden = true;
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      var f = new FormData(form), needs = f.getAll('need').join(', ') || 'not sure yet';
+      var body = ['Name: ' + (f.get('name') || ''), 'Business: ' + (f.get('business') || ''), 'Email: ' + (f.get('email') || ''),
+                  'Website: ' + (f.get('website') || ''), 'Interested in: ' + needs, 'When: ' + (f.get('when') || ''), '', (f.get('what') || '')].join('\\n');
+      location.href = 'mailto:hello@mainstagestudio.co.uk?subject=' + encodeURIComponent('Start: ' + (f.get('business') || f.get('name') || 'a new project') + ' (' + needs + ')') + '&body=' + encodeURIComponent(body);
+      form.hidden = true;
       var d = document.querySelector('.done'); d.classList.add('on'); d.setAttribute('tabindex','-1'); d.focus();
     });
   }
@@ -538,6 +551,10 @@ def page(fname, title, desc, body, light=False):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#12110F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1158,9 +1175,9 @@ def start():
         '<div class="field"><label for="f-when">When do you need it?</label><select id="f-when" name="when">'
         '<option>As soon as possible</option><option>In the next three months</option><option>Just looking</option></select></div>'
         f'<div><button class="btn primary" type="submit">Send {ARROW}</button>'
-        '<p class="muted" style="margin-top:14px;font-size:14px">I\'ll use these details to reply to you and nothing else. <a class="inline-link" href="#">Privacy notice</a></p></div>'
+        '<p class="muted" style="margin-top:14px;font-size:14px">I\'ll use these details to reply to you and nothing else. Sending opens your own email app, addressed to hello@mainstagestudio.co.uk.</p></div>'
         '</form>'
-        '<div class="done" role="status"><p class="d3">Got it.</p><p class="muted" style="margin-top:10px">I read everything that comes in and reply within two working days. If it\'s simpler to talk, my reply will include a link to book a Soundcheck.</p></div>'
+        '<div class="done" role="status"><p class="d3">Nearly there.</p><p class="muted" style="margin-top:10px">Your email app should have opened with this ready to send. If it didn\'t, write to <a class="inline-link" href="mailto:hello@mainstagestudio.co.uk">hello@mainstagestudio.co.uk</a>. I read everything that comes in and reply within two working days. If it\'s simpler to talk, my reply will include a link to book a Soundcheck.</p></div>'
     )
     body = (
         sec('intro', '<p class="label">Start</p><h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">What do you need?</h1>', 'first')
