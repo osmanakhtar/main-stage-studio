@@ -28,9 +28,34 @@
 
 **Record new:** Vera guide signup to console enrolment (Campaign); carousel builder with Vera (Content); MSS brand book scroll (Identity, after step 9); fresh screenshots of live puremed.uk.
 
-**Have:** founder portrait graded, `01_mss/brand/founder/osman-mono-4x5.webp` (site; replaced 12 Oct 2026 with a mono crop of the new studio shot `osman-original-2026-10.png`) and `osman-colour-1x1.jpg` (LinkedIn; still the old shot, recrop from the new one if wanted). Ayesha agreed to be shown.
+**Have:** founder portrait graded, `01_mss/brand/founder/osman-mono-4x5.webp` (site; replaced again 12 Oct 2026 with a mono 4:5 crop of `osman-original-2026-10b.jpeg`, Os's own shot; on About as `os-akhtar-mono-4x5-oct26b.webp`, a new name each time because Stage caches images for a day) and `osman-colour-1x1.jpg` (LinkedIn; still the old shot, recrop from the new one if wanted). Ayesha agreed to be shown.
 
 **Dropped for launch:** generated hard-lit stills (Higgsfield at 0 credits).
+
+## Cue films (12 to 13 October 2026)
+
+Os found the screen recordings janky and asked for professional brand media. Concepts: `01_mss/website/prototype-v6/brand-video-concepts.md`
+(creative-director pass; the system is "Standby. Go.": every film is one cue, the work lit and waiting, the owner gives the go).
+The recordings were replaced by **cue films**: the real tool captured frame by frame at 2x or 3x (no screen video), then a director pass
+in code (camera, Tungsten light, scripted cursor, Spike corners, a closing card). Pipeline and how to re-shoot: SOP-MSS-007.
+
+| Film | What it shows | On the site |
+|---|---|---|
+| `website-cue` | A typo on a Sunday, fixed in Stage's real editor (Vera demo) | Website page, lineup |
+| `content-cue` | Content Studio (PureMed's edition) plans and drafts a real week, CO2 laser spotlight, 5 posts in 22.6s | Content page, lineup |
+| `campaign-cue` | One sign-up, the real series on a compressed day, a booking stops it (Vera filming console) | Campaign page, lineup |
+| `platform-cue` | Four old sources, the DPIA signed first, the real legacy import, one record, a batch recall (Vera, fictional) | Platform page, lineup |
+| `identity-cue` | Sable's identity spread by spread, from her brief word for word; the crowd footage dropped (it broke her brief) | Identity page, lineup |
+| `ayesha-cue` | Built from her own work: paintings, five bodies, name, line, sampled colour, the five directions shown neutrally | **Not yet on the site** (waiting on Os) |
+
+Found and fixed on the way: the console's series-stop reasons (shipped to PureMed, see platform-design.md); Vera's filming config had lost
+its data protection content (my scratch kit copy sat away from the packs). Found and not fixed: Content Studio only matches a library folder
+to a treatment when the folder holds the full treatment name, so Nafisa's "co2 laser", "Skin booster images" and "Microneedling images"
+never fill posts on their own (offered, not approved: it changes software she uses).
+
+**Next:** Os reviews the Ayesha film, then it goes on her case study page (and possibly the Identity proof card). Still without films:
+Care and Review (the "lit object" films need Os's call: shoot real objects, or Higgsfield credits), How it works (reuse the films plus a
+cue-lamp panel), Work card posters. Then build plan step 12 (Astro).
 
 ## Honesty rules for the videos
 
@@ -50,7 +75,8 @@
 
 - Case study copy (Ayesha, Sable, three demos, 12 Oct) has had no copy-reviewer pass; `mss-website-copy-v4.md` does not yet carry it, the stills or the Spotlight lineup.
 - Sable is described on the site as "a character I created": Os to confirm the wording.
-- Ayesha has agreed to be shown, but has not seen her case study page (it quotes her answers and shows her unreleased directions).
+- Ayesha has agreed to be shown, but has not seen her case study page (it quotes her answers and shows her unreleased directions). Os confirmed 12 Oct she is fine to be shown now, on Stage, ahead of her review closing; her line "Beauty is a form of resistance" is used (still unconfirmed with her); the "1600s Rajasthan" sentence is left out.
 - Positioning v6 §5.9 still names the combat sports promotion as Review proof; the site no longer does. Review has no proof until its first paid engagement.
 - Care target for a site plus Platform (only the site rate is set).
+- The local filming console (studio_film_sandbox on :3451) is still built with Vera's signed DPIA, the legacy import and Hannah; rebuild with the setup scripts in `tools/clips/cue/` before re-shooting.
 - The viewport auditor reports PASS on a missing file (`scripts/viewport-audit.js:529`); fix offered, not yet approved.

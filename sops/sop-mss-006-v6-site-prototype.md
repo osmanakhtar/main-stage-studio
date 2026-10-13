@@ -55,5 +55,6 @@ Escalation: Stage's own code is `~/stage/server.js` and `public/live-edit.js` on
 
 ## Change log
 
+- 2026-10-12: `build-site.py` now copies the cue films (`FILMS`, SOP-MSS-007) from `tools/clips/out-v6/` with the founder portrait; films replace the stills on the product pages and the lineup. Build, audit and publish run as written after each film.
 - 2026-10-12: added the stale-image row (founder portrait swap).
 - 2026-10-12: created. Stills replace the clips (`make-stills.sh`, `work-shots.js`), and the asset rsync now recurses.

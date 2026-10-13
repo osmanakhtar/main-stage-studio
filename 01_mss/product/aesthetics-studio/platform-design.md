@@ -16,6 +16,15 @@ Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
 
+## Change note, 12 October 2026: a stopped series says why
+
+The person page's "What happened" showed a series stop as its rule id ("Series stopped because WDLT-STOP-03").
+The stop event already carries the rule's reason, so the console now says it in words: "because they booked",
+"they replied", "they unsubscribed" (also for "Series step skipped"). Found while filming the MSS Campaign film;
+shipped to app.puremed.uk on Osman's say-so (studio-platform `7399af8`, `make ship`, preflight PASS, test in
+`test/ux-p1.test.ts`). Open: "Brought in from **Faces or Acuity**" is fixed wording, so it names PureMed's old
+systems on every tenant, Vera included. Neutral wording is a small change if another clinic migrates.
+
 ## v0.11 change note, 2 October 2026: a local sandbox, and DPIA questions on booking
 
 **Why.** Console and booking work had nowhere to run except PureMed production (push to `main`
