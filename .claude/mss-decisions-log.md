@@ -245,6 +245,7 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 
 | Date | What changed | Why |
 |------|-------------|-----|
+| 13 October 2026 (films) | **Ayesha's cue film goes on her case study page** (in place of the stills of her directions) **and in her proof card on the Identity page**; Sable's card there gets her homepage still so the pair balances | Os reviewed the film and approved both placements |
 | 12 October 2026 (films) | **Cue films replace the screen recordings** on the Identity, Website, Campaign, Content and Platform pages and in the home lineup. Real tools captured frame by frame and directed in code; brand films never show a tool's UI, product films are always real captures (media-plan rule 1 kept). SOP-MSS-007 | Os: the recordings looked janky and unrefined, and some showed the wrong part of the tool. Os reviewed each film before it went up |
 | 12 October 2026 (films) | **Content film leads with CO2 laser, not Skin Boosters**, and ends on Export (posting is manual today, so the film says so by showing it) | Nafisa's library has one skin booster photo; Os chose CO2 (26 photos, and autumn is laser season) |
 | 12 October 2026 (films) | **Sable's crowd and stage footage dropped**; only a crowd-free moment of her moving image kept | Her own brief: "what is never in frame: crowds, stages, spectacle". Os agreed |

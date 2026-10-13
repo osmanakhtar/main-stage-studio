@@ -4,7 +4,7 @@
 |---|---|
 | **Purpose** | Rebuild the MSS v6 site prototype from its build script and put it on Stage for review |
 | **Operator** | Os (or a Claude session on his request) |
-| **Verified** | 2026-10-12 (stills, build, viewport audit and Stage publish run end to end, several times) |
+| **Verified** | 2026-10-13 (build, viewport audit and Stage publish run end to end, twice; stills step not needed) |
 | **Systems touched** | `01_mss/website/prototype-v6/` (worktree `mss-v6-copy`), the Pi (`pi@192.168.1.106`, Stage engagement `mss-v6-site`), mainstagestudio.co.uk and puremed.uk (read only, for screenshots) |
 | **Canon doc** | `01_mss/strategy/mss-v6-build-plan.md` (step 11) |
 
