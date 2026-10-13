@@ -32,6 +32,7 @@ FILMS = {
     'website': ('website-cue', 'A typo on a Sunday night, fixed in Stage', 'Live editing in Stage · Vera demo site'),
     'content': ('content-cue', 'Content Studio plans and drafts a real week of posts', 'Content Studio · PureMed Aesthetics'),
     'platform': ('platform-cue', 'Four old sources become one record, then a batch recall in one search', 'Old records brought in, one record, a recall · Vera demo, fictional patients'),
+    'ayesha': ('ayesha-cue', "Ayesha's brand, from her own work: her paintings, five bodies of work, her name, her line, colour sampled from a canvas, the five directions she is choosing between", 'Art by Ayesha Johar · in review'),
     'campaign': ('campaign-cue', 'One sign-up, the real follow-up series, stopped by a booking', 'Guide and follow-up series · Vera demo, days compressed for filming'),
 }
 for _f, _a, _c in FILMS.values():
@@ -990,7 +991,7 @@ def puremed():
 DEMO_JOURNEY = 'https://mainstagestudio.co.uk/work/booking-engine/prototype/?tenant='
 
 
-def case(slug, kind, badge_text, title, intro, facts, brief_label, brief, built, status, caption, product_id, try_href=None, seo=''):
+def case(slug, kind, badge_text, title, intro, facts, brief_label, brief, built, status, caption, product_id, try_href=None, seo='', film=None):
     """A case study: what was offered and why, what I built, where it stands, then the way in."""
     facts_html = '<div class="facts">' + ''.join(f'<div><span class="label">{k}</span><p>{v}</p></div>' for k, v in facts) + '</div>'
     built_html = '<div class="built">' + ''.join(f'<div><b>{h}</b><p>{t}</p></div>' for h, t in built) + '</div>'
@@ -1000,7 +1001,7 @@ def case(slug, kind, badge_text, title, intro, facts, brief_label, brief, built,
     body = (
         sec('intro', f'<p>{badge(kind, badge_text)}</p><h1 class="d1" style="margin-top:24px;font-size:clamp(44px,8vw,120px)">{title}</h1>'
                      f'<div class="split wide-left" style="margin-top:clamp(24px,3vw,40px)"><p class="lede">{intro}</p>{facts_html}</div>', 'first')
-        + sec('media', gallery(f'case-{slug}', caption))
+        + sec('media', film_figure(film) if film else gallery(f'case-{slug}', caption))
         + sec('brief', f'<div class="split"><div><p class="label">{brief_label}</p></div><div class="body lede">{brief}</div></div>')
         + sec('built', f'<div class="split"><div><p class="label">What I built</p></div>{built_html}</div>')
         + sec('status', f'<div class="split"><div><p class="label">Where it stands</p></div><div><p class="d3">{status}</p>{try_html}</div></div>')
@@ -1023,7 +1024,7 @@ def cases():
           ('A brand direction document', 'Written for her, now in its third version as her answers came in, so every decision traces back to something she said.'),
           ('Website directions', 'Several full directions, each with a home page, a room for every body of work, an about page and a way to buy. Colours are sampled from her paintings, not chosen for her.')],
          'Ayesha is choosing a direction on a private link now. Nothing is final until she says so.',
-         'Art by Ayesha Johar: website directions, in review', 'identity')
+         'Art by Ayesha Johar: website directions, in review', 'identity', film='ayesha')
     case('sable', 'self', 'Self-initiated · Identity · Sable', 'An identity built around a character and a world.',
          'Sable is a character I created to run the Identity process end to end with no client in the room: a young musician from London, soft and sharp at once. The brief, the name, the look and the moving image all came out of one idea.',
          [('Product', 'Identity'), ('Client', 'None: self-initiated'), ('Made', 'May 2026')],
