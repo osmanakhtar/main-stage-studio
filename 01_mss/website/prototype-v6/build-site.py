@@ -46,11 +46,13 @@ FILMS = {
 # film with the same name kept showing the old one or nothing (13 Oct). A new cut is a new URL.
 # FILM_SALT: bump to give every film a new URL, e.g. after browsers cached a bad response
 # (13 Oct: nginx cached the /login redirect for a day; fixed on the Pi, salt bumped to clear it).
+# MP4 (H.264) only: Chrome on a Mac failed the VP9 WebMs at random with a decode error on the live
+# site (13 Oct, campaign, content, platform and website), while every MP4 played. Headless never showed it.
 import hashlib
-FILM_SALT = b'2026-10-13b'
+FILM_SALT = b'2026-10-13c'
 for _pid, (_f, _a, _c) in list(FILMS.items()):
-    _h = hashlib.sha1(FILM_SALT + b''.join(open(os.path.join(CLIPS, f'{_f}.{e}'), 'rb').read() for e in ('mp4', 'webm', 'webp'))).hexdigest()[:6]
-    for _ext in ('mp4', 'webm', 'webp'):
+    _h = hashlib.sha1(FILM_SALT + b''.join(open(os.path.join(CLIPS, f'{_f}.{e}'), 'rb').read() for e in ('mp4', 'webp'))).hexdigest()[:6]
+    for _ext in ('mp4', 'webp'):
         shutil.copy(os.path.join(CLIPS, f'{_f}.{_ext}'), os.path.join(A, f'{_f}-{_h}.{_ext}'))
     FILMS[_pid] = (f'{_f}-{_h}', _a, _c)
 
@@ -659,7 +661,7 @@ def film(pid, cls=''):
     """A cue film: muted, looping, played by the page script only while it is on stage."""
     name, alt, _ = FILMS[pid]
     return (f'<video class="film{" " + cls if cls else ""}" muted loop playsinline preload="none" poster="assets/{name}.webp" aria-label="{alt}">'
-            f'<source src="assets/{name}.webm" type="video/webm"><source src="assets/{name}.mp4" type="video/mp4"></video>')
+            f'<source src="assets/{name}.mp4" type="video/mp4"></video>')
 
 
 def film_figure(pid, caption=True):
