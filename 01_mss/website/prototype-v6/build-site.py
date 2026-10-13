@@ -41,6 +41,8 @@ FILMS = {
     'care': ('care-cue', "A month of Care, one line at a time: hosting, backups, updates, email, a small change, the monthly check", 'What Care runs, every month'),
     'review': ('review-cue', "The house lights come up on what a Review leaves you: findings, brand guidelines, a campaign calendar and a costed plan", 'What lands at the end of the week'),
     'cues': ('cues-cue', 'Five cue lamps light in turn; yours holds on standby until you press it', 'The five cues'),
+    # home hero, "Source to stage" v2 (render-hero-v2.js): the mark opens out, does the design work on real projects, closes back into the mark
+    'hero': ('hero-cue-v2', "The Main Stage mark opens out and does the design work on real projects: colours sampled from Ayesha Johar's painting and her five directions, PureMed's own brand kept and her site rebuilt, her words in the post style she approved, Vera's follow-up series stopped by a booking, then it closes back into the mark", 'Source to stage'),
 }
 # Published under a content hash (website-cue-3f9a1c.mp4): Stage caches assets for a day, so a re-cut
 # film with the same name kept showing the old one or nothing (13 Oct). A new cut is a new URL.
@@ -171,6 +173,23 @@ input,textarea{cursor:text}
 .hero .marked::before,.hero .marked::after{transition:opacity .3s var(--ease),transform .45s cubic-bezier(.3,1.5,.5,1)}
 .lights-pre .hero .marked::before,.lights-pre .hero .marked::after{opacity:0;transform:scale(2.4)}
 .hero .sub{display:grid;gap:28px;margin-top:clamp(28px,4vw,48px);align-items:end}
+/* the hero film: on the stage above the headline, never behind it; after the buttons on phones so the headline comes first */
+.hero .wrap{display:flex;flex-direction:column}
+.hero-film{order:3;margin:40px 0 0;width:100%}
+.hero-film .film-clip{background:var(--black);
+  /* feathered edges: the film's own black melts into the lit hero instead of reading as a box */
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);mask-composite:intersect}
+.hero-film .film-pause{display:block;margin:2px 0 0 auto;background:none;border:0;padding:14px 0 14px 16px;min-width:44px;min-height:44px;color:var(--rig);cursor:pointer}
+.hero-film .film-pause:hover,.hero-film .film-pause:focus-visible{color:var(--house)}
+/* wide screens: headline and buttons left, the film right, so "Run the show." stays above the fold */
+@media(min-width:1200px){
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);column-gap:56px;align-items:end}
+  .hero h1{font-size:clamp(64px,7vw,112px);grid-column:1;grid-row:1}
+  .hero .wrap .sub{grid-column:1;grid-row:2;grid-template-columns:1fr}
+  .hero-film{grid-column:2;grid-row:1/3;order:0;width:100%;margin:0;align-self:center}
+}
+@media (prefers-reduced-motion:reduce){.hero-film .film-pause{display:none}}
 @media(min-width:900px){.hero .sub{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}}
 .marked{position:relative;display:inline-block;padding:0 .06em}
 .marked::before,.marked::after{content:"";position:absolute;width:.22em;height:.22em;border:0 solid var(--tung)}
@@ -435,11 +454,20 @@ JS = """
   });
   // cue films on the product pages: play while on screen, never under reduced motion (the poster stays)
   var play = function(v){
-    if (reduce) return;
+    if (reduce || v.dataset.held) return;
     var p = v.play(); if (p && p.catch) p.catch(function(){});
     // a film that stalls on its first load (a dropped or stale request) gets one fresh try
     if (!v._retry) { v._retry = setTimeout(function(){ if (v.readyState < 2 && !v.paused) { v.load(); var q = v.play(); if (q && q.catch) q.catch(function(){}); } }, 4000); }
   };
+  // the hero film's pause: it stays paused until pressed again, even when scrolled back on screen
+  $$('.film-pause').forEach(function(b){
+    var v = b.parentNode.querySelector('video');
+    b.addEventListener('click', function(){
+      var held = !v.dataset.held;
+      if (held) { v.dataset.held = '1'; v.pause(); } else { delete v.dataset.held; play(v); }
+      b.textContent = held ? 'Play' : 'Pause'; b.setAttribute('aria-pressed', held ? 'true' : 'false');
+    });
+  });
   if ('IntersectionObserver' in window) {
     var fo = new IntersectionObserver(function(es){ es.forEach(function(e){ var v = e.target.querySelector('video'); if (e.isIntersecting) play(v); else v.pause(); }); }, {threshold:.35});
     $$('[data-film]').forEach(function(f){ fo.observe(f); });
@@ -758,6 +786,7 @@ def home():
                    for o in ['Review', 'Identity', 'Website', 'Campaign', 'Content', 'Platform', 'Care', 'Not sure yet'])
     body = (
         f'<section class="hero" data-stage-section="hero"><div class="beam-pos" aria-hidden="true"><div class="beam"></div></div><div class="wrap" style="width:100%">'
+        f'<figure class="hero-film" data-film><div class="film-clip">{film("hero")}</div><button class="film-pause label" type="button" aria-pressed="false">Pause</button></figure>'
         f'<h1 class="d1">Run the <span class="marked">show.</span></h1>'
         f'<div class="sub"><p class="lede">Brand, website, content and the systems behind them. Built by one studio. Handed over with the controls.</p>'
         f'<div class="ctas"><a class="btn primary" href="#lineup">See what I build {ARROW}</a><a class="btn" href="start.html">Start a project</a></div></div>'

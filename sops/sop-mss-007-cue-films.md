@@ -34,6 +34,7 @@ The site ships the MP4 and the WebP poster only. The WebM is rendered but not us
    - Campaign: `SERVER_DIR=~/workspace/.worktrees/sp-v6-reskin/service bash film-campaign-setup.sh`. You should see `filming console up (one day = 30000ms)`. Then `node capture-campaign.js` (about 5.5 minutes: ten Vera days of 30 seconds).
    - Platform: `SERVER_DIR=... DATA=/tmp/vera-legacy bash film-platform-setup.sh`, then `node capture-platform.js /tmp/vera-legacy`. You should see `COMMITTED, migration job ...`.
    - Identity (Sable) and Ayesha: no setup. `node capture-identity.js`, `node capture-ayesha.js`.
+   - Hero ("Source to stage"): no setup, but it reads PureMed's site build (`02_clients/puremed/site/dist`, in the main checkout), Content Studio (`~/workspace/carousel-studio`), Vera's tenant templates and `out-v6/campaign-cue.mp4`. `node capture-hero.js` (refuses if a source is missing), then `node render-hero.js` (v1) or `node render-hero-v2.js` (v2, the mark-led cut). Every on-screen line must stay true to its source; check them against the concept doc before a re-cut.
    - Door, Care, Review, Cues (code-directed, no capture): `node render-stage.js door|care|review|cues` renders straight to `out-v6/` (`--still 4.2` for a test frame). Type, light and paper only: never draw a product screen.
 3. Check four or five test frames before a full render: `node render-<film>.js --still 6.2`, and look at them.
 4. `node render-<film>.js`. You should see the three files with sizes (aim for 1.5MB or less).
@@ -64,6 +65,8 @@ The site ships the MP4 and the WebP poster only. The WebM is rendered but not us
 - Generated imagery only where the media plan allows it (rule 6); product films are real captures only.
 
 ## Change log
+
+- 2026-10-13: hero film added (`capture-hero.js`, `render-hero.js`), first iteration with real clients.
 
 - 2026-10-12: created with the first six films.
 - 2026-10-13: `render-stage.js` adds four code-directed films (door, care, review, cues); films published under a content hash to beat Stage's asset cache.
