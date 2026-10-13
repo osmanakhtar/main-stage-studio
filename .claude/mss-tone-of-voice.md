@@ -37,7 +37,7 @@ A light stage vocabulary for the **process**, never for what someone buys:
 | Launch | Showtime |
 | Monthly running | The run |
 
-Products keep plain names: Identity, Website, Campaign, Content, Platform, Care. Drop the stage words wherever they would sound twee.
+Products keep plain names: Review, Identity, Website, Campaign, Content, Platform, Care. Drop the stage words wherever they would sound twee.
 
 ---
 
@@ -67,4 +67,4 @@ Products keep plain names: Identity, Website, Campaign, Content, Platform, Care.
 
 ## What stays private
 
-The founder is visible as a professional: name, photo, career in outline, point of view. Employers are never named. Family, faith and anything from the founder vision stay out of published copy.
+The founder is visible as a professional, as **Os Akhtar**: name, photo, career in outline, point of view. Employers are never named. Family, faith and anything from the founder vision stay out of published copy.

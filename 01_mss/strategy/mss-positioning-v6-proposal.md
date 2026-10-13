@@ -11,7 +11,7 @@
 
 MSS has spent five months describing itself in the abstract ("presence partner", "a better system", "Presence and Systems") while quietly building a set of very concrete things that work. The work is ahead of the brand. This proposal turns the work into the brand.
 
-**Six products, each one already demonstrated:** Identity, Website, Campaign, Content, Platform, and Care (the monthly running cost).
+**Six products, each one already demonstrated** (a seventh, Review, added 11 Oct 2026, §5.9): Identity, Website, Campaign, Content, Platform, and Care (the monthly running cost).
 
 **One idea that ties them together:** *Run the show.* Everything MSS builds is handed over with the controls. The client edits their own site, writes and approves their own emails, owns their own customer records and code. That is what PureMed actually has today, and it is the thing almost nobody else at this price point offers.
 
@@ -162,9 +162,9 @@ Six products. Each has a fixed scope, a starting price, a timeline, and a named 
 - **Timeline:** monthly, three-month minimum.
 - **Price:** £1,050 a month founding, £3,500 a month target.
 - **Proof:**
-  - A televised combat sports promotion (client, anonymised per the standing rule): weekly content at event pace, fighter cards, carousels, reels, built on the studio's clip library and carousel tooling.
+  - ~~A televised combat sports promotion: weekly content at event pace.~~ **Corrected 11 Oct 2026 (Osman):** it was a one-week consultancy piece. Delivered brand guidelines and a campaign calendar; the tooling was never handed over and no weekly content was run. Not Content proof.
   - PureMed (client): the content pipeline, phase 1 built; publishing phase waits on Meta setup.
-- **Proof gap:** the strongest proof is anonymised. A named Content client is the most valuable next case study.
+- **Proof gap:** no client has had a running Content service yet; PureMed is built but not publishing. A named Content client is the most valuable next case study.
 
 ### 5.5 Platform
 
@@ -209,6 +209,7 @@ Targets set by Osman on 10 Oct 2026. **Founding price = 30% of target (70% off)*
 | Platform Foundation | one-off | £8,000 | £2,400 |
 | Care | per month, site | £350 | £105 |
 | Opening Night (Identity + Website) | one-off | £4,300 | £1,290 |
+| Review (added 11 Oct 2026, §5.9) | one week | £1,500 | £450 |
 
 Rules:
 
@@ -325,6 +326,19 @@ Draft SVG for review (proportions to be refined in the build):
 ### 7.6 Motion
 
 Kept from the current rules and sharpened: motion is a lighting cue, not decoration. The one signature move is the spotlight: Tungsten fades up on the key element as it enters view. `transform` and `opacity` only.
+
+---
+
+### 5.9 Review (added 11 Oct 2026)
+
+*One week. What's working, what isn't, and what to build next.*
+
+- **What you get:** a look at the brand, site, social channels and tools; written findings; brand guidelines tidied or written down; a campaign calendar; a costed plan for what to build; a walkthrough call.
+- **You own:** the findings, guidelines, calendar and plan. No obligation to build with MSS.
+- **Timeline:** one week.
+- **Price:** £450 founding, £1,500 target (30% rule, first three clients). Fee credited against any product bought within 8 weeks.
+- **Proof:** a televised combat sports promotion (client, anonymised): one-week consultancy, brand guidelines and a campaign calendar delivered.
+- **Why added:** the only offer with real paid proof of exactly that shape, the lowest-risk first purchase for a cautious or regulated buyer, and the one that sells most directly on the founder's advisory and systems judgment. The Soundcheck stays the free call.
 
 ---
 

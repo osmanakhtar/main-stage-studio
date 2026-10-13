@@ -17,7 +17,7 @@ The single rule that makes the architecture coherent: **nothing above a layer ov
 |-------|------|-----------------|
 | Layer 0 | Source of truth | `mss-decisions-log.md` is canonical for what is locked, open, or flagged. `mss-brand-identity.md` is canonical for every visual decision. When anything disagrees, these two settle it. |
 | Layer 1 | Context files | The studio knowledge base: tone of voice, website brief, spend tracker, copy contexts. Attached per session so Claude works from real context, not memory. |
-| Layer 2 | Skills | Portable capability that travels across every session: `creative-director`, `copywriting`. Skills hold the way of working; files hold the facts. (The `bricks-*` skill family is legacy-only since the 25 June 2026 Astro pivot.) |
+| Layer 2 | Skills | Portable capability that travels across every session: `creative-director`, `copywriting`. Skills hold the way of working; files hold the facts. |
 | Layer 3 | Workflows & checklists | The process spine: client workflow guide, case study workflow guide, and the two tick-list checklists that mirror them. The narrative explains; the checklist verifies. |
 | Layer 4 | Prompts | The execution units. Held in `mss-prompt-library.md` and used in sequence through each phase. Filled in with real context every time, never sent with brackets still in them. |
 | Layer 5 | Tools | Claude desktop and Claude Code, Astro static sites, Cloudways, Higgsfield, GitHub. The surface. Interchangeable in principle; the layers above are not. |
@@ -50,7 +50,7 @@ Each process exists in two forms. The workflow guide is the narrative: what you 
 
 - **Client work:** `mss-client-workflow-guide.md` pairs with `mss-new-client-checklist.md`. Covers scoping through brand expression.
 - **Case studies:** `mss-case-study-workflow-guide.md` pairs with `mss-new-case-study-checklist.md`. Covers story through publishing.
-- **Build:** Prototype-to-Astro build, GitHub push, and Cloudways deploy. See `01_mss/strategy/mss-astro-cloudways-setup.md` and `.github/DEPLOY.md`. (The old `mss-bricks-build-guide.md`/`mss-bricks-quick-fixes.md` pairing is archived in `_archive/bricks-era/` — Bricks retired 25 June 2026.)
+- **Build:** Prototype-to-Astro build, GitHub push, and Cloudways deploy. See `01_mss/strategy/mss-astro-cloudways-setup.md` and `.github/DEPLOY.md`.
 
 ---
 

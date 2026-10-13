@@ -105,7 +105,6 @@ stale context without any way to notice it's stale. This happened on
 - `mss-studio-ops-checklist.md`
 
 **Never upload — Claude Code's domain, not desktop's:**
-- `mss-production-ops.md`
 - Anything from `01_mss/strategy/`
 
 **Rule:** always upload directly from `~/workspace/main-stage-studio/.claude/`

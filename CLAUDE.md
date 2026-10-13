@@ -7,7 +7,7 @@ Osman Akhtar's workspace. Multiple streams in one repo while each is early stage
 
 | Folder | Stream | What it is |
 |--------|--------|-----------|
-| `01_mss/` | Main Stage Studio | Six products for owner-led businesses: Identity, Website, Campaign, Content, Platform, Care. "Run the show" (v6, 10 Oct 2026) |
+| `01_mss/` | Main Stage Studio | Review (the way in) plus six products for owner-led businesses: Identity, Website, Campaign, Content, Platform, Care. "Run the show" (v6, 10 Oct 2026) |
 | `02_clients/` | Client projects | Active client engagements. Current: Ayesha Johar |
 | `03_resources/` | Shared assets | DAM holding area — images, video, tools. Cloudflare R2 or Bunny.net TBD |
 

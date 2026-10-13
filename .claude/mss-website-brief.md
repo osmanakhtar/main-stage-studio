@@ -7,9 +7,9 @@
 
 ## Proposition
 
-**Run the show.** Brand, website, content and the systems behind them, built by one studio and handed over with the controls. Six products with prices on the page: Identity, Website, Campaign, Content, Platform, Care.
+**Run the show.** Brand, website, content and the systems behind them, built by one studio and handed over with the controls. Six products, plus Review as the way in (added 11 Oct 2026), with prices on the page: Identity, Website, Campaign, Content, Platform, Care.
 
-The site's job is to sell those six products. Every product page opens on a short clip of the real tool doing its job.
+The site's job is to sell those products. Every product page opens on a short clip of the real tool doing its job; Review and Care use a static panel.
 
 ---
 
@@ -26,13 +26,13 @@ Client work appears in the client's own colours, framed by the spike. Case studi
 | Page | Job |
 |---|---|
 | `/` | Promise, the six products, one proof, how it works, who's behind it, start |
-| `/identity`, `/website`, `/campaign`, `/content`, `/platform`, `/care` | One product each, same template |
+| `/review`, `/identity`, `/website`, `/campaign`, `/content`, `/platform`, `/care` | One product each, same template |
 | `/work` | Case studies, filterable by product, each labelled live, in progress, self-initiated or demo |
 | `/work/puremed` | Flagship case study |
 | `/how-it-works` | Soundcheck, Rehearsal, Your cue, Showtime, The run, with real screens |
 | `/pricing` | Every product's founding and target price |
 | `/about` | Osman: two decades of systems, why MSS exists, what it believes |
-| `/start` | Form opening on "What do you need?" with the six products plus "Not sure" |
+| `/start` | Form opening on "What do you need?" with Review, the six products and "Not sure" |
 | `/journal` | Point-of-view pieces |
 
 Keep working via redirects: `/work/conveyancing-onboarding/`, `/work/accountancy-intake/`, `/work/clinic-booking/`, `/work/sable/`.
@@ -51,7 +51,7 @@ The tool clips live in `01_mss/website/tools/clips/out-v6/`: a narrated cut and 
 | Campaign | `campaign` |
 | Content | `content`, plus `pipeline` for the content checks |
 | Platform | `console` |
-| Identity | to record after the brand book exists |
+| Identity | Sable walk-out ending on her homepage hero; full shot list in `01_mss/website/prototype-v6/media-plan.md` |
 | Care | none; a static panel is enough |
 
 Retired assets: `3d-mark-animation.mp4`, `hero-mark-poster.webp` (old two-squares mark).
@@ -101,4 +101,4 @@ On light surfaces the strokes are `#12110F`. Files and rules: `mss-brand-identit
 
 ## Open decisions
 - Care price when a Platform is running (only the site rate is set).
-- Identity clip: record once the brand book page exists.
+- Identity clip: see `01_mss/website/prototype-v6/media-plan.md` (H3).

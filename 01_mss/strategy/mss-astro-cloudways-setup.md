@@ -84,7 +84,7 @@ This creates:
 4. Label: `github-actions-mss`
 5. Paste the public key content, save
 
-Using the server-level SSH key panel (not the application SFTP user panel) gives access via the `master_[id]` username, which matches the existing rsync pattern already documented in `mss-new-site-deployment-guide.md`.
+Using the server-level SSH key panel (not the application SFTP user panel) gives access via the `master_[id]` username, which matches the rsync pattern in `.github/DEPLOY.md`.
 
 ### 2.3 Add the private key to GitHub
 
@@ -177,7 +177,7 @@ Once all boxes are checked, the hosting layer is ready. Move to `mss-astro-build
 
 ## Naming conventions for static apps
 
-Follows the same conventions as `mss-new-site-deployment-guide.md`:
+Conventions:
 
 | Element | Convention | Example |
 |---------|-----------|---------|

@@ -1,0 +1,271 @@
+{
+  "project": "mss-website-copy-v4",
+  "_": [
+    "Every number on a public page in mss-website-copy-v4.md, bound to a second route.",
+    "Prices: the copy doc is checked against the ratified list twice, once as the",
+    "positioning v6 section 5.8 pairs and once against the specimen's price data block,",
+    "which was built separately. A price pair in the copy that is not a ratified pair",
+    "makes CLAIMED and DERIVED disagree.",
+    "PureMed and career figures are constants with their source. Two are deliberately",
+    "left unverified (no `verified` date) so the gate fails until they are checked:",
+    "the appointment count needs the production import record, and the zero-unapproved",
+    "-sends claim needs the send log. Drafted 10 Oct 2026."
+  ],
+  "maxConstantAgeDays": 90,
+  "documents": [
+    {
+      "path": "01_mss/strategy/mss-website-copy-v4.md",
+      "scanUnsourced": false
+    }
+  ],
+  "figures": [
+    {
+      "id": "FIG-PRICE-PAIRS-STRUCK",
+      "what": "founding/target pairs shown as '£founding ~~£target~~'; every one must be a ratified pair",
+      "claimed": {
+        "type": "matches",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "£[0-9][0-9,.]* ~~£[0-9][0-9,.]*~~"
+      },
+      "derived": {
+        "type": "matches",
+        "_": "ratified pairs: positioning v6 section 5.8 (10 Oct) plus Review, section 5.9 (11 Oct)",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "£(450 ~~£1,500|750 ~~£2,500|540 ~~£1,800|22\\.50 ~~£75|1,050 ~~£3,500|2,400 ~~£8,000|105 ~~£350|1,290 ~~£4,300)~~"
+      }
+    },
+    {
+      "id": "FIG-PRICE-PAIRS-TABLE",
+      "what": "pricing page table rows '| £founding | £target |'; every one must be a ratified pair",
+      "claimed": {
+        "type": "matches",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "\\| £[0-9][0-9,.]* \\| £[0-9][0-9,.]* \\|"
+      },
+      "derived": {
+        "type": "matches",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "\\| £(450 \\| £1,500|750 \\| £2,500|540 \\| £1,800|22\\.50 \\| £75|1,050 \\| £3,500|2,400 \\| £8,000|105 \\| £350|1,290 \\| £4,300) \\|"
+      }
+    },
+    {
+      "id": "FIG-PRICE-ROWS",
+      "what": "rows in the pricing page table (seven products, extra page, Opening Night)",
+      "claimed": {
+        "type": "matches",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "\\| £[0-9][0-9,.]* \\| £[0-9][0-9,.]* \\|"
+      },
+      "derived": {
+        "type": "matches",
+        "_": "rows of the ratified price list table in positioning v6 section 5.8 (target, founding order), written separately from the copy",
+        "globs": [
+          "01_mss/strategy/mss-positioning-v6-proposal.md"
+        ],
+        "match": "\\| £[0-9][0-9,.]* \\| £[0-9][0-9,.]* \\|\\n"
+      }
+    },
+    {
+      "id": "FIG-SPECIMEN-PAIRS",
+      "what": "specimen price entries that match a ratified pair (proves the second source agrees with section 5.8); Review is not in the specimen, which shows the six build products only",
+      "claimed": {
+        "type": "matches",
+        "globs": [
+          "01_mss/brand/mss-v6-specimen.html"
+        ],
+        "match": "intro:[0-9.]+, target:[0-9]+"
+      },
+      "derived": {
+        "type": "matches",
+        "globs": [
+          "01_mss/brand/mss-v6-specimen.html"
+        ],
+        "match": "intro:(750, target:2500|540, target:1800|22\\.5, target:75|1050, target:3500|2400, target:8000|105, target:350|1290, target:4300)\\b"
+      }
+    },
+    {
+      "id": "FIG-FOUNDING-RATIO",
+      "what": "founding price is 30% of target for every product and the bundle",
+      "claimed": {
+        "type": "literal",
+        "value": 30
+      },
+      "derived": {
+        "type": "constant",
+        "value": 30,
+        "source": "computed 10 and 11 Oct 2026: 450/1500, 750/2500, 540/1800, 22.5/75, 1050/3500, 2400/8000, 105/350, 1290/4300 all = 0.3000; Opening Night 1290 = 750 + 540, 4300 = 2500 + 1800",
+        "verified": "2026-10-11"
+      }
+    },
+    {
+      "id": "FIG-PUREMED-LIVE",
+      "what": "puremed.uk live on the Astro site since 30 Sep 2026 (day of month)",
+      "claimed": {
+        "type": "literal",
+        "value": 30
+      },
+      "derived": {
+        "type": "constant",
+        "value": 30,
+        "source": "SOP-PUREMED-004 cutover run, 30 Sep 2026 night; dermis.ai off the domain (project-puremed memory, puremed/CLAUDE.md Current status)",
+        "verified": "2026-10-10"
+      }
+    },
+    {
+      "id": "FIG-PUREMED-APPOINTMENTS",
+      "what": "past appointments migrated from Faces and Acuity",
+      "claimed": {
+        "type": "literal",
+        "value": 1642
+      },
+      "derived": {
+        "type": "constant",
+        "value": 1642,
+        "source": "production migration job 5aa28f40-479e-47c1-809d-d7dd822ca707, 7 Oct 2026. Re-check against the production appointments table (source = legacy import) via the prod-env helper before publishing. The 7 Oct reconciliation preview (2089 Acuity appointments) is pre-review and is NOT this figure."
+      }
+    },
+    {
+      "id": "FIG-PUREMED-SOURCES",
+      "what": "old systems the appointment history came from (Faces, Acuity)",
+      "claimed": {
+        "type": "literal",
+        "value": 2
+      },
+      "derived": {
+        "type": "constant",
+        "value": 2,
+        "source": "~/puremed-data/reconciliation-2026-10-07/summary.md: Sources Faces and Acuity for records (Mailchimp is the mailing list, not appointments)",
+        "verified": "2026-10-10"
+      }
+    },
+    {
+      "id": "FIG-PUREMED-UNAPPROVED-SENDS",
+      "what": "emails sent without the owner's approval",
+      "claimed": {
+        "type": "literal",
+        "value": 0
+      },
+      "derived": {
+        "type": "constant",
+        "value": 0,
+        "source": "platform send log joined to approval records, PureMed tenant. Not yet checked; the case-study line stays out until it is."
+      }
+    },
+    {
+      "id": "FIG-CAREER-YEARS",
+      "what": "'twenty years' building systems (Oct 2003 to Oct 2026 is 23 years)",
+      "claimed": {
+        "type": "literal",
+        "value": 20
+      },
+      "derived": {
+        "type": "constant",
+        "value": 23,
+        "source": "resources/Osman-Akhtar_14010152_cv-library.doc: Transmission Controller, On-Air Systems, Oct 2003; continuous roles to Morningstar Wealth, Sept 2025 to present",
+        "verified": "2026-10-10"
+      },
+      "tolerance": 3
+    },
+    {
+      "id": "FIG-BROADCAST-YEARS",
+      "what": "'ten years in broadcast technology' (Oct 2003 to Jul 2013 is 9.75 years)",
+      "claimed": {
+        "type": "literal",
+        "value": 10
+      },
+      "derived": {
+        "type": "constant",
+        "value": 9.75,
+        "source": "cv-library CV: On-Air Systems Oct 2003, Pilat Media Jan 2006, NBCUniversal to Jul 2013",
+        "verified": "2026-10-10"
+      },
+      "tolerance": 0.5
+    },
+    {
+      "id": "FIG-FINSERV-YEARS",
+      "what": "'over a decade in financial services' (Jul 2013 to Oct 2026 is 13 years)",
+      "claimed": {
+        "type": "literal",
+        "value": 10
+      },
+      "derived": {
+        "type": "constant",
+        "value": 13,
+        "source": "cv-library CV: Barclays from Jul 2013; FuturHealth CV: 10x Banking, NewDay, Morningstar Wealth to present. 'Over a decade' is a floor, so the derived value may exceed the claim.",
+        "verified": "2026-10-10"
+      },
+      "tolerance": 3
+    },
+    {
+      "id": "FIG-CHANNEL-CONTINENTS",
+      "what": "TV channel launches across three continents",
+      "claimed": {
+        "type": "literal",
+        "value": 3
+      },
+      "derived": {
+        "type": "constant",
+        "value": 3,
+        "source": "cv-library CV, NBCUniversal: launched channels in Benelux, Poland, Romania (Europe), Singapore (Asia), Sub-Saharan Africa (Africa)",
+        "verified": "2026-10-10"
+      }
+    },
+    {
+      "id": "FIG-PUREMED-STORES",
+      "what": "'up to four places' one client could live in before",
+      "claimed": {
+        "type": "literal",
+        "value": 4
+      },
+      "derived": {
+        "type": "constant",
+        "value": 4,
+        "source": "positioning v6 section 3: old site, Mailchimp, Faces, Acuity; reconciliation summary lists Faces, Acuity, Mailchimp as sources plus the old site forms",
+        "verified": "2026-10-10"
+      }
+    },
+    {
+      "id": "FIG-REVIEW-CREDIT-WEEKS",
+      "what": "Review fee credited against a product bought within 8 weeks",
+      "claimed": {
+        "type": "literal",
+        "value": 8
+      },
+      "derived": {
+        "type": "constant",
+        "value": 8,
+        "source": "Os, 11 Oct 2026; decisions log Change History 11 Oct; positioning v6 section 5.9",
+        "verified": "2026-10-11"
+      }
+    },
+    {
+      "id": "FIG-REVIEW-MENTIONS",
+      "what": "places the copy states the Review credit window; every one must say 8 weeks",
+      "claimed": {
+        "type": "matches",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "(within|in) 8 weeks"
+      },
+      "derived": {
+        "type": "matches",
+        "_": "every credit mention must carry the same number; a stray '6 weeks' or '2 months' makes these disagree",
+        "globs": [
+          "01_mss/strategy/mss-website-copy-v4.md"
+        ],
+        "match": "(within|in) (\\d+|two|six|eight) (weeks|months)"
+      }
+    }
+  ]
+}

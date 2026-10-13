@@ -171,65 +171,16 @@ When a page is complete, the `manifest.json` should have:
 - `compressed_path` populated for every asset
 - `preferred: true` set on exactly one variant per cross-section placement
 
-Do not proceed to the WordPress upload until all pages are signed off and
-preferred variants are marked. The upload script processes everything in the
-manifest in one run — it is cleaner to have all pages ready before running it.
+Do not place assets in the site until all pages are signed off and preferred
+variants are marked.
 
 ---
 
-## WordPress upload (legacy — WordPress/Bricks sites only)
+## Placing assets in the site
 
-Bricks was retired for new builds 25 June 2026 in favour of Astro static sites on
-Cloudways; the MSS production site itself is on Astro. This step only applies if a
-site is still on WordPress/Bricks — current Astro builds reference the compressed
-asset paths directly from the project (no WordPress media library, no upload step).
-Kept below for that legacy case.
-
-Run once after all pages are reviewed and signed off. This bridges the pipeline
-to the Bricks build.
-
-### Prerequisites
-
-- [ ] All pages generated, compressed, and reviewed
-- [ ] `preferred: true` set on one variant per cross-section placement in every
-      `manifest.json`
-- [ ] WordPress application password generated:
-      WordPress admin → Users → Profile → Application Passwords
-      Name it "Claude Code". Copy the password exactly as shown (spaces included).
-- [ ] WP_USER and WP_APP_PASSWORD set as environment variables in your shell:
-      ```bash
-      export WP_USER=your_username
-      export WP_APP_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx"
-      ```
-
-### Run the upload
-
-Run once per page manifest. From the client folder:
-
-```bash
-WP_USER=your_username WP_APP_PASSWORD="xxxx xxxx xxxx" \
-node ~/.claude/skills/higgsfield-asset-generation/scripts/upload-to-wp.js \
-  --manifest assets/generated/manifest.json \
-  --prototype [path-to-prototype.html] \
-  --wp-url https://your-site.com
-```
-
-The script uploads each compressed asset to the WordPress media library, records
-the WordPress URL and attachment ID in `manifest.json`, and updates the prototype
-HTML to replace local compressed paths with WordPress media URLs.
-
-Already-uploaded assets are skipped automatically — safe to re-run if interrupted.
-
-### Confirm the prototype is ready for Bricks (legacy WordPress/Bricks sites only)
-
-After the upload script completes:
-- [ ] Open the prototype HTML and confirm src attributes contain WordPress URLs
-      (they should start with your site domain, not a local path)
-- [ ] Spot-check one or two URLs in a browser — confirm the assets are serving
-- [ ] `manifest.json` has `wp_url` and `wp_attachment_id` populated for every asset
-
-The prototype HTML now references live WordPress media. The Bricks build session
-can begin.
+Sites are built directly in Astro. Copy each preferred, compressed WebP into the
+site's `public/` folder and reference it by its root-relative path. There is no
+media library and no upload step.
 
 ---
 
@@ -267,28 +218,6 @@ placement. If it is null, the prototype had no matching element at the time
 of analysis. Add the img or video element to the HTML manually, update the
 selector in `manifest.json`, and re-run the compression script.
 
-### WordPress upload fails
-
-Check the error message. Common causes:
-- Wrong application password — regenerate in WordPress admin and reset the
-  environment variable
-- REST API disabled — confirm `/wp-json/wp/v2/media` is accessible on the site
-- File not found — confirm `compressed_path` in `manifest.json` points to a file
-  that exists locally
-
-The upload script skips already-uploaded assets, so it is safe to re-run after
-fixing the issue. Only failed assets will be retried.
-
-### Prototype HTML not updated after upload
-
-The script matches local paths in the HTML to `compressed_path` values in the
-manifest. If paths don't match exactly (e.g. relative vs absolute), the swap
-won't happen. Open `manifest.json`, check `compressed_path` for the affected
-asset, and confirm it matches the src attribute in the HTML. Correct whichever
-is wrong and re-run the upload script.
-
----
-
 ## File locations reference
 
 | File | Location |
@@ -296,7 +225,6 @@ is wrong and re-run the upload script.
 | Skill | `~/.claude/skills/higgsfield-asset-generation/SKILL.md` |
 | Model guide | `~/.claude/skills/higgsfield-asset-generation/references/model-guide.md` |
 | Compression script | `~/.claude/skills/higgsfield-asset-generation/scripts/compress-assets.js` |
-| Upload script | `~/.claude/skills/higgsfield-asset-generation/scripts/upload-to-wp.js` |
 | Asset prompts | `[client-folder]/[client]-asset-generation-prompts.md` |
 | Generated assets | `[client-folder]/assets/generated/` |
 | Compressed assets | `[client-folder]/assets/generated/compressed/` |
@@ -319,11 +247,6 @@ the script manually.
 **The manifest is the source of truth.** During the build phase, the build skill
 reads `manifest.json` to know which asset goes in which placement. Keep it
 accurate. If you replace an asset manually, update the manifest to match.
-
-**Credentials stay in the shell.** WP_USER and WP_APP_PASSWORD are environment
-variables only — never put them in any project file, manifest, or prompt. Generate
-the application password in WordPress admin, set it as an env variable for the
-upload session, and discard it from your terminal history afterward if needed.
 
 **Credit-drawing models.** Kling 3.0, Veo 3.1, and Sora 2 draw credits on every
 generation. Check your balance before running hero cross-sections that include

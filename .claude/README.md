@@ -28,9 +28,9 @@ source of drift in this system — it happened twice in one session on 19 June a
 
 | Location | Scope | What belongs here |
 |----------|-------|---------------------|
-| `~/.claude/` (global, `osmanakhtar/.claude`) | Every project on this machine | Claude Code settings, MCP connections, auto-memory, and skills that are genuinely portable craft — not tied to MSS specifically. Currently: copywriting, creative-director, design-taste-frontend. (The Bricks skill family is legacy-only since the 25 June 2026 Astro pivot — kept for legacy WordPress/Bricks site fixes.) |
+| `~/.claude/` (global, `osmanakhtar/.claude`) | Every project on this machine | Claude Code settings, MCP connections, auto-memory, and skills that are genuinely portable craft — not tied to MSS specifically. Currently: copywriting, creative-director, design-taste-frontend. |
 | `~/workspace/main-stage-studio/.claude/` (this folder) | This repo only | MSS-specific knowledge: brand, voice, decisions, workflows, prompts, production rules. Anything that would be wrong or missing-in-action if a session forgot it. |
-| A future client repo's own `.claude/` (does not exist yet) | That repo only | Follows the same logic as this folder, scoped to one client — their brand, their voice, their site's quirks. Would only appear if a client site gets migrated to its own GitHub repo, per the convention in `mss-new-site-deployment-guide.md`. Never contains MSS strategy. This folder never contains a client's brand details. Each repo's `.claude/` only knows about itself. |
+| A future client repo's own `.claude/` (does not exist yet) | That repo only | Follows the same logic as this folder, scoped to one client — their brand, their voice, their site's quirks. Would only appear if a client site gets migrated to its own GitHub repo, per the convention in `.github/DEPLOY.md`. Never contains MSS strategy. This folder never contains a client's brand details. Each repo's `.claude/` only knows about itself. |
 
 **The test for "does this belong in `~/.claude/` or here?"** — would this make sense to
 use on a completely different project with no connection to MSS? If yes, it's a global
@@ -50,13 +50,13 @@ points to it or you mention it directly.
 > Would getting this wrong, or a session simply not knowing it, be actively confusing
 > or harmful in *any* session — not just the ones doing a specific task?
 
-If yes → `.claude/`. The decisions log, brand identity, and production-ops rules are
+If yes → `.claude/`. The decisions log and brand identity are
 all here because you'd never want a session operating without them.
 
 If no, it's only relevant to a bounded task → `01_mss/strategy/`. The deployment
 guide and session kickoff prompts live here because most sessions, writing copy,
-reviewing a brief, never need them. (The old Bricks build guide and quick-fixes docs
-are archived in `_archive/bricks-era/`, retired with the 25 June 2026 Astro pivot.)
+reviewing a brief, never need them. (Everything from the WordPress and Bricks era is
+in `_archive/bricks-era/`. Sites are built directly in Astro.)
 
 **A third, quieter category currently living inside `strategy/` without its own
 home:** point-in-time project artifacts — the copy review, the homepage audit. These
@@ -65,22 +65,6 @@ before starting a new task. They're not wrong to keep, but they're a different k
 of thing than the build guide or the deployment guide, and if `strategy/` keeps
 accumulating these, it may be worth a `strategy/archive/` subfolder later. Not urgent,
 worth naming so it doesn't get mistaken for active reference.
-
----
-
-## Bricks skill session ordering (legacy)
-
-Bricks was retired for new builds on 25 June 2026 in favour of Astro static sites on
-Cloudways; the MSS production site itself completed its Astro cutover 22 July 2026.
-The four Bricks skills (`bricks-site-connection`, `bricks-lowcode-skill`,
-`bricks-html-importer`, `bricks-mss-site-notes`) are kept installed only for the
-unlikely case of a legacy WordPress/Bricks site fix, not for any current build. New
-work uses the Astro workflow in `01_mss/strategy/mss-astro-cloudways-setup.md` and
-`.github/DEPLOY.md` instead. For reference, the old session order was:
-
-1. `bricks-site-connection` — open the session, authenticate, troubleshoot connection issues
-2. `bricks-html-importer` — run the HTML-to-Bricks conversion workflow
-3. `bricks-lowcode-skill` — consulted throughout the build for element, style, and pattern decisions
 
 ---
 
