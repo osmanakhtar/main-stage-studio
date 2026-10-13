@@ -81,6 +81,10 @@ Files: `01_mss/brand/mark/spike-tungsten.svg` (on dark), `spike-black.svg` (on l
 - Minimum size 20px. Square caps, stroke 5 on the 40 grid.
 - In tools, the mark sits at the start of the editing dock and as a small "Runs on Main Stage" signature in client consoles (black on light, Tungsten on dark).
 
+**Email and account assets (13 Oct 2026).** Email clients cannot show SVG or web fonts, so these are PNGs rendered from the mark and the site header lockup:
+- `01_mss/brand/email-signature/`: `mss-signature-logo.png` (lockup, Tungsten mark and House Lights wordmark on Stage Black, 3x, shown at 208px wide), `mss-email-signature.html` (table layout, Arial fallback; Os Akhtar, Founder, os@mainstagestudio.co.uk), `lockup-source.html` (re-render source).
+- `01_mss/brand/account-logos/`: square 1024px avatars, Tungsten on Stage Black (Google account photo) and black on House Lights, circle-crop safe; transparent Tungsten and black marks; the lockup on black.
+
 ---
 
 ## The studio layer and the client layer

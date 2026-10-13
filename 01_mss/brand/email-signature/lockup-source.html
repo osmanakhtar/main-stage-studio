@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Geist+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+html,body{margin:0;background:#12110F}
+.tile{display:inline-flex;align-items:center;gap:12px;padding:12px 18px 12px 14px;background:#12110F;color:#F3F1EC}
+.spike{width:28px;height:28px;color:#FFB21A;flex:none}
+.wm{font-family:"Archivo",sans-serif;font-variation-settings:"wdth" 125;font-weight:800;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+.wm small{font-family:"Geist Mono",monospace;font-weight:400;font-size:12px;letter-spacing:.24em;color:#8C8981;margin-left:8px}
+</style></head><body><div class="tile" id="t">
+<svg class="spike" viewBox="0 0 40 40" fill="none"><path d="M5 17V5H17" stroke="currentColor" stroke-width="5" stroke-linecap="square"/><path d="M35 23V35H23" stroke="currentColor" stroke-width="5" stroke-linecap="square"/></svg>
+<span class="wm">MAIN STAGE<small>STUDIO</small></span></div>
+<script>document.fonts.ready.then(()=>{const r=document.getElementById('t').getBoundingClientRect();document.title=Math.ceil(r.width)+'x'+Math.ceil(r.height)})</script>
+</body></html>
