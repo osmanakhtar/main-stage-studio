@@ -15,7 +15,7 @@ import os, shutil
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MSS = os.path.dirname(os.path.dirname(HERE))
-FOUNDER = os.path.join(MSS, 'brand/founder/osman-mono-4x5.webp')
+FOUNDER = os.path.join(MSS, 'brand/founder/osman-mono-4x5-soft.webp')  # grade-portrait.py
 
 # ── assets ────────────────────────────────────────────────────────────────────
 # Stills only for now (12 Oct): the clips come back once they are properly made (media-plan.md).
@@ -24,7 +24,7 @@ A = os.path.join(HERE, 'assets')
 os.makedirs(A, exist_ok=True)
 if not os.path.exists(os.path.join(A, 'still-website-edit.webp')):
     raise SystemExit('stills missing: run bash make-stills.sh first')
-shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26b.webp'))
+shutil.copy(FOUNDER, os.path.join(A, 'os-akhtar-mono-4x5-oct26c.webp'))
 # the cue films (tools/clips/cue, rendered into out-v6): copied in with their posters
 CLIPS = os.path.join(MSS, 'website/tools/clips/out-v6')
 FILMS = {
@@ -293,6 +293,11 @@ a.wcard:hover{background-color:#171613}
 .built b{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700;font-size:20px}
 /* about */
 .portrait{aspect-ratio:4/5;object-fit:cover;width:100%;filter:grayscale(1)}
+/* career logos: one tone (make-logos.py), heights set per logo so they read at the same weight */
+.logos{display:flex;flex-wrap:wrap;align-items:center;gap:28px 40px;margin-top:40px;padding-top:28px;border-top:1px solid var(--line)}
+.logos .label{flex-basis:100%}
+.logos img{height:var(--h);width:auto;opacity:.75}
+@media(max-width:700px){.logos{gap:22px 28px}.logos img{height:calc(var(--h)*.8)}}
 .beliefs{list-style:none;display:grid;gap:0;border-top:1px solid var(--line)}
 .beliefs li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;padding:20px 0;border-bottom:1px solid var(--line);font-size:20px;font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700}
 .beliefs li span:first-child{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--rig);padding-top:6px}
@@ -536,7 +541,7 @@ def page(fname, title, desc, body, light=False):
 </main>
 <footer><div class="wrap">
   <div class="grid">
-    <div><p class="d2">Run the show.</p><p class="muted" style="margin-top:16px">Main Stage Studio. One studio, owned and run by Os Akhtar.</p></div>
+    <div><p class="d2">Run the show.</p><p class="muted" style="margin-top:16px">Main Stage Studio. Founded and run by Os Akhtar.</p></div>
     <ul class="flinks"><li><a href="pricing.html">Pricing</a></li><li><a href="work.html">Work</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="about.html">About</a></li><li><a href="start.html">Start</a></li></ul>
   </div>
   <div class="small label"><span>Privacy · Terms</span><span>mainstagestudio.co.uk</span></div>
@@ -743,7 +748,7 @@ def home():
               '<div class="cues">' + ''.join(f'<div class="cue"><p class="label">{k}</p><p class="cue-line">{v}</p></div>' for k, v in cues) + '</div>'
               f'<div class="ctas" style="margin-top:28px"><a class="btn" href="how-it-works.html">How it works {ARROW}</a></div>', 'light')
         + sec('founder', '<div class="split lead"><h2 class="d2">Twenty years building systems that weren\'t allowed to fail.</h2>'
-              '<div class="body lede"><p>TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. I take that discipline and point it at businesses that deserve better than a template.</p>'
+              '<div class="body lede"><p>TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Systems like that used to need an enterprise budget. I founded Main Stage Studio to bring the same standard to founders: enterprise-grade systems and thinking, sized for a business that\'s still growing.</p>'
               f'<p>AI does the typing. I do the deciding. You do the approving.</p><div class="ctas" style="margin-top:24px"><a class="btn" href="about.html">About Os {ARROW}</a></div></div></div>', 'light')
         + sec('start', f'<div class="head"><p class="label">Start</p><h2 class="d2">What do you need?</h2></div><div class="ctas">{opts}</div>'
               '<p class="muted" style="margin-top:24px">I read everything that comes in and reply within two working days.</p>')
@@ -1083,26 +1088,45 @@ def cases():
          'Vera Aesthetics, a fictional clinic: the site, then the treatments', 'platform', DEMO_JOURNEY + 'vera')
 
 
+# Career logos (make-logos.py, sources in brand/career-logos/SOURCES.md): broadcast, then financial services.
+# Career history only: never shown as MSS clients. Optional third value: an optical size nudge for heavy or light marks.
+CAREER = [('universal', 'Universal Pictures'), ('discovery', 'Discovery Channel'), ('bbc', 'BBC', .8), ('rte', 'RTÉ', .9),
+          ('nickelodeon', 'Nickelodeon'), ('technicolor', 'Technicolor'), ('mobil', 'Mobil Oil', .75), ('barclays', 'Barclays'),
+          ('lloyds-bank', 'Lloyds Bank'), ('virgin-money', 'Virgin Money'), ('chase-uk', 'Chase UK'), ('10x-banking', '10x Banking'),
+          ('newday', 'NewDay', 1.15), ('argos-pay', 'Argos Pay', .7)]
+
+
+def logo_h(f, k=1):
+    """Display height for a logo: wide wordmarks shorter, compact marks taller, so each carries about the same weight."""
+    from PIL import Image
+    w, h = Image.open(os.path.join(A, f'logo-{f}.webp')).size
+    return round(k * min(40, max(16, 24 * (3.2 / (w / h)) ** .5)))
+
+
 def about():
-    beliefs = ['You should own what you pay for. Code, content, customer records.', 'Prices belong on the page.',
-               'AI does the typing. I do the deciding. You do the approving.', 'Nothing goes live until you give the cue.']
+    beliefs = ['Good technology should be accessible, not kept for the enterprise.', 'You should own what you pay for. Code, content, customer records.', 'Prices belong on the page.',
+               'Nothing goes live until you give the cue.']
     body = (
         sec('intro', '<div class="split wide-left" style="align-items:end"><div><p class="label">About</p>'
-                     '<h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">I\'m Os. I run Main Stage Studio.</h1></div>'
-                     '<div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5-oct26b.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000"></div></div>', 'first')
+                     '<h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">I\'m Os. I founded Main Stage Studio.</h1></div>'
+                     '<div class="framed" style="max-width:420px"><img class="portrait" src="assets/os-akhtar-mono-4x5-oct26c.webp" alt="Os Akhtar, black and white portrait" width="800" height="1000"></div></div>', 'first')
         + sec('career', '<div class="split"><div><p class="label">Before MSS</p></div><div class="body lede">'
                         '<p>I spent ten years in broadcast technology, launching TV channels across three continents, where a mistake goes out live to everyone at once. Then over a decade in financial services: banking, lending and wealth platforms, building the onboarding and identity systems that millions of customers go through to open an account. Systems that weren\'t allowed to fail.</p>'
-                        '<p>Your website is not the hard part of my week. That\'s the point.</p></div></div>')
+                        '<p>That same discipline goes into everything I build for you.</p>'
+                        '<div class="logos"><p class="label">Worked for and with, before MSS</p>'
+                        + ''.join(f'<img src="assets/logo-{f}.webp" alt="{n}" style="--h:{logo_h(f, *k)}px" loading="lazy">' for f, n, *k in CAREER) + '</div></div></div>')
         + sec('why', '<div class="split"><div><p class="label">Why MSS exists</p></div><div class="body lede">'
+                     "<p>Big organisations run on systems that are checked, recorded and signed off before anything goes live. That standard shouldn't need a big organisation's budget. My mission is to put enterprise-grade systems, and the thinking behind them, in the hands of founders.</p>"
                      "<p>I kept seeing good businesses rent their own front door. Their site, their list and their records sat with someone else, and every change cost a ticket and an invoice. I'd rather build things you can run without me. If you keep paying me, it should be because the work is good, not because you're locked in.</p></div></div>")
         + sec('beliefs', '<div class="split"><div><p class="label">What I believe</p></div><ol class="beliefs">'
                          + ''.join(f'<li><span>0{i}</span><span>{b}</span></li>' for i, b in enumerate(beliefs, 1)) + '</ol></div>')
-        + sec('one-studio', '<div class="split"><div><p class="label">One studio</p></div><div class="body lede">'
-                            "<p>It's me. Not a team, not a network of freelancers. You deal with the person who builds it. I take on a small number of clients at a time, and I'm drawn to people whose work means something beyond the commercial.</p></div></div>")
+        + sec('one-studio', '<div class="split"><div><p class="label">Founder-led</p></div><div class="body lede">'
+                             "<p>You work with me directly. I lead every project and make the calls that matter, from the first conversation to the handover.</p>"
+                             "<p>The studio runs the way large organisations run their systems: the same tools, checks and sign-off on every job, so it grows with the work without the standard slipping. As it grows, you keep the founder. I'm drawn to people whose work means something beyond the commercial.</p></div></div>")
         + sec('close', f'<div class="split" style="align-items:center"><h2 class="d2">If what you\'re building matters to you, it matters here.</h2>'
                        f'<div class="ctas"><a class="btn primary" href="start.html">Start a project {ARROW}</a></div></div>')
     )
-    page('about.html', 'About Os Akhtar | Main Stage Studio', "Twenty years building systems that weren't allowed to fail. Now pointed at owner-led businesses.", body)
+    page('about.html', 'About Os Akhtar | Main Stage Studio', "Twenty years building systems that weren't allowed to fail. Now the same standard, for founders.", body)
 
 
 def start():

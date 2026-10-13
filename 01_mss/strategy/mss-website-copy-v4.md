@@ -14,7 +14,7 @@
 
 ### Footer
 > **Run the show.**
-> Main Stage Studio. One studio, owned and run by Os Akhtar.
+> Main Stage Studio. Founded and run by Os Akhtar.
 > Products · Work · How it works · Pricing · About · Journal · Start
 > Privacy · Terms
 
@@ -90,7 +90,7 @@ Each row opens its product page. Each row's card plays the product's 8-second lo
 
 ### 6. Who's behind it `data-stage-section="founder"`
 > **Twenty years building systems that weren't allowed to fail.**
-> TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. I take that discipline and point it at businesses that deserve better than a template.
+> TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Systems like that used to need an enterprise budget. I founded Main Stage Studio to bring the same standard to founders: enterprise-grade systems and thinking, sized for a business that's still growing.
 >
 > AI does the typing. I do the deciding. You do the approving.
 > `About Os`
@@ -555,27 +555,34 @@ Filter: All · Identity · Website · Campaign · Content · Platform
 
 ## Page: About `/about`
 
-**Meta.** Title: About Os Akhtar | Main Stage Studio. Description: Twenty years building systems that weren't allowed to fail. Now pointed at owner-led businesses.
+**Meta.** Title: About Os Akhtar | Main Stage Studio. Description: Twenty years building systems that weren't allowed to fail. Now the same standard, for founders.
 
-*Portrait: `01_mss/brand/founder/osman-mono-4x5.webp`.*
+*Portrait: `01_mss/brand/founder/osman-mono-4x5-soft.webp` (softened wall and vignette, `grade-portrait.py`).*
 
-> **I'm Os. I run Main Stage Studio.**
+> **I'm Os. I founded Main Stage Studio.**
 
 > I spent ten years in broadcast technology, launching TV channels across three continents, where a mistake goes out live to everyone at once. Then over a decade in financial services: banking, lending and wealth platforms, building the onboarding and identity systems that millions of customers go through to open an account. Systems that weren't allowed to fail.
 >
-> Your website is not the hard part of my week. That's the point.
+> That same discipline goes into everything I build for you.
+>
+> mono: Worked for and with, before MSS
+> *Logo row, one tone (Rigging), wrapping: Universal Pictures, Discovery Channel, BBC, RTÉ, Nickelodeon, Technicolor, Mobil Oil, Barclays, Lloyds Bank, Virgin Money, Chase UK, 10x Banking, NewDay, Argos Pay. Career history only, never presented as MSS clients. Sources: `01_mss/brand/career-logos/SOURCES.md`.*
 
 > **Why MSS exists**
+> Big organisations run on systems that are checked, recorded and signed off before anything goes live. That standard shouldn't need a big organisation's budget. My mission is to put enterprise-grade systems, and the thinking behind them, in the hands of founders.
+>
 > I kept seeing good businesses rent their own front door. Their site, their list and their records sat with someone else, and every change cost a ticket and an invoice. I'd rather build things you can run without me. If you keep paying me, it should be because the work is good, not because you're locked in.
 
 > **What I believe**
-> mono: 01 · You should own what you pay for. Code, content, customer records.
-> mono: 02 · Prices belong on the page.
-> mono: 03 · AI does the typing. I do the deciding. You do the approving.
+> mono: 01 · Good technology should be accessible, not kept for the enterprise.
+> mono: 02 · You should own what you pay for. Code, content, customer records.
+> mono: 03 · Prices belong on the page.
 > mono: 04 · Nothing goes live until you give the cue.
 
-> **One studio**
-> It's me. Not a team, not a network of freelancers. You deal with the person who builds it. I take on a small number of clients at a time, and I'm drawn to people whose work means something beyond the commercial.
+> **Founder-led**
+> You work with me directly. I lead every project and make the calls that matter, from the first conversation to the handover.
+>
+> The studio runs the way large organisations run their systems: the same tools, checks and sign-off on every job, so it grows with the work without the standard slipping. As it grows, you keep the founder. I'm drawn to people whose work means something beyond the commercial.
 
 > If what you're building matters to you, it matters here.
 > `Start a project`

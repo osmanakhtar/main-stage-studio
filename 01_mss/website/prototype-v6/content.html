@@ -256,6 +256,11 @@ a.wcard:hover{background-color:#171613}
 .built b{font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700;font-size:20px}
 /* about */
 .portrait{aspect-ratio:4/5;object-fit:cover;width:100%;filter:grayscale(1)}
+/* career logos: one tone (make-logos.py), heights set per logo so they read at the same weight */
+.logos{display:flex;flex-wrap:wrap;align-items:center;gap:28px 40px;margin-top:40px;padding-top:28px;border-top:1px solid var(--line)}
+.logos .label{flex-basis:100%}
+.logos img{height:var(--h);width:auto;opacity:.75}
+@media(max-width:700px){.logos{gap:22px 28px}.logos img{height:calc(var(--h)*.8)}}
 .beliefs{list-style:none;display:grid;gap:0;border-top:1px solid var(--line)}
 .beliefs li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;padding:20px 0;border-bottom:1px solid var(--line);font-size:20px;font-family:var(--display);font-variation-settings:"wdth" 112;font-weight:700}
 .beliefs li span:first-child{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--rig);padding-top:6px}
@@ -364,7 +369,7 @@ section.light{padding:clamp(48px,6vw,88px) 0}
 </main>
 <footer><div class="wrap">
   <div class="grid">
-    <div><p class="d2" data-stage-id="run-the-show-6">Run the show.</p><p class="muted" style="margin-top:16px" data-stage-id="main-stage-studio-one-studio-6">Main Stage Studio. One studio, owned and run by Os Akhtar.</p></div>
+    <div><p class="d2" data-stage-id="run-the-show-6">Run the show.</p><p class="muted" style="margin-top:16px" data-stage-id="main-stage-studio-founded-and-6">Main Stage Studio. Founded and run by Os Akhtar.</p></div>
     <ul class="flinks"><li><a href="pricing.html" data-stage-id="pricing-18">Pricing</a></li><li><a href="work.html" data-stage-id="work-18">Work</a></li><li><a href="how-it-works.html" data-stage-id="how-it-works-20">How it works</a></li><li><a href="about.html" data-stage-id="about-18">About</a></li><li><a href="start.html" data-stage-id="start-7">Start</a></li></ul>
   </div>
   <div class="small label"><span data-stage-id="privacy-terms-6">Privacy · Terms</span><span data-stage-id="mainstagestudio-co-uk-6">mainstagestudio.co.uk</span></div>
