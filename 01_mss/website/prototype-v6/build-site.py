@@ -42,6 +42,7 @@ FILMS = {
     'review': ('review-cue', "The house lights come up on what a Review leaves you: findings, brand guidelines, a campaign calendar and a costed plan", 'What lands at the end of the week'),
     'cues': ('cues-cue', 'Five cue lamps light in turn; yours holds on standby until you press it', 'The five cues'),
     # home hero, "Source to stage" v2 (render-hero-v2.js): the mark opens out, does the design work on real projects, closes back into the mark
+    'hero45': ('hero-cue-v2-4x5', "The Main Stage mark opens out and does the design work on real projects, then closes back into the mark (phone cut)", 'Source to stage'),
     'hero': ('hero-cue-v2', "The Main Stage mark opens out and does the design work on real projects: colours sampled from Ayesha Johar's painting and her five directions, PureMed's own brand kept and her site rebuilt, her words in the post style she approved, Vera's follow-up series stopped by a booking, then it closes back into the mark", 'Source to stage'),
 }
 # Published under a content hash (website-cue-3f9a1c.mp4): Stage caches assets for a day, so a re-cut
@@ -180,6 +181,8 @@ input,textarea{cursor:text}
   /* feathered edges: the film's own black melts into the lit hero instead of reading as a box */
   -webkit-mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);
   -webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 3%,#000 97%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);mask-composite:intersect}
+.hero-film .tall{display:none;aspect-ratio:4/5}
+@media(max-width:699px){.hero-film .wide{display:none}.hero-film .tall{display:block}}
 .hero-film .film-pause{display:block;margin:2px 0 0 auto;background:none;border:0;padding:14px 0 14px 16px;min-width:44px;min-height:44px;color:var(--rig);cursor:pointer}
 .hero-film .film-pause:hover,.hero-film .film-pause:focus-visible{color:var(--house)}
 /* wide screens: headline and buttons left, the film right, so "Run the show." stays above the fold */
@@ -460,16 +463,18 @@ JS = """
     if (!v._retry) { v._retry = setTimeout(function(){ if (v.readyState < 2 && !v.paused) { v.load(); var q = v.play(); if (q && q.catch) q.catch(function(){}); } }, 4000); }
   };
   // the hero film's pause: it stays paused until pressed again, even when scrolled back on screen
+  // a figure can hold a wide and a phone cut; only the one on show plays (the other never loads: preload none)
+  var shown = function(f){ var vs = f.querySelectorAll('video'); for (var i = 0; i < vs.length; i++) if (vs[i].offsetParent !== null) return vs[i]; return vs[0]; };
   $$('.film-pause').forEach(function(b){
-    var v = b.parentNode.querySelector('video');
     b.addEventListener('click', function(){
+      var v = shown(b.parentNode);
       var held = !v.dataset.held;
       if (held) { v.dataset.held = '1'; v.pause(); } else { delete v.dataset.held; play(v); }
       b.textContent = held ? 'Play' : 'Pause'; b.setAttribute('aria-pressed', held ? 'true' : 'false');
     });
   });
   if ('IntersectionObserver' in window) {
-    var fo = new IntersectionObserver(function(es){ es.forEach(function(e){ var v = e.target.querySelector('video'); if (e.isIntersecting) play(v); else v.pause(); }); }, {threshold:.35});
+    var fo = new IntersectionObserver(function(es){ es.forEach(function(e){ var v = shown(e.target); if (e.isIntersecting) play(v); else v.pause(); }); }, {threshold:.35});
     $$('[data-film]').forEach(function(f){ fo.observe(f); });
   }
   // a set of stills that runs on its own while it is lit (the lineup stage); a film plays instead
@@ -786,7 +791,7 @@ def home():
                    for o in ['Review', 'Identity', 'Website', 'Campaign', 'Content', 'Platform', 'Care', 'Not sure yet'])
     body = (
         f'<section class="hero" data-stage-section="hero"><div class="beam-pos" aria-hidden="true"><div class="beam"></div></div><div class="wrap" style="width:100%">'
-        f'<figure class="hero-film" data-film><div class="film-clip">{film("hero")}</div><button class="film-pause label" type="button" aria-pressed="false">Pause</button></figure>'
+        f'<figure class="hero-film" data-film><div class="film-clip wide">{film("hero")}</div><div class="film-clip tall">{film("hero45")}</div><button class="film-pause label" type="button" aria-pressed="false">Pause</button></figure>'
         f'<h1 class="d1">Run the <span class="marked">show.</span></h1>'
         f'<div class="sub"><p class="lede">Brand, website, content and the systems behind them. Built by one studio. Handed over with the controls.</p>'
         f'<div class="ctas"><a class="btn primary" href="#lineup">See what I build {ARROW}</a><a class="btn" href="start.html">Start a project</a></div></div>'
