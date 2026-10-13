@@ -40,6 +40,7 @@ one row per placement. Nothing gets filmed or generated unless it has a row here
 |---|---|---|---|
 | Review | "What lands" panel | Code | Done |
 | Work: Ayesha | Ayesha cue film (`ayesha-cue`) in place of the stills gallery: her paintings, five bodies, name, line, sampled colour, the five directions | `tools/clips/cue/`, her own work, agreed with Ayesha | Done 13 Oct |
+| Identity: proof cards | Ayesha cue film in her card; Sable's homepage still (`still-sable-presented`) in hers | as above, and the Sable files | Done 13 Oct |
 | Identity | Identity cue film (`identity-cue`), also on the home lineup: Sable's identity from her brief, spread by spread | `tools/clips/cue/`, her brief and existing images | Done 12 Oct |
 | Website | Website cue film (`website-cue`), also on the home lineup | `tools/clips/cue/`, real Stage editor | Done 12 Oct |
 | Campaign | Campaign cue film (`campaign-cue`), also on the home lineup: one sign-up, the real series, stopped by a booking | `tools/clips/cue/`, Vera filming console, days compressed (captioned) | Done 12 Oct |

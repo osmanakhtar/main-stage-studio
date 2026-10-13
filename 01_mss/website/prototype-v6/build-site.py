@@ -627,9 +627,18 @@ def film(pid, cls=''):
             f'<source src="assets/{name}.webm" type="video/webm"><source src="assets/{name}.mp4" type="video/mp4"></video>')
 
 
-def film_figure(pid):
-    return (f'<figure class="clip-wrap" data-film><div class="framed"><div class="clip film-clip">{film(pid)}</div></div>'
-            f'<figcaption class="cliprow"><span class="label">{FILMS[pid][2]}</span></figcaption></figure>')
+def film_figure(pid, caption=True):
+    cap = f'<figcaption class="cliprow"><span class="label">{FILMS[pid][2]}</span></figcaption>' if caption else ''
+    return f'<figure class="clip-wrap" data-film><div class="framed"><div class="clip film-clip">{film(pid)}</div></div>{cap}</figure>'
+
+
+def proof_media(m):
+    """A proof card's picture, above its badge: a cue film id, or a (still name, alt) pair. The badge is the caption."""
+    if not m:
+        return ''
+    if m in FILMS:
+        return film_figure(m, caption=False)
+    return f'<figure class="clip-wrap"><div class="framed"><div class="clip">{still(m[0], m[1], "on")}</div></div></figure>'
 
 
 def gallery(pid, caption, only=None):
@@ -750,8 +759,8 @@ def proof_links(href, lbl):
 
 def product(pid, num, name, promise, who, get, own, price_html, notes, media, proofs, cue, faqs, start_label, title, desc):
     proofs_html = '<div class="proofs' + (' pair' if len(proofs) > 1 else '') + '">' + ''.join(
-        f'<div><p>{badge(k, l)}</p><p class="lede">{t}</p>{proof_links(href, lbl)}</div>'
-        for k, l, t, href, lbl in proofs) + '</div>'
+        f'<div>{proof_media(p[5] if len(p) > 5 else None)}<p>{badge(p[0], p[1])}</p><p class="lede">{p[2]}</p>{proof_links(p[3], p[4])}</div>'
+        for p in proofs) + '</div>'  # a proof is (kind, badge, text, href, link label[, proof_media])
     body = (
         sec('promise', f'<p class="label">Product {num} of 7</p>'
                        f'<h1 class="d1" style="margin-top:20px;font-size:clamp(44px,9vw,136px)">{name}.</h1>'
@@ -798,9 +807,10 @@ def product_pages():
             price('750', '2,500', 'one-off · 3–4 weeks', big=True), [],
             film_figure('identity'),
             [('prog', 'In progress · Art by Ayesha Johar',
-              'A painter\'s brand, built from her own work. The meaning of her name, the line "beauty is a form of resistance", and directions drawn from her paintings. In review with Ayesha now.', 'work-ayesha.html', 'Read the case study'),
+              'A painter\'s brand, built from her own work. The meaning of her name, the line "beauty is a form of resistance", and directions drawn from her paintings. In review with Ayesha now.', 'work-ayesha.html', 'Read the case study', 'ayesha'),
              ('self', 'Self-initiated · Sable',
-              "A musician's brand built from one idea, soft and sharp at once: her name, her look, her album cover and her moving image.", 'work-sable.html', 'Read the case study')],
+              "A musician's brand built from one idea, soft and sharp at once: her name, her look, her album cover and her moving image.", 'work-sable.html', 'Read the case study',
+              ('sable-presented', "Sable's homepage on Bone: the wordmark, with london beneath in gold"))],
             'You see each direction on a private link and comment on it there. I refine one. Nothing is final until you say so.',
             [('Do I need Identity before a Website?', "No. If you already have a brand you're happy with, I build the site around it. If you need both, Opening Night does them as one project: £1,290 founding, £4,300 target."),
              ('Will you rename my business?', 'Only if you ask. Most people keep their name; the work is in what it says.'),

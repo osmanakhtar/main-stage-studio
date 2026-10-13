@@ -46,14 +46,14 @@ in code (camera, Tungsten light, scripted cursor, Spike corners, a closing card)
 | `campaign-cue` | One sign-up, the real series on a compressed day, a booking stops it (Vera filming console) | Campaign page, lineup |
 | `platform-cue` | Four old sources, the DPIA signed first, the real legacy import, one record, a batch recall (Vera, fictional) | Platform page, lineup |
 | `identity-cue` | Sable's identity spread by spread, from her brief word for word; the crowd footage dropped (it broke her brief) | Identity page, lineup |
-| `ayesha-cue` | Built from her own work: paintings, five bodies, name, line, sampled colour, the five directions shown neutrally | Ayesha case study (replaces the stills gallery), 13 Oct |
+| `ayesha-cue` | Built from her own work: paintings, five bodies, name, line, sampled colour, the five directions shown neutrally | Ayesha case study (replaces the stills gallery) and her proof card on Identity, 13 Oct |
 
 Found and fixed on the way: the console's series-stop reasons (shipped to PureMed, see platform-design.md); Vera's filming config had lost
 its data protection content (my scratch kit copy sat away from the packs). Found and not fixed: Content Studio only matches a library folder
 to a treatment when the folder holds the full treatment name, so Nafisa's "co2 laser", "Skin booster images" and "Microneedling images"
 never fill posts on their own (offered, not approved: it changes software she uses).
 
-**Next:** the Ayesha film is on her case study page (13 Oct); open call: whether it also goes on the Identity proof card. Still without films:
+**Next:** done 13 Oct: the Ayesha film is on her case study page and her Identity proof card (Sable's card got her homepage still to balance the pair). Still without films:
 Care and Review (the "lit object" films need Os's call: shoot real objects, or Higgsfield credits), How it works (reuse the films plus a
 cue-lamp panel), Work card posters. Then build plan step 12 (Astro).
 
