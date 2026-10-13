@@ -92,7 +92,7 @@ Each row opens its product page. Each row's card plays the product's 8-second lo
 > **Twenty years building systems that weren't allowed to fail.**
 > TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Systems like that used to need an enterprise budget. I founded Main Stage Studio to bring the same standard to founders: enterprise-grade systems and thinking, sized for a business that's still growing.
 >
-> AI does the typing. I do the deciding. You do the approving.
+> You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows.
 > `About Os`
 
 ### 7. Start `data-stage-section="start"`

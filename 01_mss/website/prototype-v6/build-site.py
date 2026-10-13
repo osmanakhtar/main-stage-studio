@@ -810,7 +810,7 @@ def home():
               f'<div class="ctas" style="margin-top:28px"><a class="btn" href="how-it-works.html">How it works {ARROW}</a></div>', 'light')
         + sec('founder', '<div class="split lead"><h2 class="d2">Twenty years building systems that weren\'t allowed to fail.</h2>'
               '<div class="body lede"><p>TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Systems like that used to need an enterprise budget. I founded Main Stage Studio to bring the same standard to founders: enterprise-grade systems and thinking, sized for a business that\'s still growing.</p>'
-              f'<p>AI does the typing. I do the deciding. You do the approving.</p><div class="ctas" style="margin-top:24px"><a class="btn" href="about.html">About Os {ARROW}</a></div></div></div>', 'light')
+              f'<p>You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows.</p><div class="ctas" style="margin-top:24px"><a class="btn" href="about.html">About Os {ARROW}</a></div></div></div>', 'light')
         + sec('start', f'<div class="head"><p class="label">Start</p><h2 class="d2">What do you need?</h2></div><div class="ctas">{opts}</div>'
               '<p class="muted" style="margin-top:24px">I read everything that comes in and reply within two working days.</p>')
     )

@@ -50,8 +50,10 @@ Products keep plain names: Review, Identity, Website, Campaign, Content, Platfor
 | Proof | Everything I build, you can change, approve and take with you. |
 | Gate | Nothing goes live until you give the cue. |
 | Credential | Twenty years building systems that weren't allowed to fail. Your website is not the hard part of my week. |
-| AI | AI does the typing. I do the deciding. You do the approving. |
+| Founder-led | You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows. |
 | Close | If what you're building matters to you, it matters here. |
+
+Retired 13 Oct 2026: "AI does the typing. I do the deciding. You do the approving." It read as a one-person shop. MSS doesn't reference AI when describing how it works.
 
 ---
 

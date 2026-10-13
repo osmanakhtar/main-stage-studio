@@ -112,7 +112,7 @@ Anything that moves from Open to Locked should be dated and noted briefly.
 | Person | First person "I" (one founder); "we" only for studio and client together |
 | Principles | Name the thing; show the receipt (figures gate); talk like the owner; hand over the mic; short wins; point of view out loud; only say what the screen shows |
 | Vocabulary | Soundcheck, Rehearsal, Your cue, Showtime, The run for the process; products keep plain names |
-| Lines | Hero "Run the show."; gate "Nothing goes live until you give the cue."; AI "AI does the typing. I do the deciding. You do the approving." |
+| Lines | Hero "Run the show."; gate "Nothing goes live until you give the cue."; founder "You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows." (13 Oct 2026; the AI line is retired, no AI reference in how MSS describes its work) |
 | Never | Agency-speak, false scale, hedging, fake urgency, anything a regulated client couldn't forward to compliance, em dashes |
 
 ---
@@ -245,6 +245,7 @@ Items that look incomplete or potentially contradictory. Resolve before treating
 
 | Date | What changed | Why |
 |------|-------------|-----|
+| 13 October 2026 (home founder line) | **"AI does the typing. I do the deciding. You do the approving." removed from the home founder section** (its last place on the site). Replaced with "You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows." to match About's founder-led framing. No AI reference in MSS's description of how it works | Os: it read as a one-person shop and he doesn't want to reference AI |
 | 13 October 2026 (hero film in place) | **Hero film v2 (mark-led) chosen and placed in the prototype hero**, on Stage. Wide screens become two columns (headline and buttons left, capped at 112px; film right), because stacking the film above the full-width headline pushed "Run the show." below the fold. A 1.4s sting from the film's close is the social and end-card sign-off. Not on the live site yet | Os approved v2 and asked for the film in the hero and the sting |
 | 13 October 2026 (hero film, iteration 1) | **First iteration of the hero film uses the real clients** (Ayesha, then PureMed, then Vera), not the fictional brand book, which moves to iteration 2. Ayesha's chapter ends on "her call" with no cut because she hasn't chosen; PureMed's Content chapter uses her copy, not a photo, because her imagery is generated | Os, 13 Oct; the honesty layer (nothing invented on screen) |
 | 13 October 2026 (hero film) | **Home hero film: "Source to stage"** chosen (`prototype-v6/hero-film-concepts.md`). Four chapters (Identity, Website, Content, Campaign and Platform), each going source, real options, the cut, lit result with one Geist Mono line; each result becomes the next chapter's source. Sits framed above the headline, never behind it. Ayesha's consent covers her unchosen v3 directions. Chapter 4 stays systems-focused. One fictional brand carries the relay end to end, from a new MSS brand book of fictional brands chosen for range over ICP fit (slate: `portfolio/brand-book/brand-book-slate.md`) | Os: the site proves the systems but shows no design thinking beyond the site itself |
