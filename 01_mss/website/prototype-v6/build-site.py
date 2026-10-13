@@ -42,9 +42,12 @@ FILMS = {
 }
 # Published under a content hash (website-cue-3f9a1c.mp4): Stage caches assets for a day, so a re-cut
 # film with the same name kept showing the old one or nothing (13 Oct). A new cut is a new URL.
+# FILM_SALT: bump to give every film a new URL, e.g. after browsers cached a bad response
+# (13 Oct: nginx cached the /login redirect for a day; fixed on the Pi, salt bumped to clear it).
 import hashlib
+FILM_SALT = b'2026-10-13b'
 for _pid, (_f, _a, _c) in list(FILMS.items()):
-    _h = hashlib.sha1(b''.join(open(os.path.join(CLIPS, f'{_f}.{e}'), 'rb').read() for e in ('mp4', 'webm', 'webp'))).hexdigest()[:6]
+    _h = hashlib.sha1(FILM_SALT + b''.join(open(os.path.join(CLIPS, f'{_f}.{e}'), 'rb').read() for e in ('mp4', 'webm', 'webp'))).hexdigest()[:6]
     for _ext in ('mp4', 'webm', 'webp'):
         shutil.copy(os.path.join(CLIPS, f'{_f}.{_ext}'), os.path.join(A, f'{_f}-{_h}.{_ext}'))
     FILMS[_pid] = (f'{_f}-{_h}', _a, _c)
