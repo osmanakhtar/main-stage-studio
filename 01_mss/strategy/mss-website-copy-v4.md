@@ -20,7 +20,7 @@
 
 ### Price display (every page that shows a price)
 Founding price large, target price struck through beside it, then the unit. Under it, once per page:
-> mono: Founding price for my first three clients on each product. After that, the target price applies.
+> mono: Founding price for the first three clients on each product. After that, the target price applies.
 
 ### Status labels (every piece of proof)
 `mono: LIVE` · `mono: IN PROGRESS` · `mono: SELF-INITIATED` · `mono: DEMO, FICTIONAL CLIENT`
@@ -90,7 +90,7 @@ Each row opens its product page. Each row's card plays the product's 8-second lo
 
 ### 6. Who's behind it `data-stage-section="founder"`
 > **Twenty years building systems that weren't allowed to fail.**
-> TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Systems like that used to need an enterprise budget. I founded Main Stage Studio to bring the same standard to founders: enterprise-grade systems and thinking, sized for a business that's still growing.
+> TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Work of that standard has usually been kept for large organisations. I founded Main Stage Studio to make it available to every founder: enterprise-grade systems and thinking, built around your business.
 >
 > You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows.
 > `About Os`
@@ -98,7 +98,7 @@ Each row opens its product page. Each row's card plays the product's 8-second lo
 ### 7. Start `data-stage-section="start"`
 > **What do you need?**
 > [Review] [Identity] [Website] [Campaign] [Content] [Platform] [Care] [Not sure yet]
-> I read everything that comes in and reply within two working days.
+> Every enquiry gets a reply within two working days.
 
 ---
 
@@ -284,7 +284,7 @@ Sections, in order, each with `data-stage-section`: `promise`, `for`, `get`, `ow
 > `Read the case study`
 
 **How the cue works here**
-> You approve each email in the series before it goes live. Once you have, the series goes to every new sign-up on schedule. In my console, an email you haven't approved can't send.
+> You approve each email in the series before it goes live. Once you have, the series goes to every new sign-up on schedule. In the console, an email you haven't approved can't send.
 
 **FAQs**
 > **Do I need a list already?** No. Building one is the point.
@@ -385,11 +385,11 @@ Sections, in order, each with `data-stage-section`: `promise`, `for`, `get`, `ow
 > You approve the data map before any data moves. You approve every email before it sends. Old records only come across after you've signed off how they'll be kept.
 
 **FAQs**
-> **Is this a CRM?** It does what you'd want a CRM to do for a small business, without the forty features you'd never open.
+> **Is this a CRM?** It does what you'd want a CRM to do for your business, without the forty features you'd never open.
 >
 > **Who can see my customers' data?** You. I act as your processor, under the agreement you sign. Any sub-processors are listed in it.
 >
-> **Why should I trust you with this?** I spent two decades building onboarding and identity systems for banks and lenders, where getting it wrong wasn't an option.
+> **Why should I trust you with this?** Over a decade in banking and lending, building the onboarding and identity systems millions of customers go through, where getting it wrong wasn't an option.
 
 **Start**
 > `Start a Platform`
@@ -445,10 +445,10 @@ Sections, in order, each with `data-stage-section`: `promise`, `for`, `get`, `ow
 
 ## Page: Pricing `/pricing`
 
-**Meta.** Title: Pricing | Main Stage Studio. Description: Every product's price, on one page. Founding prices for my first three clients on each product.
+**Meta.** Title: Pricing | Main Stage Studio. Description: Every product's price, on one page. Founding prices for the first three clients on each product.
 
 > **Every price, on one page.**
-> Founding prices are for my first three clients on each product. After that, the target price applies. No hidden day rates.
+> Founding prices apply to the first three clients on each product. After that, the target price applies. No hidden day rates.
 
 | Product | Unit | Founding | Target |
 |---|---|---|---|
@@ -462,9 +462,9 @@ Sections, in order, each with `data-stage-section`: `promise`, `for`, `get`, `ow
 | Care | per month, for a site | £105 | £350 |
 | Opening Night (Identity + Website) | one-off | £1,290 | £4,300 |
 
-> **Why publish prices?** Because you shouldn't need a call to find out whether you can afford something.
+> **Why publish prices?** Because good work should be open to every founder. You can see what each product includes and what it costs before we speak.
 >
-> **Why so low now?** I'm trading margin for my first reference clients. Founding clients pay less and get the same work.
+> **What are founding prices?** The launch price for each product, for its first three clients. Same scope, same checks, same sign-off: the price is the only thing that changes.
 >
 > **What isn't included?** Outside costs, like your domain, paid ads or an email-sending service, are paid by you. Which ones apply depends on the products you choose: Care, for example, covers hosting and email sending for a site. Your written scope lists every one before you commit.
 >
@@ -569,7 +569,7 @@ Filter: All · Identity · Website · Campaign · Content · Platform
 > *Logo row, one tone (Rigging), wrapping: Universal Pictures, Discovery Channel, BBC, RTÉ, Nickelodeon, Technicolor, Mobil Oil, Barclays, Lloyds Bank, Virgin Money, Chase UK, 10x Banking, NewDay, Argos Pay. Career history only, never presented as MSS clients. Sources: `01_mss/brand/career-logos/SOURCES.md`.*
 
 > **Why MSS exists**
-> Big organisations run on systems that are checked, recorded and signed off before anything goes live. That standard shouldn't need a big organisation's budget. My mission is to put enterprise-grade systems, and the thinking behind them, in the hands of founders.
+> Big organisations run on systems that are checked, recorded and signed off before anything goes live. Every founder should have the same. My mission is to put enterprise-grade systems, and the thinking behind them, in the hands of founders.
 >
 > I kept seeing good businesses rent their own front door. Their site, their list and their records sat with someone else, and every change cost a ticket and an invoice. I'd rather build things you can run without me. If you keep paying me, it should be because the work is good, not because you're locked in.
 
@@ -611,7 +611,7 @@ Consent line under the button:
 Button: `Send`
 
 Confirmation:
-> **Got it.** I read everything that comes in and reply within two working days. If it's simpler to talk, my reply will include a link to book a Soundcheck.
+> **Got it.** Every enquiry gets a reply within two working days. If it's simpler to talk, the reply will include a link to book a Soundcheck.
 
 ---
 

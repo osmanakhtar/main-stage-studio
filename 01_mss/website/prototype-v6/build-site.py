@@ -574,7 +574,7 @@ JS = """
 })();
 """
 
-FOUNDING = ('<p class="label founding-note">Founding price for my first three clients on each product. '
+FOUNDING = ('<p class="label founding-note">Founding price for the first three clients on each product. '
             'After that, the target price applies.</p>')
 
 
@@ -814,10 +814,10 @@ def home():
               '<div class="cues">' + ''.join(f'<div class="cue"><p class="label">{k}</p><p class="cue-line">{v}</p></div>' for k, v in cues) + '</div>'
               f'<div class="ctas" style="margin-top:28px"><a class="btn" href="how-it-works.html">How it works {ARROW}</a></div>', 'light')
         + sec('founder', '<div class="split lead"><h2 class="d2">Twenty years building systems that weren\'t allowed to fail.</h2>'
-              '<div class="body lede"><p>TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Systems like that used to need an enterprise budget. I founded Main Stage Studio to bring the same standard to founders: enterprise-grade systems and thinking, sized for a business that\'s still growing.</p>'
+              '<div class="body lede"><p>TV channel launches across three continents. Banking and lending platforms. Onboarding for millions of customers. Work of that standard has usually been kept for large organisations. I founded Main Stage Studio to make it available to every founder: enterprise-grade systems and thinking, built around your business.</p>'
               f'<p>You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows.</p><div class="ctas" style="margin-top:24px"><a class="btn" href="about.html">About Os {ARROW}</a></div></div></div>', 'light')
         + sec('start', f'<div class="head"><p class="label">Start</p><h2 class="d2">What do you need?</h2></div><div class="ctas">{opts}</div>'
-              '<p class="muted" style="margin-top:24px">I read everything that comes in and reply within two working days.</p>')
+              '<p class="muted" style="margin-top:24px">Every enquiry gets a reply within two working days.</p>')
     )
     page('index.html', 'Main Stage Studio: brand, website, content and the systems behind them',
          'I build the brand, the website, the content and the systems behind them for owner-led businesses, then hand you the controls. Prices on the page.', body)
@@ -916,7 +916,7 @@ def product_pages():
             film_figure('campaign'),
             [('live', 'Live · PureMed Aesthetics',
               'Two guides and a consultation quiz, each with its own sign-up and email series. The owner writes and approves every email in her own console before it sends.', *PM)],
-            "You approve each email in the series before it goes live. Once you have, the series goes to every new sign-up on schedule. In my console, an email you haven't approved can't send.",
+            "You approve each email in the series before it goes live. Once you have, the series goes to every new sign-up on schedule. In the console, an email you haven't approved can't send.",
             [('Do I need a list already?', 'No. Building one is the point.'),
              ('Who writes the emails?', 'I draft them in your voice. You edit and approve them.'),
              ('What about GDPR?', 'Consent is captured and recorded at sign-up, in plain words that match what you send.')],
@@ -956,9 +956,9 @@ def product_pages():
               'Booking and intake journeys for a conveyancing firm, an accountancy practice and a clinic.',
               [('work-conveyancing.html', 'Conveyancing'), ('work-accountancy.html', 'Accountancy'), ('work-clinic.html', 'Clinic')], None)],
             "You approve the data map before any data moves. You approve every email before it sends. Old records only come across after you've signed off how they'll be kept.",
-            [('Is this a CRM?', "It does what you'd want a CRM to do for a small business, without the forty features you'd never open."),
+            [('Is this a CRM?', "It does what you'd want a CRM to do for your business, without the forty features you'd never open."),
              ("Who can see my customers' data?", 'You. I act as your processor, under the agreement you sign. Any sub-processors are listed in it.'),
-             ('Why should I trust you with this?', "I spent two decades building onboarding and identity systems for banks and lenders, where getting it wrong wasn't an option.")],
+             ('Why should I trust you with this?', "Over a decade in banking and lending, building the onboarding and identity systems millions of customers go through, where getting it wrong wasn't an option.")],
             'Start a Platform', 'Platform: the system your business actually runs on | Main Stage Studio',
             'One record per customer, consent kept properly, emails you approve, migration from your old tools, data protection paperwork done as part of the build.')
     # Care
@@ -987,16 +987,16 @@ def pricing():
              + '</tbody></table>')
     body = (
         sec('intro', '<p class="label">Pricing</p><h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">Every price, on one page.</h1>'
-                     '<p class="lede muted" style="margin-top:24px">Founding prices are for my first three clients on each product. After that, the target price applies. No hidden day rates.</p>', 'first')
+                     '<p class="lede muted" style="margin-top:24px">Founding prices apply to the first three clients on each product. After that, the target price applies. No hidden day rates.</p>', 'first')
         + sec('table', table + FOUNDING)
         + sec('faq', '<div class="split"><div><p class="label qlabel">Questions</p></div>' + faq([
-            ('Why publish prices?', "Because you shouldn't need a call to find out whether you can afford something."),
-            ('Why so low now?', "I'm trading margin for my first reference clients. Founding clients pay less and get the same work."),
+            ('Why publish prices?', 'Because good work should be open to every founder. You can see what each product includes and what it costs before we speak.'),
+            ('What are founding prices?', 'The launch price for each product, for its first three clients. Same scope, same checks, same sign-off: the price is the only thing that changes.'),
             ("What isn't included?", 'Outside costs, like your domain, paid ads or an email-sending service, are paid by you. Which ones apply depends on the products you choose: Care, for example, covers hosting and email sending for a site. Your written scope lists every one before you commit.'),
             ('What if I start with a Review?', 'Buy any product within 8 weeks and the Review fee comes off it.')]) + '</div>')
-        + start_band('Seen a price that fits?', 'Start a project', 'start.html')
+        + start_band('Know what you need?', 'Start a project', 'start.html')
     )
-    page('pricing.html', 'Pricing | Main Stage Studio', "Every product's price, on one page. Founding prices for my first three clients on each product.", body)
+    page('pricing.html', 'Pricing | Main Stage Studio', "Every product's price, on one page. Founding prices for the first three clients on each product.", body)
 
 
 def how():
@@ -1182,7 +1182,7 @@ def about():
                         '<div class="logos"><p class="label">Worked for and with, before MSS</p>'
                         + ''.join(f'<img src="assets/logo-{f}.webp" alt="{n}" style="--h:{logo_h(f, *k)}px" loading="lazy">' for f, n, *k in CAREER) + '</div></div></div>')
         + sec('why', '<div class="split"><div><p class="label">Why MSS exists</p></div><div class="body lede">'
-                     "<p>Big organisations run on systems that are checked, recorded and signed off before anything goes live. That standard shouldn't need a big organisation's budget. My mission is to put enterprise-grade systems, and the thinking behind them, in the hands of founders.</p>"
+                     "<p>Big organisations run on systems that are checked, recorded and signed off before anything goes live. Every founder should have the same. My mission is to put enterprise-grade systems, and the thinking behind them, in the hands of founders.</p>"
                      "<p>I kept seeing good businesses rent their own front door. Their site, their list and their records sat with someone else, and every change cost a ticket and an invoice. I'd rather build things you can run without me. If you keep paying me, it should be because the work is good, not because you're locked in.</p></div></div>")
         + sec('beliefs', '<div class="split"><div><p class="label">What I believe</p></div><ol class="beliefs">'
                          + ''.join(f'<li><span>0{i}</span><span>{b}</span></li>' for i, b in enumerate(beliefs, 1)) + '</ol></div>')
@@ -1213,7 +1213,7 @@ def start():
         f'<div><button class="btn primary" type="submit">Send {ARROW}</button>'
         '<p class="muted" style="margin-top:14px;font-size:14px">I\'ll use these details to reply to you and nothing else. Sending opens your own email app, addressed to hello@mainstagestudio.co.uk.</p></div>'
         '</form>'
-        '<div class="done" role="status"><p class="d3">Nearly there.</p><p class="muted" style="margin-top:10px">Your email app should have opened with this ready to send. If it didn\'t, write to <a class="inline-link" href="mailto:hello@mainstagestudio.co.uk">hello@mainstagestudio.co.uk</a>. I read everything that comes in and reply within two working days. If it\'s simpler to talk, my reply will include a link to book a Soundcheck.</p></div>'
+        '<div class="done" role="status"><p class="d3">Nearly there.</p><p class="muted" style="margin-top:10px">Your email app should have opened with this ready to send. If it didn\'t, write to <a class="inline-link" href="mailto:hello@mainstagestudio.co.uk">hello@mainstagestudio.co.uk</a>. Every enquiry gets a reply within two working days. If it\'s simpler to talk, the reply will include a link to book a Soundcheck.</p></div>'
     )
     body = (
         sec('intro', '<p class="label">Start</p><h1 class="d1" style="margin-top:20px;font-size:clamp(48px,8vw,120px)">What do you need?</h1>', 'first')

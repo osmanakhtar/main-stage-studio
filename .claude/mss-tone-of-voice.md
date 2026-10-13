@@ -17,7 +17,7 @@ Confident, direct and on the reader's side. The empathy is real, but it shows in
 
 1. **Name the thing.** Say what they get, in nouns. "A 10-page site you can edit yourself", not "a digital presence".
 2. **Show the receipt.** Dates, page counts, what was built, what it replaced. A number beats an adjective. Every number passes the figures gate (`make figures`) before it is published.
-3. **Talk like the owner.** First person, "I", because it is one person. "We" only when it genuinely means the studio and the client together.
+3. **Talk like the founder.** First person, "I", because the founder leads every project and makes the calls. Never read as a one-person shop: no capacity limits, no "I read everything", no "my first clients". The studio runs on the same checks and sign-off on every job, so it scales. "We" only when it genuinely means the studio and the client together; never a false "our team".
 4. **Hand over the mic.** Clients speak in their own words on case studies. MSS does not narrate other people's feelings.
 5. **Short wins.** If a line works at half the length, use half.
 6. **Point of view, out loud.** Agencies that keep the keys, rented websites, AI slop: MSS has a view and states it, without sneering at anyone.
@@ -49,7 +49,7 @@ Products keep plain names: Review, Identity, Website, Campaign, Content, Platfor
 | Support | Brand, website, content and the systems behind them. Built by one studio. Handed over with the controls. |
 | Proof | Everything I build, you can change, approve and take with you. |
 | Gate | Nothing goes live until you give the cue. |
-| Credential | Twenty years building systems that weren't allowed to fail. Your website is not the hard part of my week. |
+| Credential | Twenty years building systems that weren't allowed to fail. |
 | Founder-led | You work with me directly. Every job runs through the same checks and sign-off, so the standard holds as the studio grows. |
 | Close | If what you're building matters to you, it matters here. |
 
@@ -62,6 +62,7 @@ Retired 13 Oct 2026: "AI does the typing. I do the deciding. You do the approvin
 - **Agency-speak:** "solutions", "end-to-end", "elevate", "unlock", "seamless", "transformative".
 - **False scale:** "our team", "our experts".
 - **Hedging or fake urgency:** "we think maybe", "limited spots", "book now".
+- **Affordability language** (13 Oct 2026): never imply the reader can't afford something ("whether you can afford", "enterprise budget", "so low", "a price that fits"). Frame price as quality work open to every founder.
 - **Anything that would embarrass a regulated client** if they forwarded it to their compliance person.
 - **Em dashes.** Standing rule for every piece of writing: use a comma, colon, full stop or brackets. En dashes in ranges (3–5 weeks) are fine.
 
