@@ -25,6 +25,8 @@ Os sees the original and the plan before anything is built, and reviews each fil
 Every film is two scripts: `capture-<film>.js` writes `frames-<film>/` (stills plus a `timeline.json` of positions), and
 `render-<film>.js` (or `render.js` for Website) writes `out-v6/<film>-cue.{mp4,webm,webp}`. `--still <seconds>` renders one test frame.
 
+The site ships the MP4 and the WebP poster only. The WebM is rendered but not used: Chrome on a Mac failed the VP9 WebMs at random with a decode error (13 Oct 2026) while every MP4 played. Headless Chromium never shows this, so check a new film in installed Chrome (Playwright `channel: 'chrome'`, `headless: false`), not headless.
+
 1. `cd ~/workspace/.worktrees/mss-v6-copy/01_mss/website/tools/clips/cue`
 2. Set up the film's source, if it has one:
    - Website: `node ../stage-auth.js && node capture-website.js && node render.js; rm -f ../stage-state.json` (a human signs in as admin).
