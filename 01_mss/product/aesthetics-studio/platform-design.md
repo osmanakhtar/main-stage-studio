@@ -16,6 +16,18 @@ Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
 
+## Change note, 14 October 2026: Anthropic in A5, review on facts-only deploys, signed documents spec
+
+- **Part A A5 and the DPA list Anthropic** (studio-platform 23277d4, live) while the Faces route was Claude reading
+  screens; agreement "None yet" (individual Claude plan). PureMed signed DPIA v5 on it. The route has since moved
+  to a script (`02_clients/puremed/clinical-platform/faces-screen-extraction-plan.md`), so B10.4 and A5 are to be
+  reworded and Anthropic removed; Nafisa signs v6.
+- **The DPIA review now triggers on a deploy that changes only `platform-facts.json`** (f1b9303, live). Before,
+  `afterActivate` ran only when the config changed, so a new sub-processor waited for the next config publish.
+  SOP-PLAT-002 section 6.
+- **Signed documents build spec v0.1** (`signed-documents-build-spec.md`, nothing built): one module for booking
+  documents, consent forms (link or clinic iPad) and the migrated Faces forms. Next: settle S1 (PDF storage region).
+
 ## Change note, 12 October 2026: a stopped series says why
 
 The person page's "What happened" showed a series stop as its rule id ("Series stopped because WDLT-STOP-03").
