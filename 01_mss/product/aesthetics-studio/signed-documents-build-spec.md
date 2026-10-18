@@ -166,6 +166,8 @@ no treatment records beyond the existing Record treatment, no patient accounts.
 
 ## 10. Open decisions
 
+**18 Oct 2026:** an existing supplier is preferred (Osman). S1 and D2 to D8 go to a discovery call with Nafisa before the build: `02_clients/puremed/clinical-platform/signed-documents-discovery-call.md` (options A to D with costs; A recommended: the existing DigitalOcean database, no added running cost). Spaces is $5 a month for 250 GiB; LON1 availability seen only in secondary sources.
+
 | Id | Question | Recommendation | Who |
 |---|---|---|---|
 | S1 | Where the PDFs are stored | DigitalOcean Spaces if it is offered in the London region (not yet checked); if not, Postgres in the London database, rather than a new country for patient files | Osman |
