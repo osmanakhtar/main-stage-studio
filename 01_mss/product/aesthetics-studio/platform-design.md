@@ -16,6 +16,17 @@ Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
 
+## Change note, 18 October 2026: booking and Stripe build spec
+
+- **Booking and Stripe build spec v0.1** (`booking-payments-build-spec.md`, nothing built): catalogue and rules as
+  versioned tenant config with every booking snapshotting what applied; availability as a pure function; the diary;
+  Stripe deposits confirmed only by webhook, refunds from policy; care@ messages and Google Calendar writes; the
+  Faces cutover order including a forward-diary read. Nine slices; slice 1 also writes studio-platform's
+  `rule-trace.json` so `make trace` can check the rest. Designs out the booking engine's 18 Aug determinism findings.
+- **Cutover (D9) about 31 Dec 2026** (Osman; PureMed decisions log).
+- **Next:** B1 (Stripe Connect Standard or PureMed's restricted key, Osman), B3 to B7 and B10 from Nafisa, then
+  slice 1 on the Vera sandbox in a worktree.
+
 ## Change note, 14 October 2026: Anthropic in A5, review on facts-only deploys, signed documents spec
 
 - **Part A A5 and the DPA list Anthropic** (studio-platform 23277d4, live) while the Faces route was Claude reading
