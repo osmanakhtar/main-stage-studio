@@ -12,3 +12,4 @@ template live in `~/workspace/sops/`.
 | [SOP-MSS-005](sop-mss-005-products-scope-and-cost.md) | Products, scope and cost: scoping and quoting a v6 product | Not yet run |
 | [SOP-MSS-006](sop-mss-006-v6-site-prototype.md) | Building the v6 site prototype and publishing it to Stage | 2026-10-12 |
 | [SOP-MSS-007](sop-mss-007-cue-films.md) | Cue films for the MSS site: capture the real tools, render, re-shoot | 2026-10-12 (Platform script not yet run whole) |
+| [SOP-MSS-008](sop-mss-008-document-viewer-client-export.md) | Document viewer: reading workspace docs and client exports (PDF, Word, XLS) | Not yet run by hand (automated run 2026-10-18) |

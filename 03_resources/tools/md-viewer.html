@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MD Viewer — Main Stage Studio</title>
+<title>MD Viewer · Main Stage Studio</title>
 
 <!-- Brand fonts (both brands' fonts loaded up front so switching is instant) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&family=Geist+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500&family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <!-- Tab icon — swapped per-brand by setBrand() below -->
 <link rel="icon" id="favicon" type="image/png">
@@ -25,41 +25,57 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
-/* ─── Brand tokens: Main Stage Studio (default) ─── */
+/* ─── Brand tokens: Main Stage Studio (default) ───
+   v6 direction A, "Stage" (01_mss/brand/mss-v6-tokens.css). Stage Black chrome,
+   documents on House Lights. Tungsten is the one accent and never text on a
+   light surface, so --accent (used as text) is Stage Black and Tungsten only
+   lands on the header, the mark and rules (--header-accent, --print-rule). */
 :root,
 [data-brand="mss"] {
-  --bg:            #F5EFE5;
-  --header-bg:     #1C1712;
-  --header-text:   #F5EFE5;
-  --text:          #1C1712;
-  --text-strong:   #1C1712;
-  --text-muted:    rgba(28,23,18,0.6);
-  --accent:        #BF6B47;
-  --accent-strong: #8C4A2F;
-  --code-bg:       #E8C9AE;
-  --divider:       rgba(28,23,18,0.15);
-  --divider-soft:  rgba(28,23,18,0.12);
-  --tint-hover:    rgba(232,201,174,0.4);
-  --tint-active:   rgba(232,201,174,0.6);
-  --tint-quote:    rgba(232,201,174,0.28);
-  --tint-row:      rgba(232,201,174,0.18);
-
-  --heading-font:      'Cormorant Garamond', serif;
+  --bg:            #F3F1EC;
+  --header-bg:     #12110F;
+  --header-text:   #F3F1EC;
+  --header-line:   #2E2B27;
+  --header-accent: #FFB21A;
+  --header-accent-text: #12110F;
+  --wordmark-sub:  #8C8981;
+  --text:          #12110F;
+  --text-strong:   #12110F;
+  --text-muted:    #5E5B55;
+  --accent:        #12110F;
+  --accent-strong: #000000;
+  --code-bg:       #E6E3DC;
+  --divider:       rgba(18,17,15,0.16);
+  --divider-soft:  rgba(18,17,15,0.1);
+  --tint-hover:    rgba(18,17,15,0.05);
+  --tint-active:   rgba(18,17,15,0.09);
+  --tint-quote:    rgba(18,17,15,0.04);
+  --tint-row:      rgba(18,17,15,0.025);
+  --rule:          #12110F;
+  --strong-weight: 600;
+  --heading-font:      'Archivo', system-ui, sans-serif;
+  --heading-stretch:   118%;
   --heading-transform: none;
-  --heading-weight:    400;
-  --body-font:         'Plus Jakarta Sans', sans-serif;
-  --body-weight:       300;
-
+  --heading-weight:    800;
+  --body-font:         'Archivo', system-ui, sans-serif;
+  --body-weight:       400;
+  --ui-font:           'Archivo', system-ui, sans-serif;
+  --label-font:        'Geist Mono', ui-monospace, Menlo, monospace;
+  --em-font:           'Archivo', system-ui, sans-serif;
+  /* Word can't rely on Archivo being installed on the reader's machine */
+  --docx-heading-font: 'Arial';
+  --docx-body-font:    'Arial';
   /* Print (PDF export) palette */
-  --print-text:     #1C1712;
-  --print-accent:   #BF6B47;
-  --print-th-bg:    #F0EBE3;
-  --print-code-bg:  #F7F7F7;
-  --print-quote-bg: rgba(245,239,229,0.15);
-  --print-border:   rgba(28,23,18,0.3);
-  --print-border-soft: rgba(28,23,18,0.2);
+  --print-text:     #12110F;
+  --print-accent:   #12110F;
+  --print-rule:     #FFB21A;
+  --print-muted:    #5E5B55;
+  --print-th-bg:    #F3F1EC;
+  --print-code-bg:  #F3F1EC;
+  --print-quote-bg: rgba(18,17,15,0.035);
+  --print-border:   rgba(18,17,15,0.3);
+  --print-border-soft: rgba(18,17,15,0.16);
 }
-
 /* ─── Brand tokens: FightStar Championship ─── */
 [data-brand="fsc"] {
   --bg:            #0B0F17;
@@ -83,10 +99,23 @@
   --heading-weight:    400;
   --body-font:         'Barlow Condensed', Arial, sans-serif;
   --body-weight:       400;
-
-  /* Print (PDF export) palette — light page, navy/blue ink */
+  --heading-stretch:   normal;
+  --ui-font:           'Plus Jakarta Sans', sans-serif;
+  --label-font:        'Plus Jakarta Sans', sans-serif;
+  --em-font:           'Bebas Neue', 'Arial Narrow', sans-serif;
+  --docx-heading-font: 'Bebas Neue';
+  --docx-body-font:    'Barlow Condensed';
+  --header-line:   rgba(255,255,255,0.2);
+  --header-accent: #1A6FE8;
+  --header-accent-text: #FFFFFF;
+  --wordmark-sub:  #1A6FE8;
+  --rule:          #1A6FE8;
+  --strong-weight: 500;
+  /* Print (PDF export) palette: light page, navy/blue ink */
   --print-text:     #0D1B2E;
   --print-accent:   #1A6FE8;
+  --print-rule:     #1A6FE8;
+  --print-muted:    rgba(13,27,46,0.55);
   --print-th-bg:    #E7EEFC;
   --print-code-bg:  #F2F5FB;
   --print-quote-bg: rgba(26,111,232,0.06);
@@ -133,6 +162,7 @@ html, body {
 
 #site-header .wordmark-main {
   font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
   font-weight: var(--heading-weight);
   font-size: 15px;
   color: var(--header-text);
@@ -140,25 +170,27 @@ html, body {
   text-transform: var(--heading-transform);
 }
 
+[data-brand="mss"] #site-header .wordmark-main { text-transform: uppercase; font-size: 14px; }
+
 #site-header .wordmark-sub {
-  font-family: 'Plus Jakarta Sans', 'Barlow Condensed', sans-serif;
+  font-family: var(--label-font);
   font-weight: 500;
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--wordmark-sub);
 }
 
 #site-header .logo-icon { flex-shrink: 0; }
 
 /* ─── Brand switcher ─── */
 #brand-select {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.04em;
   background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid var(--header-line);
   color: var(--header-text);
   padding: 5px 8px;
   border-radius: 2px;
@@ -166,8 +198,8 @@ html, body {
 }
 
 #brand-select option {
-  color: #1C1712;
-  background: #F5EFE5;
+  color: #12110F;
+  background: #F3F1EC;
 }
 
 /* ─── Page shell below header ─── */
@@ -202,7 +234,7 @@ html, body {
 /* ─── Breadcrumb — shared styles for sidebar and single-file strip ─── */
 #sidebar-breadcrumb,
 #main-breadcrumb {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 11px;
   font-weight: 300;
   color: var(--text-muted);
@@ -237,7 +269,7 @@ html, body {
 #btn-folder,
 #btn-refresh,
 #btn-sort {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 12px;
   font-weight: 400;
   background: none;
@@ -274,7 +306,7 @@ html, body {
 
 #type-filter button {
   flex: 1;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -310,7 +342,7 @@ html, body {
   background: none;
   border: none;
   padding: 9px 18px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 13px;
   font-weight: 300;
   color: var(--text);
@@ -326,6 +358,7 @@ html, body {
 
 #file-list button.active {
   background: var(--tint-active);
+  box-shadow: inset 3px 0 0 var(--rule);
   color: var(--accent-strong);
   font-weight: 400;
 }
@@ -367,7 +400,7 @@ html, body {
   font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.12em;
-  background: var(--accent);
+  background: var(--rule);
   color: var(--bg);
   padding: 2px 5px;
   border-radius: 2px;
@@ -391,7 +424,7 @@ html, body {
 
 /* Subdirectory group label */
 #file-list .dir-group {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--label-font);
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -417,7 +450,7 @@ html, body {
 }
 
 #file-list .other-files-label {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--label-font);
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.16em;
@@ -449,6 +482,7 @@ html, body {
   align-items: center;
   justify-content: center;
   font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
   font-size: 28px;
   font-weight: 400;
   color: var(--accent);
@@ -469,6 +503,7 @@ html, body {
 
 #empty-state h2 {
   font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
   font-weight: var(--heading-weight);
   font-size: 32px;
   letter-spacing: -0.02em;
@@ -477,7 +512,7 @@ html, body {
 }
 
 #empty-state p {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-weight: 300;
   font-size: 15px;
   color: var(--text-muted);
@@ -494,7 +529,7 @@ html, body {
 }
 
 .btn-primary {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 13px;
   font-weight: 400;
   background: var(--accent);
@@ -508,7 +543,7 @@ html, body {
 .btn-primary:hover { background: var(--accent-strong); }
 
 .btn-secondary {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 13px;
   font-weight: 400;
   background: none;
@@ -525,7 +560,7 @@ html, body {
 }
 
 #no-fsapi-note {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 12px;
   font-weight: 300;
   color: var(--text-muted);
@@ -547,7 +582,7 @@ html, body {
 
 /* File title shown above content */
 #content-filename {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--label-font);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.18em;
@@ -559,7 +594,7 @@ html, body {
 
 /* Full path of the file being viewed, shown under the filename label */
 #content-filepath {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 11px;
   font-weight: 400;
   color: var(--text-muted, #8A8378);
@@ -572,6 +607,7 @@ html, body {
 /* ─── Markdown rendering styles ─── */
 #content h1 {
   font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
   font-weight: var(--heading-weight);
   font-size: 42px;
   line-height: 1.15;
@@ -584,6 +620,7 @@ html, body {
 
 #content h2 {
   font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
   font-weight: var(--heading-weight);
   font-size: 28px;
   line-height: 1.2;
@@ -593,11 +630,12 @@ html, body {
   margin: 48px 0 16px;
   padding-bottom: 8px;
   /* Accent rule under h2 */
-  border-bottom: 1.5px solid var(--accent);
+  border-bottom: 2px solid var(--rule);
 }
 
 #content h3 {
   font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
   font-weight: var(--heading-weight);
   font-size: 22px;
   line-height: 1.25;
@@ -610,7 +648,7 @@ html, body {
 /* h4/h5 as small-caps style labels */
 #content h4,
 #content h5 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--label-font);
   font-weight: 500;
   font-size: 11px;
   letter-spacing: 0.18em;
@@ -620,7 +658,7 @@ html, body {
 }
 
 #content h6 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-weight: 400;
   font-size: 13px;
   color: var(--text-muted);
@@ -670,7 +708,7 @@ html, body {
 
 #content a:visited { color: var(--accent-strong); }
 
-#content strong { font-weight: 500; color: var(--text-strong); }
+#content strong { font-weight: var(--strong-weight); color: var(--text-strong); }
 #content em { font-style: italic; }
 
 #content del {
@@ -708,7 +746,7 @@ html, body {
 
 /* Blockquotes */
 #content blockquote {
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--rule);
   background: var(--tint-quote);
   margin: 0 0 24px;
   padding: 14px 20px;
@@ -738,7 +776,7 @@ html, body {
 #content th {
   background: var(--code-bg);
   color: var(--text-strong);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-weight: 500;
   font-size: 13px;
   letter-spacing: 0.03em;
@@ -792,7 +830,7 @@ html, body {
 
 /* Caption noting a CSV was regrouped into a day-by-day document layout */
 #content p.csv-group-note {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--ui-font);
   font-size: 12px;
   color: var(--text-muted);
   margin: -8px 0 28px;
@@ -808,32 +846,158 @@ html, body {
 
 /* ─── Header action buttons ─── */
 .btn-export {
-  margin-left: 10px;
+  margin-left: 8px;
   display: none;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 400;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-family: var(--label-font);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: var(--bg);
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid var(--header-line);
+  color: var(--header-text);
+  padding: 7px 12px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
 #btn-export-pdf { margin-left: auto; }
 
-.btn-export:hover {
-  background: var(--header-bg);
-  color: var(--header-text);
-  filter: brightness(1.4);
+.btn-export:hover,
+.btn-export:focus-visible {
+  border-color: var(--header-accent);
+  color: var(--header-accent);
+  outline: none;
 }
 
+/* Client export: the one accent moment in the header */
+#client-export { position: relative; margin-left: 14px; display: none; }
+#client-export.visible { display: block; }
+#btn-client-export {
+  display: block;
+  margin: 0;
+  background: var(--header-accent);
+  border-color: var(--header-accent);
+  color: var(--header-accent-text);
+}
+#btn-client-export:hover,
+#btn-client-export:focus-visible { filter: brightness(1.08); color: var(--header-accent-text); }
+#client-export-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 200px;
+  background: var(--header-bg);
+  border: 1px solid var(--header-line);
+  padding: 6px 0;
+  display: none;
+  z-index: 150;
+}
+#client-export-menu.open { display: block; }
+#client-export-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--header-text);
+  font-family: var(--label-font);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+#client-export-menu button:hover,
+#client-export-menu button:focus-visible { color: var(--header-accent); background: rgba(255,255,255,0.04); outline: none; }
+
+/* ─── Client document details form ─── */
+#client-dialog {
+  margin: auto;
+  border: none;
+  padding: 0;
+  width: min(480px, calc(100vw - 32px));
+  background: #F3F1EC;
+  color: #12110F;
+  font-family: var(--ui-font);
+}
+#client-dialog::backdrop { background: rgba(18,17,15,0.6); }
+#client-dialog form { padding: 28px 28px 24px; }
+#client-dialog h2 {
+  font-family: var(--heading-font);
+  font-stretch: var(--heading-stretch);
+  font-weight: var(--heading-weight);
+  font-size: 22px;
+  line-height: 1.2;
+  margin: 0 0 6px;
+}
+#client-dialog .cd-intro { font-size: 13px; color: #5E5B55; margin: 0 0 20px; line-height: 1.5; }
+#client-dialog .cd-warn {
+  font-size: 13px;
+  line-height: 1.5;
+  border-left: 3px solid #E5402A;
+  background: rgba(229,64,42,0.07);
+  padding: 8px 12px;
+  margin: 0 0 18px;
+  display: none;
+}
+#client-dialog .cd-warn.visible { display: block; }
+#client-dialog label {
+  display: block;
+  font-family: var(--label-font);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5E5B55;
+  margin: 0 0 14px;
+}
+#client-dialog input[type="text"] {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  font-family: var(--ui-font);
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #12110F;
+  background: #FFFFFF;
+  border: 1px solid rgba(18,17,15,0.25);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+#client-dialog input[type="text"]:focus { outline: 2px solid #12110F; outline-offset: 0; }
+#client-dialog .cd-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+#client-dialog label.cd-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ui-font);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #12110F;
+}
+#client-dialog .cd-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+#client-dialog .cd-actions button {
+  font-family: var(--label-font);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  cursor: pointer;
+  border: 1px solid #12110F;
+}
+#client-dialog .cd-cancel { background: transparent; color: #12110F; }
+#client-dialog .cd-go { background: #12110F; color: #F3F1EC; }
+#client-dialog .cd-go:hover { background: #000; }
+
+/* Title block for client documents: only ever printed, never on screen */
+#client-titleblock { display: none; }
 /* ─── JSON "plain English" raw-source toggle ─── */
 .json-raw-toggle {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--label-font);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -892,6 +1056,8 @@ html, body {
   #btn-export-pdf,
   #btn-export-word,
   #btn-export-xls,
+  #client-export,
+  #client-dialog,
   #drop-overlay,
   #content-filename,
   #file-input,
@@ -939,6 +1105,7 @@ html, body {
   /* ── Print typography ── */
   #content h1 {
     font-family: var(--heading-font);
+    font-stretch: var(--heading-stretch);
     font-weight: var(--heading-weight);
     font-size: 28pt;
     color: var(--print-text);
@@ -951,6 +1118,7 @@ html, body {
 
   #content h2 {
     font-family: var(--heading-font);
+    font-stretch: var(--heading-stretch);
     font-weight: var(--heading-weight);
     font-size: 22pt;
     color: var(--print-text);
@@ -963,6 +1131,7 @@ html, body {
 
   #content h3 {
     font-family: var(--heading-font);
+    font-stretch: var(--heading-stretch);
     font-weight: var(--heading-weight);
     font-size: 16pt;
     color: var(--print-text);
@@ -996,13 +1165,14 @@ html, body {
   }
 
   #content strong {
-    font-weight: 500;
+    font-weight: var(--strong-weight);
     color: var(--print-text);
   }
 
   /* Em uses the brand display font italic in print for a calligraphic feel */
   #content em {
-    font-family: var(--heading-font);
+    font-family: var(--em-font);
+    font-stretch: var(--heading-stretch);
     font-style: italic;
     font-weight: 400;
   }
@@ -1016,7 +1186,7 @@ html, body {
 
   #content a[href^="http"]::after {
     content: " (" attr(href) ")";
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--ui-font);
     font-weight: 300;
     font-size: 8.5pt;
     opacity: 0.6;
@@ -1058,7 +1228,7 @@ html, body {
   }
 
   #content blockquote p {
-    font-family: var(--heading-font);
+    font-family: var(--em-font);
     font-weight: 400;
     font-size: 11pt;
     font-style: italic;
@@ -1114,6 +1284,62 @@ html, body {
     page-break-inside: avoid;
     break-inside: avoid;
   }
+
+  /* ── Client document (Client export > PDF) ── */
+  body.client-print #content-filepath,
+  body.client-print #md-output .client-hidden,
+  body.client-print #md-output .csv-group-note { display: none !important; }
+
+  body.client-print #client-titleblock {
+    display: block;
+    margin: 6pt 0 26pt;
+    padding-bottom: 14pt;
+    border-bottom: 0.75pt solid var(--print-border);
+    break-after: avoid;
+  }
+  #client-titleblock .ct-kicker {
+    font-family: var(--label-font);
+    font-size: 8pt;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--print-muted);
+    margin: 0 0 8pt;
+  }
+  #client-titleblock .ct-title {
+    font-family: var(--heading-font);
+    font-stretch: var(--heading-stretch);
+    font-weight: var(--heading-weight);
+    text-transform: var(--heading-transform);
+    font-size: 26pt;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--print-text);
+    margin: 0 0 16pt;
+  }
+  #client-titleblock dl {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: start;
+    gap: 0 28pt;
+    margin: 0;
+  }
+  #client-titleblock dt {
+    font-family: var(--label-font);
+    font-size: 7pt;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--print-muted);
+    grid-row: 1;
+  }
+  #client-titleblock dd {
+    font-family: var(--body-font);
+    font-size: 10pt;
+    color: var(--print-text);
+    margin: 3pt 0 0;
+    grid-row: 2;
+  }
 }
 </style>
 </head>
@@ -1124,12 +1350,11 @@ html, body {
 
 <!-- Fixed header -->
 <header id="site-header">
-  <!-- MSS canonical mark -->
+  <!-- MSS mark: the Spike (v6), Tungsten on dark -->
   <span class="brand-block mss logo-icon">
-    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="2" y="16" width="24" height="22" rx="2.5" fill="#BF6B47"/>
-      <rect x="14" y="2" width="24" height="22" rx="2.5" fill="#1C1712"/>
-      <rect x="14" y="16" width="12" height="8" rx="1.5" fill="#F5EFE5"/>
+    <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M5 17V5H17" stroke="#FFB21A" stroke-width="5" stroke-linecap="square"/>
+      <path d="M35 23V35H23" stroke="#FFB21A" stroke-width="5" stroke-linecap="square"/>
     </svg>
   </span>
   <span class="brand-block fsc logo-icon">
@@ -1149,7 +1374,36 @@ html, body {
   <button id="btn-export-pdf" class="btn-export" title="Export to PDF">Export PDF</button>
   <button id="btn-export-word" class="btn-export" title="Export to Word">Export Word</button>
   <button id="btn-export-xls" class="btn-export" title="Export to Excel">Export XLS</button>
+  <div id="client-export">
+    <button id="btn-client-export" class="btn-export" title="Export an official, client-facing copy" aria-haspopup="true" aria-expanded="false">Client export</button>
+    <div id="client-export-menu" role="menu">
+      <button type="button" role="menuitem" data-format="pdf">Client PDF</button>
+      <button type="button" role="menuitem" data-format="word">Client Word</button>
+      <button type="button" role="menuitem" data-format="xls">Client XLS</button>
+    </div>
+  </div>
 </header>
+
+<!-- Client document details, asked for before every client export -->
+<dialog id="client-dialog">
+  <form method="dialog">
+    <h2>Client document</h2>
+    <p class="cd-intro">Adds a title block and official footers, and leaves out the file path and the internal status line.</p>
+    <p class="cd-warn" id="cd-warn">This file is marked <strong>Status: internal</strong>. Check it is meant for the client before you send it.</p>
+    <label>Document title<input type="text" id="cd-title" autocomplete="off"></label>
+    <label>Prepared for<input type="text" id="cd-client" autocomplete="off" placeholder="Client name"></label>
+    <label>Prepared by<input type="text" id="cd-by" autocomplete="off"></label>
+    <div class="cd-row">
+      <label>Date<input type="text" id="cd-date" autocomplete="off"></label>
+      <label>Version<input type="text" id="cd-version" autocomplete="off"></label>
+    </div>
+    <label class="cd-check"><input type="checkbox" id="cd-confidential" checked> Mark as confidential</label>
+    <div class="cd-actions">
+      <button type="button" class="cd-cancel" id="cd-cancel">Cancel</button>
+      <button type="submit" class="cd-go" id="cd-go">Export</button>
+    </div>
+  </form>
+</dialog>
 
 <!-- Page shell -->
 <div id="shell">
@@ -1184,7 +1438,7 @@ html, body {
         <button class="btn-secondary" id="btn-open-folder">Open folder</button>
       </div>
       <p id="no-fsapi-note" style="display:none">
-        Folder browsing isn't available in this browser (File System Access API required — try Chrome or Edge).
+        Folder browsing isn't available in this browser (it needs the File System Access API: try Chrome or Edge).
         Single-file upload works fine.
       </p>
     </div>
@@ -1197,6 +1451,7 @@ html, body {
     <div id="content" role="main">
       <span id="content-filename"></span>
       <span id="content-filepath"></span>
+      <header id="client-titleblock"></header>
       <div id="md-output"></div>
     </div>
 
@@ -1214,11 +1469,14 @@ marked.setOptions({
 });
 
 /* ─── Shared brand logo for light/white-page contexts (PDF header + Word export) ───
-   Same asset, one definition — keeps every exported document format on-brand together. */
+   Same asset, one definition, so every exported document format stays on-brand together.
+   MSS starts as a font-free SVG fallback; renderMssLockup() swaps in a PNG drawn
+   with the real Archivo and Geist Mono once the web fonts have loaded. Entries
+   may carry w/h: the size to show the logo at, in CSS px. */
 const PRINT_HEADER_LOGO = {
   mss: {
     mime: 'image/svg+xml',
-    b64: 'PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjAwIDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIHRyYW5zZm9ybT0ic2NhbGUoMC42KSI+PHJlY3QgeD0iMiIgeT0iMTYiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyMiIgcng9IjIuNSIgZmlsbD0iI0JGNkI0NyIvPjxyZWN0IHg9IjE0IiB5PSIyIiB3aWR0aD0iMjQiIGhlaWdodD0iMjIiIHJ4PSIyLjUiIGZpbGw9IiMxQzE3MTIiLz48cmVjdCB4PSIxNCIgeT0iMTYiIHdpZHRoPSIxMiIgaGVpZ2h0PSI4IiByeD0iMS41IiBmaWxsPSIjRjVFRkU1Ii8+PC9nPjx0ZXh0IHg9IjMwIiB5PSIxNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxQzE3MTIiPk1haW4gU3RhZ2U8L3RleHQ+PHRleHQgeD0iMTE3IiB5PSIxNSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjkiIGZpbGw9IiNCRjZCNDciIGxldHRlci1zcGFjaW5nPSIyLjUiPlNUVURJTzwvdGV4dD48L3N2Zz4=',
+    b64: 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjgiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAxNjggMjQiPjxnIHRyYW5zZm9ybT0ic2NhbGUoMC42KSI+PHBhdGggZD0iTTUgMTdWNUgxNyIgc3Ryb2tlPSIjMTIxMTBGIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMzUgMjNWMzVIMjMiIHN0cm9rZT0iIzEyMTEwRiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0ic3F1YXJlIiBmaWxsPSJub25lIi8+PC9nPjx0ZXh0IHg9IjMyIiB5PSIxNi41IiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMxMjExMEYiPk1BSU4gU1RBR0U8L3RleHQ+PHRleHQgeD0iMTIyIiB5PSIxNiIgZm9udC1mYW1pbHk9Ik1lbmxvLG1vbm9zcGFjZSIgZm9udC1zaXplPSI4IiBsZXR0ZXItc3BhY2luZz0iMS41IiBmaWxsPSIjNUU1QjU1Ij5TVFVESU88L3RleHQ+PC9zdmc+',
   },
   fsc: {
     mime: 'image/png',
@@ -1227,12 +1485,80 @@ const PRINT_HEADER_LOGO = {
 };
 
 /* ─── Per-brand tab icon ───
-   MSS: the canonical wordmark block, rasterised from the CLAUDE.md SVG.
+   MSS: the v6 Spike, 01_mss/brand/mark/favicons/favicon-32x32.png.
    FSC: the star icon mark from fightstar-championship/brand/logos/PNG/Logo-icon-blue.png. */
 const FAVICONS = {
-  mss: 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABlmWCKAAAB0UlEQVR4Ae2Xv0rDUBTGT5pQjRRbBbEVBBWXivoIDg4+i0/QNxB8ESeLawcFEcXZwX8ZFGMrdXBoRRtr/0StcuHepnAc8+Vkuueeb8j3fb8SaoXfDxnP+dkpNV+bxu3vuLC4RMXiSuQujpeWGcDN9RVtbW6M9JLNZunSux+5j9siZb5wELTMK20OgkCb4z4MBRB3Q/99/8QHYHU+WmH1qEz9zucgPK9ap9v3HtmOPZj9B5/2ywcq2HQ6TXePdTXH/eA0vAvyK3vKR3uyQNulHTXXak9aAGoBckiF/b5mZSylfxW73a62z+WmtDnug2MamGg808luidqhNViFlk2Vw2Mly+cL6oxwGArgx5T79kLun7vx6VlaXVtH8BrpIfFfgcQH4Lgzc+S4Gep12pGIZOaXI+9RLof+C6AY4/pI/E9AAuCigqoTAlCb5foSArhJoeqEANRmub6EAG5SqDohALVZri8hgJsUqk4IQG2W60sI4CaFqhMCUJvl+hICuEmh6oQA1Ga5voQAblKoOiEAtVmuLyGAmxSqTghAbZbrSwjgJoWqEwJQm+X6EgK4SaHqhADUZrm+hABuUqg6IQC1Wa4vIYCbFKpOCEBtlusr8QR8ATxKVsEjoPtZAAAAAElFTkSuQmCC',
+  mss: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAABbUlEQVRYhe2XsU7CUBSGv3MhFpQAbRcTElwdMLI5+ArEB5DFSQffwAfQ3ZFZfAJ9B0cSCDskDg4VRQyBkF4HbTTBFmJLGxO+sWf4vzTn/jdX+Mawi/kzLXIMVIAtouUd6IjWTedl2AAmAAJg23ZJu7N7YD/iUD9aotI1x3EeFWDEHA5Q1e7sDjBSdjF/jshJjOEe25tZ4ymVzWSuEUoJCABiiWUW3oBcMgKMVILhALl00PSyblApK995p+9y0ZyEMggUqJQVh7v+AlEQKOAxHGvaPT33vdN34xFo9zRHV+PQYb+x2v+7FvgPAoFL6G15FNvuh1hmYf58RYBXYovKaqlj+BeWLbHEd2AtkLhA6CX0u7L3diQegbBXdmiBRSW1aL6yIloWBYwSzB8qNN0EBbpK0DdJpQu6KYBhmYUHoBpzfut58HqggImodA1oxRn+lTn92RYbtpk/1Uidz+d51A+WEdAW9K0zGDaAKcAHQG1l8+WFqBwAAAAASUVORK5CYII=',
   fsc: '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',
 };
+
+// The MSS letterhead lockup for light pages: Spike in Stage Black, MAIN STAGE
+// in Archivo wide 800, STUDIO in Geist Mono tracked wide in Rigging Deep.
+// Drawn on a canvas so exports carry the brand type even where the reader
+// doesn't have the fonts (PDF @page boxes and Word can't load web fonts).
+async function renderMssLockup() {
+  await Promise.all([
+    document.fonts.load('800 expanded 40px "Archivo"'),
+    document.fonts.load('500 20px "Geist Mono"'),
+  ]);
+  const SCALE = 4;
+  const H = 24;                       // CSS px height of the lockup
+  const MAIN = '800 14px "Archivo"';
+  const SUB = '500 8px "Geist Mono"';
+  const measure = document.createElement('canvas').getContext('2d');
+  measure.fontStretch = 'expanded';
+  measure.font = MAIN;
+  const mainW = measure.measureText('MAIN STAGE').width;
+  measure.fontStretch = 'normal';
+  measure.font = SUB;
+  measure.letterSpacing = '1.6px';
+  const subW = measure.measureText('STUDIO').width;
+  const markW = 24, gap1 = 8, gap2 = 6;
+  const W = Math.ceil(markW + gap1 + mainW + gap2 + subW + 2);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W * SCALE;
+  canvas.height = H * SCALE;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(SCALE, SCALE);
+  // Spike: the 40-unit mark scaled to 24px
+  ctx.save();
+  ctx.scale(0.6, 0.6);
+  ctx.strokeStyle = '#12110F';
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'square';
+  ctx.beginPath();
+  ctx.moveTo(5, 17); ctx.lineTo(5, 5); ctx.lineTo(17, 5);
+  ctx.moveTo(35, 23); ctx.lineTo(35, 35); ctx.lineTo(23, 35);
+  ctx.stroke();
+  ctx.restore();
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#12110F';
+  ctx.fontStretch = 'expanded';
+  ctx.font = MAIN;
+  ctx.fillText('MAIN STAGE', markW + gap1, 17);
+  ctx.fontStretch = 'normal';
+  ctx.font = SUB;
+  ctx.letterSpacing = '1.6px';
+  ctx.fillStyle = '#5E5B55';
+  ctx.fillText('STUDIO', markW + gap1 + mainW + gap2, 16.5);
+
+  const b64 = canvas.toDataURL('image/png').split(',')[1];
+  return { mime: 'image/png', b64, w: W, h: H };
+}
+
+const lockupReady = renderMssLockup()
+  .then(lockup => { PRINT_HEADER_LOGO.mss = lockup; })
+  .catch(err => console.warn('MSS lockup fell back to the plain SVG:', err));
+
+// @page margin boxes show an image at its natural pixel size, so a hi-res
+// PNG is wrapped in an SVG that pins its display size.
+function pageLogoDataUrl(entry) {
+  if (!entry.w) return 'data:' + entry.mime + ';base64,' + entry.b64;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${entry.w}" height="${entry.h}" viewBox="0 0 ${entry.w} ${entry.h}">` +
+    `<image width="${entry.w}" height="${entry.h}" xlink:href="data:${entry.mime};base64,${entry.b64}"/></svg>`;
+  return 'data:image/svg+xml;base64,' + btoa(svg);
+}
 
 function setFavicon(brand) {
   const link = document.getElementById('favicon');
@@ -1263,11 +1589,17 @@ const btnExportPdf     = document.getElementById('btn-export-pdf');
 const btnExportWord    = document.getElementById('btn-export-word');
 const btnExportXls     = document.getElementById('btn-export-xls');
 const brandSelect      = document.getElementById('brand-select');
+const clientExport     = document.getElementById('client-export');
+const btnClientExport  = document.getElementById('btn-client-export');
+const clientMenu       = document.getElementById('client-export-menu');
+const clientDialog     = document.getElementById('client-dialog');
+const clientTitleblock = document.getElementById('client-titleblock');
 
 let currentFilename = '';
 let currentFileType  = 'md'; // 'md' | 'csv' | 'json' — drives PDF page orientation
 let currentRawText   = ''; // source text of the loaded file, kept for XLS export
 let rootFolderName   = '';   // set when a folder is opened, used for brand auto-detect
+let currentFilePath  = '';   // folder-relative path of the open file ('' for single-file loads)
 
 /* ─── Brand switching ─── */
 const savedBrand = localStorage.getItem('md-viewer-brand');
@@ -1437,7 +1769,7 @@ function csvToGroupedDocumentHtml(header, body) {
     if (rowsInGroup.length === 1) {
       const r = rowsInGroup[0];
       html += '<p>' + restHeader.map((c, i) =>
-        `<strong>${escapeHtml(humanizeKey(c))}:</strong> ${escapeHtml(r[i + 1] ?? '') || '<em>—</em>'}`
+        `<strong>${escapeHtml(humanizeKey(c))}:</strong> ${escapeHtml(r[i + 1] ?? '') || '<em>(blank)</em>'}`
       ).join(' &nbsp;·&nbsp; ') + '</p>';
     } else {
       html += csvRowsToTableHtml(restHeader, rowsInGroup, 1);
@@ -1445,7 +1777,7 @@ function csvToGroupedDocumentHtml(header, body) {
   });
 
   // Small caption noting how the CSV was regrouped, so it's clear this isn't the raw row order
-  html = `<p class="csv-group-note"><em>Grouped by ${escapeHtml(groupLabel)} — ${groupOrder.length} entries, ${body.length} source rows.</em></p>` + html;
+  html = `<p class="csv-group-note"><em>Grouped by ${escapeHtml(groupLabel)}: ${groupOrder.length} entries, ${body.length} source rows.</em></p>` + html;
   return html;
 }
 
@@ -1682,6 +2014,18 @@ function linkifyUrls(root) {
   });
 }
 
+// Markdown joins consecutive lines into one paragraph, so a metadata block of
+// "**Label:** value" lines renders as one run-on sentence. Keep a line break
+// wherever a new line starts with a bold label.
+function breakLabelLines(root) {
+  root.querySelectorAll('p > strong, li > strong').forEach(strong => {
+    const prev = strong.previousSibling;
+    if (!/:\s*$/.test(strong.textContent)) return;
+    if (!prev || prev.nodeType !== Node.TEXT_NODE || !/\n\s*$/.test(prev.nodeValue)) return;
+    strong.parentNode.insertBefore(document.createElement('br'), strong);
+  });
+}
+
 // External links open in a new tab so the viewer (and its loaded folder) isn't lost.
 function decorateLinks(root) {
   root.querySelectorAll('a[href^="http"]').forEach(a => {
@@ -1696,6 +2040,7 @@ function decorateLinks(root) {
 // single-file upload/drop only ever gets a bare filename from the browser,
 // so the path row is hidden rather than showing something misleading.
 function setFilePath(fullPath) {
+  currentFilePath = fullPath || '';
   if (fullPath) {
     filepathLabel.textContent = fullPath;
     filepathLabel.title = fullPath;
@@ -1731,6 +2076,7 @@ function renderDoc(text, filename, type) {
     contentEl.classList.remove('wide');
   }
   mdOutput.innerHTML = cleanHtml;
+  breakLabelLines(mdOutput);
   linkifyUrls(mdOutput);
   decorateLinks(mdOutput);
   attachTableSort(mdOutput);
@@ -1748,6 +2094,8 @@ function renderDoc(text, filename, type) {
   btnExportPdf.style.display = 'block';
   btnExportWord.style.display = 'block';
   btnExportXls.style.display = type === 'csv' ? 'block' : 'none';
+  clientExport.classList.add('visible');
+  clientMenu.querySelector('[data-format="xls"]').style.display = type === 'csv' ? 'block' : 'none';
 }
 
 function fileTypeOf(name) {
@@ -2191,23 +2539,48 @@ btnFolder.addEventListener('click', openFolder);
 btnRefresh.addEventListener('click', refreshFolder);
 
 /* ─── Export PDF ─── */
-btnExportPdf.addEventListener('click', printAsPdf);
+btnExportPdf.addEventListener('click', () => printAsPdf(null));
 
-function printAsPdf() {
+function cssString(s) {
+  return '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+}
+
+// client: null for the internal export, or the details from the client form.
+// Client copies get a title block, no file path or status line, and footers
+// carrying the studio, who it was prepared for, and "Page n of m".
+async function printAsPdf(client) {
+  await lockupReady;
   // Swap document.title so Chrome uses the file's name as the suggested PDF save name.
   const originalTitle = document.title;
-  document.title = currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+  document.title = client ? client.fileStem : docTitleFromFilename();
 
   const brand = document.documentElement.getAttribute('data-brand') || 'mss';
-  const printHeaderMime = PRINT_HEADER_LOGO[brand].mime;
-  const printHeaderSvgB64 = PRINT_HEADER_LOGO[brand].b64;
-  const headerRuleColor = brand === 'fsc' ? '#1A6FE8' : '#BF6B47';
-  const footerColor = brand === 'fsc' ? 'rgba(13,27,46,0.55)' : 'rgba(28,23,18,0.5)';
-  const footerFont = brand === 'fsc' ? "'Barlow Condensed', Arial, sans-serif" : "'Plus Jakarta Sans', sans-serif";
+  const logoUrl = pageLogoDataUrl(PRINT_HEADER_LOGO[brand]);
+  const headerRuleColor = brandVar('--print-rule');
+  const footerColor = brandVar('--print-muted');
+  const footerFont = brand === 'fsc' ? "'Barlow Condensed', Arial, sans-serif" : "'Geist Mono', Menlo, monospace";
+  const footerBox = (content, align) =>
+    '    content: ' + content + ';' +
+    '    font-family: ' + footerFont + ';' +
+    '    font-weight: ' + (brand === 'fsc' ? 300 : 400) + ';' +
+    '    font-size: ' + (brand === 'fsc' ? '8pt' : '7pt') + ';' +
+    (brand === 'fsc' ? '' : '    letter-spacing: 0.04em;') +
+    '    color: ' + footerColor + ';' +
+    '    border-top: 0.5px solid ' + headerRuleColor + ';' +
+    '    padding-top: 4pt;' +
+    '    vertical-align: top;' +
+    (align ? '    text-align: ' + align + ';' : '');
 
-  const escaped = currentFilename
-    .replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"');
+  let left, centre, right;
+  if (client) {
+    left = cssString(client.orgName);
+    centre = cssString(client.footerNote);
+    right = '"Page " counter(page) " of " counter(pages)';
+  } else {
+    left = cssString(currentFilename);
+    centre = '""';
+    right = '"Page " counter(page)';
+  }
 
   const styleEl = document.createElement('style');
   styleEl.id = 'print-footer-style';
@@ -2215,48 +2588,239 @@ function printAsPdf() {
     '@page {' +
     (currentFileType === 'csv' ? ' size: A4 landscape; margin: 1.5cm 1.8cm;' : '') +
     '  @top-left {' +
-    '    content: url("data:' + printHeaderMime + ';base64,' + printHeaderSvgB64 + '");' +
+    '    content: url("' + logoUrl + '");' +
     '    vertical-align: middle;' +
     '    border-bottom: 1px solid ' + headerRuleColor + ';' +
     '    padding-bottom: 5pt;' +
     '  }' +
     '  @top-center { content: ""; border-bottom: 1px solid ' + headerRuleColor + '; padding-bottom: 5pt; }' +
-    '  @top-right  { content: ""; border-bottom: 1px solid ' + headerRuleColor + '; padding-bottom: 5pt; }' +
+    '  @top-right  { content: ' + (client && client.site ? cssString(client.site) : '""') + '; border-bottom: 1px solid ' + headerRuleColor + '; padding-bottom: 5pt;' +
+    '    vertical-align: middle; text-align: right; font-family: ' + footerFont + '; font-size: 7pt; letter-spacing: 0.04em; color: ' + footerColor + '; }' +
     '  @top-left-corner    { content: ""; }' +
     '  @top-right-corner   { content: ""; }' +
-    '  @bottom-center      { content: ""; }' +
     '  @bottom-left-corner { content: ""; }' +
     '  @bottom-right-corner { content: ""; }' +
-    '  @bottom-left {' +
-    '    content: "' + escaped + '";' +
-    '    font-family: ' + footerFont + ';' +
-    '    font-weight: 300;' +
-    '    font-size: 8pt;' +
-    '    color: ' + footerColor + ';' +
-    '    border-top: 0.5px solid ' + headerRuleColor + ';' +
-    '    padding-top: 4pt;' +
-    '    vertical-align: top;' +
-    '  }' +
-    '  @bottom-right {' +
-    '    content: "Page " counter(page);' +
-    '    font-family: ' + footerFont + ';' +
-    '    font-weight: 300;' +
-    '    font-size: 8pt;' +
-    '    color: ' + footerColor + ';' +
-    '    border-top: 0.5px solid ' + headerRuleColor + ';' +
-    '    padding-top: 4pt;' +
-    '    vertical-align: top;' +
-    '  }' +
+    '  @bottom-left {' + footerBox(left) + '  }' +
+    '  @bottom-center {' + (client ? footerBox(centre, 'center') : '    content: "";') + '  }' +
+    '  @bottom-right {' + footerBox(right, 'right') + '  }' +
     '}';
   document.head.appendChild(styleEl);
-  window.print();
+
+  const hidden = [];
+  if (client) {
+    clientTitleblock.innerHTML = clientTitleblockHtml(client);
+    hidden.push(...clientHiddenNodes(mdOutput));
+    hidden.forEach(el => el.classList.add('client-hidden'));
+    document.body.classList.add('client-print');
+  }
+
   window.addEventListener('afterprint', function cleanup() {
     document.title = originalTitle;
     const s = document.getElementById('print-footer-style');
     if (s) s.remove();
+    clientTitleblock.innerHTML = '';
+    hidden.forEach(el => el.classList.remove('client-hidden'));
+    document.body.classList.remove('client-print');
     window.removeEventListener('afterprint', cleanup);
   });
+  window.print();
 }
+
+/* ─── Client documents ───
+   One "Client export" menu offers PDF, Word, and (for CSVs) XLS. Each asks for
+   the title, client, author, date and version first, then exports an official
+   copy: title block, studio and client in the footer, page n of m, and none of
+   the internal chrome (file path, "Status: internal" line, CSV regroup note). */
+const CLIENT_DOC_ORG = {
+  mss: { org: 'Main Stage Studio', site: 'mainstagestudio.co.uk' },
+  fsc: { org: 'FightStar Championship', site: '' },
+};
+
+function docTitleFromFilename() {
+  return currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+}
+
+function slugify(s) {
+  return s.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function isInternalStatus(text) {
+  return /^\s*\*\*Status:?\*\*:?\s*internal\b/im.test(text);
+}
+
+// Elements an official copy leaves out: a leading H1 (the title block replaces
+// it) and the "**Status:** ..." line of a front-matter paragraph. The status
+// line shares its <p> with the other metadata lines, so it is split out into
+// its own span first and only that span is hidden.
+function clientHiddenNodes(root) {
+  const out = [];
+  const first = root.firstElementChild;
+  if (first && first.tagName === 'H1') out.push(first);
+  root.querySelectorAll(':scope > p').forEach(p => {
+    const strong = Array.from(p.children).find(el => el.tagName === 'STRONG' && /^Status:?$/i.test(el.textContent.trim()));
+    if (!strong) return;
+    let wrap = p.querySelector(':scope > .status-line');
+    if (!wrap) {
+      wrap = document.createElement('span');
+      wrap.className = 'status-line';
+      p.insertBefore(wrap, strong);
+      let node = strong;
+      while (node) {
+        const next = node.nextSibling;
+        // The line ends where the next bold label starts, or at a newline
+        if (node !== strong && node.nodeType === Node.ELEMENT_NODE && node.tagName === 'STRONG') break;
+        if (node !== strong && node.nodeType === Node.TEXT_NODE && node.nodeValue.includes('\n')) {
+          const cut = node.nodeValue.indexOf('\n') + 1;
+          wrap.appendChild(document.createTextNode(node.nodeValue.slice(0, cut)));
+          node.nodeValue = node.nodeValue.slice(cut);
+          break;
+        }
+        wrap.appendChild(node);
+        node = next;
+      }
+    }
+    out.push(p.textContent.trim() === wrap.textContent.trim() ? p : wrap);
+  });
+  return out;
+}
+
+function clientMetaRows(client) {
+  return [
+    ['Prepared for', client.client],
+    ['Prepared by', client.by],
+    ['Date', client.date],
+    ['Version', client.version],
+  ].filter(([, v]) => v);
+}
+
+function clientTitleblockHtml(client) {
+  const kicker = client.confidential ? 'Confidential' : client.org;
+  return `<p class="ct-kicker">${escapeHtml(kicker)}</p>` +
+    `<h1 class="ct-title">${escapeHtml(client.title)}</h1>` +
+    '<dl>' + clientMetaRows(client).map(([k, v]) =>
+      `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('') + '</dl>';
+}
+
+// Client name guess: the folder under 02_clients, else the opened folder.
+// Whatever is typed into the form is remembered for that folder.
+function clientKey() {
+  const segs = (currentFilePath || '').split('/').filter(Boolean);
+  const i = segs.indexOf('02_clients');
+  if (i !== -1 && segs[i + 1]) return segs[i + 1];
+  return rootFolderName || '';
+}
+
+function loadJson(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+}
+
+function saveJson(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* private window */ }
+}
+
+function todayLong() {
+  return new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+let pendingClientFormat = null;
+
+function openClientDialog(format) {
+  pendingClientFormat = format;
+  const brand = document.documentElement.getAttribute('data-brand') || 'mss';
+  const docKey = 'md-viewer-docmeta:' + (currentFilePath || currentFilename);
+  const saved = loadJson(docKey, {});
+  const key = clientKey();
+  const h1 = mdOutput.firstElementChild && mdOutput.firstElementChild.tagName === 'H1'
+    ? mdOutput.firstElementChild.textContent.trim() : '';
+
+  document.getElementById('cd-title').value = saved.title || h1 || docTitleFromFilename();
+  document.getElementById('cd-client').value = saved.client
+    || loadJson('md-viewer-client:' + key, '')
+    || (/^(discovery|deliverables|docs?|brand|web)$/i.test(key) ? '' : key.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+  document.getElementById('cd-by').value = saved.by || loadJson('md-viewer-prepared-by', '') || CLIENT_DOC_ORG[brand].org;
+  document.getElementById('cd-date').value = todayLong();
+  document.getElementById('cd-version').value = saved.version || '1.0';
+  document.getElementById('cd-confidential').checked = saved.confidential ?? true;
+  document.getElementById('cd-warn').classList.toggle('visible', isInternalStatus(currentRawText));
+  document.getElementById('cd-go').textContent = 'Export ' + { pdf: 'PDF', word: 'Word', xls: 'XLS' }[format];
+  clientDialog.showModal();
+  document.getElementById('cd-client').focus();
+}
+
+function readClientDialog() {
+  const brand = document.documentElement.getAttribute('data-brand') || 'mss';
+  const { org, site } = CLIENT_DOC_ORG[brand];
+  const v = id => document.getElementById(id).value.trim();
+  const client = {
+    title: v('cd-title') || docTitleFromFilename(),
+    client: v('cd-client'),
+    by: v('cd-by'),
+    date: v('cd-date'),
+    version: v('cd-version'),
+    confidential: document.getElementById('cd-confidential').checked,
+    org: site ? org + '  ·  ' + site : org,
+    orgName: org,
+    site,
+  };
+  const note = [];
+  if (client.client) note.push('Prepared for ' + client.client);
+  if (client.confidential) note.push('Confidential');
+  client.footerNote = note.join('  ·  ');
+  const titleNamesClient = client.client && client.title.toLowerCase().includes(client.client.toLowerCase());
+  client.fileStem = [titleNamesClient ? '' : client.client, client.title, client.version && 'v' + client.version]
+    .filter(Boolean).join(' ');
+  client.fileSlug = slugify(client.fileStem) || slugify(docTitleFromFilename());
+
+  saveJson('md-viewer-docmeta:' + (currentFilePath || currentFilename), {
+    title: client.title, client: client.client, by: client.by,
+    version: client.version, confidential: client.confidential,
+  });
+  if (client.client) saveJson('md-viewer-client:' + clientKey(), client.client);
+  if (client.by) saveJson('md-viewer-prepared-by', client.by);
+  return client;
+}
+
+function closeClientMenu() {
+  clientMenu.classList.remove('open');
+  btnClientExport.setAttribute('aria-expanded', 'false');
+}
+
+btnClientExport.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const open = !clientMenu.classList.contains('open');
+  clientMenu.classList.toggle('open', open);
+  btnClientExport.setAttribute('aria-expanded', String(open));
+});
+clientMenu.addEventListener('click', (e) => {
+  const item = e.target.closest('[data-format]');
+  if (!item) return;
+  closeClientMenu();
+  openClientDialog(item.dataset.format);
+});
+document.addEventListener('click', (e) => {
+  if (!clientExport.contains(e.target)) closeClientMenu();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeClientMenu();
+});
+document.getElementById('cd-cancel').addEventListener('click', () => clientDialog.close());
+
+clientDialog.querySelector('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const client = readClientDialog();
+  const format = pendingClientFormat;
+  clientDialog.close();
+  // Let the dialog close before the print preview opens
+  setTimeout(() => {
+    const run = format === 'pdf' ? printAsPdf(client)
+      : format === 'word' ? exportWord(client)
+      : Promise.resolve().then(() => exportXls(client));
+    run.catch(err => {
+      console.error(err);
+      alert('Client export failed: ' + err.message);
+    });
+  }, 50);
+});
 
 /* ─── Export Word (.docx) ───
    Client-side, via docx.js: the rendered #md-output DOM is walked and rebuilt
@@ -2311,19 +2875,21 @@ function docxTheme() {
   const brand = document.documentElement.getAttribute('data-brand') || 'mss';
   return {
     brand,
-    headingFont: firstFontFamily(brandVar('--heading-font')),
+    headingFont: firstFontFamily(brandVar('--docx-heading-font')),
     headingCaps: brandVar('--heading-transform') === 'uppercase',
-    bodyFont: firstFontFamily(brandVar('--body-font')),
+    headingBold: brand === 'mss',
+    bodyFont: firstFontFamily(brandVar('--docx-body-font')),
     text: docxHex(brandVar('--print-text')),
     accent: docxHex(brandVar('--print-accent')),
+    rule: docxHex(brandVar('--print-rule')),
     thBg: docxHex(brandVar('--header-bg')),   // header row = the brand's header bar
     thText: docxHex(brandVar('--header-text')),
     codeBg: docxHex(brandVar('--print-code-bg')),
     quoteBg: docxHex(brandVar('--print-quote-bg')),
     border: docxHex(brandVar('--print-border')),
     borderSoft: docxHex(brandVar('--print-border-soft')),
-    zebra: docxHex(hexToRgbaString(brandVar('--print-accent'), 0.07)),
-    muted: docxHex(brand === 'fsc' ? 'rgba(13,27,46,0.55)' : 'rgba(28,23,18,0.5)'),
+    zebra: docxHex(brand === 'fsc' ? hexToRgbaString(brandVar('--print-accent'), 0.07) : 'rgba(18,17,15,0.035)'),
+    muted: docxHex(brandVar('--print-muted')),
   };
 }
 
@@ -2446,6 +3012,7 @@ function docxBlock(el, theme, ctx) {
       children: docxInlineRuns(el, theme, {
         size: DOCX_HEADING_SIZES[tag],
         font: theme.headingFont,
+        bold: theme.headingBold,
         allCaps: theme.headingCaps,
       }),
       spacing: { before: tag === 'H1' ? 0 : 280, after: tag === 'H1' ? 240 : 140 },
@@ -2540,7 +3107,8 @@ function docxBlocks(container, theme, ctx) {
 // Letterhead logo, as PNG bytes: the FSC asset is already a PNG; the MSS SVG
 // wordmark is rasterised through a canvas (Word can't place SVG reliably).
 async function docxLogoRun(brand) {
-  const { mime, b64 } = PRINT_HEADER_LOGO[brand];
+  await lockupReady;
+  const { mime, b64, w, h } = PRINT_HEADER_LOGO[brand];
   const img = new Image();
   img.src = 'data:' + mime + ';base64,' + b64;
   await img.decode();
@@ -2559,42 +3127,117 @@ async function docxLogoRun(brand) {
   return new docx.ImageRun({
     data,
     transformation: {
-      width: Math.round(img.naturalWidth * 0.9),
-      height: Math.round(img.naturalHeight * 0.9),
+      width: Math.round((w || img.naturalWidth) * 0.9),
+      height: Math.round((h || img.naturalHeight) * 0.9),
     },
   });
 }
 
 btnExportWord.addEventListener('click', () => {
-  exportWord().catch(err => {
+  exportWord(null).catch(err => {
     console.error(err);
     alert('Word export failed: ' + err.message);
   });
 });
 
-async function exportWord() {
+// Client title block for Word: kicker, title, then a borderless meta table.
+function docxClientTitleblock(client, theme) {
+  const none = { style: docx.BorderStyle.NONE, size: 0, color: 'FFFFFF' };
+  const rows = clientMetaRows(client);
+  return [
+    new docx.Paragraph({
+      children: [new docx.TextRun({ text: client.confidential ? 'Confidential' : client.org, allCaps: true, size: 16, color: theme.muted, characterSpacing: 30 })],
+      spacing: { before: 120, after: 120 },
+    }),
+    new docx.Paragraph({
+      children: [new docx.TextRun({ text: client.title, font: theme.headingFont, bold: theme.headingBold, allCaps: theme.headingCaps, size: 48 })],
+      spacing: { after: 280 },
+    }),
+    new docx.Table({
+      width: { size: 100, type: docx.WidthType.PERCENTAGE },
+      borders: { top: none, bottom: none, left: none, right: none, insideHorizontal: none, insideVertical: none },
+      rows: [
+        new docx.TableRow({ children: rows.map(([k]) => new docx.TableCell({
+          borders: { top: none, bottom: none, left: none, right: none },
+          children: [new docx.Paragraph({ children: [new docx.TextRun({ text: k, allCaps: true, size: 14, color: theme.muted, characterSpacing: 30 })] })],
+        })) }),
+        new docx.TableRow({ children: rows.map(([, v]) => new docx.TableCell({
+          borders: { top: none, bottom: { style: docx.BorderStyle.SINGLE, size: 4, color: theme.border }, left: none, right: none },
+          margins: { bottom: 160 },
+          children: [new docx.Paragraph({ children: [new docx.TextRun({ text: v, size: 20 })] })],
+        })) }),
+      ],
+    }),
+    new docx.Paragraph({ children: [], spacing: { after: 360 } }),
+  ];
+}
+
+// client: null for the internal export, or the details from the client form.
+async function exportWord(client) {
   const theme = docxTheme();
-  const title = currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+  const title = client ? client.title : docTitleFromFilename();
 
   // Work on a clone with the screen-only chrome stripped
   const clone = mdOutput.cloneNode(true);
   clone.querySelectorAll('.json-raw-toggle, .json-raw, .sort-arrow').forEach(el => el.remove());
-
-  const ctx = { olInstance: 1 };
-  const children = [
-    new docx.Paragraph({
-      children: [await docxLogoRun(theme.brand)],
-      border: { bottom: { style: docx.BorderStyle.SINGLE, size: 12, color: theme.accent, space: 6 } },
-      spacing: { after: 360 },
-    }),
-    ...docxBlocks(clone, theme, ctx),
-  ];
+  if (client) {
+    clone.querySelectorAll('.csv-group-note').forEach(el => el.remove());
+    clientHiddenNodes(clone).forEach(el => el.remove());
+    clone.querySelectorAll('p').forEach(p => { if (!p.textContent.trim() && !p.querySelector('img, input')) p.remove(); });
+  }
 
   // CSVs export landscape, same as the PDF path
   const landscape = currentFileType === 'csv';
+  const margin = landscape
+    ? { top: 850, bottom: 850, left: 1020, right: 1020 }
+    : { top: 1134, bottom: 1134, left: 1417, right: 1417 };
+  // A4 in twips, less the side margins: where the footer's centre and right tabs sit
+  const textWidth = (landscape ? 16838 : 11906) - margin.left - margin.right;
+
+  const ctx = { olInstance: 1 };
+  const logo = new docx.Paragraph({
+    ...(client && client.site ? { tabStops: [{ type: docx.TabStopType.RIGHT, position: textWidth }] } : {}),
+    children: [
+      await docxLogoRun(theme.brand),
+      ...(client && client.site ? [new docx.TextRun({ text: '\t' + client.site, size: 15, color: theme.muted })] : []),
+    ],
+    border: { bottom: { style: docx.BorderStyle.SINGLE, size: 12, color: theme.rule, space: 6 } },
+    spacing: { after: client ? 0 : 360 },
+  });
+  const children = client
+    ? [...docxClientTitleblock(client, theme), ...docxBlocks(clone, theme, ctx)]
+    : [logo, ...docxBlocks(clone, theme, ctx)];
+
+  const footerRun = (text) => new docx.TextRun({ text, size: 15, color: theme.muted });
+  const footer = client
+    ? new docx.Paragraph({
+        tabStops: [
+          { type: docx.TabStopType.CENTER, position: Math.round(textWidth / 2) },
+          { type: docx.TabStopType.RIGHT, position: textWidth },
+        ],
+        border: { top: { style: docx.BorderStyle.SINGLE, size: 4, color: theme.rule, space: 4 } },
+        children: [
+          footerRun(client.orgName),
+          footerRun('\t' + client.footerNote),
+          new docx.TextRun({ children: ['\tPage ', docx.PageNumber.CURRENT, ' of ', docx.PageNumber.TOTAL_PAGES], size: 15, color: theme.muted }),
+        ],
+      })
+    : new docx.Paragraph({
+        alignment: docx.AlignmentType.RIGHT,
+        border: { top: { style: docx.BorderStyle.SINGLE, size: 4, color: theme.rule, space: 4 } },
+        children: [
+          new docx.TextRun({ text: currentFilename + '   ·   ', size: 16, color: theme.muted }),
+          new docx.TextRun({ children: ['Page ', docx.PageNumber.CURRENT], size: 16, color: theme.muted }),
+        ],
+      });
 
   const doc = new docx.Document({
     title,
+    ...(client ? {
+      creator: client.by || CLIENT_DOC_ORG[theme.brand].org,
+      subject: client.client ? 'Prepared for ' + client.client : undefined,
+      description: [client.date, client.version && 'Version ' + client.version, client.confidential && 'Confidential'].filter(Boolean).join(', '),
+    } : {}),
     styles: {
       default: {
         document: { run: { font: theme.bodyFont, size: 21, color: theme.text } },
@@ -2616,23 +3259,12 @@ async function exportWord() {
       properties: {
         page: {
           ...(landscape ? { size: { orientation: docx.PageOrientation.LANDSCAPE } } : {}),
-          margin: landscape
-            ? { top: 850, bottom: 850, left: 1020, right: 1020 }
-            : { top: 1134, bottom: 1134, left: 1417, right: 1417 },
+          margin,
         },
       },
-      footers: {
-        default: new docx.Footer({
-          children: [new docx.Paragraph({
-            alignment: docx.AlignmentType.RIGHT,
-            border: { top: { style: docx.BorderStyle.SINGLE, size: 4, color: theme.accent, space: 4 } },
-            children: [
-              new docx.TextRun({ text: currentFilename + '   ·   ', size: 16, color: theme.muted }),
-              new docx.TextRun({ children: ['Page ', docx.PageNumber.CURRENT], size: 16, color: theme.muted }),
-            ],
-          })],
-        }),
-      },
+      // Client copies carry the letterhead on every page; internal ones on page one
+      ...(client ? { headers: { default: new docx.Header({ children: [logo] }) } } : {}),
+      footers: { default: new docx.Footer({ children: [footer] }) },
       children,
     }],
   });
@@ -2641,7 +3273,7 @@ async function exportWord() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = title.trim().replace(/\s+/g, '-').toLowerCase() + '.docx';
+  a.download = (client ? client.fileSlug : title.trim().replace(/\s+/g, '-').toLowerCase()) + '.docx';
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -2651,20 +3283,56 @@ async function exportWord() {
 /* ─── Export XLS (CSV only) ─── */
 btnExportXls.addEventListener('click', () => {
   try {
-    exportXls();
+    exportXls(null);
   } catch (err) {
     console.error(err);
     alert('Excel export failed: ' + err.message);
   }
 });
 
-function exportXls() {
-  const title = currentFilename.replace(/\.(md|csv|json)$/i, '').replace(/[-_]/g, ' ');
+// client: null for the internal export, or the details from the client form.
+// The free SheetJS build can't style cells, so the client copy is made official
+// with a title block above the data, a filter on the header row, sized columns,
+// a closing line, and the workbook's document properties.
+function exportXls(client) {
+  const title = client ? client.title : docTitleFromFilename();
   const rows = parseCSV(currentRawText);
-  const ws = XLSX.utils.aoa_to_sheet(rows);
+  if (!client) {
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, title.trim().replace(/\s+/g, '-').toLowerCase() + '.xlsx');
+    return;
+  }
+
+  const width = Math.max(1, ...rows.map(r => r.length));
+  const head = [[client.title]];
+  clientMetaRows(client).forEach(([k, v]) => head.push([k, v]));
+  if (client.confidential) head.push(['Confidential']);
+  head.push([]);
+  const dataStart = head.length;           // 0-based row of the CSV header
+  const aoa = [...head, ...rows, [], [client.org]];
+
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: Math.max(0, width - 1) } }];
+  if (rows.length) {
+    ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s: { r: dataStart, c: 0 }, e: { r: dataStart + rows.length - 1, c: width - 1 } }) };
+  }
+  ws['!cols'] = Array.from({ length: width }, (_, c) => ({
+    wch: Math.min(60, Math.max(10, ...rows.map(r => String(r[c] ?? '').length + 2), c < 2 ? 14 : 0)),
+  }));
+
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  XLSX.writeFile(wb, title.trim().replace(/\s+/g, '-').toLowerCase() + '.xlsx');
+  wb.Props = {
+    Title: client.title,
+    Subject: client.client ? 'Prepared for ' + client.client : '',
+    Author: client.by,
+    Company: CLIENT_DOC_ORG[document.documentElement.getAttribute('data-brand') || 'mss'].org,
+    CreatedDate: new Date(),
+  };
+  const sheetName = client.title.replace(/[\[\]:*?\/\\]/g, ' ').trim().slice(0, 31) || 'Sheet1';
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  XLSX.writeFile(wb, client.fileSlug + '.xlsx');
 }
 </script>
 </body>
