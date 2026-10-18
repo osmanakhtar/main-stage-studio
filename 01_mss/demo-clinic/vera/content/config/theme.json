@@ -36,7 +36,7 @@
     "frame": "no inset frame; a 64×2px gold rule under the eyebrow/headline carries the accent",
     "eyebrow": "Hanken Grotesk 600, uppercase, .24em tracking, gold",
     "footerOnEverySlide": true,
-    "footer": "leaf mark + lowercase 'vera' wordmark in Fraunces, bottom-left; swipe indicator or CTA bottom-right"
+    "footer": "'vera.' wordmark (navy or bone word, gold point; brand/logo/), bottom-left; swipe indicator or CTA bottom-right"
   },
   "account": {
     "name": "Vera Aesthetics",
@@ -48,7 +48,7 @@
   "footer": {
     "text": "vera",
     "accent": "",
-    "note": "Lowercase wordmark only. The renderer colours footer.accent with palette.primary, which is navy-on-navy (invisible) for Vera, and the brand's footer lockup is the mark plus 'vera' anyway."
+    "note": "Lowercase wordmark only. The renderer colours footer.accent with palette.primary, which is navy-on-navy (invisible) for Vera, and the brand's footer lockup is the 'vera.' wordmark (gold point) anyway."
   },
   "preview": {
     "pageBg": "#F5F2EC",

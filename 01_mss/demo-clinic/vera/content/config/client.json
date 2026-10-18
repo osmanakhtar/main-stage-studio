@@ -23,7 +23,7 @@
     "widthPct": 14,
     "opacity": 0.95,
     "defaultOn": true,
-    "note": "Bone leaf mark (light raster) for the logo bug on photo/still slides — those carry a navy scrim, so the bone version reads. On the navy/bone/gold card text slides the mark is already part of the template footer. ffmpeg has no SVG decoder, so the overlay must use the PNG raster (assets/vera-mark.png is the navy variant for light backgrounds; assets/vera-mark.svg is the editable source)."
+    "note": "Bone \"v.\" monogram (light raster, built by brand/logo/build-logo.py) for the logo bug on photo/still slides — those carry a navy scrim, so the bone version reads. On the navy/bone/gold card text slides the mark is already part of the template footer. ffmpeg has no SVG decoder, so the overlay must use the PNG raster (assets/vera-mark.png is the navy variant for light backgrounds; assets/vera-mark.svg is the editable source)."
   },
   "topicLabel": "Service",
   "treatments": [

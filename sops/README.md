@@ -13,3 +13,4 @@ template live in `~/workspace/sops/`.
 | [SOP-MSS-006](sop-mss-006-v6-site-prototype.md) | Building the v6 site prototype and publishing it to Stage | 2026-10-12 |
 | [SOP-MSS-007](sop-mss-007-cue-films.md) | Cue films for the MSS site: capture the real tools, render, re-shoot | 2026-10-12 (Platform script not yet run whole) |
 | [SOP-MSS-008](sop-mss-008-document-viewer-client-export.md) | Document viewer: reading workspace docs and client exports (PDF, Word, XLS) | Not yet run by hand (automated run 2026-10-18) |
+| [SOP-MSS-009](sop-mss-009-vera-logo-build.md) | Vera logo: rebuild every logo file from the generator script | 2026-10-18 |

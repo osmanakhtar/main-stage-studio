@@ -29,7 +29,7 @@ for f in os.listdir(os.path.join(VERA, 'assets/webp')):
     shutil.copy(os.path.join(VERA, 'assets/webp', f), os.path.join(HERE, 'assets', f))
 shutil.copy(os.path.join(VERA, 'assets/vera-mark.svg'), os.path.join(HERE, 'assets/vera-mark.svg'))
 
-MARK = '<svg width="30" height="30" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M12 34 C12 20, 24 10, 36 12 C36 26, 24 36, 12 34 Z" stroke="currentColor" stroke-width="2.2"/><path d="M18 30 C24 24, 30 20, 34 16" stroke="#C6A667" stroke-width="2.2" stroke-linecap="round"/></svg>'
+MARK = open(os.path.join(VERA, 'brand/logo/vera-logo.svg'), encoding='utf-8').read().strip().replace('<svg ', '<svg height="34" style="width:auto;display:block" ', 1)
 
 CSS = """
 :root{--bone:#F5F2EC;--navy:#1E2B4D;--ink:#141A2B;--stone:#DCD9D2;--gold:#C6A667;--muted:#4E5568;
@@ -92,7 +92,7 @@ input[type=text],input[type=email],input[type=tel]{min-height:48px;padding:0 14p
 footer{border-top:1px solid var(--stone);padding:44px 0 56px;font-size:14px;color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px}
 .demo{color:var(--navy);font-weight:500}
-@media(max-width:860px){.hero .wrap,.split{grid-template-columns:1fr}.three{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:8px}nav{gap:14px;font-size:14px}header .wrap{padding-top:12px;padding-bottom:12px}}
+@media(max-width:860px){.hero .wrap,.split{grid-template-columns:1fr}.three{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:8px}nav{gap:14px;font-size:14px}header .wrap{padding-top:12px;padding-bottom:12px}.brand svg{height:26px}}
 """
 
 PAGES = [('index', 'Home'), ('treatments', 'Treatments'), ('fresh-face-assessment', 'Fresh-Face Assessment'), ('guide-opt-in', 'Free guide')]
@@ -107,7 +107,7 @@ def page(slug, title, body):
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>{CSS}</style></head><body>
 <header data-stage-section="header"><div class="wrap">
-<a class="brand" href="index.html">{MARK}<b>vera</b></a>
+<a class="brand" href="index.html">{MARK}</a>
 <nav aria-label="Main">{nav}<a href="guide-opt-in.html"{' aria-current="page"' if slug == 'guide-opt-in' else ''}>Free guide</a><a class="btn" href="fresh-face-assessment.html">Book an assessment</a></nav>
 </div></header>
 <main>{body}</main>

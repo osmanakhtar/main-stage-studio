@@ -1,4 +1,4 @@
-# Vera Aesthetics — Studio Client Onboarding
+# Vera Aesthetics: Studio Client Onboarding
 
 *Created: 24 July 2026*
 *Status: ONBOARDED. Vera runs as a Studio client (`--client vera`). Config complete, boot verified, slide rendering verified against the brand system.*
@@ -25,11 +25,11 @@ Vera is now a **client config folder**, not new code, exactly as the architectur
 | `campaign-types.json` | the clinic's real axes | `brand`, `service`, `multi-service`, `seasonal`. Added 24 Jul to kill the FSC vocabulary leak, see §6 |
 
 **Also created:**
-- `brand/fonts/` — **Fraunces** and **Hanken Grotesk** as OFL variable TTFs, with their licences, wired up through `theme.fonts.files`. Neither family is installed on the machine, so until this was done the slide renderer silently fell back to Georgia and system-ui. Nothing errored; the slides were simply not in Vera's typography. Font files are embedded as data URIs at render time, following the FSC pattern.
-- `assets/vera-mark.svg` — the leaf mark from brand identity §7, as a real file.
-- `assets/vera-mark.png` + `assets/vera-mark-light.png` — 512px rasters (navy and bone). **Required**: ffmpeg has no SVG decoder, so the logo bug fails on every media slide if pointed at the SVG. The bone variant is the one wired up, because media slides carry a navy scrim.
-- `assets/webp/` — q=90 WebP derivatives of all 14 assets. See §5.
-- `content/assets/stills/` — 8 symlinks to the IG-native 4:5 crops and the two macro shots (now the WebP versions). The Carousel Builder discovers stills by scanning fixed folders (`brand/photos`, `content/assets-stills`, `content/assets/stills` relative to the project root), so the assets had to live in one of those. Symlinks avoid duplicating the files.
+- `brand/fonts/`: **Fraunces** and **Hanken Grotesk** as OFL variable TTFs, with their licences, wired up through `theme.fonts.files`. Neither family is installed on the machine, so until this was done the slide renderer silently fell back to Georgia and system-ui. Nothing errored; the slides were simply not in Vera's typography. Font files are embedded as data URIs at render time, following the FSC pattern.
+- `assets/vera-mark.svg`: originally the leaf mark; since 18 Oct the "v." monogram, written by `brand/logo/build-logo.py` (see §7a).
+- `assets/vera-mark.png` + `assets/vera-mark-light.png`: 512px rasters (navy and bone). **Required**: ffmpeg has no SVG decoder, so the logo bug fails on every media slide if pointed at the SVG. The bone variant is the one wired up, because media slides carry a navy scrim.
+- `assets/webp/`: q=90 WebP derivatives of all 14 assets. See §5.
+- `content/assets/stills/`: 8 symlinks to the IG-native 4:5 crops and the two macro shots (now the WebP versions). The Carousel Builder discovers stills by scanning fixed folders (`brand/photos`, `content/assets-stills`, `content/assets/stills` relative to the project root), so the assets had to live in one of those. Symlinks avoid duplicating the files.
 
 **Registered** in `scripts/content-clients.json`:
 ```json
@@ -74,9 +74,9 @@ The real slide renderer is `scripts/slides/graphics.js`. Two structural facts dr
 
 ### Config fixes already applied (these were unambiguous wins)
 
-- `slideRules.headlineColor: "#F5F2EC"` — **without this every headline was invisible**, because the renderer defaults the headline to `palette.primary`. This was the single worst defect and is now fixed.
-- `palette.textMuted: "#C2BEB5"` — warm muted bone for kicker, body and footer, replacing the default cool grey.
-- `footer.accent: ""` — the renderer colours the accent word with `palette.primary` (invisible). Vera's footer lockup is the lowercase wordmark anyway.
+- `slideRules.headlineColor: "#F5F2EC"`: **without this every headline was invisible**, because the renderer defaults the headline to `palette.primary`. This was the single worst defect and is now fixed.
+- `palette.textMuted: "#C2BEB5"`: warm muted bone for kicker, body and footer, replacing the default cool grey.
+- `footer.accent: ""`: the renderer colours the accent word with `palette.primary` (invisible). Vera's footer lockup is the lowercase wordmark anyway.
 
 ### Cosmetic deviations from the hand-built spec (not blocking)
 
@@ -144,6 +144,19 @@ Vera's vocabulary: `brand` (the 12-post POC shape), `service`, `multi-service`, 
 - The Source block is YouTube-channel-only, which is the FSC/Football sourcing model. Vera has no video source at all.
 - `review-app.js:4226` keys a People-screen role off the literal `'fighter'`.
 - **The Campaign Builder never calls `/api/campaign/list`**, so you cannot see whether a campaign already exists. The endpoint is there; nothing renders it.
+
+## 7a. Logo replaced (18 Oct 2026)
+
+The leaf placeholder is retired. The logo is now **"vera."**, outlined Fraunces with a gold point; concept, construction and rules in `vera-brand-identity.md` §7.
+
+- **Source of truth:** `brand/logo/build-logo.py` (needs fonttools and rsvg-convert). It writes the SVG masters and PNGs, then copies `assets/vera-mark.png`, `vera-mark-light.png` and `vera-mark.svg` (now the "v." monogram, same filenames so no Studio config changed) and the studio-platform tenant's `brand/logo-header.png` (bone, console), `logo-email.png` (navy) and `logo-footer.png` (bone).
+- **Demo site:** header wordmark swapped on all five pages and in `site/build-site.py`; 26px on screens under 860px.
+- **Verified:** contact sheet viewed at large and favicon sizes; site header screenshotted at 1440 and 390. At 16px the point mostly disappears; 32px up holds.
+- **Not yet verified:** the monogram as the logo bug on a rendered Studio still or reel, and the logo-reveal and logo-cta finishing idents.
+- **Known, not caused by this:** the site nav already overflowed at 390px before the change.
+- **Open:** Osman has not reviewed the direction yet.
+
+**Next action:** render one Vera still and one reel in Studio (`--client vera`) and look at the "v." bug and the end idents; then fix the site nav at phone width.
 
 ## 7. Resume prompt
 

@@ -6,7 +6,7 @@
     "widthPct": 12,
     "opacity": 0.95,
     "defaultOn": true,
-    "note": "Bone leaf mark (light raster), bottom-right — reads over the soft/warm clinic grades. ffmpeg has no SVG decoder, so the overlay uses the PNG (assets/vera-mark.svg is the editable source; assets/vera-mark.png is the navy variant)."
+    "note": "Bone \"v.\" monogram (light raster, built by brand/logo/build-logo.py), bottom-right — reads over the soft/warm clinic grades. ffmpeg has no SVG decoder, so the overlay uses the PNG (assets/vera-mark.svg is the editable source; assets/vera-mark.png is the navy variant)."
   },
   "colorGrades": [
     {
