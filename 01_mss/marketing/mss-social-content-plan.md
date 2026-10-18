@@ -96,6 +96,8 @@ MSS itself is not a regulated business, so the compliance load here is much ligh
 
 ## 8. Open decisions before this runs
 
+- **18 Oct 2026:** the v6 launch visuals are planned in `mss-v6-launch-asset-plan.md`: the Cue Sheet concept, aspect ratio per placement, 15 cues, and no Higgsfield (code-rendered work plus up to £35 of pay-per-use generation). It is a proposal, waiting on Osman's answers in its section 7.
+
 - [ ] Higgsfield credit top-up — needed before pillar 5 (brand/visual) or any Instagram cadence is possible at all
 - [ ] Confirm 8+8/month cadence is sustainable alongside client delivery, or scale down for month one
 - [x] LinkedIn company page vs. Osman's personal profile as the primary posting surface: **resolved 18 Aug 2026.** Personal profile leads (founder POV, teardowns, philosophy; where a regulated-business prospect actually checks credibility). Company page is a slower-moving mirror, carrying only Process transparency, Case study/proof, and Studio philosophy in studio voice, plus Brand/visual once unblocked. A content pipeline for the page is built at `content-engine/` (SOP-MSS-003); the personal-profile stream stays manual for now.
