@@ -67,8 +67,7 @@ publishes, the same way Nafisa's emails work.
 
 | Table | Holds | Rules |
 |---|---|---|
-| `practitioner` | person who can be booked: name, staff login (if any), treatment keys they deliver, active | a resource; rooms later if needed |
-| `working_pattern` | per practitioner: weekday, start, end, location, valid from and to | |
+| ~~`practitioner`, `working_pattern`~~ | **Config, not tables (slice 1, 20 Oct 2026):** practitioners and their working hours live in `tenants/<slug>/booking.json` with the rule table, so every booking points at the config version whose hours applied, and a change is a new version like a price change | |
 | `diary_exception` | per practitioner: closed or extra time, start, end, reason | holidays, training |
 | `booking` | person, treatment key, practitioner, location, `tstzrange` start to end, status (`held`, `confirmed`, `attended`, `no_show`, `cancelled`), source (`online`, `staff`, `faces`), config version id, **snapshot** (price, deposit, policy, rule ids fired, documents required, as they were), cancellation reason and actor | exclusion constraint: no two `held` or `confirmed` bookings overlap for one practitioner; a hold expires after 10 minutes |
 | `payment` | booking, kind (`deposit`, `fee`, `refund`), amount in pence, currency, Stripe payment intent or refund id, status mirrored from Stripe, rule id that set the amount, actor | never `captured` without a Stripe id; a £0 deposit writes no payment row at all |
@@ -106,7 +105,10 @@ NSF-001  no-show                             -> deposit kept; fee only if a card
 The numbers above are placeholders to show the shape; every value comes from Nafisa (section 13). Rules are
 evaluated by a pure function of (config version, treatment, person's booking history, now passed in), which returns
 the requirements, the deposit and the rule ids. Staff bookings go through the same function (BKG-003); staff can
-override a requirement only with a reason, recorded as an event naming the rule overridden.
+override a requirement only with a reason, recorded as an event naming the rule overridden. **Super user (Nafisa,
+20 Oct):** the owner can override any booking rule herself (days, hours, slots, buffers, deposits, requirements),
+always with a reason and an event; no call to MSS needed. Example: online toxin booking only on the prescriber's
+day (Wednesday); Nafisa books a returning client on a Friday.
 
 ## 6. Availability
 
@@ -180,7 +182,8 @@ On cutover day every "Book" link on puremed.uk (now Faces `treatmentId` links, m
 ## 9. Messages and the calendar
 
 **Messages** from care@ through the existing Gmail sending: confirmation (with the manage link and, if needed, the
-signing link), reminder 48 hours before, moved, cancelled, deposit refunded. They are service messages, not marketing
+signing link), reminders 7 days and 48 hours before (always sent; while forms are unsigned they carry the forms
+link, signed documents spec section 4), moved, cancelled, deposit refunded. They are service messages, not marketing
 (DPIA B8.5): sent regardless of marketing consent, never to a suppressed address, never carrying marketing content.
 Whether they name the treatment is the clinic's B8.6 answer, held as a tenant setting. Nafisa approves each template
 in the console, as with campaign emails.
@@ -217,11 +220,34 @@ diary must move without losing or doubling a booking (BKG-011).
 
 ## 11. Slices, in build order
 
-1. **Catalogue and diary config**: `treatments.json` schema, `rules/booking.json`, practitioners, working patterns,
+1. **Catalogue and diary config** (**started 20 Oct 2026**, branch `booking-slice-1`, worktree `.worktrees/sp-booking-1`, not pushed: catalogue fields on `treatments.json`, `booking.json` with practitioners, hours and rules, publish validation, the pure evaluator `src/modules/booking/rules.ts` with owner overrides (super user) and a never-overridable age rule, 18 tests on Vera, draft `service/rule-trace.json` for Osman to ratify, `make trace` 0 fail 4 warn. Console **Settings, Booking** built the same day (880107b): owner edits treatments, practitioners with weekly hours, and rules; each save publishes a config version and logs `booking.settings_changed`; editors view only; rule ids never reused; 16 HTTP tests, 390 and 1440 checked. **Still to do:** Osman ratifies `rule-trace.json`; merge and ship; PureMed's values (B3 to B5, B10)): `treatments.json` schema, `rules/booking.json`, practitioners, working patterns,
    exceptions, console Settings to edit and publish; the rule evaluator as a pure function with tests. Write and
    ratify a `rule-trace.json` for studio-platform here, so `make trace` can check every later slice.
-2. **Availability and the staff diary**: the pure availability function, day and week views, staff booking with no
+2. **Availability and the staff diary** (**built 20 Oct 2026** on `booking-slice-1` in `.worktrees/sp-booking-1`,
+   uncommitted at close of build, not pushed): the pure availability function, day and week views, staff booking with no
    payment, move, cancel, attended, no-show; events and `person_facts`.
+   What landed: `src/modules/booking/availability.ts` (pure: weekly hours plus open exceptions minus closed ones, buffers,
+   the 15-minute grid from local midnight, notice, horizon, allowed-days rules, inactive practitioners never offered;
+   `slotProblems` explains a refused start with a traceable id), `diary.ts` (book, move, cancel, outcome, time off; an
+   override is an event naming the rule; a per-practitioner advisory lock stands in for slice 3's exclusion constraint),
+   `facts.ts` (next booking, last visit, folded from booking events, computed on read: no table), migration
+   `014_booking.sql` (`booking`, `diary_exception`; 013 left for signed documents), console **Diary** (nav item once
+   practitioners exist), book, booking page, time off, and bookings on the person page; `npm run sandbox:diary`.
+   Tests: 31 availability (both clock-change days), 25 diary over the database and HTTP; full suite 328 pass
+   (`consultation.test.ts` can't load from a worktree: it reads the PureMed site by a relative path). `make trace` on the
+   draft contract, now covering slices 1 and 2: 0 fail, 4 warn. Checked at 390 and 1440 on the Vera sandbox.
+   **Calls made here, for Osman to confirm:** (a) buffers keep appointments apart but needn't fit inside working hours;
+   (b) the owner can book over hours, a closed exception, a buffer or the grid with a reason; nobody can book over another
+   appointment, an inactive practitioner or one who doesn't deliver the treatment; editors override only rules marked
+   staff-overridable; (c) a late cancellation is one the client asked for, at a notice whose policy row refunds under
+   100%; it is counted all-time, because the rule table has no window (B5 suggests 12 months: add a field if wanted);
+   (d) attended and no-show can only be marked once the start time has passed, and can't be undone yet; (e) moving
+   re-runs the rules at the new time (so an earlier override must be given again), keeps price, deposit and policy;
+   (f) "seen before" counts attended bookings and recorded treatments, not Faces or Acuity history (staff override).
+   **Before it ships:** `platform-facts.json` and the DPIA footprint don't yet describe `booking` and `diary_exception`
+   (slice 9, but rule 4 of the repo says re-read at a new migration); PureMed's workflow files still stop series only on
+   `booking.created` and `booking.recorded_manually` (Vera's now include `booking.confirmed`, as do campaign results);
+   min notice applies to staff bookings too, so the desk can't book a same-day consultation without the owner.
 3. **Holds and commit**: `held` bookings, expiry, the exclusion constraint, the concurrent-commit test ported.
 4. **Stripe in the sandbox**: connect (B1), Payment Intents, the Payment Element, webhooks into `stripe_event`,
    refunds from policy, the nightly comparison; Stripe test cards including a 3D Secure one and a decline.
@@ -261,7 +287,7 @@ diary must move without losing or doubling a booking (BKG-011).
 | B7 | How long booking and payment records are kept (B8.9, B8.10) | Bookings with the clinical records; payments 6 years for the accounts | Nafisa, accountant |
 | B8 | VAT on treatments (booking-engine §9.1) | The accountant's answer, set per treatment | Nafisa, accountant |
 | B9 | Where the booking page lives | `app.puremed.uk/book` first (no change to the static site's hosting); an embed on puremed.uk later | Osman |
-| B10 | Who is bookable, rooms, and whether toxin needs a prescriber's time alongside (BKG-009) | Practitioners only in v1; prescriber routing if Nafisa is not always the prescriber | Nafisa |
+| B10 | Who is bookable, rooms, and whether toxin needs a prescriber's time alongside (BKG-009) | **Decided 20 Oct (Nafisa):** no prescriber time reserved; online toxin only on his day (Wednesday); other days by super user override | Nafisa |
 | B11 | Read practitioners' Google free/busy into availability | Not in v1; the platform diary is the truth | Osman |
 | B12 | Cutover date (D9) | **Decided 18 Oct 2026: about 31 Dec 2026** (Osman). Later than the 30 Nov backstop on the Faces data files (extraction plan section 7), which the catch-up needs; that backstop has to move first | Osman, Nafisa |
 
