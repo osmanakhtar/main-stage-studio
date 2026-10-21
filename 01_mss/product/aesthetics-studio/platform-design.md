@@ -16,6 +16,14 @@ Clinical depth is **not** repeated here. `02_clients/puremed/clinical-platform/`
 (plan v0.8, register v0.8, technical design v0.4, components S1 to S15) stays the source
 for clinical rows. This doc places that work inside a wider platform.
 
+## Change note, 20 October 2026: signed documents after the discovery call
+
+- **Signed documents spec to v0.2** (`signed-documents-build-spec.md`, nothing built): one form per treatment with the
+  medical history inside, every visit; courses and review visits get a short check; client's own phone first, iPad
+  deferred; reminders 7 days and 48 hours before by email and WhatsApp; practitioner and prescriber sign-offs at
+  server time; attachments; Faces PDFs, photos, notes and attachments imported. Goes live with booking at cutover,
+  no partial running. Plan to cutover in its section 10. Next: S1 (Spaces London), slice 1.
+
 ## Change note, 18 October 2026: booking and Stripe build spec
 
 - **Booking and Stripe build spec v0.1** (`booking-payments-build-spec.md`, nothing built): catalogue and rules as
