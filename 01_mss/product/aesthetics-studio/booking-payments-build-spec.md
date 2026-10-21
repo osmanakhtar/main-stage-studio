@@ -1,6 +1,7 @@
 # Build spec: booking and Stripe deposits
 
-*Build spec, v0.1, 18 October 2026. Nothing built. Implements requirements BKG-001 to BKG-012 and PAY-001 to PAY-005
+*Build spec, v0.1, 18 October 2026. **Status 21 Oct 2026:** slices 1 to 3 built on branch `booking-slice-1` (worktree
+`.worktrees/sp-booking-1`), not pushed; next is slice 4, blocked on B1 (Osman). Implements requirements BKG-001 to BKG-012 and PAY-001 to PAY-005
 (`requirements-register.py`) and `booking-engine/booking-engine-plan.md` §3 to §9 inside the live platform, per D3
 (customer records and bookings in house, Faces replaced). Parent canon: `platform-design.md`. Repo:
 `~/workspace/studio-platform`, built in the sandbox first (SOP-PLAT-004, tenant Vera, Stripe test mode). Sits beside
@@ -229,7 +230,7 @@ diary must move without losing or doubling a booking (BKG-011).
    What landed: `src/modules/booking/availability.ts` (pure: weekly hours plus open exceptions minus closed ones, buffers,
    the 15-minute grid from local midnight, notice, horizon, allowed-days rules, inactive practitioners never offered;
    `slotProblems` explains a refused start with a traceable id), `diary.ts` (book, move, cancel, outcome, time off; an
-   override is an event naming the rule; a per-practitioner advisory lock stands in for slice 3's exclusion constraint),
+   override is an event naming the rule; a per-practitioner advisory lock, now alongside slice 3's exclusion constraint),
    `facts.ts` (next booking, last visit, folded from booking events, computed on read: no table), migration
    `014_booking.sql` (`booking`, `diary_exception`; 013 left for signed documents), console **Diary** (nav item once
    practitioners exist), book, booking page, time off, and bookings on the person page; `npm run sandbox:diary`.
@@ -249,6 +250,27 @@ diary must move without losing or doubling a booking (BKG-011).
    `booking.created` and `booking.recorded_manually` (Vera's now include `booking.confirmed`, as do campaign results);
    min notice applies to staff bookings too, so the desk can't book a same-day consultation without the owner.
 3. **Holds and commit**: `held` bookings, expiry, the exclusion constraint, the concurrent-commit test ported.
+   (**Built 20 Oct 2026** on `booking-slice-1`, uncommitted at close of build, not pushed.) What landed: folded into
+   migration `014_booking.sql` (still one booking migration, never shipped): `btree_gist`, `hold_expires_at`, a generated
+   `during tstzrange` (start inclusive, end exclusive), status `expired`, and `booking_no_overlap`, an exclusion
+   constraint so no two `held` or `confirmed` bookings overlap for one practitioner. `diary.ts`: `holdSlot` (online rules,
+   nothing overridable, lapses after the config's `hold_minutes`, event `booking.held` naming `booking.hold_minutes`),
+   `confirmHold` (the payment's step 3; safe to call twice; a payment after the hold lapsed confirms only if no booking or
+   buffer has taken the time since, otherwise `booking.confirm_refused` and `slot_taken` for slice 4 to refund),
+   `releaseHold`, and `expireHolds`, run by the worker each pass (`booking.hold_expired`). Booking or moving for a
+   practitioner expires that practitioner's lapsed holds first, in the same transaction. Availability ignores a hold
+   past its expiry before the sweep. The console shows "Held, paying" and "Hold lapsed". Tests: 15 in
+   `test/booking-holds.test.ts`, including two patients holding one slot at once, a patient and the desk at once, two raw
+   overlapping inserts in concurrent transactions (the database refuses the second with no booking code involved), a
+   hold that lapses mid-payment with the slot free and with it taken, and a buffer taken after the lapse. Full suite 343
+   pass. `make trace`: 0 fail, 4 warn (unchanged), with a `holds` decision area. The shared sandbox's existing 014 was
+   altered by hand to match (the constraint went on cleanly over the 41 seeded bookings).
+   **Calls made here, for Osman to confirm:** (g) a sixth status, `expired`, for a hold that ended unpaid (lapsed or given
+   up), so it is never confused with a cancellation; (h) the constraint covers the appointment itself, not its buffers,
+   because the owner can book into a buffer with a reason; buffers stay the code's job, so the per-practitioner lock
+   stays alongside the constraint; (i) a late payment for a lapsed hold still confirms if the time is free, even if hours
+   or rules changed in the ten minutes; (j) the hold length comes from `booking.json` `hold_minutes` (10 on Vera), not a
+   constant.
 4. **Stripe in the sandbox**: connect (B1), Payment Intents, the Payment Element, webhooks into `stripe_event`,
    refunds from policy, the nightly comparison; Stripe test cards including a 3D Secure one and a decline.
 5. **Public booking page and self-serve manage**: the journey in section 8, the manage link, the requirement checks
@@ -299,6 +321,7 @@ no clinical records beyond the signed documents module and the existing Record t
 
 ## Resume prompt
 
-Booking and Stripe, build. Read `01_mss/product/aesthetics-studio/booking-payments-build-spec.md`, get B1 from Osman
-and B3 to B5 from Nafisa (or build to the placeholders on Vera), then build slice 1 in a studio-platform worktree
-against the sandbox (SOP-PLAT-004).
+Booking slice 4. In `~/workspace/.worktrees/sp-booking-1`, read this spec's sections 7 and 11 and get B1 from Osman
+(Stripe Connect Standard recommended), then build Stripe in the sandbox on top of `holdSlot` and `confirmHold`. Before
+that, or alongside: Osman confirms calls (a) to (j) in section 11 and ratifies `service/rule-trace.json`; before
+shipping, re-read `platform-facts.json` for migration 014 and add `booking.confirmed` to PureMed's workflows.
