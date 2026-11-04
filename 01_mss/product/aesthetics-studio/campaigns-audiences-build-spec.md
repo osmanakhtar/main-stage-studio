@@ -703,10 +703,42 @@ unlinks WhatsApp for Windows; 20 messages a second. **DPIA question for the clin
 onboarding offers to sync 180 days of chat history and the phone's contacts into the platform;
 whether to accept or decline the history is theirs to decide, not ours.
 
+## 13d. Audience fixes, 3 and 4 November 2026
+
+**Reported (Nafisa, 3 Nov):** an audience "didn't book in the last 180 days" for the "model call"
+campaign still matched 732 and would send to 487, a regular client included, with 0 left out by
+a rule. **Cause:** the condition was evaluated correctly, but no booking events exist on the
+platform. Her bookings are in Faces, nothing on `main` writes `booking.created`, and "Mark as
+booked" had not been used; the Faces and Acuity appointments were barred from audiences by the
+signed DPIA (B10.1 "never used for marketing", CON-009). So nobody counted as booked.
+
+**Shipped to production 3 Nov** (studio-platform `da5dd9f`, `1da6b3a`, released as `d3041bd` with
+`make ship`; branch `audience-booking-data`). Seen live on her phone 4 Nov.
+- Each "Did / Didn't do something" choice shows how many people have it on record; if nobody has
+  any ticked one, the condition warns that it picks nobody or leaves nobody out. "booked
+  (online)" is not offered until online booking is on the platform.
+- New condition `last_visit` ("Last appointment": more than / within N days), from the latest
+  `legacy_appointment.starts_at` per person, date only, never treatment or note. Offered, saved
+  and evaluated only when the latest signed DPIA answers **B10.5** a plain "yes"; if taken back,
+  a saved audience picks nobody and, as a rule to leave out, leaves everyone out. People with no
+  old appointment never match. B10.5 added to PureMed's DPIA questions, B10.1 points at it;
+  platform facts, `data-protection.json`, the in-app guide and SOP-PLAT-003 updated to match.
+
+**State 4 Nov:** Osman reports Nafisa has signed the DPIA; whether her B10.5 answer is "yes" is
+not yet confirmed from here (no read access to production). She asked what the red warning
+means; a WhatsApp explanation was drafted.
+
+**Open:**
+1. Confirm "Last appointment" is offered in her console (proves B10.5 "yes"), then she rebuilds
+   "model call" on it and does not send until then.
+2. Proposed, not built: plainer warning wording that points to Last appointment when B10.5 is
+   signed ("No bookings have been recorded here yet...").
+
 ## Resume prompt
 
 > Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`,
-> section 13c. WhatsApp: once Meta lifts the block on the MSS portfolio, run MSS business
+> section 13d first (audiences: confirm Nafisa's B10.5 "yes" and her rebuilt "model call"; the
+> plainer warning wording is proposed, not built), then section 13c. WhatsApp: once Meta lifts the block on the MSS portfolio, run MSS business
 > verification (sole trader, Osman uploads documents), then access verification, then write and
 > build the Embedded Signup + coexistence webhooks spec in studio-platform, then App Review. In
 > parallel: Manychat disconnected and the 07459 account deleted by Osman or Nafisa. Still open from
