@@ -734,10 +734,44 @@ means; a WhatsApp explanation was drafted.
 2. Proposed, not built: plainer warning wording that points to Last appointment when B10.5 is
    signed ("No bookings have been recorded here yet...").
 
+## 13e. Pictures in campaign emails, 4 and 5 November 2026
+
+**Asked (Osman, 4 Nov):** campaign emails should take pictures, added before sending, for PureMed
+and future clients. Upload from the device is enough for now (Osman, 5 Nov); picking from the
+website's images, Dropbox or Drive was offered and declined for this build.
+
+**Shipped to production 5 Nov** (studio-platform `84174bd`, `make ship`, live 07:17; migration
+`015_email_images.sql`, numbered after the held 013 signed documents and 014 booking).
+- Per-clinic library (`email_image`, RLS, never edited after upload). On the campaign Email page,
+  **Pictures**: choose a file on the phone or computer, describe it (alt text), **Add picture**.
+  The browser shrinks it to 1200px wide; the server takes PNG or JPEG only, checked from the
+  bytes, 800 KB at most.
+- Placed as its own paragraph, `![description](image:ref)`, inserted at the cursor; **Put in
+  email** reuses one. Preview shows it at letter width (536px at most).
+- Sent inline by cid like the logo, so nothing loads from the platform on open. The text
+  version carries `[description]`. Approval refuses an unknown code, a picture sharing a
+  paragraph with text, more than 6 pictures, or more than 3 MB.
+- Removal only while no approved email or draft uses the picture. Series emails refuse
+  pictures for now. Activity log: `email_image.added`, `email_image.removed`.
+- Tests: `test/email-images.test.ts` (11); full suite passed in the ship preflight.
+  SOP-PLAT-003 section 4b.
+
+**Not checked yet:** upload from a phone (only a desktop browser, on the Vera sandbox), and a
+real test send seen in Gmail and Apple Mail.
+
+**Open:**
+1. Osman tries an upload on his phone in a draft PureMed campaign, then sends himself a test.
+2. Tell Nafisa where Pictures is.
+3. Patient before and after photos: the console asks for written agreement but can't check it;
+   the library has no retention and no erasure link to the person. A DPIA question for PureMed
+   before she uses them (`data-protection.json`, `email_image`). Platform facts wording was
+   left unchanged so the signed DPIA stays current.
+
 ## Resume prompt
 
 > Read `main-stage-studio/01_mss/product/aesthetics-studio/campaigns-audiences-build-spec.md`,
-> section 13d first (audiences: confirm Nafisa's B10.5 "yes" and her rebuilt "model call"; the
+> section 13e first (email pictures live 5 Nov: phone upload check, real test send, tell Nafisa,
+> patient photos as a DPIA question), then 13d (audiences: confirm Nafisa's B10.5 "yes" and her rebuilt "model call"; the
 > plainer warning wording is proposed, not built), then section 13c. WhatsApp: once Meta lifts the block on the MSS portfolio, run MSS business
 > verification (sole trader, Osman uploads documents), then access verification, then write and
 > build the Embedded Signup + coexistence webhooks spec in studio-platform, then App Review. In
